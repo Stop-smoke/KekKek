@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
 
+    implementation ("androidx.cardview:cardview:1.0.0")
+
     // TEST
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -67,5 +69,7 @@ dependencies {
 
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+
 
 }
