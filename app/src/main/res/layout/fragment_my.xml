@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/iv_my_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_setting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +69,7 @@
                 android:id="@+id/tv_my_writing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="내가 쓴 글"
+                android:text="@string/my_writing"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="내가 쓴 댓글"
+                android:text="@string/my_comments"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_my_writing" />
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="북마크"
+                android:text="@string/bookmark"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_my_comments" />
@@ -131,7 +131,7 @@
                 android:id="@+id/tv_my_achievementTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="업적"
+                android:text="@string/achievement"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
