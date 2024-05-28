@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
 
-    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // TEST
     testImplementation(libs.junit)
@@ -71,5 +71,6 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
 
-
+    //Naver Sns
+    implementation("com.navercorp.nid:oauth:5.9.1") // jdk 11
 }

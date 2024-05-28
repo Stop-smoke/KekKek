@@ -2,4 +2,7 @@
     <string name="app_name">켁켁이</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="social_login_info_naver_client_id">Ehuy_8yhWC4Fj8WKYIUg</string>
+    <string name="social_login_info_naver_client_secret">n1IGGjQ4w0</string>
+    <string name="social_login_info_naver_client_name">켁켁이</string>
 </resources>
