@@ -75,7 +75,7 @@ class MyFragment : Fragment() {
 
             }
             is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState ->{ //로그인 성공
-
+                val myItem: MyItem = myUiState.myLoginUiState.myItem
             }
         }
     }

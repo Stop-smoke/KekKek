@@ -9,6 +9,9 @@
         android:id="@+id/iv_itemPopular_image"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        android:background="@drawable/bg_rounded"
         android:layout_height="128dp"/>
 
     <TextView

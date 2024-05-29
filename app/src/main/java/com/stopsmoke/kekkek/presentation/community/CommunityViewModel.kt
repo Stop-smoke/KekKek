@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class CommunityViewModel: ViewModel() {
-    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.init())
-    val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<CommunityUiState> = MutableStateFlow(CommunityUiState.init())
+    val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 }
