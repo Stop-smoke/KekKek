@@ -1,3 +1,7 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,6 +9,17 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+}
+
+val properties = Properties().apply {
+    load(FileInputStream(rootProject.file("apikey.properties")))
+}
+
+fun ApplicationDefaultConfig.addManifestPlaceholdersAndBuildConfig(key: String) {
+    (properties[key] as? String)?.let {
+        manifestPlaceholders[key] = it
+        buildConfigField("String", key, "\"$it\"")
+    }
 }
 
 android {
@@ -19,6 +34,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        addManifestPlaceholdersAndBuildConfig("KAKAO_NATIVE_API_KEY")
     }
 
     buildTypes {
@@ -72,7 +89,10 @@ dependencies {
 
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
+    
+    // KAKAO
+    implementation(libs.kakao.sdk.v2.user) // 카카오 로그인 API 모듈
+    
     //Naver Sns
     implementation("com.navercorp.nid:oauth:5.9.1") // jdk 11
 
