@@ -10,7 +10,7 @@ import com.stopsmoke.kekkek.databinding.ItemImageBinding
 
 private const val IMAGE_RESOURCE = "ImageResource"
 
-class ImageFragment: Fragment() {
+class ImageItemFragment: Fragment() {
     private var _binding: ItemImageBinding? = null
     private val binding: ItemImageBinding get() = _binding!!
     private var imageResource: String? = null

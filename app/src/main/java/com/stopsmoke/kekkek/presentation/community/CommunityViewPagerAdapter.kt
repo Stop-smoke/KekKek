@@ -18,7 +18,7 @@ class CommunityViewPagerAdapter(fm: FragmentActivity) : FragmentStateAdapter(fm)
     }
 
     override fun createFragment(position: Int): Fragment {
-        return ImageFragment.newInstance(imageList[position])
+        return ImageItemFragment.newInstance(imageList[position])
     }
 
 }
