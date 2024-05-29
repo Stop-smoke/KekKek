@@ -7,13 +7,15 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 val properties = Properties().apply {
     load(FileInputStream(rootProject.file("apikey.properties")))
 }
 
-fun ApplicationDefaultConfig.manifestPlaceholders(key: String) {
+fun ApplicationDefaultConfig.addManifestPlaceholdersAndBuildConfig(key: String) {
     (properties[key] as? String)?.let {
         manifestPlaceholders[key] = it
         buildConfigField("String", key, "\"$it\"")
@@ -33,7 +35,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders("KAKAO_NATIVE_API_KEY")
+        addManifestPlaceholdersAndBuildConfig("KAKAO_NATIVE_API_KEY")
     }
 
     buildTypes {
@@ -87,4 +89,12 @@ dependencies {
 
     // KAKAO
     implementation(libs.kakao.sdk.v2.user) // 카카오 로그인 API 모듈
+    // FIREBASE
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    releaseImplementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
+
 }
