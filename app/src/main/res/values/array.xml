@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category">
+        <item>커뮤니티 홈</item>
+        <item>공지사항</item>
+        <item>인기 게시판</item>
+        <item>자유 게시판</item>
+        <item>금연 성공 후기</item>
+        <item>금연 보조제 후기</item>
+    </string-array>
+</resources>
