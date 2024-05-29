@@ -1,8 +1,23 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+}
+
+val properties = Properties().apply {
+    load(FileInputStream(rootProject.file("apikey.properties")))
+}
+
+fun ApplicationDefaultConfig.manifestPlaceholders(key: String) {
+    (properties[key] as? String)?.let {
+        manifestPlaceholders[key] = it
+        buildConfigField("String", key, "\"$it\"")
+    }
 }
 
 android {
@@ -17,6 +32,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders("KAKAO_NATIVE_API_KEY")
     }
 
     buildTypes {
