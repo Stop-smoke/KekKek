@@ -105,9 +105,16 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-auth")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-fragment:2.5.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
 
     // PAGING
     implementation("androidx.paging:paging-runtime:3.3.0")
     testImplementation("androidx.paging:paging-common:3.3.0")
 
+    //google SNS with FireBase
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }

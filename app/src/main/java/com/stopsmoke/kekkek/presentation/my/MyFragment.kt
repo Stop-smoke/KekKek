@@ -63,7 +63,7 @@ class MyFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-
+                    onBind(state)
                 }
         }
     }
