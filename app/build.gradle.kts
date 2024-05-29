@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -71,7 +73,15 @@ dependencies {
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-
     //Naver Sns
     implementation("com.navercorp.nid:oauth:5.9.1") // jdk 11
+
+    // FIREBASE
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    releaseImplementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.firestore)
+
 }
