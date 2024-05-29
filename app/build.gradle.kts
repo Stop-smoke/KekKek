@@ -50,12 +50,15 @@ dependencies {
     // CORE
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // UI
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
+
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // TEST
     testImplementation(libs.junit)
@@ -69,6 +72,9 @@ dependencies {
 
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    //Naver Sns
+    implementation("com.navercorp.nid:oauth:5.9.1") // jdk 11
 
     // FIREBASE
     implementation(platform(libs.firebase.bom))
