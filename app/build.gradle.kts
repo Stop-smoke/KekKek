@@ -68,4 +68,6 @@ dependencies {
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    // KAKAO
+    implementation(libs.kakao.sdk.v2.user) // 카카오 로그인 API 모듈
 }
