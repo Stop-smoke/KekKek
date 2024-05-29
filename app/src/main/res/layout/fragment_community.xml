@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".presentation.community.CommunityFragment">
+
+    <ImageView
+        android:id="@+id/iv_community_bell"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_bell"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_community_profile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_community_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KekKek"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!--    카테고리-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_community_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/shadow"
+            android:paddingTop="9dp"
+            android:paddingStart="20dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_title">
+
+            <TextView
+                android:id="@+id/tv_community_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="@string/category"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/spn_community_category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+            <Spinner
+                android:id="@+id/spn_community_category"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray"
+                style="@style/CustomSpinner"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- 인기 포스트 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_community_popularList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/shadow"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@id/cl_community_category">
+
+        <TextView
+            android:id="@+id/tv_community_popularPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/popular_post"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_community_popularPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_popularPost" />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout_community_popularPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_community_popularPost"
+            app:tabBackground="@drawable/tab_dot"
+            android:background="@color/white"
+            app:tabIndicator="@null"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 공지 게시판  -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_community_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:padding="20dp"
+        android:background="@drawable/shadow"
+        app:layout_constraintTop_toBottomOf="@id/cl_community_popularList">
+
+        <TextView
+            android:id="@+id/tv_community_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notice"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_community_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:minHeight="100dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_notice" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout_community_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vp_community_notice"
+            app:tabBackground="@drawable/tab_dot"
+            android:background="@color/white"
+            app:tabIndicator="@null"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

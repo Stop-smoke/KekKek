@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:drawableTint">@color/gray</item>
+        <item name="android:backgroundTint">@color/gray</item>
+    </style>
+</resources>
