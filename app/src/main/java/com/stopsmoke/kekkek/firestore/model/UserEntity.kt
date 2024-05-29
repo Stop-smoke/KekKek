@@ -9,6 +9,6 @@ data class UserEntity(
     @PropertyName("gender") val gender: String? = null,
     @PropertyName("age") val age: Int? = null,
     @PropertyName("location") val location: LocationEntity? = null,
-    @get:PropertyName("phone_number") val phoneNumber: String? = null,
-    @get:PropertyName("profile_image_url") val profileImageUrl: String? = null,
+    @get:PropertyName("phone_number") @set:PropertyName("phone_number") var phoneNumber: String? = null,
+    @get:PropertyName("profile_image_url") @set:PropertyName("profile_image_url") var profileImageUrl: String? = null,
 )
