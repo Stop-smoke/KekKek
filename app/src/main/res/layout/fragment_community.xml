@@ -36,22 +36,16 @@
 
 
     <!--    카테고리-->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_community_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:minHeight="30dp"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_community_title">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_community_category"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/shadow"
+            android:paddingTop="9dp"
+            android:paddingStart="20dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_title">
 
             <TextView
                 android:id="@+id/tv_community_category"
@@ -63,17 +57,18 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/spn_community_category"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <Spinner
                 android:id="@+id/spn_community_category"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
 
 
     <!-- 인기 포스트 -->
@@ -81,10 +76,10 @@
         android:id="@+id/cl_community_popularList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/shadow"
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@id/cv_community_category">
+        app:layout_constraintTop_toBottomOf="@id/cl_community_category">
 
         <TextView
             android:id="@+id/tv_community_popularPost"
@@ -100,24 +95,13 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_community_popularPost"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintTop_toBottomOf="@id/tv_community_popularPost" />
 
-        <TextView
-            android:id="@+id/tv_community_popularPostTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/vp_community_popularPost"
-            tools:text="example Title haha" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout_community_popularPost"
@@ -125,8 +109,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_community_popularPostTitle"
-            app:tabBackground="@drawable/tab_dot" />
+            app:layout_constraintTop_toBottomOf="@id/vp_community_popularPost"
+            app:tabBackground="@drawable/tab_dot"
+            android:background="@color/white"
+            app:tabIndicator="@null"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 공지 게시판  -->
@@ -134,7 +120,7 @@
         android:id="@+id/cl_community_notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:padding="20dp"
         android:background="@drawable/shadow"
         app:layout_constraintTop_toBottomOf="@id/cl_community_popularList">
@@ -149,44 +135,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_community_notice1"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_community_notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tv_community_notice"
-            tools:text="나는 탈모에 걸리지 않을 것을 굳게 맹세합니다. 아니면 슬픈 일ㅇ" />
-
-        <TextView
-            android:id="@+id/tv_community_notice2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tv_community_notice1"
-            tools:text="나는 탈모에 걸리지 않을 것을 굳게 맹세합니다. 아니면 슬픈 일ㅇ" />
-
-        <TextView
-            android:id="@+id/tv_community_notice3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tv_community_notice2"
-            tools:text="나는 탈모에 걸리지 않을 것을 굳게 맹세합니다. 아니면 슬픈 일ㅇ" />
+            android:scaleType="centerCrop"
+            android:minHeight="100dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_notice" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout_community_notice"
@@ -194,8 +151,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_community_notice3"
-            app:tabBackground="@drawable/tab_dot" />
+            app:layout_constraintTop_toBottomOf="@id/vp_community_notice"
+            app:tabBackground="@drawable/tab_dot"
+            android:background="@color/white"
+            app:tabIndicator="@null"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

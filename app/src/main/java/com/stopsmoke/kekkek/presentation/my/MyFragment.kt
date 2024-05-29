@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class MyFragment : Fragment() {
@@ -55,6 +59,26 @@ class MyFragment : Fragment() {
         ivMySetting.setOnClickListener {}
     }
 
+    private fun initViewModel() = with(viewModel){
+        viewLifecycleOwner.lifecycleScope.launch {
+            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { state ->
+
+                }
+        }
+    }
+
+
+    private fun onBind(myUiState: MyUiState) = with(binding){
+        when(myUiState.myLoginUiState){
+            is MyLoginStatusState.NeedLoginUiState ->{ // 로그인 필요
+
+            }
+            is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState ->{ //로그인 성공
+
+            }
+        }
+    }
     companion object {
         @JvmStatic
         fun newInstance() =
