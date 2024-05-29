@@ -53,20 +53,39 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:text="@string/category"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/spn_community_category"
+                app:layout_constraintEnd_toStartOf="@id/tv_community_selectCategory"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
+
+            <TextView
+                android:id="@+id/tv_community_selectCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:minWidth="116dp"
+                tools:text="금연 보조제 후기"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray"
+                app:layout_constraintEnd_toStartOf="@id/spn_community_category"
+                app:layout_constraintStart_toEndOf="@id/tv_community_category"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
             <Spinner
                 android:id="@+id/spn_community_category"
-                android:layout_width="100dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/CustomSpinner"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
