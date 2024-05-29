@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.myFragment
+package com.stopsmoke.kekkek.presentation.my
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

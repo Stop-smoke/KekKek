@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.myFragment
+package com.stopsmoke.kekkek.presentation.my
 
 data class MyItem (
     val name: String,

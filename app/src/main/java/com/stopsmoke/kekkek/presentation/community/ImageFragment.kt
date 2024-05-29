@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.community
+package com.stopsmoke.kekkek.presentation.community
 
 
 import android.os.Bundle

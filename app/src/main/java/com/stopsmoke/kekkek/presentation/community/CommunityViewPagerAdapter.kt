@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.community
+package com.stopsmoke.kekkek.presentation.community
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

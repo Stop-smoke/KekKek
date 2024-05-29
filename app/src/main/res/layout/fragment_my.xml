@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".myFragment.MyFragment">
+    tools:context=".presentation.my.MyFragment">
 
     <ImageView
         android:id="@+id/iv_my_setting"

@@ -17,7 +17,7 @@
             android:name=".snsLoginTest.SnsTestActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
