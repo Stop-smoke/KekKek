@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="@drawable/bg_home"
+    tools:context=".HomeFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_home_head_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_home_app_name"
+                tools:text="금연 진행 상황" />
+
+            <ImageView
+                android:id="@+id/iv_home_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_timer"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_home_timer"
+                app:layout_constraintStart_toEndOf="@+id/tv_home_timer"
+                app:layout_constraintTop_toTopOf="@+id/tv_home_timer" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_home_performance"
+                android:layout_width="350dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_home_timer">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/iv_home_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="32dp"
+                        android:src="@drawable/ic_achievement_first"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_cigarette_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_achievement_second"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_day"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_day"
+                        app:layout_constraintTop_toTopOf="@+id/iv_home_day" />
+
+
+                    <ImageView
+                        android:id="@+id/iv_home_life_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_achievement_fourth"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_save_money"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_save_money"
+                        app:layout_constraintTop_toTopOf="@+id/iv_home_save_money" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_save_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_achievement_third"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_cigarette_num"
+                        app:layout_constraintStart_toEndOf="@+id/iv_home_cigarette_num"
+                        app:layout_constraintTop_toTopOf="@+id/iv_home_cigarette_num" />
+
+                    <TextView
+                        android:id="@+id/tv_home_day_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:textColor="#0C35C4"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_day"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_day"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_day"
+                        tools:text="금연 기간" />
+
+                    <TextView
+                        android:id="@+id/tv_home_cigarette_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:textColor="#0C35C4"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_cigarette_num"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_cigarette_num"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_cigarette_num"
+                        tools:text="절약 담배 수" />
+
+                    <TextView
+                        android:id="@+id/tv_home_save_money_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:textColor="#0C35C4"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_save_money"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_save_money"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_save_money"
+                        tools:text="절약한 돈" />
+
+                    <TextView
+                        android:id="@+id/tv_home_life_day_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:textColor="#0C35C4"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_life_day"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_life_day"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_life_day"
+                        tools:text="생명 연장일" />
+
+                    <TextView
+                        android:id="@+id/tv_home_day_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_day_description"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_day_num"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_day_num"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_day_num" />
+
+                    <TextView
+                        android:id="@+id/tv_home_cigarette_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_cigarette_description"
+                        android:textAlignment="center"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_cigarette_num"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_cigarette_num"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_cigarette_num" />
+
+                    <TextView
+                        android:id="@+id/tv_home_save_money_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_save_money_description"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_save_money_num"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_save_money_num"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_save_money_num" />
+
+                    <TextView
+                        android:id="@+id/tv_home_life_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_life_description"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_life_day_num"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_life_day_num"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_life_day_num" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_home_ranking"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="@+id/cv_home_performance"
+                app:layout_constraintTop_toBottomOf="@+id/cv_home_performance">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/iv_home_ranking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_ranking"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_home_ranking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_ranking"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_ranking"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_ranking"
+                        tools:text="등수" />
+
+                    <TextView
+                        android:id="@+id/tv_home_region"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="#AAAAAA"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_ranking"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_ranking"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_ranking"
+                        tools:text="사용자 주소" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_home_test"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/cv_home_performance"
+                app:layout_constraintTop_toBottomOf="@+id/cv_home_performance">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_home_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/home_test"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_home_test"
+                        app:layout_constraintStart_toStartOf="@+id/iv_home_test"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_home_test" />
+
+                    <TextView
+                        android:id="@+id/tv_home_test_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/home_test_detail"
+                        android:textColor="#AAAAAA"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_home_test"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_test"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_test" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_test"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_cigarette"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_home_motivation"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="@+id/cv_home_ranking"
+                app:layout_constraintTop_toBottomOf="@+id/cv_home_ranking">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_home_motivation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/home_motivation"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_random"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_random"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_home_motivation"
+                        app:layout_constraintStart_toEndOf="@+id/tv_home_motivation"
+                        app:layout_constraintTop_toTopOf="@+id/tv_home_motivation" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_motivation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:paddingVertical="20dp"
+                        android:src="@drawable/img_motivation_1"
+                        app:layout_constraintStart_toStartOf="@+id/tv_home_motivation"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_home_motivation" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tv_home_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_home_head_text"
+                app:layout_constraintTop_toBottomOf="@+id/tv_home_head_text"
+                tools:text="타이머 시간" />
+
+            <ImageView
+                android:id="@+id/iv_home_notification"
+                android:layout_width="23dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_notification"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_home_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="KekKek"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

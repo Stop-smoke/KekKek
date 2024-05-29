@@ -1,12 +1,21 @@
 <resources>
     <string name="app_name">켁켁이</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-<!--    sns 인증키-->
-    <string name="social_login_info_naver_client_id">Ehuy_8yhWC4Fj8WKYIUg</string>
-    <string name="social_login_info_naver_client_secret">n1IGGjQ4w0</string>
-    <string name="social_login_info_naver_client_name">켁켁이</string>
+<!--  Home  -->
+    <string name="home_start">start</string>
+    <string name="home_performance">성과</string>
+    <string name="home_test">중독 테스트</string>
+    <string name="home_test_detail">중독테스트를 실시해보세요!</string>
+    <string name="home_motivation">동기부여</string>
+    <string name="home_keep">keep</string>
+    <string name="home_day_description">금연한 지</string>
+    <string name="home_cigarette_description">피우지\n않은 담배</string>
+    <string name="home_save_money_description">돈 절약</string>
+    <string name="home_life_description">생명 되찾음</string>
+    <string name="menu_home">home</string>
+    <string name="menu_community">community</string>
+    <string name="menu_mypage">mypage</string>
 
 <!--    my fragment-->
     <string name="popular_post">인기 포스트</string>
