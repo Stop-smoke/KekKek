@@ -32,7 +32,7 @@ class FireStoreService @Inject constructor(
     }
 
     suspend fun setUser(userEntity: UserEntity) {
-        firestore.collection(USER_COLLECTION).document(userEntity.id ?: return)
+        firestore.collection(USER_COLLECTION).document(userEntity.uid!!)
             .set(userEntity)
             .addOnFailureListener { throw it }
             .await()

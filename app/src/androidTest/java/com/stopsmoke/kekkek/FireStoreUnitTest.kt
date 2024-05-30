@@ -35,7 +35,7 @@ class FireStoreUnitTest {
     @Test
     fun setUsersData() = runTest {
         val user = UserEntity(
-            id = "테스트_계정",
+            uid = "테스트_계정",
             name = "김민준",
             nickname = "히히",
             gender = "male",
