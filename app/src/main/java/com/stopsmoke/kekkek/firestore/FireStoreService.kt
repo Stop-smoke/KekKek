@@ -13,10 +13,10 @@ class FireStoreService @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) {
 
-    fun getUser(userId: String): Flow<Result<UserEntity>> = callbackFlow {
+    fun getUser(uid: String): Flow<Result<UserEntity>> = callbackFlow {
 
         val snapshotListener = firestore.collection(USER_COLLECTION)
-            .document(userId)
+            .document(uid)
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     trySendBlocking(Result.failure(error))
