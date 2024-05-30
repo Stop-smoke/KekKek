@@ -106,4 +106,8 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
 
+    // PAGING
+    implementation("androidx.paging:paging-runtime:3.3.0")
+    testImplementation("androidx.paging:paging-common:3.3.0")
+
 }
