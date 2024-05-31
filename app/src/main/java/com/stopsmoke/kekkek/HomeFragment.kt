@@ -90,7 +90,9 @@ class HomeFragment : Fragment() {
             }
 
             ivHomeTest.setOnClickListener {
-                // 담배 중독 테스트 화면으로 넘어간다.
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.main,TestOnBoardingFragment())
+                    .commit()
             }
 
             ivHomeRandom.setOnClickListener {
