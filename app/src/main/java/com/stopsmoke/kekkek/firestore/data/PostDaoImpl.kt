@@ -20,7 +20,7 @@ internal class PostDaoImpl @Inject constructor(
         previousItem: PostEntity?,
         limit: Long,
     ): Flow<Result<List<PostEntity>>> = callbackFlow {
-        val snapshotListener = firestore.collection(POST_COLLECTION)
+        val snapshotListener = firestore.collection(COLLECTION)
             .orderBy("date_time", Query.Direction.DESCENDING)
             .where(Filter.equalTo("title", ""))
             .startAt()
@@ -44,7 +44,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun addPost(postEntity: PostEntity) {
-        firestore.collection(POST_COLLECTION).document().let { document ->
+        firestore.collection(COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
                 .addOnFailureListener { throw it }
                 .addOnCanceledListener { throw CancellationException() }
@@ -53,7 +53,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun updateOrInsertPost(postEntity: PostEntity) {
-        firestore.collection(POST_COLLECTION)
+        firestore.collection(COLLECTION)
             .document(postEntity.id!!)
             .set(postEntity)
             .addOnFailureListener { throw it }
@@ -62,7 +62,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun deletePost(postId: String) {
-        firestore.collection(POST_COLLECTION)
+        firestore.collection(COLLECTION)
             .document(postId)
             .delete()
             .addOnFailureListener { throw it }
@@ -71,6 +71,6 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     companion object {
-        private const val POST_COLLECTION = "post"
+        private const val COLLECTION = "post"
     }
 }
