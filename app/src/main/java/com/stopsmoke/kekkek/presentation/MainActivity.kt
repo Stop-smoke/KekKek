@@ -6,9 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.stopsmoke.kekkek.HomeFragment
+import com.stopsmoke.kekkek.presentation.home.HomeFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
+import com.stopsmoke.kekkek.presentation.my.MyFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.my_page -> {
-//                    MyPageFragment().changeFragment()
+                    MyFragment().changeFragment()
                 }
             }
             return@setOnItemSelectedListener true
@@ -53,6 +54,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Fragment.changeFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main, this).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerViewMain, this).commit()
     }
 }

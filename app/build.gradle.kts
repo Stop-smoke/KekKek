@@ -105,6 +105,5 @@ dependencies {
     implementation(libs.firebase.firestore)
 
     //admob
-    implementation("com.google.android.gms:play-services-ads:23.1.0")
-
+    implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
 }

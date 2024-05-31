@@ -30,27 +30,6 @@ class CommunityFragment : Fragment() {
         ViewModelProvider(this)[CommunityViewModel::class.java]
     }
 
-    private val viewPagerAutomaticFlippingJob by lazy {
-        val viewPagerList = listOf(
-            binding.vpCommunityPopularPost,
-            binding.vpCommunityNotice
-        )
-        CoroutineScope(Dispatchers.Main).launch {
-            while (true) {
-                delay(3000)
-                Log.d("coroutine", "dd")
-                viewPagerList.forEach { viewPager ->
-                    viewPager.adapter?.let { adapter ->
-                        if (viewPager.currentItem + 1 < adapter.itemCount)
-                            viewPager.currentItem += 1
-                        else viewPager.currentItem = 0
-                    }
-                }
-
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,25 +46,15 @@ class CommunityFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        viewPagerAutomaticFlippingJob.cancel()
     }
 
     private fun initView() = with(binding) {
-        vpCommunityPopularPost.adapter = CommunityPopularViewPagerAdapter(requireActivity())
-        vpCommunityPopularPost.isUserInputEnabled = true
-        TabLayoutMediator(tabLayoutCommunityPopularPost, vpCommunityPopularPost) { tab, position -> }.attach()
-
-        vpCommunityNotice.adapter = CommunityNoticeViewPagerAdapter(requireActivity())
-        vpCommunityNotice.isUserInputEnabled = true
-        TabLayoutMediator(tabLayoutCommunityNotice, vpCommunityNotice){ tab, position -> }.attach()
-
-        viewPagerAutomaticFlippingJob
 
         initSpinner()
 
     }
 
-    private fun initViewModel() = with(viewModel){
+    private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
@@ -96,44 +65,18 @@ class CommunityFragment : Fragment() {
 
     private fun onBind(communityUiState: CommunityUiState) {
         when (val category = communityUiState.communityCategory) { // home일 경우 viewPager에 넣을 아이템들
-            is CommunityCategory.CommunityHome ->{
+            is CommunityCategory.CommunityHome -> {
                 val homeItems = category.popularItemList
                 val noticeItems = category.noticeList
             }
-            is CommunityCategory.CommunityList ->{ // home이 아닐 경우 출력할 글 목록들
+
+            is CommunityCategory.CommunityList -> { // home이 아닐 경우 출력할 글 목록들
                 val writingList = category.list
             }
         }
     }
 
-    private fun initSpinner() = with(binding){
-        val category: Array<String> = resources.getStringArray(R.array.category)
-        spnCommunityCategory.adapter = ArrayAdapter.createFromResource(requireContext(), R.array.category, R.layout.item_spinner_custom)
-        spnCommunityCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (position) {
-                    0 -> {
-                    }
+    private fun initSpinner() = with(binding) {
 
-                    1 -> {
-                    }
-
-                    2 -> {
-                    }
-
-                    3 -> {
-                    }
-
-                    4 -> {
-                    }
-
-                    5 -> {
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
-
 }
