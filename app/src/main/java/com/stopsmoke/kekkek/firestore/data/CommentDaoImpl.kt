@@ -8,7 +8,6 @@ import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
-import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
@@ -19,7 +18,6 @@ class CommentDaoImpl @Inject constructor(
 ) : CommentDao {
 
     override fun getComment(
-        previousItem: PostEntity?,
         limit: Long,
     ): Flow<PagingData<CommentEntity>> {
         return Pager(

@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface PostDao {
 
     fun getPost(
-        previousItem: PostEntity? = null,
         limit: Long = 30,
     ): Flow<PagingData<PostEntity>>
 

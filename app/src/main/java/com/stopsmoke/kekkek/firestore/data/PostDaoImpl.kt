@@ -18,7 +18,6 @@ internal class PostDaoImpl @Inject constructor(
 ) : PostDao {
 
     override fun getPost(
-        previousItem: PostEntity?,
         limit: Long,
     ): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION)
