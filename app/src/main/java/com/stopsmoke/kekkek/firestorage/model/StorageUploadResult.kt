@@ -1,6 +1,6 @@
 package com.stopsmoke.kekkek.firestorage.model
 
-interface StorageUploadResult {
+sealed interface StorageUploadResult {
 
     data class Success(val imageUrl: String) : StorageUploadResult
     data class Error(val exception: Throwable? = null) : StorageUploadResult
