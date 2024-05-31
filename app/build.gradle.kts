@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.circleimageview)
 
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // TEST
     testImplementation(libs.junit)
@@ -104,4 +106,6 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
 
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
 }
