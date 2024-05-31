@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E"
+    tools:context=".QuestionFragment">
+
+
+    <TextView
+        android:id="@+id/tv_question_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/test_title"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressbar_question"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#5877E4"
+        android:backgroundTintMode="src_in"
+        android:progressBackgroundTint="#5877E4"
+        android:progressBackgroundTintMode="add"
+        app:layout_constraintEnd_toEndOf="@+id/tv_question_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_question_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_question_title" />
+
+    <!-- 프로그래스 바 부분 나중에 수정 필요해 보입니다. -->
+
+    <TextView
+        android:id="@+id/tv_question_main_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/question1_title"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar_question" />
+
+    <TextView
+        android:id="@+id/tv_question_sub_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/question_sub_text"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tv_question_main_text"
+        app:layout_constraintTop_toBottomOf="@+id/tv_question_main_text" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_question_answer_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_text_button"
+        android:text="@string/question1_answer1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_2"
+        app:layout_constraintEnd_toEndOf="@+id/btn_question_answer_2"
+        app:layout_constraintStart_toStartOf="@+id/btn_question_answer_2" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_question_answer_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_text_button"
+        android:text="@string/question1_answer2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_3"
+        app:layout_constraintEnd_toEndOf="@+id/btn_question_answer_3"
+        app:layout_constraintStart_toStartOf="@+id/btn_question_answer_3" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_question_answer_3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_text_button"
+        android:text="@string/question1_answer3"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
