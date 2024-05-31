@@ -1,10 +1,10 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.firestore.dao
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.stopsmoke.kekkek.firestore.FireStoreService
+import com.stopsmoke.kekkek.firestore.data.UserDaoImpl
 import com.stopsmoke.kekkek.firestore.model.LocationEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.first
@@ -15,21 +15,20 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class FireStoreUnitTest {
+class UserDaoInstrumentedTest {
 
-    private lateinit var fireStoreService: FireStoreService
+    private lateinit var userDao: UserDao
 
     @Before
     fun init() {
-        val firestore = Firebase.firestore
-        fireStoreService = FireStoreService(firestore)
+        userDao = UserDaoImpl(Firebase.firestore)
     }
 
     @Test
     fun getUsersData() = runTest {
-        val result = fireStoreService.getUser("테스트_계정").first()
+        val result = userDao.getUser("테스트_계정").first()
         Log.d("result", result.toString())
-        Assert.assertTrue(result.isSuccess)
+        Assert.assertEquals(result.uid, "테스트_계정")
     }
 
     @Test
@@ -43,6 +42,7 @@ class FireStoreUnitTest {
             location = LocationEntity(0, 0, "강북구"),
             phoneNumber = "01013456987"
         )
-        fireStoreService.setUser(user)
+        userDao.setUser(user)
+        Assert.assertEquals(user, userDao.getUser("테스트_계정").first())
     }
 }

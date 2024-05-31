@@ -8,7 +8,6 @@ import com.stopsmoke.kekkek.firestore.data.PostDaoImpl
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +27,6 @@ class PostDaoInstrumentedTest {
     fun getPost() = runTest {
         val post = postDao.getPost().first()
         Log.d("result", post.toString())
-        Assert.assertTrue(post.isSuccess)
     }
 
     @Test // 게시글 등록
