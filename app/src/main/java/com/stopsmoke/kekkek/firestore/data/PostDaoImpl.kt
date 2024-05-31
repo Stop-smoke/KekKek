@@ -1,46 +1,41 @@
 package com.stopsmoke.kekkek.firestore.data
 
-import com.google.firebase.firestore.Filter
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.PostDao
+import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : PostDao {
+
     override fun getPost(
         previousItem: PostEntity?,
         limit: Long,
-    ): Flow<Result<List<PostEntity>>> = callbackFlow {
-        val snapshotListener = firestore.collection(COLLECTION)
+    ): Flow<PagingData<PostEntity>> {
+        val query = firestore.collection(COLLECTION)
             .orderBy("date_time", Query.Direction.DESCENDING)
-            .where(Filter.equalTo("title", ""))
-            .startAt()
             .limit(limit)
-            .startAt(previousItem)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    trySendBlocking(Result.failure(error))
-                    return@addSnapshotListener
-                }
 
-                val result = runCatching {
-                    value!!.documents.map { it.toObject(PostEntity::class.java)!! }
-                }
-                trySendBlocking(result)
-            }
+        return Pager(
+            config = PagingConfig(limit.toInt())
+        ) {
+            FireStorePagingSource(
+                query = query,
+                limit = limit,
+                clazz = PostEntity::class.java
+            )
 
-        awaitClose {
-            snapshotListener.remove()
         }
+            .flow
     }
 
     override suspend fun addPost(postEntity: PostEntity) {

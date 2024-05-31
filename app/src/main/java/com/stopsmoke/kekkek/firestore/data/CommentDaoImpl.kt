@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
-import com.stopsmoke.kekkek.firestore.data.pager.CommentPagingSource
+import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
@@ -25,10 +25,11 @@ class CommentDaoImpl @Inject constructor(
         return Pager(
             config = PagingConfig(limit.toInt())
         ) {
-            CommentPagingSource(
-                firestore.collection(COLLECTION)
-                    .orderBy("date_time", Query.Direction.DESCENDING)
-                    .limit(limit)
+            FireStorePagingSource(
+                query = firestore.collection(COLLECTION)
+                    .orderBy("date_time", Query.Direction.DESCENDING),
+                limit = limit,
+                clazz = CommentEntity::class.java
             )
         }
             .flow
