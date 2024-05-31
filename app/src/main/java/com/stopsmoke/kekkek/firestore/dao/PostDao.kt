@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostDao {
 
-    fun getPost(
-        limit: Long = 30,
-    ): Flow<PagingData<PostEntity>>
+    fun getPost(): Flow<PagingData<PostEntity>>
 
     suspend fun addPost(postEntity: PostEntity)
 

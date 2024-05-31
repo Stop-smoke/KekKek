@@ -17,19 +17,16 @@ internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : PostDao {
 
-    override fun getPost(
-        limit: Long,
-    ): Flow<PagingData<PostEntity>> {
+    override fun getPost(): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION)
             .orderBy("date_time", Query.Direction.DESCENDING)
-            .limit(limit)
 
         return Pager(
-            config = PagingConfig(limit.toInt())
+            config = PagingConfig(PAGE_LIMIT)
         ) {
             FireStorePagingSource(
                 query = query,
-                limit = limit,
+                limit = PAGE_LIMIT.toLong(),
                 clazz = PostEntity::class.java
             )
 
@@ -66,5 +63,6 @@ internal class PostDaoImpl @Inject constructor(
 
     companion object {
         private const val COLLECTION = "post"
+        private const val PAGE_LIMIT = 30
     }
 }

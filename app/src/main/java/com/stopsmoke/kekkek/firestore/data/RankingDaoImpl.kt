@@ -20,12 +20,12 @@ class RankingDaoImpl @Inject constructor(
             .orderBy("date_time", Query.Direction.ASCENDING)
 
         return Pager(
-            config = PagingConfig(LIMIT)
+            config = PagingConfig(PAGE_LIMIT)
         ) {
 
             FireStorePagingSource(
                 query = query,
-                limit = LIMIT.toLong(),
+                limit = PAGE_LIMIT.toLong(),
                 clazz = RankingEntity::class.java
             )
 
@@ -37,6 +37,6 @@ class RankingDaoImpl @Inject constructor(
 
     companion object {
         private const val COLLECTION = "ranking"
-        private const val LIMIT = 30
+        private const val PAGE_LIMIT = 30
     }
 }

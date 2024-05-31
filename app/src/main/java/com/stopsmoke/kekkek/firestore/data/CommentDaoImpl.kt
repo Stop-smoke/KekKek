@@ -17,16 +17,16 @@ class CommentDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : CommentDao {
 
-    override fun getComment(
-        limit: Long,
-    ): Flow<PagingData<CommentEntity>> {
+    override fun getComment(): Flow<PagingData<CommentEntity>> {
+        val query = firestore.collection(COLLECTION)
+            .orderBy("date_time", Query.Direction.DESCENDING)
+
         return Pager(
-            config = PagingConfig(limit.toInt())
+            config = PagingConfig(PAGE_LIMIT)
         ) {
             FireStorePagingSource(
-                query = firestore.collection(COLLECTION)
-                    .orderBy("date_time", Query.Direction.DESCENDING),
-                limit = limit,
+                query = query,
+                limit = PAGE_LIMIT.toLong(),
                 clazz = CommentEntity::class.java
             )
         }
@@ -68,5 +68,6 @@ class CommentDaoImpl @Inject constructor(
 
     companion object {
         private const val COLLECTION = "comment"
+        private const val PAGE_LIMIT = 30
     }
 }
