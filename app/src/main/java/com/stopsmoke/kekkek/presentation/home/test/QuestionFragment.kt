@@ -1,10 +1,11 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.presentation.home.test
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentQuestionBinding
 
 class QuestionFragment : Fragment() {

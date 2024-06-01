@@ -5,7 +5,7 @@
     android:id="@+id/test_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TestResultFragment">
+    tools:context=".presentation.home.test.TestResultFragment">
 
     <TextView
         android:id="@+id/tv_test_result_title"

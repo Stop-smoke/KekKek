@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.presentation.home.test
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentTestResultBinding
+import com.stopsmoke.kekkek.presentation.home.HomeFragment
 
 class TestResultFragment : Fragment() {
 
@@ -50,7 +52,7 @@ class TestResultFragment : Fragment() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
                 parentFragmentManager.commit {
-                    replace(R.id.main,HomeFragment())
+                    replace(R.id.main, HomeFragment())
                 }
             }
         }

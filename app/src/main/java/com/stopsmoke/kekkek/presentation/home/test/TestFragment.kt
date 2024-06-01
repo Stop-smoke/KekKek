@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.presentation.home.test
 
 import android.os.Bundle
 import android.view.LayoutInflater
