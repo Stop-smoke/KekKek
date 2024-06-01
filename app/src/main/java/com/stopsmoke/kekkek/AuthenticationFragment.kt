@@ -1,45 +1,39 @@
 package com.stopsmoke.kekkek
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.oAuthCredential
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.model.User
+import com.stopsmoke.kekkek.authorization.google.GoogleAuthorization
+import com.stopsmoke.kekkek.authorization.google.GoogleAuthorizationCallbackListener
+import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorization
+import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AuthenticationFragment : Fragment() {
+class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
+    GoogleAuthorizationCallbackListener {
 
     private var _binding: FragmentAuthenticationBinding? = null
     private val binding: FragmentAuthenticationBinding get() = _binding!!
 
-    private lateinit var googleSighInClient: GoogleSignInClient
-    private lateinit var googleLoginResult: ActivityResultLauncher<Intent>
-
-    private lateinit var auth: FirebaseAuth
+    private lateinit var kakaoAuthorization: KakaoAuthorization
+    private lateinit var googleAuthorization: GoogleAuthorization
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-        registerGoogleAuthRequest()
+        googleAuthorization = GoogleAuthorization(this).apply {
+            registerCallbackListener(this@AuthenticationFragment)
+        }
     }
 
     override fun onCreateView(
@@ -54,124 +48,31 @@ class AuthenticationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ivAuthKakaoLogin.setOnClickListener {
-            loginKakao()
+            kakaoAuthorization = KakaoAuthorization().apply {
+                registerCallbackListener(this@AuthenticationFragment)
+                loginKakao(requireContext())
+            }
         }
 
         binding.ivAuthGoogleLogin.setOnClickListener {
-            clickGoogleLoginButton()
+            googleAuthorization.launchGoogleAuthActivity()
         }
     }
 
-    private fun registerGoogleAuthRequest() {
-        googleLoginResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    try {
-                        // Google Sign In was successful, authenticate with Firebase
-                        val account = task.getResult(ApiException::class.java)!!
-                        Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                        firebaseAuthWithGoogle(account.idToken!!)
-                    } catch (e: ApiException) {
-                        // Google Sign In failed, update UI appropriately
-                        Log.w(TAG, "Google sign in failed", e)
-                        e.printStackTrace()
-                    }
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        kakaoAuthorization.unregisterCallbackListener()
+        googleAuthorization.unregisterCallbackListener()
+        _binding = null
     }
 
-    private fun clickGoogleLoginButton() {
-        val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(BuildConfig.FIRBASE_AUTH_SERVCER_CLIENT_KEY)
-            .requestId()
-            .requestEmail()
-            .requestProfile()
-            .build()
-
-        googleSighInClient = GoogleSignIn.getClient(requireContext(), options)
-        googleLoginResult.launch(googleSighInClient.signInIntent)
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    Log.d("Google 로그인", user.toString())
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                }
-            }
-            .addOnFailureListener {
-                it.printStackTrace()
-            }
-    }
-
-    private fun loginKakao() {
-        if (!getKakaoAppLoginAvailable()) {
-            loginKakaoWeb()
-            return
-        }
-        UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
-            if (error != null || token == null) {
-                Log.e("kakao", "카카오톡으로 로그인 실패", error)
-                loginKakaoWeb()
-                return@loginWithKakaoTalk
-            }
-
-            UserApiClient.instance.me { user, error ->
-                if (error != null || user == null) {
-                    Log.e("kakaouser", "사용자 정보 요청 실패", error)
-                    return@me
-                }
-                token.registerKakaoToken()
-                showSuccessLog(user)
-            }
-            Log.i("kakao", "카카오톡으로 로그인 성공 ${token.accessToken}")
-        }
-    }
-
-    private fun getKakaoAppLoginAvailable() =
-        UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())
-
-    private fun loginKakaoWeb() {
-        UserApiClient.instance.loginWithKakaoAccount(
-            context = requireContext(),
-            callback = { token, error ->
-                if (error != null) {
-                    Log.e("kakao", "카카오계정으로 로그인 실패", error)
-                } else if (token != null) {
-                    token.registerKakaoToken()
-                    Log.i("kakao", "카카오계정으로 로그인 성공 ${token.accessToken}")
-                }
-            }
-        )
-    }
-
-    private fun showSuccessLog(
-        user: com.kakao.sdk.user.model.User,
-    ) {
-        Log.i(
-            "kakaouser", "사용자 정보 요청 성공" +
-                    "\n회원번호: ${user.id}" +
-                    "\n이메일: ${user.kakaoAccount?.email}" +
-                    "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
-                    "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
-        )
-    }
-
-    private fun OAuthToken.registerKakaoToken() {
+    override fun onSuccess(token: OAuthToken, user: User) {
         val providerId = "oidc.kakao"
         val credential = oAuthCredential(providerId) {
-            idToken = this@registerKakaoToken.idToken
-            accessToken = this@registerKakaoToken.accessToken
+            idToken = token.idToken
+            accessToken = token.accessToken
         }
-
+        val auth = Firebase.auth
         auth.signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
                 authResult.user?.displayName?.let {
@@ -184,15 +85,18 @@ class AuthenticationFragment : Fragment() {
             }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onSuccess(user: FirebaseUser) {
+
+    }
+
+    override fun onFailure(t: Throwable?) {
+        if (context != null) {
+            Toast.makeText(context, "로그인 에러", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = AuthenticationFragment()
-
-        private const val TAG = "AuthenticationFragment"
     }
 }
