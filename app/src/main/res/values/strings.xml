@@ -28,4 +28,7 @@
     <string name="category">카테고리</string>
     <string name="notice">공지사항</string>
 
+    <!--  notification  -->
+    <string name="post_notification_channel_id">게시글 알림</string>
+
 </resources>
