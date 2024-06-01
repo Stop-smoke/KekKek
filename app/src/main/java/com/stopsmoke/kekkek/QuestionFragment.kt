@@ -1,11 +1,10 @@
 package com.stopsmoke.kekkek
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentQuestionBinding
 
 class QuestionFragment : Fragment() {
@@ -15,9 +14,9 @@ class QuestionFragment : Fragment() {
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
 
-    private var result: Int = 0
-    private val testFragment = TestFragment()
+    private var result = 0
 
+    private lateinit var testFragment: TestFragment
 
     // 질문 제목
     private val questionTitles = listOf(
@@ -75,7 +74,6 @@ class QuestionFragment : Fragment() {
         )
     )
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -85,22 +83,20 @@ class QuestionFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        // 화면 전환 코드
-        // inflater : 레이아웃 xml 을 코드로 가져온다.
         _binding = FragmentQuestionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        testFragment = (parentFragment as TestFragment)
         setupView()
         setupListener()
     }
 
     private fun setupView() {
-        // 이 부분 강의 다시 확인하기
         binding.run {
             tvQuestionMainText.text = getString(questionTitles[questionType])
             btnQuestionAnswer1.text = getString(questionAnswers[questionType][0])
@@ -133,14 +129,12 @@ class QuestionFragment : Fragment() {
     }
 
     companion object {
-        private const val QUESTION_TYPE = "questionType"
+        private const val QUESTION_TYPE = "pageNum"
 
-        // TestActivity 에서 viewPager.setCurrentITem(nestItem, true)
-        // 넘기는 번호를 받아주는 곳
-        fun newInstance(questionType: Int): QuestionFragment {
+        fun newInstance(pageNum: Int): QuestionFragment {
             val fragment = QuestionFragment()
             val argument = Bundle()
-            argument.putInt(QUESTION_TYPE, questionType) // 새로운 페이지의 페이지 번호를 전달함
+            argument.putInt(QUESTION_TYPE, pageNum) // 새로운 페이지의 페이지 번호를 전달함
             fragment.arguments = argument
             return fragment
         }

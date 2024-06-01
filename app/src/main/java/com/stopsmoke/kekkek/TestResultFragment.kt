@@ -55,7 +55,6 @@ class TestResultFragment : Fragment() {
             btnTestResultOk.setOnClickListener {
                 parentFragmentManager.commit {
                     replace(R.id.main,HomeFragment())
-                        .commit()
                 }
             }
         }

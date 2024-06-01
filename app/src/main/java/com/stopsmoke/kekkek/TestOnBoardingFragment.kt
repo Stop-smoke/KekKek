@@ -10,19 +10,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
 import com.stopsmoke.kekkek.databinding.FragmentTestOnboardingBinding
 
-class TestOnBoardingFragment : Fragment() {
+class TestOnBoardingFragment(
+    private val callback: () -> Unit
+) : Fragment() {
 
     private var _binding: FragmentTestOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTestOnboardingBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -35,10 +33,7 @@ class TestOnBoardingFragment : Fragment() {
     private fun setupListener() {
         binding.run {
             btnTestStart.setOnClickListener {
-                parentFragmentManager.commit {
-                    replace(R.id.main,TestFragment())
-                        .commit()
-                }
+                callback()
             }
         }
     }

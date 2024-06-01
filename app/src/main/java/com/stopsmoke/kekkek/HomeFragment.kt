@@ -1,10 +1,10 @@
 package com.stopsmoke.kekkek
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,9 +35,9 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -90,8 +90,9 @@ class HomeFragment : Fragment() {
             }
 
             ivHomeTest.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.main,TestOnBoardingFragment())
+                parentFragmentManager.beginTransaction()
+                    .add(R.id.main, TestFragment())
+                    .addToBackStack(null)
                     .commit()
             }
 

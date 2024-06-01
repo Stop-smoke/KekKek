@@ -1,15 +1,30 @@
 package com.stopsmoke.kekkek
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int {
-        return 8 // 리턴 개수: 만드는 질문지의 총 개수
+class ViewPagerAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    callback: () -> Unit
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
+    private val fragments: List<Fragment> = (0..8).map {
+        if (it == 0) {
+            return@map TestOnBoardingFragment(callback)
+        }
+        if (it == 7) {
+            return@map TestResultFragment()
+        }
+        QuestionFragment.newInstance(it)
     }
 
-    override fun createFragment(position: Int): Fragment {
-        return QuestionFragment.newInstance(position)
+
+    override fun getItemCount(): Int = fragments.size
+
+    override fun createFragment(pageNum: Int): Fragment {
+        return fragments[pageNum]
     }
 }
