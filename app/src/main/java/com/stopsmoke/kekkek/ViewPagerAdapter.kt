@@ -11,7 +11,7 @@ class ViewPagerAdapter(
     callback: () -> Unit
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private val fragments: List<Fragment> = (0..8).map {
+    private val fragments: List<Fragment> = (0..7).map {
         if (it == 0) {
             return@map TestOnBoardingFragment(callback)
         }

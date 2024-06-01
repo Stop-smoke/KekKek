@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
 
@@ -28,6 +29,15 @@ class TestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupView()
 
+        activity?.onBackPressedDispatcher?.addCallback(
+            object : OnBackPressedCallback(binding.viewpagerTest.currentItem == 0) {
+                override fun handleOnBackPressed() {
+                    val nextItem = binding.viewpagerTest.currentItem - 1
+                    binding.viewpagerTest.setCurrentItem(nextItem, true)
+                }
+
+            }
+        )
     }
 
     private fun setupView() {
@@ -36,7 +46,6 @@ class TestFragment : Fragment() {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
         binding.viewpagerTest.adapter = viewPagerAdapter
-        binding.viewpagerTest.isUserInputEnabled = false // 화면이 넘어가지 못하도록 막음
     }
 
     fun moveToNextQuestionPage() {
