@@ -4,37 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AuthenticationFragment">
+    tools:context=".presentation.authentication.AuthenticationFragment">
 
-    <TextView
-        android:id="@+id/tv_auth_login"
+    <ImageView
+        android:id="@+id/iv_login_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_login" />
+
+    <ImageView
+        android:id="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="로그인"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="74dp"
+        android:src="@drawable/ic_brand_logo_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_auth_kakao_login"
+    <FrameLayout
+        android:id="@+id/fl_login_kakao"
         android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/kakao_login_large_wide"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/fl_login_google"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ImageView
-        android:id="@+id/iv_auth_google_login"
+        <include layout="@layout/btn_login_kakao" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_login_google"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_login_other"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <include layout="@layout/btn_login_google" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_login_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:src="@drawable/google_login"
-        app:layout_constraintBottom_toTopOf="@id/iv_auth_kakao_login"
+        android:layout_marginBottom="80dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="@string/login_other_btn"
+        android:textColor="#E0E0E0"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

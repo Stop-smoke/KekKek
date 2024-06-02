@@ -47,14 +47,14 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.ivAuthKakaoLogin.setOnClickListener {
+        binding.flLoginKakao.setOnClickListener {
             kakaoAuthorization = KakaoAuthorization().apply {
                 registerCallbackListener(this@AuthenticationFragment)
                 loginKakao(requireContext())
             }
         }
 
-        binding.ivAuthGoogleLogin.setOnClickListener {
+        binding.flLoginGoogle.setOnClickListener {
             googleAuthorization.launchGoogleAuthActivity()
         }
     }

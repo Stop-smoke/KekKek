@@ -30,5 +30,8 @@
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>
+    <string name="login_other_btn"><u>다른 방법으로 이용하기</u></string>
+    <string name="login_google">Google로 이용하기</string>
+    <string name="login_kakao">카카오로 이용하기</string>
 
 </resources>
