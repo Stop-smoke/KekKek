@@ -1,7 +1,9 @@
 package com.stopsmoke.kekkek.data.repository
 
+import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.firestorage.model.StorageUploadResult
@@ -47,5 +49,9 @@ internal class UserRepositoryImpl @Inject constructor(
             .onEach {
                 bitmap.deleteOnExit()
             }
+    }
+
+    override suspend fun setUserData(user: User) {
+        userDao.setUser(user.toEntity())
     }
 }

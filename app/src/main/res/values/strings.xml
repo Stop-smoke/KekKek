@@ -2,7 +2,7 @@
     <string name="app_name">켁켁이</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-<!--  Home  -->
+    <!--  Home  -->
     <string name="home_start">start</string>
     <string name="home_performance">성과</string>
     <string name="home_test">중독 테스트</string>
@@ -17,21 +17,24 @@
     <string name="menu_community">community</string>
     <string name="menu_mypage">mypage</string>
 
-<!--    my fragment-->
+    <!--    my fragment-->
     <string name="popular_post">인기 포스트</string>
     <string name="my_writing">내가 쓴 글</string>
     <string name="my_comments">내가 쓴 댓글</string>
     <string name="bookmark">북마크</string>
     <string name="achievement">업적</string>
 
-<!--    community fragment-->
+    <!--    community fragment-->
     <string name="category">카테고리</string>
     <string name="notice">공지사항</string>
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>
     <string name="login_other_btn"><u>다른 방법으로 이용하기</u></string>
+
+    <!--  login  -->
     <string name="login_google">Google로 이용하기</string>
     <string name="login_kakao">카카오로 이용하기</string>
+    <string name="login_default_nickname">킥킥이</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.presentation.authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,17 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.oAuthCredential
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.model.User
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.authorization.google.GoogleAuthorization
 import com.stopsmoke.kekkek.authorization.google.GoogleAuthorizationCallbackListener
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +28,8 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
 
     private var _binding: FragmentAuthenticationBinding? = null
     private val binding: FragmentAuthenticationBinding get() = _binding!!
+
+    private val viewModel: AuthenticationViewModel by viewModels()
 
     private lateinit var kakaoAuthorization: KakaoAuthorization
     private lateinit var googleAuthorization: GoogleAuthorization
@@ -75,6 +80,15 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         val auth = Firebase.auth
         auth.signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
+                com.stopsmoke.kekkek.domain.model.User(
+                    uid = authResult.user?.uid ?: return@addOnSuccessListener,
+                    name = user.kakaoAccount?.name ?: getString(R.string.login_default_nickname),
+                    location = null,
+                    profileImage = ProfileImage.Default
+                ).let {
+                    viewModel.updateUserData(it)
+                }
+
                 authResult.user?.displayName?.let {
                     Toast.makeText(requireContext(), "${it}님 환영합니다", Toast.LENGTH_SHORT).show()
                 }
@@ -86,7 +100,14 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     }
 
     override fun onSuccess(user: FirebaseUser) {
-
+        val domainUser = com.stopsmoke.kekkek.domain.model.User(
+            uid = user.uid,
+            name = user.displayName ?: getString(R.string.login_default_nickname),
+            location = null,
+            profileImage = ProfileImage.Default
+        )
+        viewModel.updateUserData(domainUser)
+        Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailure(t: Throwable?) {
