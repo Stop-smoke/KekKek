@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
+import com.stopsmoke.kekkek.invisible
 
 class TestFragment : Fragment() {
 
@@ -54,6 +55,11 @@ class TestFragment : Fragment() {
         if (nextItem < (viewPagerAdapter.itemCount)) {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {
