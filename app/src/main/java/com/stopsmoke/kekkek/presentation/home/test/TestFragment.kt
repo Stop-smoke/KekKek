@@ -46,6 +46,7 @@ class TestFragment : Fragment() {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
         binding.viewpagerTest.adapter = viewPagerAdapter
+        binding.viewpagerTest.isUserInputEnabled = false // 사용자가 페이지를 넘기지 못하도록 만듬
     }
 
     fun moveToNextQuestionPage() {
