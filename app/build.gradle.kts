@@ -108,4 +108,7 @@ dependencies {
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    // advertisement
+//    implementation("com.google.android.gms:play-services-ads:23.1.0")
 }
