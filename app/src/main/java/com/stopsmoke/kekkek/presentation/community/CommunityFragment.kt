@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
+import com.stopsmoke.kekkek.PostWriteFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
@@ -63,6 +65,7 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        setupListener()
     }
 
     override fun onResume() {
@@ -89,6 +92,15 @@ class CommunityFragment : Fragment() {
 
         initSpinner()
 
+    }
+
+    private fun setupListener() = with(binding) {
+        floatingActionButtonCommunity.setOnClickListener {
+            parentFragmentManager.commit {
+                replace(R.id.main, PostWriteFragment())
+                addToBackStack(null)
+            }
+        }
     }
 
     private fun initViewModel() = with(viewModel){
@@ -119,21 +131,27 @@ class CommunityFragment : Fragment() {
             override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
                     0 -> {
+                        // 커뮤니티 홈
                     }
 
                     1 -> {
+                        // 공지사항
                     }
 
                     2 -> {
+                        // 인기 게시판
                     }
 
                     3 -> {
+                        // 자유 게시판
                     }
 
                     4 -> {
+                        // 금연 성공 후기
                     }
 
                     5 -> {
+                        // 금연 보조제 후기
                     }
                 }
             }
