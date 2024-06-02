@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.stopsmoke.kekkek.AuthenticationFragment
 import com.stopsmoke.kekkek.HomeFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
+import com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment
 import com.stopsmoke.kekkek.presentation.community.CommunityFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Fragment.changeFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerViewMain, this).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerViewMain, this)
+            .commit()
     }
 }
