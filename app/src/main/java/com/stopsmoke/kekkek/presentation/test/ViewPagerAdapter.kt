@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.test
+package com.stopsmoke.kekkek.presentation.test
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
