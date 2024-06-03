@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
 import com.stopsmoke.kekkek.invisible
 
@@ -31,8 +32,13 @@ class TestFragment : Fragment() {
         setupView()
 
         activity?.onBackPressedDispatcher?.addCallback(
-            object : OnBackPressedCallback(binding.viewpagerTest.currentItem == 0) {
+            object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    if (binding.viewpagerTest.currentItem == 0) {
+                        findNavController().popBackStack()
+                        return
+                    }
+
                     val nextItem = binding.viewpagerTest.currentItem - 1
                     binding.viewpagerTest.setCurrentItem(nextItem, true)
                 }

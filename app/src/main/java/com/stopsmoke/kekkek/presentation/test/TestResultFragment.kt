@@ -1,15 +1,14 @@
 package com.stopsmoke.kekkek.presentation.test
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentTestResultBinding
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.home.HomeFragment
 
 class TestResultFragment : Fragment() {
 
@@ -19,8 +18,8 @@ class TestResultFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentTestResultBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,7 +34,8 @@ class TestResultFragment : Fragment() {
         with(binding) {
             if (result in 0..7) {
                 tvTestResultType.text = "가장 쉽게 금연할 수 있는 상태"
-                tvTestResultDescription.text = "흡연량과 흡연 시간이 늘어날수록 니코틴에 대한 의존도는 높아집니다. 오늘부터 금연 성공을 이어가세요!"
+                tvTestResultDescription.text =
+                    "흡연량과 흡연 시간이 늘어날수록 니코틴에 대한 의존도는 높아집니다. 오늘부터 금연 성공을 이어가세요!"
                 ivTestResultIcon.setImageResource(R.drawable.ic_test_good)
             } else if (result in 8..16) {
                 tvTestResultType.text = "금연을 시작해야 할 상태"
@@ -52,9 +52,7 @@ class TestResultFragment : Fragment() {
     private fun setupListener() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
-                parentFragmentManager.commit {
-                    replace(R.id.main, HomeFragment())
-                }
+                findNavController().popBackStack("home", false)
             }
         }
     }
