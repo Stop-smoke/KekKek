@@ -79,6 +79,10 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    // text editor
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.ui.text.android)
+
     // TEST
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -111,4 +115,10 @@ dependencies {
 
     // advertisement
 //    implementation("com.google.android.gms:play-services-ads:23.1.0")
+
+    // text editor - k1
+    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05")
+
+    // text editor - k2 → k1, k2 차이는 잘 모르겠음
+//    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05-k2")
 }
