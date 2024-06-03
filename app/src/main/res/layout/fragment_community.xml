@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
-        android:text="마이페이지"
+        android:text="커뮤니티"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/toolbar_community"
@@ -76,8 +76,6 @@
         app:layout_constraintTop_toTopOf="@id/tv_community_notice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_community_list"

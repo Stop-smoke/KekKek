@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/iv_itemPopular_fire"
@@ -12,7 +11,9 @@
         android:layout_height="15dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_popular_fire"/>
+        android:src="@drawable/ic_popular_fire"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:id="@+id/tv_itemPopular_popular"
@@ -35,7 +36,8 @@
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_itemPopular_fire"
-        app:layout_constraintBottom_toBottomOf="@id/iv_itemPopular_fire"/>
+        app:layout_constraintBottom_toBottomOf="@id/iv_itemPopular_fire"
+        android:layout_marginEnd="16dp"/>
 
     
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +46,8 @@
         android:layout_height="wrap_content"
         android:minHeight="40dp"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintTop_toBottomOf="@id/tv_itemPopular_popular"
         android:background="@drawable/bg_community_popularbox"
         android:padding="12dp">
@@ -90,46 +94,46 @@
             tools:text = "22222"
             android:textSize="10dp"
             android:textColor="@color/gray"
-            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_heart1"
+            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_like1"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType1"
             android:layout_marginEnd="10dp"/>
 
         <ImageView
-            android:id="@+id/iv_itemPopular_heart1"
+            android:id="@+id/iv_itemPopular_like1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_heart_none"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_heartNum1"
+            android:src="@drawable/ic_like_none"
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_likeNum1"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType1"
             android:layout_marginEnd="5dp"/>
 
         <TextView
-            android:id="@+id/tv_itemPopular_heartNum1"
+            android:id="@+id/tv_itemPopular_likeNum1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="45dp"
             tools:text = "22222"
             android:textSize="10dp"
             android:textColor="@color/gray"
-            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_chat1"
+            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_comment1"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType1"
             android:layout_marginEnd="10dp"/>
 
         <ImageView
-            android:id="@+id/iv_itemPopular_chat1"
+            android:id="@+id/iv_itemPopular_comment1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chat"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_chatNum1"
+            android:src="@drawable/ic_comment"
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum1"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType1"
             android:layout_marginEnd="10dp"/>
 
         <TextView
-            android:id="@+id/tv_itemPopular_chatNum1"
+            android:id="@+id/tv_itemPopular_commentNum1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="45dp"
@@ -144,12 +148,14 @@
 <!-- box 2 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_itemPopular_postPopular2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="40dp"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/cl_itemPopular_postPopular1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_itemPopular_bottomView"
+        app:layout_constraintStart_toStartOf="@id/cl_itemPopular_postPopular1"
+        app:layout_constraintEnd_toEndOf="@id/cl_itemPopular_postPopular1"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_community_popularbox"
         android:padding="12dp">
@@ -196,46 +202,46 @@
             tools:text = "22222"
             android:textSize="10dp"
             android:textColor="@color/gray"
-            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_heart2"
+            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_like2"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType2"
             android:layout_marginEnd="10dp"/>
 
         <ImageView
-            android:id="@+id/iv_itemPopular_heart2"
+            android:id="@+id/iv_itemPopular_like2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_heart_none"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_heartNum2"
+            android:src="@drawable/ic_like_none"
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_likeNum2"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType2"
             android:layout_marginEnd="5dp"/>
 
         <TextView
-            android:id="@+id/tv_itemPopular_heartNum2"
+            android:id="@+id/tv_itemPopular_likeNum2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="45dp"
             tools:text = "22222"
             android:textSize="10dp"
             android:textColor="@color/gray"
-            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_chat2"
+            app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_comment2"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType2"
             android:layout_marginEnd="10dp"/>
 
         <ImageView
-            android:id="@+id/iv_itemPopular_chat2"
+            android:id="@+id/iv_itemPopular_comment2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_chat"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_chatNum2"
+            android:src="@drawable/ic_comment"
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum2"
             app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType2"
             android:layout_marginEnd="10dp"/>
 
         <TextView
-            android:id="@+id/tv_itemPopular_chatNum2"
+            android:id="@+id/tv_itemPopular_commentNum2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="45dp"
@@ -248,11 +254,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+        android:id="@+id/view_itemPopular_bottomView"
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:background="@color/bg_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="-16dp"
-        android:layout_marginEnd="-16dp"
-        android:layout_marginBottom="-16dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

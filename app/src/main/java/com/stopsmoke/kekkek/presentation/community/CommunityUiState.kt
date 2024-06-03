@@ -15,7 +15,7 @@ data class CommunityUiState (
 
 sealed class CommunityCategory{
     data class CommunityHome(
-        val popularItemList: List<CommunityPopularItem>,
+        val popularItemList: List<CommunityListItem>,
         val noticeList: List<List<String>>
     ): CommunityCategory()
 

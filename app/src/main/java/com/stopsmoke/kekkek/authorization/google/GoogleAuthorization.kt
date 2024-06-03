@@ -67,7 +67,7 @@ class GoogleAuthorization(
 
     fun launchGoogleAuthActivity() {
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(BuildConfig.FIRBASE_AUTH_SERVCER_CLIENT_KEY)
+//            .requestIdToken(BuildConfig.FIRBASE_AUTH_SERVCER_CLIENT_KEY)
             .requestId()
             .requestEmail()
             .requestProfile()
