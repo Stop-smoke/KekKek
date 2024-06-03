@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentTestResultBinding
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.home.HomeFragment
 
 class TestResultFragment : Fragment() {
@@ -56,6 +57,11 @@ class TestResultFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {

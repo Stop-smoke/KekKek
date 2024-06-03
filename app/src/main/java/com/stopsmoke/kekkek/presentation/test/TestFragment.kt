@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
+import com.stopsmoke.kekkek.invisible
 
 class TestFragment : Fragment() {
 
@@ -46,6 +47,7 @@ class TestFragment : Fragment() {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
         binding.viewpagerTest.adapter = viewPagerAdapter
+        binding.viewpagerTest.isUserInputEnabled = false // 사용자가 페이지를 넘기지 못하도록 만듬
     }
 
     fun moveToNextQuestionPage() {
@@ -53,6 +55,11 @@ class TestFragment : Fragment() {
         if (nextItem < (viewPagerAdapter.itemCount)) {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {

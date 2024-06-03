@@ -117,6 +117,10 @@
     </string>
     <string name="test_result_title">테스트 결과</string>
     <string name="test_result_ok">확인</string>
+    <string name="post_add_comment">댓글을 남겨주세요.</string>
+    <string name="comment_like">좋아요</string>
+    <string name="comment_recomment">대댓글</string>
+    <string name="floatingActionButton_community">글쓰기</string>
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>

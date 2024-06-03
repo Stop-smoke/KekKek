@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.presentation.test.TestFragment
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.visible
 
 class HomeFragment : Fragment() {
 
@@ -25,6 +27,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.visible()
     }
 
     override fun onDestroyView() {

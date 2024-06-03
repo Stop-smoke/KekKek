@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.stopsmoke.kekkek.databinding.FragmentTestOnboardingBinding
+import com.stopsmoke.kekkek.invisible
 
 class TestOnBoardingFragment(
     private val callback: () -> Unit
@@ -25,6 +26,11 @@ class TestOnBoardingFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     private fun setupListener() {

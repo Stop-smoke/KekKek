@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentQuestionBinding
+import com.stopsmoke.kekkek.invisible
 
 class QuestionFragment : Fragment() {
 
@@ -127,6 +128,11 @@ class QuestionFragment : Fragment() {
                 testFragment.moveToNextQuestionPage()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     companion object {

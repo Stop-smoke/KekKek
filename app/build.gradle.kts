@@ -114,6 +114,12 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.5.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
 
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    // advertisement
+//    implementation("com.google.android.gms:play-services-ads:23.1.0")
+
     // PAGING
     implementation("androidx.paging:paging-runtime:3.3.0")
     testImplementation("androidx.paging:paging-common:3.3.0")
