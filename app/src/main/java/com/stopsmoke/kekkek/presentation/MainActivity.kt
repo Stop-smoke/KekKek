@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.stopsmoke.kekkek.HomeFragment
+import com.stopsmoke.kekkek.presentation.home.HomeFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
-import com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment
 import com.stopsmoke.kekkek.presentation.community.CommunityFragment
+import com.stopsmoke.kekkek.presentation.my.MyFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             binding.bottomNavigationViewHome.selectedItemId = R.id.home
         }
-        AuthenticationFragment().changeFragment()
     }
 
     private fun setupBottomNavigation() {
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.my_page -> {
-                    AuthenticationFragment().changeFragment()
+                    MyFragment().changeFragment()
                 }
             }
             return@setOnItemSelectedListener true
@@ -56,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Fragment.changeFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerViewMain, this)
-            .commit()
+        supportFragmentManager.beginTransaction().replace(R.id.main, this).commit()
     }
 }

@@ -17,16 +17,106 @@
     <string name="menu_community">community</string>
     <string name="menu_mypage">mypage</string>
 
-    <!--    my fragment-->
+    <!--  my fragment  -->
     <string name="popular_post">인기 포스트</string>
     <string name="my_writing">내가 쓴 글</string>
     <string name="my_comments">내가 쓴 댓글</string>
     <string name="bookmark">북마크</string>
     <string name="achievement">업적</string>
 
-    <!--    community fragment-->
+    <!-- Test OnBoarding fragment-->
     <string name="category">카테고리</string>
     <string name="notice">공지사항</string>
+    <string name="test_description">한국어판 니코틴 의존도 설문 도구\n(Fagerstrom Tolerance Questionnaire)\n에 의거하여 작성된 담배 중독 검사입니다.</string>
+    <string name="test_title">담배 중독 검사</string>
+    <string name="test_start">테스트 시작하기</string>
+
+    <!-- Test fragment -->
+    <string name="question_sub_text">대략적으로 알려주세요.</string>
+    <string name="question1_title">하루에 담배를 몇 개비 정도 피우십니까?</string>
+    <string name="question1_answer1">15 개비 이하</string>
+    <string name="question1_answer2">16 ∼ 25개비</string>
+    <string name="question1_answer3">26 개비 이상</string>
+
+    <string name="question2_title">귀하가 피우는 담배의 니코틴 함량은 어느 정도입니까?</string>
+    <string name="question2_answer1">낮다</string>
+    <string name="question2_answer2">중간 정도</string>
+    <string name="question2_answer3">높다</string>
+
+    <string name="question3_title">얼마나 자주 담배 연기를 깊이 들이마십니까?</string>
+    <string name="question3_answer1">들이마시지 않는다</string>
+    <string name="question3_answer2">가끔</string>
+    <string name="question3_answer3">항상</string>
+
+    <string name="question4_title">귀하는 아침 나절에 피우는 담배가 나머지 시간에 피우는 담배보다 많습니까?</string>
+    <string name="question4_answer1">아니요</string>
+    <string name="question4_answer2">잘 모르겠음</string>
+    <string name="question4_answer3">예</string>
+
+    <string name="question5_title">귀하는 하루의 첫 담배를 아침 기상 후 언제 피우십니까?</string>
+    <string name="question5_answer1">30분 이내</string>
+    <string name="question5_answer2">잘 모르겠음</string>
+    <string name="question5_answer3">30분 이후</string>
+
+    <string name="question6_title">하루에 언제 피우는 담배가 가장 만족스럽습니까?</string>
+    <string name="question6_answer1">잘 모르겠음</string>
+    <string name="question6_answer2">그 외</string>
+    <string name="question6_answer3">아침 첫 담배</string>
+
+    <string name="question7_title">귀하는 금연장소에서도 담배 피우기를 참기가 어렵습니까?</string>
+    <string name="question7_answer1">아니요</string>
+    <string name="question7_answer2">잘 모르겠음</string>
+    <string name="question7_answer3">예</string>
+
+    <string name="question8_title">귀하는 몸이 불편해서 누워 쉴 때에도 담배를 피우십니까?</string>
+    <string name="question8_answer1">아니요</string>
+    <string name="question8_answer2">잘 모르겠음</string>
+    <string name="question8_answer3">예</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="test_result_title">테스트 결과</string>
+    <string name="test_result_ok">확인</string>
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>

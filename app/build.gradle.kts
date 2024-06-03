@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.circleimageview)
 
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // TEST
     testImplementation(libs.junit)
@@ -106,16 +108,5 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
-    implementation("com.google.firebase:firebase-auth")
 
-    //Navigation
-    implementation("androidx.navigation:navigation-fragment:2.5.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
-
-    // PAGING
-    implementation("androidx.paging:paging-runtime:3.3.0")
-    testImplementation("androidx.paging:paging-common:3.3.0")
-
-    //google SNS with FireBase
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }
