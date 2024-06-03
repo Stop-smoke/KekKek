@@ -75,10 +75,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
-
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
 
     // TEST
     testImplementation(libs.junit)
@@ -117,8 +114,8 @@ dependencies {
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
-    // advertisement
-//    implementation("com.google.android.gms:play-services-ads:23.1.0")
+    //admob
+    implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
 
     // PAGING
     implementation("androidx.paging:paging-runtime:3.3.0")

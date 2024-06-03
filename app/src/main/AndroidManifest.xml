@@ -31,18 +31,16 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_foreground" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/white" />
 
         <!-- 에드몹 -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9360439257056668~3215355425"/>
+        <!-- adMpb, 추후 출시 applicationId 추가, kakaoApi 역시 hash key에 릴리즈키 등록해야한다는데..-->
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
         <activity
             android:name=".presentation.MainActivity"
@@ -67,6 +65,11 @@
                     android:scheme="kakao ${KAKAO_NATIVE_API_KEY}" />
             </intent-filter>
         </activity>
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
     </application>
 
 </manifest>
