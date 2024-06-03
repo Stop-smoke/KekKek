@@ -5,55 +5,81 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
+import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PostWriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PostWriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentPostWriteBinding ?= null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_write, container, false)
+        _binding = FragmentPostWriteBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PostWriteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PostWriteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        initListener()
+    }
+
+    @androidx.compose.runtime.Composable
+    private fun initView() = with(binding) {
+        val state = rememberRichTextState()
+        RichTextEditor(
+            state = state,
+        )
+    }
+
+    private fun initListener() = with(binding) {
+        ivPostWriteBold.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
+        }
+        ivPostWriteItalic.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
+        }
+        ivPostWriteUnderline.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline))
+        }
+        ivPostWriteLineThrough.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.LineThrough))
+        }
+        ivPostWriteTextColor.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(color = Color.Gray))
+        }
+        ivPostWriteBackgroundColor.setOnClickListener {
+            state.toggleSpanStyle(SpanStyle(background = Color.Yellow))
+        }
+        ivPostWriteLink.setOnClickListener {
+            state.addLink(
+                text = "깃허브",
+                url = "https://github.com/Stop-smoke/KekKek"
+            )
+        }
+        tvPostWriteCancel.setOnClickListener {
+
+        }
+        tvPostWriteRegister.setOnClickListener {
+
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

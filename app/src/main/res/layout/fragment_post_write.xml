@@ -7,13 +7,176 @@
     tools:context=".PostWriteFragment">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="글쓰기 화면입니다."
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/cl_post_write_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_post_write_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="취소"
+            android:textColor="#D0D5DB"
+            android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_post_write_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="글 카테고리"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_post_write_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="등록"
+            android:clickable="true"
+            android:textColor="#D0D5DB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_post_write_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:hint="제목을 입력해 주세요."
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toTopOf="@+id/iv_post_write_bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_editor_1"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_2"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_bold"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_bold"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_bold" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_underline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_3"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_italic"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_italic"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_italic" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_line_through"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_4"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_underline"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_underline"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_underline" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_5"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_line_through"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_line_through"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_line_through" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_background_color"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_6"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_text_color"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_text_color"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_text_color" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/ic_editor_7"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"
+            app:layout_constraintStart_toEndOf="@+id/iv_post_write_background_color"
+            app:layout_constraintTop_toTopOf="@+id/iv_post_write_background_color" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_post_write_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#F4F6F8"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <EditText
+            android:id="@+id/et_post_write_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="내용을 입력해 주세요.\n에티켓을 준수해 유용한 공간을 만들어요😊"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
