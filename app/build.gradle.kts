@@ -111,8 +111,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     //Navigation
-    implementation("androidx.navigation:navigation-fragment:2.5.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
