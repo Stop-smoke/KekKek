@@ -36,6 +36,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         addManifestPlaceholdersAndBuildConfig("KAKAO_NATIVE_API_KEY")
+        addManifestPlaceholdersAndBuildConfig("FIRBASE_AUTH_SERVCER_CLIENT_KEY")
     }
 
     buildTypes {
@@ -74,13 +75,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
-
     implementation("androidx.cardview:cardview:1.0.0")
 
     // TEST
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 
     // HILT
     implementation(libs.hilt.android)
@@ -103,5 +105,22 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-auth")
 
+    //Navigation
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    //admob
+    implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
+
+    // PAGING
+    implementation("androidx.paging:paging-runtime:3.3.0")
+    testImplementation("androidx.paging:paging-common:3.3.0")
+
+    //google SNS with FireBase
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }

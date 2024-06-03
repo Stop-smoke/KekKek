@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
+        app:route="home"
+        tools:layout="@layout/fragment_home"/>
+
+    <fragment
+        android:id="@+id/community"
+        android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
+        app:route="community"
+        tools:layout="@layout/fragment_community"/>
+
+    <fragment
+        android:id="@+id/my_page"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyFragment"
+        app:route="my"
+        tools:layout="@layout/fragment_my"/>
+
+    <fragment
+        android:id="@+id/test_page"
+        android:name="com.stopsmoke.kekkek.presentation.test.TestFragment"
+        app:route="test_page"
+        tools:layout="@layout/fragment_test_onboarding"/>
+
+</navigation>

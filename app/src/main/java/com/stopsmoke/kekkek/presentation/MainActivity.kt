@@ -5,8 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import com.stopsmoke.kekkek.HomeFragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,6 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,37 +25,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
-        setupBottomNavigation()
-
-        if (savedInstanceState == null) {
-            binding.bottomNavigationViewHome.selectedItemId = R.id.home
-        }
+        setupNavigation()
     }
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigationViewHome.setOnItemSelectedListener { menu ->
-            when (menu.itemId) {
-                R.id.home -> {
-                    HomeFragment().changeFragment()
-                }
+    private fun setupNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
 
-                R.id.community -> {
-//                    CommunityFragment().changeFragment()
-                }
-
-                R.id.my_page -> {
-//                    MyPageFragment().changeFragment()
-                }
-            }
-            return@setOnItemSelectedListener true
-        }
-    }
-
-    private fun Fragment.changeFragment() {
-        supportFragmentManager.beginTransaction().replace(R.id.main, this).commit()
+        navController = navHostFragment.navController
+        binding.bottomNavigationViewHome.setupWithNavController(navController)
     }
 }

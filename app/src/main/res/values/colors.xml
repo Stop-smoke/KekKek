@@ -3,4 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#CACACA</color>
+    <color name="bg_gray">#F7F8FA</color>
+    <color name="bg_community_box_gray">#F3F3F3</color>
+    <color name="community_box_blue">#E1F0FF</color>
+
 </resources>
