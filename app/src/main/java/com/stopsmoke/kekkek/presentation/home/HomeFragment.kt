@@ -9,10 +9,6 @@ import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 
 
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
