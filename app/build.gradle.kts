@@ -123,4 +123,7 @@ dependencies {
 
     //google SNS with FireBase
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    //Coil
+    implementation("io.coil-kt:coil:2.1.0")
 }

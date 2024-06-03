@@ -1,11 +1,14 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import java.util.Date
+
 sealed interface CommunityListItem {
     data class CommunityWritingItem(
         val userInfo: UserInfo,
         val postInfo : PostInfo,
         val postImage: String,
-        val post: String
+        val post: String,
+        val postTime: Date
     ) : CommunityListItem
 
     data class CommunityPopularItem(

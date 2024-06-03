@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostpopularBinding
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import java.util.Calendar
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class CommunityListAdapter
     : ListAdapter<CommunityListItem, CommunityListAdapter.ViewHolder>(
@@ -72,9 +75,39 @@ class CommunityListAdapter
 
             writingItem.postInfo.let{
                 tvItemWritingTitle.text = it.title
+                tvItemWritingViewNum.text = it.view.toString()
+                tvItemWritingLikeNum.text = it.like.toString()
+                tvItemWritingCommentNum.text = it.comment.toString()
+            }
+
+            tvItemWritingPost.text = writingItem.post
+            tvItemWritingTimeStamp.text = getRelativeTime(writingItem.postTime)
+
+            if(writingItem.postImage != "") {
+                ivItemWritingPostImage
             }
         }
 
+        private fun getRelativeTime(pastDate: Date): String {
+            val now = Calendar.getInstance().time
+            val diffInMillis = now.time - pastDate.time
+
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+            val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+            val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+            val months = days / 30
+            val years = days / 365
+
+            return when {
+                seconds < 60 -> "${seconds}초 전"
+                minutes < 60 -> "${minutes}분 전"
+                hours < 24 -> "${hours}시간 전"
+                days < 30 -> "${days}일 전"
+                months < 12 -> "${months}달 전"
+                else -> "${years}년 전"
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int = when(getItem(position)){
