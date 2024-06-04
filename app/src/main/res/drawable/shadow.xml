@@ -5,7 +5,8 @@
     <item>
         <shape>
             <padding
-                android:bottom="2dp"
+                android:top="1dp"
+                android:bottom="1dp"
                 android:left="1dp"
                 android:right="1dp" />
 
@@ -17,7 +18,8 @@
     <item>
         <shape>
             <padding
-                android:bottom="2dp"
+                android:top="1dp"
+                android:bottom="1dp"
                 android:left="1dp"
                 android:right="1dp" />
 
@@ -29,7 +31,8 @@
     <item>
         <shape>
             <padding
-                android:bottom="2dp"
+                android:top="1dp"
+                android:bottom="1dp"
                 android:left="1dp"
                 android:right="1dp" />
 
@@ -41,7 +44,8 @@
     <item>
         <shape>
             <padding
-                android:bottom="2dp"
+                android:top="1dp"
+                android:bottom="1dp"
                 android:left="1dp"
                 android:right="1dp" />
 
@@ -53,7 +57,8 @@
     <item>
         <shape>
             <padding
-                android:bottom="2dp"
+                android:top="1dp"
+                android:bottom="1dp"
                 android:left="1dp"
                 android:right="1dp" />
 

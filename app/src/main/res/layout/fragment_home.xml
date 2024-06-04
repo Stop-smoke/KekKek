@@ -5,390 +5,384 @@
     android:id="@+id/cl_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="@drawable/bg_home"
     tools:context=".presentation.home.HomeFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_home_toolbar" />
+
+    <ImageView
+        android:id="@+id/tv_home_topTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/app_title"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/toolbar_home" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_home">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tv_home_head_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_home_app_name"
-                tools:text="금연 진행 상황" />
-
-            <ImageView
-                android:id="@+id/iv_home_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_timer"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_home_timer"
-                app:layout_constraintStart_toEndOf="@+id/tv_home_timer"
-                app:layout_constraintTop_toTopOf="@+id/tv_home_timer" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_home_performance"
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="40dp"
-                app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_home_timer">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/iv_home_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="32dp"
-                        android:src="@drawable/ic_achievement_first"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_cigarette_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:src="@drawable/ic_achievement_second"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_day"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_day"
-                        app:layout_constraintTop_toTopOf="@+id/iv_home_day" />
-
-
-                    <ImageView
-                        android:id="@+id/iv_home_life_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:src="@drawable/ic_achievement_fourth"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_save_money"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_save_money"
-                        app:layout_constraintTop_toTopOf="@+id/iv_home_save_money" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_save_money"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:src="@drawable/ic_achievement_third"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_home_cigarette_num"
-                        app:layout_constraintStart_toEndOf="@+id/iv_home_cigarette_num"
-                        app:layout_constraintTop_toTopOf="@+id/iv_home_cigarette_num" />
-
-                    <TextView
-                        android:id="@+id/tv_home_day_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textColor="#0C35C4"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_day"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_day"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_day"
-                        tools:text="금연 기간" />
-
-                    <TextView
-                        android:id="@+id/tv_home_cigarette_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textColor="#0C35C4"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_cigarette_num"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_cigarette_num"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_cigarette_num"
-                        tools:text="절약 담배 수" />
-
-                    <TextView
-                        android:id="@+id/tv_home_save_money_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textColor="#0C35C4"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_save_money"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_save_money"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_save_money"
-                        tools:text="절약한 돈" />
-
-                    <TextView
-                        android:id="@+id/tv_home_life_day_num"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:textColor="#0C35C4"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_life_day"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_life_day"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_life_day"
-                        tools:text="생명 연장일" />
-
-                    <TextView
-                        android:id="@+id/tv_home_day_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_day_description"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_day_num"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_day_num"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_day_num" />
-
-                    <TextView
-                        android:id="@+id/tv_home_cigarette_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_cigarette_description"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_cigarette_num"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_cigarette_num"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_cigarette_num" />
-
-                    <TextView
-                        android:id="@+id/tv_home_save_money_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_save_money_description"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_save_money_num"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_save_money_num"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_save_money_num" />
-
-                    <TextView
-                        android:id="@+id/tv_home_life_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_life_description"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_life_day_num"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_life_day_num"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_life_day_num" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_home_ranking"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="40dp"
-                app:cardElevation="10dp"
-                app:layout_constraintStart_toStartOf="@+id/cv_home_performance"
-                app:layout_constraintTop_toBottomOf="@+id/cv_home_performance">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/iv_home_ranking"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_ranking"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_home_ranking"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_ranking"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_ranking"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_ranking"
-                        tools:text="등수" />
-
-                    <TextView
-                        android:id="@+id/tv_home_region"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:textColor="#AAAAAA"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_ranking"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_ranking"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_ranking"
-                        tools:text="사용자 주소" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_home_test"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="40dp"
-                app:cardElevation="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/cv_home_performance"
-                app:layout_constraintTop_toBottomOf="@+id/cv_home_performance">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_home_test"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/home_test"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_home_test"
-                        app:layout_constraintStart_toStartOf="@+id/iv_home_test"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_home_test" />
-
-                    <TextView
-                        android:id="@+id/tv_home_test_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/home_test_detail"
-                        android:textColor="#AAAAAA"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="@+id/tv_home_test"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_test"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_test" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_test"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="16dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_cigarette"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_home_motivation"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="40dp"
-                app:cardElevation="10dp"
-                app:layout_constraintStart_toStartOf="@+id/cv_home_ranking"
-                app:layout_constraintTop_toBottomOf="@+id/cv_home_ranking">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_home_motivation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
-                        android:text="@string/home_motivation"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_random"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_random"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_home_motivation"
-                        app:layout_constraintStart_toEndOf="@+id/tv_home_motivation"
-                        app:layout_constraintTop_toTopOf="@+id/tv_home_motivation" />
-
-                    <ImageView
-                        android:id="@+id/iv_home_motivation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:paddingVertical="20dp"
-                        android:src="@drawable/img_motivation_1"
-                        app:layout_constraintStart_toStartOf="@+id/tv_home_motivation"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_home_motivation" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+            android:layout_height="match_parent"
+            android:background="@color/bg_gray">
 
             <TextView
                 android:id="@+id/tv_home_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tv_home_head_text"
-                app:layout_constraintTop_toBottomOf="@+id/tv_home_head_text"
-                tools:text="타이머 시간" />
-
-            <ImageView
-                android:id="@+id/iv_home_notification"
-                android:layout_width="23dp"
-                android:layout_height="26dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_notification"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_home_app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="KekKek"
-                android:textSize="34sp"
-                android:textStyle="bold"
+                android:layout_marginTop="28dp"
+                android:text="금연한지"
+                android:fontFamily="@font/pretendard_medium"
+                android:textSize="28sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tv_home_timerNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="46183시간 5분"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_timer" />
+
+            <ImageView
+                android:id="@+id/iv_home_timerArrow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@id/tv_home_timerNum"
+                app:layout_constraintStart_toEndOf="@id/tv_home_timerNum" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shadow"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_timerNum">
+
+                <TextView
+                    android:id="@+id/tv_home_noticeBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_notice_box"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp"
+                    android:text="공지사항"
+                    android:textColor="@color/tv_blue"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_home_noticeTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="11dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:maxLines="1"
+                    android:textColor="@color/tv_notice"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_home_noticeArrow"
+                    app:layout_constraintStart_toEndOf="@id/tv_home_noticeBox"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="exampl notice TItle!!! gogo we can..... gogogogogogo" />
+
+                <ImageView
+                    android:id="@+id/iv_home_noticeArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_savedMoney"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/shadow"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/cl_home_test"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_home_notice"
+                app:layout_constraintWidth_percent="0.45">
+
+                <TextView
+                    android:id="@+id/tv_home_savedMoneyTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="절약한 돈"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_home_savedMoneyNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="n 원"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_home_savedMoneyTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_savedMoneyTitle" />
+
+                <ImageView
+                    android:id="@+id/iv_home_savedMoney"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="28dp"
+                    android:src="@drawable/ic_home_money"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_test"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/shadow"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cl_home_savedMoney"
+                app:layout_constraintTop_toBottomOf="@id/cl_home_notice"
+                app:layout_constraintWidth_percent="0.45">
+
+                <TextView
+                    android:id="@+id/tv_home_testTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="중독 테스트"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_home_testDegree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="n 원"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_home_testTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_testTitle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/iv_home_test"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="28dp"
+                    android:background="@drawable/bg_home_test_btn"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:src="@drawable/ic_heart"
+                    android:text="검사하기"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_rank"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/shadow"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/cl_home_savedLife"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_home_savedMoney"
+                app:layout_constraintWidth_percent="0.45">
+
+                <TextView
+                    android:id="@+id/tv_home_rankTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="랭킹"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_home_rankNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="n 원"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_home_rankTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_rankTitle" />
+
+                <ImageView
+                    android:id="@+id/iv_home_rank"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="28dp"
+                    android:src="@drawable/ic_home_trophy"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_savedLife"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/shadow"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cl_home_rank"
+                app:layout_constraintTop_toTopOf="@id/cl_home_rank"
+                app:layout_constraintWidth_percent="0.45">
+
+                <TextView
+                    android:id="@+id/tv_home_savedLifeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="증가한 생명"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_home_savedLifeNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="n 원"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@id/tv_home_savedLifeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_savedLifeTitle" />
+
+                <ImageView
+                    android:id="@+id/iv_home_savedLife"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="28dp"
+                    android:src="@drawable/ic_home_heart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_motivation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintDimensionRatio="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_home_rank">
+
+
+                <ImageView
+                    android:id="@+id/iv_home_motivation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/img_motivation_1"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_home_motivation"
+                    android:clipToOutline="true"/>
+
+
+                <TextView
+                    android:id="@+id/tv_home_motivation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="이것은 명언입니다.\n이것을 보고 담배를 끊을 수 있어!"
+                    android:gravity="center"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textColor="@color/bg_gray"/>
+
+                <ImageView
+                    android:id="@+id/iv_home_motivationRe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:src="@drawable/ic_re"
+                    android:layout_margin="20dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_home_personalPolicy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/cl_home_motivation"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="개인정보처리방침 보기"
+                android:fontFamily="@font/pretendard_medium"
+                android:textSize="11sp"
+                android:textColor="@color/gray"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

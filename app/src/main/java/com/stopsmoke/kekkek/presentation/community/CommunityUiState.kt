@@ -1,25 +1,11 @@
 package com.stopsmoke.kekkek.presentation.community
 
 data class CommunityUiState (
-    val communityCategory: CommunityCategory
+    val communityListItem: List<CommunityListItem>
 ) {
     companion object{
         fun init() = CommunityUiState(
-            communityCategory = CommunityCategory.CommunityHome(
-                popularItemList = emptyList(),
-                noticeList = emptyList()
-            )
+            communityListItem = emptyList()
         )
     }
-}
-
-sealed class CommunityCategory{
-    data class CommunityHome(
-        val popularItemList: List<CommunityPopularItem>,
-        val noticeList: List<List<String>>
-    ): CommunityCategory()
-
-    data class CommunityList(
-        val list: List<String>
-    ): CommunityCategory()
 }

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -80,9 +81,28 @@ class MyFragment : Fragment() {
 
             is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState -> { //로그인 성공
                 val myItem: MyItem = myUiState.myLoginUiState.myItem
+
+                with(binding){
+                    ivMyProfile.load(myItem.profileImg) {
+                        crossfade(true)
+//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
+//                    error(R.drawable.error) 오류시 띄우나?
+                    }
+                    tvMyName.text = myItem.name
+                    tvMyRank.text = "랭킹 ${myItem.rank}위"
+
+                    myItem.myWriting.let {
+                        tvMyWritingNum.text = it.writing.toString()
+                        tvMyCommentNum.text = it.comment.toString()
+                        tvMyBookmarkNum.text = it.bookmark.toString()
+                    }
+
+                    tvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                }
             }
         }
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

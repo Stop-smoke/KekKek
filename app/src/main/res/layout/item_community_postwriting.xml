@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleIv_itemWriting_profile"
@@ -12,7 +11,9 @@
         android:layout_height="40dp"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:id="@+id/tv_itemWriting_name"
@@ -21,8 +22,9 @@
         app:layout_constraintTop_toTopOf="@id/circleIv_itemWriting_profile"
         app:layout_constraintStart_toEndOf="@id/circleIv_itemWriting_profile"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="단짠단짠"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tv_itemWriting_rank"
@@ -31,6 +33,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_name"
         app:layout_constraintStart_toStartOf="@id/tv_itemWriting_name"
         android:textSize="11sp"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:textStyle="bold"
         android:textColor="@color/gray"
         android:text="랭킹 111위"/>
@@ -40,12 +43,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="example Title"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
         app:layout_constraintTop_toBottomOf="@id/circleIv_itemWriting_profile"
-        app:layout_constraintEnd_toStartOf="@id/iv_itemWriting_postImage"
-        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="110dp"
         android:layout_marginTop="12dp"
-        android:textSize="15sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end" />
@@ -58,9 +62,11 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:minLines="2"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_regular"
         android:text="sample text sample text sample textsample textsample textsample textsample textsample textsample textsample textsample text"
         app:layout_constraintEnd_toEndOf="@id/tv_itemWriting_title"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
         app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_title"/>
 
     <ImageView
@@ -71,90 +77,112 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_post"
         android:src="@drawable/ic_launcher_background"
         android:clipToOutline="true"
-        android:background="@drawable/bg_post_image"/>
+        android:background="@drawable/bg_post_image"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="16dp"/>
     
     <View
         android:id="@+id/view_itemWriting_div"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#E7E7E7"
+        android:background="@color/bg_thin_gray"
         app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_post"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"/>
 
     <TextView
         android:id="@+id/tv_itemWriting_timeStamp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="6시간 전"
+        android:textColor="@color/gray"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
         app:layout_constraintTop_toBottomOf="@id/view_itemWriting_div"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
         android:layout_marginTop="12dp"/>
 
     <ImageView
-        android:id="@+id/iv_itemPopular_view1"
+        android:id="@+id/iv_itemWriting_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_view"
-        app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_viewNum1"
+        app:layout_constraintEnd_toStartOf="@id/tv_itemWriting_viewNum"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
         android:layout_marginEnd="5dp"/>
 
     <TextView
-        android:id="@+id/tv_itemPopular_viewNum1"
+        android:id="@+id/tv_itemWriting_viewNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="45dp"
         tools:text = "22222"
-        android:textSize="10dp"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/gray"
-        app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_heart1"
+        app:layout_constraintEnd_toStartOf="@id/iv_itemWriting_like"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
         android:layout_marginEnd="10dp"/>
 
     <ImageView
-        android:id="@+id/iv_itemPopular_heart1"
+        android:id="@+id/iv_itemWriting_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_heart_none"
-        app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_heartNum1"
+        app:layout_constraintEnd_toStartOf="@id/tv_itemWriting_likeNum"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
         android:layout_marginEnd="5dp"/>
 
     <TextView
-        android:id="@+id/tv_itemPopular_heartNum1"
+        android:id="@+id/tv_itemWriting_likeNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="45dp"
         tools:text = "22222"
-        android:textSize="10dp"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/gray"
-        app:layout_constraintEnd_toStartOf="@id/iv_itemPopular_chat1"
+        app:layout_constraintEnd_toStartOf="@id/iv_itemWriting_comment"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
         android:layout_marginEnd="10dp"/>
 
     <ImageView
-        android:id="@+id/iv_itemPopular_chat1"
+        android:id="@+id/iv_itemWriting_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_chat"
-        app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_chatNum1"
+        app:layout_constraintEnd_toStartOf="@id/tv_itemWriting_commentNum"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
         android:layout_marginEnd="10dp"/>
 
     <TextView
-        android:id="@+id/tv_itemPopular_chatNum1"
+        android:id="@+id/tv_itemWriting_commentNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="45dp"
         tools:text = "22222"
-        android:textSize="10dp"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"/>
+        app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
+        android:layout_marginEnd="16dp"/>
+
+    <View
+        android:id="@+id/view_itemWriting_bottomView"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="@color/bg_gray"
+        app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_timeStamp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="12dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

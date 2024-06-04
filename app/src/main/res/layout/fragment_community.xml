@@ -10,6 +10,7 @@
         android:id="@+id/toolbar_community"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="60dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_my_toolbar"
@@ -20,9 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
-        android:text="마이페이지"
+        android:text="커뮤니티"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard_bold"
         app:layout_constraintBottom_toBottomOf="@id/toolbar_community"
         app:layout_constraintStart_toStartOf="@id/toolbar_community"
         app:layout_constraintTop_toTopOf="@id/toolbar_community" />
@@ -42,12 +44,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_notice_box"
         android:text="공지사항"
-        android:textColor="#437EF0"
-        android:textSize="12sp"
+        android:textColor="@color/tv_blue"
+        android:textSize="13sp"
         android:textStyle="bold"
+        android:fontFamily="@font/pretendard_bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="5dp"/>
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"/>
 
     <TextView
         android:id="@+id/tv_community_noticeTitle"
@@ -59,25 +65,25 @@
         app:layout_constraintEnd_toStartOf="@id/iv_community_noticeArrow"
         app:layout_constraintTop_toTopOf="@id/tv_community_notice"
         android:layout_marginEnd="20dp"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
         tools:text="공지사항 예시입니다. 저희 모두 금연 화이팅!!"
+        android:textColor="@color/tv_notice"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:fontFamily="@font/pretendard_bold"/>
 
     <ImageView
         android:id="@+id/iv_community_noticeArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:padding="4dp"
         android:src="@drawable/ic_right_arrow"
         app:layout_constraintBottom_toBottomOf="@id/tv_community_notice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_community_notice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_community_list"
