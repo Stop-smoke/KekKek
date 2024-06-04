@@ -38,7 +38,7 @@ class CommunityListAdapter
 
     }
 ) {
-    enum class PostItemViewType{
+    enum class PostItemViewType {
         POPULAR, CATEGORY, POST
     }
 
@@ -48,10 +48,11 @@ class CommunityListAdapter
 
 
     class PopularPostViewHolder(
-        private val binding: ItemCommunityPostpopularBinding)
-        :ViewHolder(binding.root) {
-        override fun bind(item: CommunityListItem) = with(binding){
-            val popularItem: CommunityListItem.CommunityPopularItem = item as CommunityListItem.CommunityPopularItem
+        private val binding: ItemCommunityPostpopularBinding
+    ) : ViewHolder(binding.root) {
+        override fun bind(item: CommunityListItem) = with(binding) {
+            val popularItem: CommunityListItem.CommunityPopularItem =
+                item as CommunityListItem.CommunityPopularItem
 
             popularItem.postInfo1.let {
                 tvItemPopularTitle1.text = it.title
@@ -77,11 +78,12 @@ class CommunityListAdapter
 
     class WritingPostViewHolder(
         private val binding: ItemCommunityPostwritingBinding
-    ): ViewHolder(binding.root){
-        override fun bind(item: CommunityListItem): Unit = with(binding){
-            val writingItem: CommunityListItem.CommunityWritingItem = item as CommunityListItem.CommunityWritingItem
+    ) : ViewHolder(binding.root) {
+        override fun bind(item: CommunityListItem): Unit = with(binding) {
+            val writingItem: CommunityListItem.CommunityWritingItem =
+                item as CommunityListItem.CommunityWritingItem
 
-            writingItem.postInfo.let{
+            writingItem.postInfo.let {
                 tvItemWritingTitle.text = it.title
                 tvItemWritingViewNum.text = it.view.toString()
                 tvItemWritingLikeNum.text = it.like.toString()
@@ -138,9 +140,10 @@ class CommunityListAdapter
 
     class CategoryViewHolder(
         private val binding: ItemCommunityPostcategoryBinding
-    ): ViewHolder(binding.root){
+    ) : ViewHolder(binding.root) {
         override fun bind(item: CommunityListItem) = with(binding) {
-           val categoryItem: CommunityListItem.CommunityCategoryItem = item as CommunityListItem.CommunityCategoryItem
+            val categoryItem: CommunityListItem.CommunityCategoryItem =
+                item as CommunityListItem.CommunityCategoryItem
 
             rvItemPostCategoryCategory.layoutManager =
                 LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
@@ -157,7 +160,7 @@ class CommunityListAdapter
         }
     }
 
-    override fun getItemViewType(position: Int): Int = when(getItem(position)){
+    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is CommunityListItem.CommunityPopularItem -> PostItemViewType.POPULAR.ordinal
         is CommunityListItem.CommunityWritingItem -> PostItemViewType.POST.ordinal
         is CommunityListItem.CommunityCategoryItem -> PostItemViewType.CATEGORY.ordinal
@@ -166,7 +169,7 @@ class CommunityListAdapter
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CommunityListAdapter.ViewHolder = when(viewType){
+    ): CommunityListAdapter.ViewHolder = when (viewType) {
         PostItemViewType.POPULAR.ordinal -> {
             PopularPostViewHolder(
                 ItemCommunityPostpopularBinding.inflate(
@@ -176,6 +179,7 @@ class CommunityListAdapter
                 )
             )
         }
+
         PostItemViewType.POST.ordinal -> {
             WritingPostViewHolder(
                 ItemCommunityPostwritingBinding.inflate(
@@ -185,6 +189,7 @@ class CommunityListAdapter
                 )
             )
         }
+
         PostItemViewType.CATEGORY.ordinal -> {
             CategoryViewHolder(
                 ItemCommunityPostcategoryBinding.inflate(
@@ -194,6 +199,7 @@ class CommunityListAdapter
                 )
             )
         }
+
         else -> {
             UnknownViewHolder(
                 ItemUnknownBinding.inflate(
@@ -207,5 +213,27 @@ class CommunityListAdapter
 
     override fun onBindViewHolder(holder: CommunityListAdapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun isHeader(position: Int): Boolean =
+        getItemViewType(position) == PostItemViewType.CATEGORY.ordinal
+
+    fun getHeaderView(list: RecyclerView, position: Int): View? {
+        val lastIndex = if (position < currentList.size) position else currentList.size - 1
+
+        for (index in lastIndex downTo 0) {
+            if (getItemViewType(index) == PostItemViewType.CATEGORY.ordinal) {
+                val titleItem = getItem(position) as? CommunityListItem.CommunityCategoryItem
+                if (titleItem != null) {
+                    val binding = ItemCommunityPostcategoryBinding.inflate(
+                        LayoutInflater.from(list.context),
+                        list,
+                        false
+                    )
+                    return binding.root
+                }
+            }
+        }
+        return null
     }
 }
