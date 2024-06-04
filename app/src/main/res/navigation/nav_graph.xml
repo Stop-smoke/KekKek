@@ -42,6 +42,7 @@
         app:route="post_write"
         tools:layout="@layout/fragment_post_write"/>
 
+    <fragment
         android:id="@+id/attainments"
         android:name="com.stopsmoke.kekkek.presentation.attainments.AttainmentsFragment"
         app:route="attainments"

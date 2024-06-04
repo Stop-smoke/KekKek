@@ -1,27 +1,19 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
-import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.visible
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -101,6 +93,6 @@ class HomeFragment : Fragment() {
 
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
-        navController.navigate(R.id.attainments)
+        navController.navigate("attainments")
     }
 }
