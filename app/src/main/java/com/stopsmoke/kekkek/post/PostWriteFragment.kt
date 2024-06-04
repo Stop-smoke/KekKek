@@ -1,29 +1,23 @@
-package com.stopsmoke.kekkek
+package com.stopsmoke.kekkek.post
 
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
-import android.text.style.TextAppearanceSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 
 
@@ -47,7 +41,39 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+        initSpinner()
+    }
 
+    private fun initSpinner() = with(binding) {
+        val category = resources.getStringArray(R.array.post_category)
+        val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,category)
+        spinnerPostWrite.adapter = adapter
+        spinnerPostWrite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when(position) {
+                    0 -> {
+                        tvPostWriteType.text = category[0]
+                    }
+                    1 -> {
+                        tvPostWriteType.text = category[1]
+                    }
+                    2 -> {
+                        tvPostWriteType.text = category[2]
+                    }
+                    3 -> {
+                        tvPostWriteType.text = category[3]
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+        }
     }
 
     private fun initListener() = with(binding) {
@@ -81,7 +107,7 @@ class PostWriteFragment : Fragment() {
         }
 
         tvPostWriteCancel.setOnClickListener {
-
+            findNavController().popBackStack()
         }
         tvPostWriteRegister.setOnClickListener {
 
@@ -109,4 +135,6 @@ class PostWriteFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
+

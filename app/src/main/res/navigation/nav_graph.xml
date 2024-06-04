@@ -35,4 +35,10 @@
         app:route="notification"
         tools:layout="@layout/fragment_notification" />
 
+    <fragment
+        android:id="@+id/post_write"
+        android:name="com.stopsmoke.kekkek.post.PostWriteFragment"
+        app:route="post_write"
+        tools:layout="@layout/fragment_post_write"/>
+
 </navigation>
