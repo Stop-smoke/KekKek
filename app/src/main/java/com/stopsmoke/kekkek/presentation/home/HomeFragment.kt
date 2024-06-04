@@ -51,6 +51,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
+        binding.clHomeSavedMoney.setOnClickListener {
+            navigateToAttainmentsFragment()
+        }
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
@@ -96,4 +99,8 @@ class HomeFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun navigateToAttainmentsFragment() {
+        val navController = findNavController()
+        navController.navigate(R.id.attainments)
+    }
 }
