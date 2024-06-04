@@ -29,4 +29,10 @@
         app:route="test_page"
         tools:layout="@layout/fragment_test_onboarding"/>
 
+    <fragment
+        android:id="@+id/notification"
+        android:name="com.stopsmoke.kekkek.presentation.notification.NotificationFragment"
+        app:route="notification"
+        tools:layout="@layout/fragment_notification" />
+
 </navigation>
