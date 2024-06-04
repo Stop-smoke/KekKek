@@ -17,4 +17,5 @@
         android:enabled="true"
         android:icon="@drawable/ic_mypage_bottom"
         android:title="@string/menu_mypage"/>
+
 </menu>

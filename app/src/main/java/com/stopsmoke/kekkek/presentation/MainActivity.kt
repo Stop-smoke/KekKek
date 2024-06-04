@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
@@ -37,5 +38,9 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigationViewHome.setupWithNavController(navController)
+
+        // 클릭시 색상 변경용
+        binding.bottomNavigationViewHome.itemIconTintList = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
+        binding.bottomNavigationViewHome.itemTextColor = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
     }
 }
