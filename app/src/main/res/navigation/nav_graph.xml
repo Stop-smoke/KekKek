@@ -36,7 +36,12 @@
         tools:layout="@layout/fragment_notification" />
 
     <fragment
+        android:id="@+id/search"
+        android:name="com.stopsmoke.kekkek.presentation.search.SearchFragment"
+        app:route="search"
+        tools:layout="@layout/fragment_search" />
 
+    <fragment
         android:id="@+id/post_write"
         android:name="com.stopsmoke.kekkek.post.PostWriteFragment"
         app:route="post_write"
@@ -53,6 +58,5 @@
         android:name="com.stopsmoke.kekkek.presentation.bookmark.BookmarkFragment"
         app:route="bookmark"
         tools:layout="@layout/fragment_bookmark"/>
-
 
 </navigation>
