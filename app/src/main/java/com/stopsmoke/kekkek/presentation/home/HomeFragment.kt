@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
     private fun setupListener() {
         binding.run {
             ivHomeNotification.setOnClickListener {
-                // 알림 화면으로 넘어간다.
+                findNavController().navigate("notification")
             }
 
             ivHomeTimer.setOnClickListener {
