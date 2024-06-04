@@ -9,11 +9,11 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.firestore.dao.UserDao
-import com.stopsmoke.kekkek.firestore.model.UserEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,11 +38,9 @@ class MessageService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         serviceLifeScope.launch {
-            val userEntity = UserEntity(
-                uid = "adhgflkjn", // TODO: uid 넣기
-                fcmToken = token
-            )
-            userDao.setUser(userEntity)
+            userDao.getUser().firstOrNull()?.let {
+                userDao.setUser(it.copy(fcmToken = token))
+            }
         }
     }
 

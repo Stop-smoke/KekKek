@@ -113,6 +113,7 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
@@ -126,4 +127,7 @@ dependencies {
 
     //google SNS with FireBase
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    //Coil
+    implementation("io.coil-kt:coil:2.1.0")
 }

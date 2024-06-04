@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.data.di
 
+import com.stopsmoke.kekkek.data.repository.NotificationRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.UserRepositoryImpl
+import com.stopsmoke.kekkek.domain.repository.NotificationRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -15,5 +17,10 @@ internal interface DataModule {
     fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
+
+    @Binds
+    fun bindNotificationRepository(
+        notificationRepositoryImpl: NotificationRepositoryImpl
+    ): NotificationRepository
 
 }
