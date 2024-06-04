@@ -35,4 +35,10 @@
         app:route="notification"
         tools:layout="@layout/fragment_notification" />
 
+    <fragment
+        android:id="@+id/search"
+        android:name="com.stopsmoke.kekkek.presentation.search.SearchFragment"
+        app:route="search"
+        tools:layout="@layout/fragment_search" />
+
 </navigation>
