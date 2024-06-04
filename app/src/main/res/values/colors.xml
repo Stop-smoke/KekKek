@@ -8,5 +8,6 @@
     <color name="community_box_blue">#E1F0FF</color>
     <color name="tv_blue">#437EF0</color>
     <color name="bg_thin_gray">#E7E7E7</color>
+    <color name="tv_notice">#4B4B4B</color>
 
 </resources>

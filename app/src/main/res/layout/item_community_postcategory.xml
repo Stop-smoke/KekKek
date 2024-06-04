@@ -8,7 +8,7 @@
         android:id="@+id/tv_itemPostCategory_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="전체보기"
+        android:text="카테고리"
         android:textStyle="bold"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,6 +18,7 @@
         android:fontFamily="@font/pretendard_bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_itemPostCategory_category"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_itemPostCategory_title"

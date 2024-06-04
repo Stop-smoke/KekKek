@@ -3,6 +3,9 @@ package com.stopsmoke.kekkek.presentation.community
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -11,7 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.stopsmoke.kekkek.DummyData
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
@@ -30,6 +35,14 @@ class CommunityFragment : Fragment() {
         ViewModelProvider(this)[CommunityViewModel::class.java]
     }
 
+    private val listAdapter: CommunityListAdapter by lazy {
+        CommunityListAdapter()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +54,7 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+//        initViewModel()
     }
 
     override fun onDestroy() {
@@ -48,10 +62,16 @@ class CommunityFragment : Fragment() {
         _binding = null
     }
 
-    private fun initView() = with(binding) {
 
-        initSpinner()
+    private fun initView() = with(binding){
+        rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
+        rvCommunityList.adapter = listAdapter
 
+        listAdapter.submitList(DummyData.CommunityList)
+
+        ivCommunityNoticeArrow.setOnClickListener {
+            // 인기글 전체보기 클릭
+        }
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -64,19 +84,20 @@ class CommunityFragment : Fragment() {
     }
 
     private fun onBind(communityUiState: CommunityUiState) {
-        when (val category = communityUiState.communityCategory) { // home일 경우 viewPager에 넣을 아이템들
-            is CommunityCategory.CommunityHome -> {
-                val homeItems = category.popularItemList
-                val noticeItems = category.noticeList
-            }
-
-            is CommunityCategory.CommunityList -> { // home이 아닐 경우 출력할 글 목록들
-                val writingList = category.list
-            }
-        }
+        listAdapter.submitList(communityUiState.communityListItem)
     }
 
-    private fun initSpinner() = with(binding) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_community_toolbar, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle menu item clicks here
+        when (item.itemId) {
+            R.id.toolbar_community_bell -> {}
+            R.id.toolbar_community_setting -> {}
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -1,12 +1,20 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.databinding.ItemCommunityPostcategoryBinding
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostpopularBinding
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.databinding.ItemRecyclerviewCommunityCategoryBinding
+import com.stopsmoke.kekkek.databinding.ItemUnknownBinding
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -70,7 +78,7 @@ class CommunityListAdapter
     class WritingPostViewHolder(
         private val binding: ItemCommunityPostwritingBinding
     ): ViewHolder(binding.root){
-        override fun bind(item: CommunityListItem) = with(binding) {
+        override fun bind(item: CommunityListItem): Unit = with(binding){
             val writingItem: CommunityListItem.CommunityWritingItem = item as CommunityListItem.CommunityWritingItem
 
             writingItem.postInfo.let{
@@ -83,8 +91,20 @@ class CommunityListAdapter
             tvItemWritingPost.text = writingItem.post
             tvItemWritingTimeStamp.text = getRelativeTime(writingItem.postTime)
 
-            if(writingItem.postImage != "") {
-                ivItemWritingPostImage
+            writingItem.userInfo.let {
+                if (writingItem.postImage != "") {
+                    ivItemWritingPostImage.load(it.profileImage) {
+                        crossfade(true)
+//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
+//                    error(R.drawable.error) 오류시 띄우나?
+                    }
+                } else {
+                    ivItemWritingPostImage.visibility = View.GONE
+                    setMarginEnd(tvItemWritingTitle, 16)
+                }
+
+                tvItemWritingName.text = it.name
+                tvItemWritingRank.text = "랭킹 ${it.rank}위"
             }
         }
 
@@ -108,6 +128,33 @@ class CommunityListAdapter
                 else -> "${years}년 전"
             }
         }
+
+        private fun setMarginEnd(view: TextView, end: Int) {
+            val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.marginEnd = end
+            view.layoutParams = layoutParams
+        }
+    }
+
+    class CategoryViewHolder(
+        private val binding: ItemCommunityPostcategoryBinding
+    ): ViewHolder(binding.root){
+        override fun bind(item: CommunityListItem) = with(binding) {
+           val categoryItem: CommunityListItem.CommunityCategoryItem = item as CommunityListItem.CommunityCategoryItem
+
+            rvItemPostCategoryCategory.layoutManager =
+                LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+            val adapter = CommunityCategoryListAdapter()
+            adapter.submitList(categoryItem.categoryList)
+            rvItemPostCategoryCategory.adapter = adapter
+        }
+    }
+
+    class UnknownViewHolder(
+        binding: ItemUnknownBinding
+    ) : ViewHolder(binding.root) {
+        override fun bind(item: CommunityListItem) {
+        }
     }
 
     override fun getItemViewType(position: Int): Int = when(getItem(position)){
@@ -120,9 +167,42 @@ class CommunityListAdapter
         parent: ViewGroup,
         viewType: Int
     ): CommunityListAdapter.ViewHolder = when(viewType){
-        PostItemViewType.POPULAR.ordinal -> {}
-        PostItemViewType.POST.ordinal -> {}
-        PostItemViewType.CATEGORY.ordinal -> {}
+        PostItemViewType.POPULAR.ordinal -> {
+            PopularPostViewHolder(
+                ItemCommunityPostpopularBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
+        PostItemViewType.POST.ordinal -> {
+            WritingPostViewHolder(
+                ItemCommunityPostwritingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
+        PostItemViewType.CATEGORY.ordinal -> {
+            CategoryViewHolder(
+                ItemCommunityPostcategoryBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
+        else -> {
+            UnknownViewHolder(
+                ItemUnknownBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
     }
 
     override fun onBindViewHolder(holder: CommunityListAdapter.ViewHolder, position: Int) {

@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 sealed interface CommunityListItem {
     data class CommunityWritingItem(
@@ -12,13 +14,12 @@ sealed interface CommunityListItem {
     ) : CommunityListItem
 
     data class CommunityPopularItem(
-        val postCategory: String,
         val postInfo1 : PostInfo,
         val postInfo2: PostInfo
     ) : CommunityListItem
 
     data class CommunityCategoryItem(
-        val categoryList: String
+        val categoryList: List<String>
     ) : CommunityListItem
 }
 
@@ -32,6 +33,8 @@ data class PostInfo(
 
 data class UserInfo(
     val name: String,
-    val rank: String,
+    val rank: Int,
     val profileImage: String
 )
+
+
