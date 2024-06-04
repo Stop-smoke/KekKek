@@ -3,26 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@+id/home">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.stopsmoke.kekkek.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/home"
+        android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
+        app:route="home"
+        tools:layout="@layout/fragment_home"/>
 
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.stopsmoke.kekkek.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/community"
+        android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
+        app:route="community"
+        tools:layout="@layout/fragment_community"/>
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+    <fragment
+        android:id="@+id/my_page"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyFragment"
+        app:route="my"
+        tools:layout="@layout/fragment_my"/>
+
+    <fragment
+        android:id="@+id/test_page"
+        android:name="com.stopsmoke.kekkek.presentation.test.TestFragment"
+        app:route="test_page"
+        tools:layout="@layout/fragment_test_onboarding"/>
+
+    <fragment
+        android:id="@+id/notification"
+        android:name="com.stopsmoke.kekkek.presentation.notification.NotificationFragment"
+        app:route="notification"
+        tools:layout="@layout/fragment_notification" />
+
 </navigation>

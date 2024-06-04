@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#A2AAD1"
-    tools:context=".presentation.home.test.TestOnBoardingFragment">
+    tools:context=".presentation.test.TestOnBoardingFragment">
 
 
     <ImageView

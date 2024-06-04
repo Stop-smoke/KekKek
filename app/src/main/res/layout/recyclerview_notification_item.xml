@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="28dp">
+
+    <ImageView
+        android:id="@+id/iv_notification_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_notification_bell"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_notification_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:barrierMargin="16dp"
+        app:constraint_referenced_ids="iv_notification_icon" />
+
+    <TextView
+        android:id="@+id/tv_notification_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/barrier_notification_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="회원님의 게시글에 새 댓글이 달렸습니다." />
+
+    <TextView
+        android:id="@+id/tv_notification_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="#8B94A1"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/barrier_notification_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notification_title"
+        tools:text="진짜 담배 어떻게 끊으셨는지 궁금 궁금 매우 궁금합니다" />
+
+    <TextView
+        android:id="@+id/tv_notification_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="#8B94A1"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/barrier_notification_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notification_body"
+        tools:text="10시간 전" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

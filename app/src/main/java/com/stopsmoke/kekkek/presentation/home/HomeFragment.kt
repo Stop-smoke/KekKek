@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.presentation.home.test.TestFragment
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
-import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.visible
 
 class HomeFragment : Fragment() {
@@ -42,7 +40,7 @@ class HomeFragment : Fragment() {
     private fun setupListener() {
         binding.run {
             ivHomeNotification.setOnClickListener {
-                // 알림 화면으로 넘어간다.
+                findNavController().navigate("notification")
             }
 
             ivHomeTimer.setOnClickListener {
@@ -58,10 +56,7 @@ class HomeFragment : Fragment() {
             }
 
             ivHomeTest.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .add(R.id.main, TestFragment())
-                    .addToBackStack(null)
-                    .commit()
+                findNavController().navigate("test_page")
             }
 
             ivHomeRandom.setOnClickListener {

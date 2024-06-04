@@ -16,8 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KekKek"
         tools:targetApi="31">
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <service
+            android:name=".firemseeage.MessageService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_foreground" />
@@ -28,9 +38,9 @@
             android:resource="@color/white" />
 
         <!-- 에드몹 -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9360439257056668~3215355425"/>
+        <!-- adMpb, 추후 출시 applicationId 추가, kakaoApi 역시 hash key에 릴리즈키 등록해야한다는데..-->
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
         <activity
             android:name=".presentation.MainActivity"
@@ -55,6 +65,11 @@
                     android:scheme="kakao ${KAKAO_NATIVE_API_KEY}" />
             </intent-filter>
         </activity>
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
     </application>
 
 </manifest>

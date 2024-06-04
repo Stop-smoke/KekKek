@@ -17,7 +17,7 @@
     <string name="menu_community">community</string>
     <string name="menu_mypage">mypage</string>
 
-    <!--    my fragment-->
+    <!--  my fragment  -->
     <string name="popular_post">인기 포스트</string>
     <string name="my_writing">내가 쓴 글</string>
     <string name="my_comments">내가 쓴 댓글</string>
@@ -125,5 +125,21 @@
     <string name="post_write_register">등록</string>
     <string name="post_write_title">제목을 입력해 주세요.</string>
     <string name="post_write_content">내용을 입력해 주세요.\n에티켓을 준수해 유용한 공간을 만들어요😊</string>
+
+    <!--  notification  -->
+    <string name="post_notification_channel_id">게시글 알림</string>
+    <string name="notification_elapsed_year">년 전</string>
+    <string name="notification_elapsed_month">개월 전</string>
+    <string name="notification_elapsed_week">주 전</string>
+    <string name="notification_elapsed_day">일 전</string>
+    <string name="notification_elapsed_hour">시간 전</string>
+    <string name="notification_elapsed_minute">분 전</string>
+    <string name="notification_elapsed_second">초 전</string>
+    <string name="login_other_btn"><u>다른 방법으로 이용하기</u></string>
+
+    <!--  login  -->
+    <string name="login_google">Google로 이용하기</string>
+    <string name="login_kakao">카카오로 이용하기</string>
+    <string name="login_default_nickname">킥킥이</string>
 
 </resources>
