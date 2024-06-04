@@ -115,10 +115,4 @@ dependencies {
 
     // advertisement
 //    implementation("com.google.android.gms:play-services-ads:23.1.0")
-
-    // text editor - k1
-    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05")
-
-    // text editor - k2 → k1, k2 차이는 잘 모르겠음
-//    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05-k2")
 }
