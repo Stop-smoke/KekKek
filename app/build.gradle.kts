@@ -80,6 +80,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
+    // text editor
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.ui.text.android)
+
     // TEST
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
