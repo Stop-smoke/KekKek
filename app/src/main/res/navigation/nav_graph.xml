@@ -35,4 +35,10 @@
         app:route="notification"
         tools:layout="@layout/fragment_notification" />
 
+
+    <fragment
+        android:id="@+id/bookamrk"
+        android:name="com.stopsmoke.kekkek.presentation.bookmark.BookmarkFragment"
+        app:route="bookmark"
+        tools:layout="@layout/fragment_bookmark"/>
 </navigation>
