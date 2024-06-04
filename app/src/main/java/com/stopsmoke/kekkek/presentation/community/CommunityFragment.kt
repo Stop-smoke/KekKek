@@ -45,6 +45,7 @@ class CommunityFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,10 +80,6 @@ class CommunityFragment : Fragment() {
         }
     }
 
-
-
-
-        }
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
