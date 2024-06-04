@@ -10,9 +10,9 @@
         android:id="@+id/toolbar_my"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:minHeight="60dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_my_toolbar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -28,7 +28,6 @@
         app:layout_constraintBottom_toBottomOf="@id/toolbar_my"
         app:layout_constraintStart_toStartOf="@id/toolbar_my"
         app:layout_constraintTop_toTopOf="@id/toolbar_my" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_profile"
