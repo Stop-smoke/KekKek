@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.DummyData
 import com.stopsmoke.kekkek.R
@@ -66,13 +67,25 @@ class CommunityFragment : Fragment() {
     private fun initView() = with(binding){
         rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
         rvCommunityList.adapter = listAdapter
-
+//        rvCommunityList.addItemDecoration(StickHeaderItemDecoration(getSectionCallback()))
         listAdapter.submitList(DummyData.CommunityList)
 
         ivCommunityNoticeArrow.setOnClickListener {
             // 인기글 전체보기 클릭
         }
     }
+
+//    private fun getSectionCallback(): StickHeaderItemDecoration.SectionCallback {
+//        return object : StickHeaderItemDecoration.SectionCallback {
+//            override fun isHeader(position: Int): Boolean {
+//                return adapter.isHeader(position)
+//            }
+//
+//            override fun getHeadLayoutView(list: RecyclerView, position: Int): View? {
+//                return adapter.getHeaderView(list, position)
+//            }
+//        }
+//    }
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
