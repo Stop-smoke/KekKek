@@ -38,7 +38,9 @@ class CommunityFragment : Fragment() {
     }
 
     private val listAdapter: CommunityListAdapter by lazy {
-        CommunityListAdapter()
+        CommunityListAdapter {
+            findNavController().navigate("post_view")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,20 @@ class CommunityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbarCommunity.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.toolbar_search -> {
+                    findNavController().navigate("search")
+                }
+                R.id.toolbar_my_bell -> {
+                    findNavController().navigate("notification")
+                }
+                R.id.toolbar_community_setting -> {}
+            }
+            true
+        }
+
         initView()
 //        initViewModel()
     }
@@ -94,17 +110,17 @@ class CommunityFragment : Fragment() {
         listAdapter.submitList(communityUiState.communityListItem)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_community_toolbar, menu)
-        return super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle menu item clicks here
-        when (item.itemId) {
-            R.id.toolbar_community_bell -> {}
-            R.id.toolbar_community_setting -> {}
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_community_toolbar, menu)
+//        return super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle menu item clicks here
+//        when (item.itemId) {
+//            R.id.toolbar_community_bell -> {}
+//            R.id.toolbar_community_setting -> {}
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }

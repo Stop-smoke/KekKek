@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
@@ -42,9 +43,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbarHome.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.toolbar_home_bell -> {
+                    findNavController().navigate("notification")
+                }
+            }
+            true
+        }
+
         initViewModel()
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
+        }
+
+        binding.ivHomeTest.setOnClickListener {
+            findNavController().navigate("test_page")
         }
     }
 
@@ -78,18 +92,18 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home_toolbar, menu)
-        return super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle menu item clicks here
-        when (item.itemId) {
-            R.id.toolbar_home_bell -> {}
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_home_toolbar, menu)
+//        return super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle menu item clicks here
+//        when (item.itemId) {
+//            R.id.toolbar_home_bell -> {}
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
