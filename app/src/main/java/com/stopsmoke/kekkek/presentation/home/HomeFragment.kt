@@ -53,9 +53,8 @@ class HomeFragment : Fragment() {
         initViewModel()
     }
 
-    private fun initView() = with(binding){//클릭 시 이동 이벤트 처리 추가해야함
+    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
     }
-
 
 
     private fun initViewModel() = with(viewModel) {
