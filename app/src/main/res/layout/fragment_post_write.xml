@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostWriteFragment">
+    tools:context=".post.PostWriteFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/cl_post_write_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,6 +150,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"
             app:layout_constraintStart_toEndOf="@+id/iv_post_write_background_color"
             app:layout_constraintTop_toTopOf="@+id/iv_post_write_background_color" />
+
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_post_write"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_category"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_post_write_type"
+            app:layout_constraintStart_toEndOf="@+id/tv_post_write_type"
+            app:layout_constraintTop_toTopOf="@+id/tv_post_write_type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
