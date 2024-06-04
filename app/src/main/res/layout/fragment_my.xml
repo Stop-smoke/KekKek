@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        android:minHeight="60dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:menu = "@menu/menu_my_toolbar" />
@@ -26,7 +27,6 @@
         app:layout_constraintStart_toStartOf="@id/toolbar_my"
         app:layout_constraintTop_toTopOf="@id/toolbar_my"
         app:layout_constraintBottom_toBottomOf="@id/toolbar_my"/>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_profile"
