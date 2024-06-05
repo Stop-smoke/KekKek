@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.my
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -75,6 +76,12 @@ class MyFragment : Fragment() {
                 .collectLatest { state ->
                     onBind(state)
                 }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            userData?.collectLatest { user ->
+                viewModel.updateUserData(user)
+                Log.d("userData_my", user.toString())
+            }
         }
     }
 

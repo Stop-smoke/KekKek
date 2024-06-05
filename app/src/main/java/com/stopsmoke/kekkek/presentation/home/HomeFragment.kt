@@ -77,8 +77,9 @@ class HomeFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            userData?.collectLatest {
-                Log.d("userData", it.toString())
+            userData?.collectLatest {user ->
+                Log.d("userData_home", user.toString())
+                updateUserData(user)
             }
         }
     }
