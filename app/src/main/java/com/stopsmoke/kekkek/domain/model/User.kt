@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.domain.model
 
 import com.stopsmoke.kekkek.firestore.model.LocationEntity
+import java.time.LocalDateTime
 
 data class User(
     val uid: String,
@@ -12,5 +13,10 @@ data class User(
     val gender: String? = null,
     val age: Int? = null,
     var phoneNumber: String? = null,
-    var fcmToken: String? = null
+    var fcmToken: String? = null,
+    var introduction: String? = null,
+    var ranking: Int? = null,
+    var postBookmark: List<String> = emptyList(),
+    var postLike: List<String> = emptyList(),
+    var startTime: LocalDateTime? = null
 )
