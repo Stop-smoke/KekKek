@@ -29,4 +29,6 @@ internal interface DataModule {
     fun bindSearchRepository(
         searchRepositoryImpl: SearchRepositoryImpl,
     ): SearchRepository
+
+
 }

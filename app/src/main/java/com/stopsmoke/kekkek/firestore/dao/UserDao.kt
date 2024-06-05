@@ -18,5 +18,4 @@ interface UserDao {
     fun getUser(uid: String): Flow<UserEntity>
 
     suspend fun setUser(userEntity: UserEntity)
-
 }
