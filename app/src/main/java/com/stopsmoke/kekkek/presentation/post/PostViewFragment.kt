@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.post
+package com.stopsmoke.kekkek.presentation.post
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

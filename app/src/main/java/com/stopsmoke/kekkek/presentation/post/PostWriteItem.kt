@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.post
+package com.stopsmoke.kekkek.presentation.post
 
 data class PostWriteItem(
     val title: String,
