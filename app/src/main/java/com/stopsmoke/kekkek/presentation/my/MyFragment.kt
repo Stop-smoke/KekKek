@@ -52,6 +52,7 @@ class MyFragment : Fragment() {
         }
 
         initView()
+        initListener()
         initViewModel()
     }
 
@@ -65,6 +66,15 @@ class MyFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.apply {
             title = "My Toolbar Title"
             setDisplayShowTitleEnabled(false)
+        }
+    }
+
+    private fun initListener() = with(binding) {
+        tvMyWriting.setOnClickListener {
+            findNavController().navigate("my_post")
+        }
+        tvMyComment.setOnClickListener {
+            findNavController().navigate("my_comment")
         }
     }
 
