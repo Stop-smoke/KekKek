@@ -12,5 +12,7 @@ interface UserRepository {
         userId: String,
     ): Flow<ProfileImageUploadResult>
 
+    fun getUserData(uid: String): Result<Flow<User>>
+
     suspend fun setUserData(user: User)
 }
