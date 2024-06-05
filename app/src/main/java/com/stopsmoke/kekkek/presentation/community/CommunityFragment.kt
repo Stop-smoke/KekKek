@@ -79,11 +79,6 @@ class CommunityFragment : Fragment() {
         }
     }
 
-
-
-
-        }
-
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
