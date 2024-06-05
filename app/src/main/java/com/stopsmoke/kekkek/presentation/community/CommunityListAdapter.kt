@@ -19,8 +19,9 @@ import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-class CommunityListAdapter
-    : ListAdapter<CommunityListItem, CommunityListAdapter.ViewHolder>(
+class CommunityListAdapter(
+    private val postItemClick: (Int) -> Unit
+) : ListAdapter<CommunityListItem, CommunityListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<CommunityListItem>() {
         override fun areItemsTheSame(
             oldItem: CommunityListItem,
@@ -77,8 +78,16 @@ class CommunityListAdapter
     }
 
     class WritingPostViewHolder(
-        private val binding: ItemCommunityPostwritingBinding
+        private val binding: ItemCommunityPostwritingBinding,
+        private val postItemClick: (Int) -> Unit
     ) : ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                postItemClick(bindingAdapterPosition)
+            }
+        }
+
         override fun bind(item: CommunityListItem): Unit = with(binding) {
             val writingItem: CommunityListItem.CommunityWritingItem =
                 item as CommunityListItem.CommunityWritingItem
@@ -186,7 +195,8 @@ class CommunityListAdapter
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-                )
+                ),
+                postItemClick
             )
         }
 

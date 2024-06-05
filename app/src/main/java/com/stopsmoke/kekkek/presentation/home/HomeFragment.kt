@@ -1,27 +1,20 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
-import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.visible
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -50,9 +43,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbarHome.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.toolbar_home_bell -> {
+                    findNavController().navigate("notification")
+                }
+            }
+            true
+        }
+
         initViewModel()
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
+        }
+
+        binding.ivHomeTest.setOnClickListener {
+            findNavController().navigate("test_page")
         }
     }
 
@@ -86,21 +92,21 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home_toolbar, menu)
-        return super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle menu item clicks here
-        when (item.itemId) {
-            R.id.toolbar_home_bell -> {}
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_home_toolbar, menu)
+//        return super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle menu item clicks here
+//        when (item.itemId) {
+//            R.id.toolbar_home_bell -> {}
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
-        navController.navigate(R.id.attainments)
+        navController.navigate("attainments")
     }
 }

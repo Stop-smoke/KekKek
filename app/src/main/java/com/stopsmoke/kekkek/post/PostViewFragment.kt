@@ -9,6 +9,7 @@ import android.view.ViewGroup
 //import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.visible
 
 
 class PostViewFragment : Fragment() {
@@ -62,6 +63,7 @@ class PostViewFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.visible()
         _binding = null
     }
 

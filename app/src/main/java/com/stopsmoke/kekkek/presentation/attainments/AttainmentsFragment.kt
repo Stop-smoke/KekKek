@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentAttainmentsBinding
 
 class AttainmentsFragment : Fragment() {
@@ -47,6 +48,11 @@ class AttainmentsFragment : Fragment() {
         viewModel.elapsedTime.observe(viewLifecycleOwner, Observer { time ->
             binding.tvAttainmentsTime.text = time
         })
+
+
+        binding.ivAttainmentsBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         return binding.root
     }
