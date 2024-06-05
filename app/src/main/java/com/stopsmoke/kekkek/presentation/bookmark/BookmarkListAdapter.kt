@@ -7,11 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import coil.load
-import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
-import com.stopsmoke.kekkek.presentation.community.CommunityListItem
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
