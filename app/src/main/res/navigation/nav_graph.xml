@@ -67,13 +67,13 @@
 
     <fragment
         android:id="@+id/my_post"
-        android:name="com.stopsmoke.kekkek.presentation.MyPostFragment"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
         app:route="my_post"
         tools:layout="@layout/fragment_my_post"/>
 
     <fragment
         android:id="@+id/my_comment"
-        android:name="com.stopsmoke.kekkek.presentation.MyCommentFragment"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyCommentFragment"
         app:route="my_comment"
         tools:layout="@layout/fragment_my_comment"/>
 

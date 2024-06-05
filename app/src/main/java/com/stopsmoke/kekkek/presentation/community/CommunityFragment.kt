@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.DummyData
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.presentation.post.PostWriteItem
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -79,18 +81,28 @@ class CommunityFragment : Fragment() {
         rvCommunityCategory.adapter = adapter
 
         setToolbarMenu()
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PostWriteItem?>("NEW_POST")
+            ?.observe(viewLifecycleOwner) { newPost ->
+                Log.d("items",newPost.toString())
+                // 성공해서 초기화 해야 될 때
+
+                // 게시물 등록을 안 했을 때
+            }
     }
 
 
-    private fun setToolbarMenu(){
+    private fun setToolbarMenu() {
         binding.toolbarCommunity.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_search -> {
                     findNavController().navigate("search")
                 }
+
                 R.id.toolbar_my_bell -> {
                     findNavController().navigate("notification")
                 }
+
                 R.id.toolbar_community_setting -> {}
             }
             true
@@ -106,8 +118,8 @@ class CommunityFragment : Fragment() {
         }
     }
 
-    private fun onBind(communityUiState: CommunityUiState) = with(binding){
-        when(communityUiState) {
+    private fun onBind(communityUiState: CommunityUiState) = with(binding) {
+        when (communityUiState) {
             is CommunityUiState.CommunityNormalUiState -> {
                 listAdapter.submitList(communityUiState.writingList)
 

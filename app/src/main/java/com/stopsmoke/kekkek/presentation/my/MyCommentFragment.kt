@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation
+package com.stopsmoke.kekkek.presentation.my
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
-import com.stopsmoke.kekkek.databinding.FragmentMyPostBinding
 
+class MyCommentFragment : Fragment() {
 
-class MyPostFragment : Fragment() {
-
-    private var _binding: FragmentMyPostBinding?= null
+    private var _binding: FragmentMyCommentBinding ?= null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +22,7 @@ class MyPostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyPostBinding.inflate(inflater,container,false)
+        _binding = FragmentMyCommentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -34,7 +32,7 @@ class MyPostFragment : Fragment() {
     }
 
     private fun setupListener() = with(binding) {
-        ivMyPostBack.setOnClickListener {
+        ivMyCommentBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }

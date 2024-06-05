@@ -11,10 +11,12 @@ data class CommunityWritingItem(
     val post: String,
     val postTime: Date,
 )
+
 data class CommunityPopularItem(
     val postInfo1 : PostInfo,
     val postInfo2: PostInfo
 )
+
 data class PostInfo(
     val title: String,
     val postType: String,
