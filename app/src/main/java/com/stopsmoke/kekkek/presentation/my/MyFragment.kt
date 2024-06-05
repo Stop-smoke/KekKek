@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
@@ -45,6 +46,10 @@ class MyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvMyBookmark.setOnClickListener {
+            findNavController().navigate("bookmark")
+        }
 
         initView()
         initViewModel()

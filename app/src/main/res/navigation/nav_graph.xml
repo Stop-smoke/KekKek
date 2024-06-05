@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_search" />
 
     <fragment
+        android:id="@+id/post_view"
+        android:name="com.stopsmoke.kekkek.post.PostViewFragment"
+        app:route="post_view"
+        tools:layout="@layout/fragment_post_view" />
+
+    <fragment
         android:id="@+id/post_write"
         android:name="com.stopsmoke.kekkek.post.PostWriteFragment"
         app:route="post_write"

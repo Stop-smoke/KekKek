@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/pretendard_medium"
-            android:text="내가 쓴 글"
+            android:text="북마크"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/tv_my_bookmarkNum"
             app:layout_constraintStart_toStartOf="@id/tv_my_bookmarkNum"

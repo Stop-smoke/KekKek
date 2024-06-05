@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentTestBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.visible
 
 class TestFragment : Fragment() {
 
@@ -70,6 +71,7 @@ class TestFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.visible()
         _binding = null
     }
 }
