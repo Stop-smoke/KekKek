@@ -68,7 +68,7 @@ dependencies {
     // CORE
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity)
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
 
     // UI
     implementation(libs.androidx.appcompat)
