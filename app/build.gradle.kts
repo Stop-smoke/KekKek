@@ -76,7 +76,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
