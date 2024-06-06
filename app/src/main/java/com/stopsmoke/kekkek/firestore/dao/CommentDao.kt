@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentDao {
 
-    fun getComment(): Flow<PagingData<CommentEntity>>
+    fun getComment(postId: String): Flow<PagingData<CommentEntity>>
+
+    fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>>
 
     suspend fun addComment(commentEntity: CommentEntity)
 
