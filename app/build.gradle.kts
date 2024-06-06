@@ -125,8 +125,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
 
     // PAGING
-    implementation("androidx.paging:paging-runtime:3.3.0")
-    testImplementation("androidx.paging:paging-common:3.3.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    testImplementation("androidx.paging:paging-common-ktx:3.3.0")
 
     //google SNS with FireBase
     implementation("com.google.android.gms:play-services-auth:20.7.0")
