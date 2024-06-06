@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.setting
+package com.stopsmoke.kekkek.presentation.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,20 +8,20 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
-import com.stopsmoke.kekkek.databinding.FragmentSettingSupportBinding
+import com.stopsmoke.kekkek.databinding.FragmentSettingsSupportBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.visible
 
-class SettingSupportFragment : Fragment() {
+class SettingsSupportFragment : Fragment() {
 
-    private var _binding: FragmentSettingSupportBinding? = null
+    private var _binding: FragmentSettingsSupportBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSettingSupportBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingsSupportBinding.inflate(inflater, container, false)
 
         binding.ivSupportBack.setOnClickListener {
             findNavController().popBackStack()

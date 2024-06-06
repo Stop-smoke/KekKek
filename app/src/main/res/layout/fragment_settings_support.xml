@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.setting.SettingSupportFragment">
+    tools:context=".presentation.settings.SettingsPrivatePolicyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_support_topbar"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
-            android:text="성과"
+            android:text="지원"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
