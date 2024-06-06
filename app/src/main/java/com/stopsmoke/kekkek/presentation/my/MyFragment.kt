@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,17 +17,17 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding: FragmentMyBinding get() = _binding!!
 
-    private val viewModel: MyViewModel by lazy {
-        ViewModelProvider(this)[MyViewModel::class.java]
-    }
+    private val viewModel: MyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +98,7 @@ class MyFragment : Fragment() {
             is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState -> { //로그인 성공
                 val myItem: MyItem = myUiState.myLoginUiState.myItem
 
-                with(binding){
+                with(binding) {
                     ivMyProfile.load(myItem.profileImg) {
                         crossfade(true)
 //                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
@@ -117,7 +118,6 @@ class MyFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

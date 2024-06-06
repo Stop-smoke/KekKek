@@ -1,31 +1,28 @@
 package com.stopsmoke.kekkek.presentation.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider(this)[HomeViewModel::class.java]
-    }
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +40,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbarHome.setOnMenuItemClickListener {
-            when(it.itemId) {
-                R.id.toolbar_home_bell -> {
-                    findNavController().navigate("notification")
-                }
-            }
-            true
-        }
-
         initViewModel()
+        initView()
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
         }
@@ -63,6 +52,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
+        initToolbar()
+
+    }
+
+    private fun initToolbar(){
+        binding.toolbarHome.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.toolbar_home_bell -> {
+                    findNavController().navigate("notification")
+                }
+            }
+            true
+        }
     }
 
 
@@ -72,6 +74,12 @@ class HomeFragment : Fragment() {
                 .collectLatest { state ->
                     onBind(state)
                 }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userData?.collectLatest {
+                Log.d("userData", it.toString())
+            }
         }
     }
 

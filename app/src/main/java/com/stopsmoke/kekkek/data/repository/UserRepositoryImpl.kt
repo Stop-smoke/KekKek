@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.data.repository
 
+import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.data.mapper.toEntity
+import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
@@ -51,7 +53,16 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getUserData(uid: String): Result<Flow<User>> {
+        return kotlin.runCatching {
+            userDao.getUser().map { user ->
+                    user.toExternalModel()
+                }
+        }
+    }
+
     override suspend fun setUserData(user: User) {
         userDao.setUser(user.toEntity())
     }
+
 }

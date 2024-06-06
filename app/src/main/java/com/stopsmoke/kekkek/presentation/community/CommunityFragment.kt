@@ -82,12 +82,10 @@ class CommunityFragment : Fragment() {
 
         setToolbarMenu()
 
+        // 이 부분 향후에 Shared View Model 로 바꾸는게 좋을 듯
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PostWriteItem?>("NEW_POST")
             ?.observe(viewLifecycleOwner) { newPost ->
                 Log.d("items",newPost.toString())
-                // 성공해서 초기화 해야 될 때
-
-                // 게시물 등록을 안 했을 때
             }
     }
 
