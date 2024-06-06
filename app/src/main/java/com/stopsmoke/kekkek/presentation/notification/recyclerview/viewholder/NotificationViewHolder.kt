@@ -14,7 +14,7 @@ class NotificationViewHolder(
     fun bind(notification: Notification) = with(binding) {
         tvNotificationTitle.text = notification.title
         tvNotificationBody.text = notification.body
-        tvNotificationDateTime.text = notification.elapsedDateTime.toResourceId(itemView.context)
+        tvNotificationDateTime.text = notification.modifiedElapsedDateTime.toResourceId(itemView.context)
         ivNotificationIcon.setImageResource(notification.category.toResourceId())
     }
 }
