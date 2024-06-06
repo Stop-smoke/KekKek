@@ -41,11 +41,11 @@ class ExamplePagingActivity : AppCompatActivity() {
 //        binding.rvTest.adapter = adapter
 //        binding.rvTest.layoutManager = LinearLayoutManager(this)
 
-        lifecycleScope.launch {
-            viewModel.data.collect { paging ->
-                adapter.submitData(paging)
-            }
-        }
+//        lifecycleScope.launch {
+//            viewModel.data.collect { paging ->
+//                adapter.submitData(paging)
+//            }
+//        }
 
     }
 }
