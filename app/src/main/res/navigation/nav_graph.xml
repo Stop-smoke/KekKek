@@ -43,13 +43,13 @@
 
     <fragment
         android:id="@+id/post_view"
-        android:name="com.stopsmoke.kekkek.post.PostViewFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.PostViewFragment"
         app:route="post_view"
         tools:layout="@layout/fragment_post_view" />
 
     <fragment
         android:id="@+id/post_write"
-        android:name="com.stopsmoke.kekkek.post.PostWriteFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.PostWriteFragment"
         app:route="post_write"
         tools:layout="@layout/fragment_post_write"/>
 
@@ -64,5 +64,17 @@
         android:name="com.stopsmoke.kekkek.presentation.bookmark.BookmarkFragment"
         app:route="bookmark"
         tools:layout="@layout/fragment_bookmark"/>
+
+    <fragment
+        android:id="@+id/my_post"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
+        app:route="my_post"
+        tools:layout="@layout/fragment_my_post"/>
+
+    <fragment
+        android:id="@+id/my_comment"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyCommentFragment"
+        app:route="my_comment"
+        tools:layout="@layout/fragment_my_comment"/>
 
 </navigation>
