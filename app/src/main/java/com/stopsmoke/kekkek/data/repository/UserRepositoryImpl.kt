@@ -62,14 +62,17 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserData(): Flow<Result<User>> {
+    override fun getUserData(): Result<Flow<User>> {
         return try {
             userDao.getUser().map { user ->
-                Result.Success(user.toExternalModel())
+                user.toExternalModel()
             }
+                .let {
+                    Result.Success(it)
+                }
         } catch (e: Exception) {
             e.printStackTrace()
-            flowOf(Result.Error(e))
+            Result.Error(e)
         }
     }
 

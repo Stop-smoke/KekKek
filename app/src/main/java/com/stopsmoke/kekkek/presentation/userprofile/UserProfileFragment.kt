@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -45,36 +43,22 @@ class UserProfileFragment : Fragment() {
         setupTabLayoutWithViewPager()
     }
 
-    private fun observeUserData() = FlowCollector<Result<User>> {
-        when (it) {
-            is Result.Error -> {
-                Toast.makeText(requireContext(), "error occur", Toast.LENGTH_SHORT).show()
-            }
+    private fun observeUserData() = FlowCollector<User> { user ->
+        with(binding.includeUserprofileDetail) {
+            tvUserProfileName.text = user.name
+            tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
+            tvUserProfileIntroduce.text = user.introduction
+            tvUserProfileFollowerCount.text = "3"
+            tvUserProfileFollowingCount.text = "4"
 
-            is Result.Loading -> {
-                Toast.makeText(requireContext(), "loading", Toast.LENGTH_SHORT).show()
-            }
+            when (user.profileImage) {
+                is ProfileImage.Default -> {
+                    ivUserProfileProfileImage.setImageResource(R.drawable.ic_user_profile_test)
+                }
 
-            is Result.Success -> {
-                setupUserInformation(it.data)
-            }
-        }
-    }
-
-    private fun setupUserInformation(user: User) = with(binding.includeUserprofileDetail) {
-        tvUserProfileName.text = user.name
-        tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
-        tvUserProfileIntroduce.text = user.introduction
-        tvUserProfileFollowerCount.text = "3"
-        tvUserProfileFollowingCount.text = "4"
-
-        when (user.profileImage) {
-            is ProfileImage.Default -> {
-                ivUserProfileProfileImage.setImageResource(R.drawable.ic_user_profile_test)
-            }
-
-            is ProfileImage.Web -> {
-                ivUserProfileProfileImage.load((user.profileImage as ProfileImage.Web).url)
+                is ProfileImage.Web -> {
+                    ivUserProfileProfileImage.load((user.profileImage as ProfileImage.Web).url)
+                }
             }
         }
     }

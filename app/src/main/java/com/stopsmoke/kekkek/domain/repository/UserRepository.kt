@@ -22,7 +22,7 @@ interface UserRepository {
     /**
      * 자신의 유저 정보를 가져옴
      */
-    fun getUserData(): Flow<Result<User>>
+    fun getUserData(): Result<Flow<User>>
 
     suspend fun setUserData(user: User)
 }

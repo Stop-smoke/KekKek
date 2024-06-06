@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfilePostBinding
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import com.stopsmoke.kekkek.presentation.userprofile.post.adapter.UserPostListAdapter
@@ -48,16 +46,7 @@ class UserProfilePostFragment : Fragment() {
 
     private fun observeRecyclerViewItem() = lifecycleScope.launch {
         viewModel.posts.collectLatest {
-            when (it) {
-                is Result.Error -> {
-                    Toast.makeText(requireContext(), "error occur", Toast.LENGTH_SHORT).show()
-                }
-
-                is Result.Loading -> {}
-                is Result.Success -> {
-                    userPostListAdapter.submitData(it.data)
-                }
-            }
+            userPostListAdapter.submitData(it)
         }
     }
 

@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
 
-    fun getPost(categories: List<String> = emptyList()): Flow<Result<PagingData<Post>>>
+    fun getPost(categories: List<String> = emptyList()): Result<Flow<PagingData<Post>>>
 }
