@@ -77,4 +77,10 @@
         app:route="my_comment"
         tools:layout="@layout/fragment_my_comment"/>
 
+    <fragment
+        android:id="@+id/setting"
+        android:name="com.stopsmoke.kekkek.presentation.setting.SettingFragment"
+        app:route="setting"
+        tools:layout="@layout/fragment_setting"/>
+
 </navigation>
