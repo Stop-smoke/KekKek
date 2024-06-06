@@ -47,6 +47,7 @@ class CommunityListAdapter(
         private val binding: ItemCommunityPostwritingBinding,
         private val postItemClick: (Int) -> Unit
     ) : ViewHolder(binding.root) {
+
         init {
             binding.root.setOnClickListener {
                 postItemClick(bindingAdapterPosition)
