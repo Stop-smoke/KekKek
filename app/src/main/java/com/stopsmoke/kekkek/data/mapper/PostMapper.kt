@@ -4,6 +4,7 @@ import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import java.time.LocalDateTime
 
@@ -11,7 +12,7 @@ fun PostEntity.asExternalModel(): Post =
     Post(
         id = id ?: "null",
         commentId = commentId ?: "null",
-        written = Post.Written(
+        written = Written(
             uid = written?.uid ?: "null",
             name = written?.name ?: "null",
             profileImage = written?.profileImage

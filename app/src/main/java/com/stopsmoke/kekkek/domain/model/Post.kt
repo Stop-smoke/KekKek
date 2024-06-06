@@ -17,11 +17,4 @@ data class Post(
 ) {
     val modifiedElapsedDateTime = dateTime.modified.getElapsedDateTime()
 
-    data class Written(
-        val uid: String,
-        val name: String,
-        val profileImage: ProfileImage,
-        val ranking: Long,
-    )
-
 }
