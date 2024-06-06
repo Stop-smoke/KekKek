@@ -143,5 +143,8 @@
     <string name="login_default_nickname">킥킥이</string>
     <string name="tv_my_post_title">내가 쓴 글</string>
     <string name="my_comment_title">내가 쓴 댓글</string>
+    <string name="setting_title">설정</string>
+    <string name="setting_profile_edit">내 계정 수정하기</string>
+    <string name="setting_version">현재 버전 2.0.51</string>
 
 </resources>
