@@ -1,6 +1,6 @@
 package com.stopsmoke.kekkek.data.repository
 
-import com.stopsmoke.kekkek.data.mapper.asExternalModel
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
@@ -12,6 +12,7 @@ import com.stopsmoke.kekkek.firestorage.model.StorageUploadResult
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import java.io.InputStream
@@ -53,11 +54,22 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getUserData(uid: String): Result<Flow<User>> {
+    override fun getUserData(uid: String): kotlin.Result<Flow<User>> {
         return kotlin.runCatching {
+            userDao.getUser(uid).map { user ->
+                user.toExternalModel()
+            }
+        }
+    }
+
+    override fun getUserData(): Flow<Result<User>> {
+        return try {
             userDao.getUser().map { user ->
-                    user.toExternalModel()
-                }
+                Result.Success(user.toExternalModel())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            flowOf(Result.Error(e))
         }
     }
 
