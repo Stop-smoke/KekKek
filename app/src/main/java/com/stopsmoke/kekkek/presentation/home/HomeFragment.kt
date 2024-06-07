@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,6 +55,7 @@ class HomeFragment : Fragment() {
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
+
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
@@ -61,9 +63,9 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.toolbar_home_bell -> {
                     findNavController().navigate("notification")
                 }

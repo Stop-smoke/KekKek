@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/onboarding_introduce"
+    android:id="@+id/nav_onboarding">
+
+    <fragment
+        android:id="@+id/onboarding_introduce"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingIntroduceFragment"
+        tools:layout="@layout/fragment_onboarding_introduce">
+        <action
+            android:id="@+id/action_onboarding_introduce_to_onboarding_name"
+            app:destination="@id/onboarding_name" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_name"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingNameFragment"
+        tools:layout="@layout/fragment_onboarding_name">
+        <action
+            android:id="@+id/action_onboarding_name_to_onboarding_perday"
+            app:destination="@id/onboarding_perday" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_perday"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPerdayFragment"
+        tools:layout="@layout/fragment_onboarding_perday">
+        <action
+            android:id="@+id/action_onboarding_perday_to_onboarding_perpack"
+            app:destination="@id/onboarding_perpack" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_perpack"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPerpackFragment"
+        tools:layout="@layout/fragment_onboarding_perpack">
+        <action
+            android:id="@+id/action_onboarding_perpack_to_onboarding_price"
+            app:destination="@id/onboarding_price" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_price"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPriceFragment"
+        tools:layout="@layout/fragment_onboarding_price">
+        <action
+            android:id="@+id/action_onboarding_price_to_onboarding_birth"
+            app:destination="@id/onboarding_birth" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_birth"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingBirthFragment"
+        tools:layout="@layout/fragment_onboarding_birth">
+        <action
+            android:id="@+id/action_onboarding_birth_to_onboarding_finish"
+            app:destination="@id/onboarding_finish" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/onboarding_finish"
+        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingFinishFragment"
+        tools:layout="@layout/fragment_onboarding_finish">
+    </fragment>
+
+</navigation>

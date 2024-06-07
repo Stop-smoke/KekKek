@@ -153,4 +153,7 @@
     <string name="user_profile_achievements">업적</string>
     <string name="userprofile_following">팔로잉</string>
     <string name="userprofile_follower">팔로워</string>
+
+    <!--  oss  -->
+    <string name="custom_license_title">오픈 소스 고지</string>
 </resources>
