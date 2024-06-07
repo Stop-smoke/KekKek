@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
@@ -19,6 +20,7 @@ import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -59,6 +61,11 @@ class MyFragment : Fragment() {
         initViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.visible()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -78,6 +85,22 @@ class MyFragment : Fragment() {
         }
         tvMyComment.setOnClickListener {
             findNavController().navigate("my_comment")
+        }
+        toolbarMy.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.toolbar_search -> {
+                    true
+                }
+
+                R.id.toolbar_my_bell -> {
+                    true
+                }
+                R.id.toolbar_my_setting -> {
+                    findNavController().navigate("setting")
+                    true
+                }
+                else -> false
+            }
         }
     }
 

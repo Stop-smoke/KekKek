@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
 import com.stopsmoke.kekkek.databinding.FragmentMyPostBinding
+import com.stopsmoke.kekkek.invisible
 
 
 class MyPostFragment : Fragment() {
@@ -37,6 +38,11 @@ class MyPostFragment : Fragment() {
         ivMyPostBack.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {

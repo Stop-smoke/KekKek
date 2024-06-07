@@ -46,6 +46,11 @@ class HomeFragment : Fragment() {
             navigateToAttainmentsFragment()
         }
 
+        // 일단 걍 실험용
+        binding.clHomeMotivation.setOnClickListener {
+            findNavController().navigate("setting_support")
+        }
+
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
