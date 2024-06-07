@@ -59,6 +59,10 @@ class MyFragment : Fragment() {
         initView()
         initListener()
         initViewModel()
+
+        binding.clMyAchievement.setOnClickListener {
+            findNavController().navigate("achievement")
+        }
     }
 
     override fun onResume() {
