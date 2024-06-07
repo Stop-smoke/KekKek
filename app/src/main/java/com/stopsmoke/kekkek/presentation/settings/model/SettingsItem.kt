@@ -1,6 +1,6 @@
-package com.stopsmoke.kekkek.presentation.settings
+package com.stopsmoke.kekkek.presentation.settings.model
 
-data class SettingItem(
+data class SettingsItem(
     val profileInfo: ProfileInfo?,
     val settingTitle: String?,
     val version: String?,

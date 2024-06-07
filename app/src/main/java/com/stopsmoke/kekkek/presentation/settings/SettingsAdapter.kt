@@ -4,19 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.databinding.ItemSettingListBinding
-import com.stopsmoke.kekkek.databinding.ItemSettingProfileBinding
-import com.stopsmoke.kekkek.databinding.ItemSettingVersionBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsListBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsProfileBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsVersionBinding
 import com.stopsmoke.kekkek.databinding.UnknownItemBinding
+import com.stopsmoke.kekkek.presentation.settings.model.MultiViewEnum
+import com.stopsmoke.kekkek.presentation.settings.model.OnClickListener
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 
-class SettingAdapter(private val onClickListener: OnClickListener) :
+class SettingsAdapter(private val onClickListener: OnClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var itemList = listOf<SettingItem>()
+    var itemList = listOf<SettingsItem>()
 
-    class UserProfileViewHolder(private val binding: ItemSettingProfileBinding) :
+    class UserProfileViewHolder(private val binding: ItemSettingsProfileBinding) : //ItemSettingsProfileBinding
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem, onClickListener: OnClickListener) {
+        fun bind(setting: SettingsItem, onClickListener: OnClickListener) {
             binding.run {
                 tvSettingUsername.text = setting.profileInfo?.userNickname
                 circleIvSettingProfile.load(setting.profileInfo?.profileImg) {
@@ -29,9 +32,9 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-    class SettingListViewHolder(private val binding: ItemSettingListBinding) :
+    class SettingListViewHolder(private val binding: ItemSettingsListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem, onClickListener: OnClickListener) = with(binding) {
+        fun bind(setting: SettingsItem, onClickListener: OnClickListener) = with(binding) {
             tvSettingListName.text = setting.settingTitle
             root.setOnClickListener {
                 onClickListener.onClickSettingList(setting)
@@ -39,9 +42,9 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-    class SettingVersionViewHolder(private val binding: ItemSettingVersionBinding) :
+    class SettingVersionViewHolder(private val binding: ItemSettingsVersionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem) = with(binding) {
+        fun bind(setting: SettingsItem) = with(binding) {
             tvSettingVersion.text = setting.version
         }
     }
@@ -50,7 +53,6 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() = Unit
     }
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -62,7 +64,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
 
         return when (multiViewType) {
             MultiViewEnum.MY_PAGE -> {
-                val binding = ItemSettingProfileBinding.inflate(
+                val binding = ItemSettingsProfileBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -71,7 +73,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
             }
 
             MultiViewEnum.LIST -> {
-                val binding = ItemSettingListBinding.inflate(
+                val binding = ItemSettingsListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -80,7 +82,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
             }
 
             MultiViewEnum.VERSION -> {
-                val binding = ItemSettingVersionBinding.inflate(
+                val binding = ItemSettingsVersionBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
