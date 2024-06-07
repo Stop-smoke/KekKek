@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -49,6 +50,7 @@ class HomeFragment : Fragment() {
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
+
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
@@ -56,9 +58,9 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.toolbar_home_bell -> {
                     findNavController().navigate("notification")
                 }
@@ -76,9 +78,23 @@ class HomeFragment : Fragment() {
                 }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            userData?.collectLatest {
-                Log.d("userData", it.toString())
+
+        when (userData) {
+            is Result.Error -> {
+
+            }
+
+            is Result.Loading -> {
+
+            }
+
+            is Result.Success -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                        .collectLatest { user ->
+                            viewModel.updateUserData(user)
+                        }
+                }
             }
         }
     }

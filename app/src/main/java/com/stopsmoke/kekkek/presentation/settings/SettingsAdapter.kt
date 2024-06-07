@@ -4,44 +4,47 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.databinding.ItemSettingListBinding
-import com.stopsmoke.kekkek.databinding.ItemSettingProfileBinding
-import com.stopsmoke.kekkek.databinding.ItemSettingVersionBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsListBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsProfileBinding
+import com.stopsmoke.kekkek.databinding.ItemSettingsVersionBinding
 import com.stopsmoke.kekkek.databinding.UnknownItemBinding
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 
-class SettingAdapter(private val onClickListener: OnClickListener) :
+class SettingsAdapter(private val settingsOnClickListener: SettingsOnClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var itemList = listOf<SettingItem>()
+    var itemList = listOf<SettingsItem>()
 
-    class UserProfileViewHolder(private val binding: ItemSettingProfileBinding) :
+    class UserProfileViewHolder(private val binding: ItemSettingsProfileBinding) : //ItemSettingsProfileBinding
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem, onClickListener: OnClickListener) {
+        fun bind(setting: SettingsItem, settingsOnClickListener: SettingsOnClickListener) {
             binding.run {
                 tvSettingUsername.text = setting.profileInfo?.userNickname
                 circleIvSettingProfile.load(setting.profileInfo?.profileImg) {
                     crossfade(true)
                 }
                 root.setOnClickListener {
-                    onClickListener.onClickProfile(setting)
+                    settingsOnClickListener.onClickProfile(setting)
                 }
             }
         }
     }
 
-    class SettingListViewHolder(private val binding: ItemSettingListBinding) :
+    class SettingListViewHolder(private val binding: ItemSettingsListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem, onClickListener: OnClickListener) = with(binding) {
+        fun bind(setting: SettingsItem, settingsOnClickListener: SettingsOnClickListener) = with(binding) {
             tvSettingListName.text = setting.settingTitle
             root.setOnClickListener {
-                onClickListener.onClickSettingList(setting)
+                settingsOnClickListener.onClickSettingList(setting)
             }
         }
     }
 
-    class SettingVersionViewHolder(private val binding: ItemSettingVersionBinding) :
+    class SettingVersionViewHolder(private val binding: ItemSettingsVersionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(setting: SettingItem) = with(binding) {
+        fun bind(setting: SettingsItem) = with(binding) {
             tvSettingVersion.text = setting.version
         }
     }
@@ -51,18 +54,17 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         fun bind() = Unit
     }
 
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        val multiViewType = MultiViewEnum.entries.find {
+        val multiViewType = SettingsMultiViewEnum.entries.find {
             it.viewType == viewType
         }
 
         return when (multiViewType) {
-            MultiViewEnum.MY_PAGE -> {
-                val binding = ItemSettingProfileBinding.inflate(
+            SettingsMultiViewEnum.MY_PAGE -> {
+                val binding = ItemSettingsProfileBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -70,8 +72,8 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
                 UserProfileViewHolder(binding)
             }
 
-            MultiViewEnum.LIST -> {
-                val binding = ItemSettingListBinding.inflate(
+            SettingsMultiViewEnum.LIST -> {
+                val binding = ItemSettingsListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -79,8 +81,8 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
                 SettingListViewHolder(binding)
             }
 
-            MultiViewEnum.VERSION -> {
-                val binding = ItemSettingVersionBinding.inflate(
+            SettingsMultiViewEnum.VERSION -> {
+                val binding = ItemSettingsVersionBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -103,17 +105,17 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentItem = itemList[position]
         when (holder.itemViewType) {
-            MultiViewEnum.MY_PAGE.viewType -> {
+            SettingsMultiViewEnum.MY_PAGE.viewType -> {
                 val profileHolder = holder as UserProfileViewHolder
-                profileHolder.bind(currentItem, onClickListener)
+                profileHolder.bind(currentItem, settingsOnClickListener)
             }
 
-            MultiViewEnum.LIST.viewType -> {
+            SettingsMultiViewEnum.LIST.viewType -> {
                 val listHolder = holder as SettingListViewHolder
-                listHolder.bind(currentItem, onClickListener)
+                listHolder.bind(currentItem, settingsOnClickListener)
             }
 
-            MultiViewEnum.VERSION.viewType -> {
+            SettingsMultiViewEnum.VERSION.viewType -> {
                 val versionHolder = holder as SettingVersionViewHolder
                 versionHolder.bind(currentItem)
             }

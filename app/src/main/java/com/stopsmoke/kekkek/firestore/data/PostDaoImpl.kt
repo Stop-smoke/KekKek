@@ -17,13 +17,11 @@ internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : PostDao {
 
-    override fun getPost(categories: List<String>): Flow<PagingData<PostEntity>> {
-        val query = firestore.collection(COLLECTION).apply {
-            categories.ifEmpty { null }?.let {
-                whereIn("category", it)
-            }
-            orderBy("date_time", Query.Direction.DESCENDING)
-        }
+    override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
+        val query = firestore.collection(COLLECTION)
+            .whereEqualTo("category", category)
+            .orderBy("date_time", Query.Direction.DESCENDING)
+
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)

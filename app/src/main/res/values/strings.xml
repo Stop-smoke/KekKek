@@ -153,4 +153,18 @@
     <string name="user_profile_achievements">업적</string>
     <string name="userprofile_following">팔로잉</string>
     <string name="userprofile_follower">팔로워</string>
+
+    <!--  settings  -->
+    <string name="custom_license_title">오픈 소스 고지</string>
+    <string name="setting_profile_title">설정</string>
+    <string name="setting_profile_nickname">닉네임</string>
+    <string name="setting_profile_birth">생년월일</string>
+    <string name="setting_profile_introduction">소개글</string>
+    <string name="profile_show_setting">프로필 공개 설정</string>
+    <string name="tv_profile_show_setting_detail">선택하면 다른 사람에게 프로필을 공개합니다.</string>
+    <string name="setting_log_out">로그아웃</string>
+    <string name="setting_service_out">서비스 계정 탈퇴</string>
+    <string name="setting_language_english">English</string>
+    <string name="setting_language_korean">한글</string>
+
 </resources>

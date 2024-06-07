@@ -27,8 +27,8 @@ data class PostEntity(
     @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
     var unlikeUser: List<String> = emptyList(),
 
-    @get:PropertyName("categories") @set:PropertyName("categories")
-    var categories: String? = null,
+    @get:PropertyName("category") @set:PropertyName("category")
+    var category: String? = null,
 
     @get:PropertyName("views") @set:PropertyName("views")
     var views: Long? = null,

@@ -29,6 +29,10 @@ legacySupportV4 = "1.0.0"
 androidxLifecycle = "2.8.1"
 fragmentKtx = "1.7.1"
 
+ossLicensesPlugin = "0.10.6"
+googleOssLicenses = "17.0.1"
+activityVersion = "1.8.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +68,9 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 
+android-gms-oos-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOssLicenses" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -72,3 +79,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+google-oss-licenses = { id = "com.geekorum.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
