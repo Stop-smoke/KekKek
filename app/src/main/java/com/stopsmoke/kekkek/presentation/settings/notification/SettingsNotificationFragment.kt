@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSettingsNotificationBinding
 
 
@@ -19,6 +20,18 @@ class SettingsNotificationFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsNotificationBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAppBar()
+    }
+
+    private fun initAppBar() = with(binding) {
+        settingNotification.tvUserProfileTitle.text = "알림"
+        settingNotification.ivUserProfileBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
