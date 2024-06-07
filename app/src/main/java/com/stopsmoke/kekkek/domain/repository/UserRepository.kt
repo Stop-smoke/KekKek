@@ -17,7 +17,7 @@ interface UserRepository {
      * 다른 유저 정보를 가져옴
      */
 
-    fun getUserData(uid: String): kotlin.Result<Flow<User>>
+    fun getUserData(uid: String): Result<Flow<User>>
 
     /**
      * 자신의 유저 정보를 가져옴

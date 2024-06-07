@@ -54,11 +54,16 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getUserData(uid: String): kotlin.Result<Flow<User>> {
-        return kotlin.runCatching {
+    override fun getUserData(uid: String): Result<Flow<User>> {
+        return try {
             userDao.getUser(uid).map { user ->
                 user.toExternalModel()
             }
+                .let {
+                    Result.Success(it)
+                }
+        } catch (e: Exception) {
+            Result.Error(e)
         }
     }
 
