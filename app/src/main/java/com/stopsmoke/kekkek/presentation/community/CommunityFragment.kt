@@ -79,6 +79,7 @@ class CommunityFragment : Fragment() {
         initCommunityCategory()
         setToolbarMenu()
 
+        // 이 부분 향후에 Shared View Model 로 바꾸는게 좋을 듯
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PostWriteItem?>("NEW_POST")
             ?.observe(viewLifecycleOwner) { newPost ->
                 Log.d("items", newPost.toString())
