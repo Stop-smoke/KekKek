@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,24 +31,29 @@ class CommunityViewModel @Inject constructor(
 
     private var posts: Flow<PagingData<CommunityWritingItem>> = flowOf()
     private var category: PostCategory = PostCategory.ALL
+    private var postsJob: Job? = null
 
     init {
         reLoading()
     }
-    fun reLoading() = viewModelScope.launch {
-        posts = postRepository.getPost(category)
-            .let {
-                when (it) {
-                    is Result.Error -> emptyFlow()
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data.map { pagingData->
-                        pagingData.map {
-                            updateWritingItem(it)
+    fun reLoading() {
+        postsJob?.cancel() // 이전 작업이 있으면 취소
+
+        postsJob = viewModelScope.launch {
+            posts = postRepository.getPost(category)
+                .let {
+                    when (it) {
+                        is Result.Error -> emptyFlow()
+                        is Result.Loading -> emptyFlow()
+                        is Result.Success -> it.data.map { pagingData->
+                            pagingData.map {
+                                updateWritingItem(it)
+                            }
                         }
                     }
                 }
-            }
-            .cachedIn(viewModelScope)
+                .cachedIn(viewModelScope)
+        }
     }
 
     fun getPosts() = posts
