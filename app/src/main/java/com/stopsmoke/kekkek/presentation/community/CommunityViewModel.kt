@@ -15,10 +15,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +44,7 @@ class CommunityViewModel @Inject constructor(
 
     fun getPosts() = posts
     fun reLoading() =  viewModelScope.launch {
+
         posts = postRepository.getPost()
             .let {
                 when (it) {
@@ -60,6 +59,7 @@ class CommunityViewModel @Inject constructor(
             }
             .cachedIn(viewModelScope)
     }
+
     private fun updateWritingItem(post: Post): CommunityWritingItem =
         CommunityWritingItem(
             userInfo = UserInfo(
@@ -71,14 +71,15 @@ class CommunityViewModel @Inject constructor(
                 title = post.title,
                 postType = when(post.categories){
                     PostCategory.NOTICE -> "공지사항"
-                    PostCategory.QUIT_SMOKING_SUPPORT -> "금연 보조제 후기"
-                    PostCategory.POPULAR -> "인기 게시글"
-                    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> ""
-                    PostCategory.SUCCESS_STORIES -> ""
-                    PostCategory.GENERAL_DISCUSSION -> ""
-                    PostCategory.FAILURE_STORIES -> ""
-                    PostCategory.RESOLUTIONS -> ""
+                    PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
+                    PostCategory.POPULAR -> "인기글"
+                    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
+                    PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
+                    PostCategory.GENERAL_DISCUSSION -> "자유게시판"
+                    PostCategory.FAILURE_STORIES -> "금연 실패 후기"
+                    PostCategory.RESOLUTIONS -> "금연 다짐"
                     PostCategory.UNKNOWN -> ""
+                    PostCategory.ALL -> ""
                 },
                 view = post.views,
                 like = post.likeUser.size.toLong(),

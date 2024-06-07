@@ -11,7 +11,7 @@ interface PostDao {
      * [category] 공지사항, 인기글 등등 필터를 적용해서 가져올 수 있습니다
      */
     // https://www.notion.so/stopsmoke/enum-PostCategory-c6956f5b008d4185bcd3dfe42dfbc14e?pvs=4
-    fun getPost(categories: List<String> = emptyList()): Flow<PagingData<PostEntity>>
+    fun getPost(category: String? = null): Flow<PagingData<PostEntity>>
 
     suspend fun addPost(postEntity: PostEntity)
 

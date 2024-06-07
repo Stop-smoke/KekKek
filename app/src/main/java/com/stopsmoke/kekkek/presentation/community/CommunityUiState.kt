@@ -4,7 +4,8 @@ import androidx.paging.PagingData
 
 sealed interface CommunityUiState {
     data class CommunityNormalUiState(
-        val popularItem: CommunityPopularItem
+        val popularItem: CommunityPopularItem,
+        val isLoading: Boolean = false
     ) : CommunityUiState
 
     companion object {
