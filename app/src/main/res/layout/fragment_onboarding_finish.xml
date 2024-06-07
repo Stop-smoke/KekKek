@@ -6,17 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.onboarding.OnboardingFinishFragment">
 
-    <Button
-        android:id="@+id/btn_onboarding_next"
+
+    <TextView
+        android:id="@+id/tv_onboarding_perpack1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:text="다음으로"
-        android:textSize="24sp"
+        android:layout_marginTop="450dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="설정을 모두 완료하였어요!"
+        android:textColor="@color/primary_blue"
+        android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
