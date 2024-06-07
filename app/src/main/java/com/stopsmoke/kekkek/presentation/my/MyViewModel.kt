@@ -20,8 +20,7 @@ class MyViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.init())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
-    val userData = userRepository.getUserData("테스트_계정").getOrNull()
-
+    val userData = userRepository.getUserData("테스트_계정")
 
     fun updateUserData(user : User) = viewModelScope.launch {
         _uiState.update {

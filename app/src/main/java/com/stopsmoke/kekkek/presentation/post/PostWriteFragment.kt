@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.post
+package com.stopsmoke.kekkek.presentation.post
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -16,15 +16,23 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
+import com.stopsmoke.kekkek.presentation.community.CommunityFragment
 
 
 class PostWriteFragment : Fragment() {
 
-    private var _binding: FragmentPostWriteBinding ?= null
+    private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
+
+    override fun onStart() {
+        super.onStart()
+        findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", null)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +54,8 @@ class PostWriteFragment : Fragment() {
 
     private fun initSpinner() = with(binding) {
         val category = resources.getStringArray(R.array.post_category)
-        val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,category)
+        val adapter =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
         spinnerPostWrite.adapter = adapter
         spinnerPostWrite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -55,23 +64,26 @@ class PostWriteFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when(position) {
+                when (position) {
                     0 -> {
                         tvPostWriteType.text = category[0]
                     }
+
                     1 -> {
                         tvPostWriteType.text = category[1]
                     }
+
                     2 -> {
                         tvPostWriteType.text = category[2]
                     }
+
                     3 -> {
                         tvPostWriteType.text = category[3]
                     }
                 }
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
         }
     }
@@ -110,7 +122,13 @@ class PostWriteFragment : Fragment() {
             findNavController().popBackStack()
         }
         tvPostWriteRegister.setOnClickListener {
-
+            val newPost = PostWriteItem(
+                postType = tvPostWriteType.text.toString(),
+                title = etPostWriteTitle.text.toString(),
+                content = etPostWriteContent.text.toString()
+            )
+            findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", newPost)
+            findNavController().popBackStack()
         }
     }
 
@@ -118,7 +136,7 @@ class PostWriteFragment : Fragment() {
         val etPostWriteContent = binding.etPostWriteContent
         val start = etPostWriteContent.selectionStart
         val end = etPostWriteContent.selectionEnd
-        if(start!=end) {
+        if (start != end) {
             val spannableString = SpannableStringBuilder(etPostWriteContent.text)
             spannableString.setSpan(
                 span,
@@ -127,8 +145,13 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
             )
             etPostWriteContent.text = spannableString
-            etPostWriteContent.setSelection(start,end) // setSelection : 선택 영역 유지
+            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
     }
 
     override fun onDestroyView() {

@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -54,6 +55,7 @@ class MyFragment : Fragment() {
         }
 
         initView()
+        initListener()
         initViewModel()
     }
 
@@ -70,6 +72,15 @@ class MyFragment : Fragment() {
         }
     }
 
+    private fun initListener() = with(binding) {
+        tvMyWriting.setOnClickListener {
+            findNavController().navigate("my_post")
+        }
+        tvMyComment.setOnClickListener {
+            findNavController().navigate("my_comment")
+        }
+    }
+
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -77,10 +88,24 @@ class MyFragment : Fragment() {
                     onBind(state)
                 }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            userData?.collectLatest { user ->
-                viewModel.updateUserData(user)
-                Log.d("userData_my", user.toString())
+
+
+        when (userData) {
+            is Result.Error -> {
+
+            }
+
+            is Result.Loading -> {
+
+            }
+
+            is Result.Success -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                        .collectLatest { user ->
+                            viewModel.updateUserData(user)
+                        }
+                }
             }
         }
     }

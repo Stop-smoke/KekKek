@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    val userData = userRepository.getUserData("테스트_계정").getOrNull()
+    val userData = userRepository.getUserData("테스트_계정")
     private var startTime: LocalDateTime = LocalDateTime.now()
 
     init {

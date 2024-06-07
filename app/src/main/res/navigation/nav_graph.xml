@@ -43,13 +43,13 @@
 
     <fragment
         android:id="@+id/post_view"
-        android:name="com.stopsmoke.kekkek.post.PostViewFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.PostViewFragment"
         app:route="post_view"
         tools:layout="@layout/fragment_post_view" />
 
     <fragment
         android:id="@+id/post_write"
-        android:name="com.stopsmoke.kekkek.post.PostWriteFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.PostWriteFragment"
         app:route="post_write"
         tools:layout="@layout/fragment_post_write"/>
 
@@ -70,5 +70,30 @@
         android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
         app:route="myWritingList"
         tools:layout="@layout/fragment_my_writing_list"/>
+
+
+    <fragment
+        android:id="@+id/my_post"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
+        app:route="my_post"
+        tools:layout="@layout/fragment_my_post"/>
+
+    <fragment
+        android:id="@+id/my_comment"
+        android:name="com.stopsmoke.kekkek.presentation.my.MyCommentFragment"
+        app:route="my_comment"
+        tools:layout="@layout/fragment_my_comment"/>
+
+    <fragment
+        android:id="@+id/user_profile"
+        android:name="com.stopsmoke.kekkek.presentation.userprofile.UserProfileFragment"
+        app:route="user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+
+        <argument android:name="uid"
+            app:argType="string" />
+    </fragment>
+
+
 
 </navigation>

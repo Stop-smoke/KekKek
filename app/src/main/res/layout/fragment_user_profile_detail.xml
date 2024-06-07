@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="36dp"
+    android:paddingStart="18dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:id="@+id/tv_user_profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="LimHeejin" />
+
+    <TextView
+        android:id="@+id/tv_user_profile_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:maxWidth="100dp"
+        android:maxLines="1"
+        android:textColor="#CACACA"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_profile_name"
+        tools:text="랭킹 7369위" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user_profile_profile_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_user_profile_test" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_user_profile_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="iv_user_profile_profile_image, tv_user_profile_ranking" />
+
+    <TextView
+        android:id="@+id/tv_user_profile_following"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:maxWidth="100dp"
+        android:maxLines="1"
+        android:text="@string/userprofile_following"
+        android:textColor="#8B94A1"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_user_profile_title" />
+
+    <TextView
+        android:id="@+id/tv_user_profile_following_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:maxWidth="100dp"
+        android:maxLines="1"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_user_profile_following"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_profile_following"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/tv_user_profile_follower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:maxWidth="100dp"
+        android:maxLines="1"
+        android:text="@string/userprofile_follower"
+        android:textColor="#8B94A1"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_user_profile_following"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_user_profile_title" />
+
+    <TextView
+        android:id="@+id/tv_user_profile_follower_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:maxWidth="100dp"
+        android:maxLines="1"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_user_profile_follower"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_profile_follower"
+        tools:text="0" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_user_profile_introduce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="24dp"
+        app:constraint_referenced_ids="tv_user_profile_following_count, tv_user_profile_follower_count" />
+
+
+    <TextView
+        android:id="@+id/tv_user_profile_introduce"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_user_profile_introduce"
+        android:ellipsize="end"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:maxLines="1"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:textColor="#8B94A1"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_user_profile_introduce"
+        tools:text="안녕하세요 저는 금연 24일차이고 이건 소개글입니다." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

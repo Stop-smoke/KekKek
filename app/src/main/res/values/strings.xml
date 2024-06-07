@@ -141,5 +141,13 @@
     <string name="login_google">Google로 이용하기</string>
     <string name="login_kakao">카카오로 이용하기</string>
     <string name="login_default_nickname">킥킥이</string>
+    <string name="tv_my_post_title">내가 쓴 글</string>
+    <string name="my_comment_title">내가 쓴 댓글</string>
 
+    <!--  user profile  -->
+    <string name="user_profile_post">작성한 글</string>
+    <string name="user_profile_comment">작성한 댓글</string>
+    <string name="user_profile_achievements">업적</string>
+    <string name="userprofile_following">팔로잉</string>
+    <string name="userprofile_follower">팔로워</string>
 </resources>
