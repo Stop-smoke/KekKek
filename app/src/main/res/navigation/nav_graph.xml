@@ -65,4 +65,10 @@
         app:route="bookmark"
         tools:layout="@layout/fragment_bookmark"/>
 
+    <fragment
+        android:id="@+id/myWritingList"
+        android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
+        app:route="myWritingList"
+        tools:layout="@layout/fragment_my_writing_list"/>
+
 </navigation>

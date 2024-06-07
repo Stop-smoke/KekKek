@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
@@ -11,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.DummyData
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -53,9 +56,15 @@ class BookmarkFragment : Fragment() {
     }
 
     private fun initAppBar() = with(binding) {
-        clBookmarkAppBar.setOnClickListener {
+        val ivNotificationBack = requireActivity().findViewById<ImageView>(R.id.iv_notification_back)
+        val ivNotificationDelete = requireActivity().findViewById<ImageView>(R.id.iv_notification_delete)
+        val tvNotificationTitle = requireActivity().findViewById<TextView>(R.id.tv_notification_title)
+
+        ivNotificationBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        tvNotificationTitle.text = "북마크"
     }
 
     private fun initViewModel() = with(viewModel) {
