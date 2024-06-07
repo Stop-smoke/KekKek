@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.settings
+package com.stopsmoke.kekkek.presentation.settings.opensource
 
 import android.content.Intent
 import android.os.Bundle

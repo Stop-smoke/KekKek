@@ -3,20 +3,27 @@ package com.stopsmoke.kekkek.firestore.model
 import com.google.firebase.firestore.PropertyName
 
 data class CommentEntity(
-    @PropertyName("id")
-    val id: String? = null,
-    @PropertyName("title")
-    val title: String? = null,
-    @PropertyName("text")
-    val text: String? = null,
+    @get:PropertyName("id") @set:PropertyName("id")
+    var id: String? = null,
+
+    @get:PropertyName("post_id") @set:PropertyName("post_id")
+    var postId: String? = null,
+
+    @get:PropertyName("text") @set:PropertyName("text")
+    var text: String? = null,
+
     @get:PropertyName("date_time") @set:PropertyName("date_time")
-    var dateTime: String? = null,
-    @PropertyName("like")
-    val like: Int? = null,
-    @get:PropertyName("is_like") @set:PropertyName("is_like")
-    var isLike: Boolean? = null,
-    @PropertyName("unlike")
-    val unlike: Int? = null,
-    @get:PropertyName("is_unlike") @set:PropertyName("is_unlike")
-    var isUnlike: Boolean? = null,
+    var dateTime: DateTimeEntity? = null,
+
+    @get:PropertyName("like_user") @set:PropertyName("like_user")
+    var likeUser: List<String> = emptyList(),
+
+    @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
+    var unlikeUser: List<String> = emptyList(),
+
+    @get:PropertyName("reply") @set:PropertyName("reply")
+    var reply: ReplyEntity? = null,
+
+    @get:PropertyName("written") @set:PropertyName("written")
+    var written: WrittenEntity? = null
 )
