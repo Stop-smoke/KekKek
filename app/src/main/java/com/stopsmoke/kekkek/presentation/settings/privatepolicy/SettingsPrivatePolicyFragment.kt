@@ -54,5 +54,4 @@ class SettingsPrivatePolicyFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

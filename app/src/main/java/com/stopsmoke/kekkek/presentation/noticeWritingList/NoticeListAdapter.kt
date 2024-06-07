@@ -1,54 +1,40 @@
-package com.stopsmoke.kekkek.presentation.community
+package com.stopsmoke.kekkek.presentation.noticeWritingList
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import java.util.Calendar
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
-class CommunityListAdapter(
-    private val postItemClick: (Int) -> Unit
-) : PagingDataAdapter<CommunityWritingItem, CommunityListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
+class NoticeListAdapter
+    : ListAdapter<NoticeListItem, NoticeListAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<NoticeListItem>() {
         override fun areItemsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
+            oldItem: NoticeListItem,
+            newItem: NoticeListItem
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
+            oldItem: NoticeListItem,
+            newItem: NoticeListItem
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 ) {
-    abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        abstract fun bind(item: CommunityWritingItem)
-    }
-
-
-    class WritingPostViewHolder(
-        private val binding: ItemCommunityPostwritingBinding,
-        private val postItemClick: (Int) -> Unit
-    ) : ViewHolder(binding.root) {
-
-        init {
-            binding.root.setOnClickListener {
-                postItemClick(bindingAdapterPosition)
-            }
-        }
-
-        override fun bind(item: CommunityWritingItem): Unit = with(binding) {
+    class ViewHolder(
+        private val binding: ItemCommunityPostwritingBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: NoticeListItem) = with(binding) {
             item.postInfo.let {
                 tvItemWritingTitle.text = it.title
                 tvItemWritingViewNum.text = it.view.toString()
@@ -76,18 +62,25 @@ class CommunityListAdapter(
             }
         }
 
-        private fun getRelativeTime(pastTime: ElapsedDateTime): String {
-            val timeType = when (pastTime.elapsedDateTime) {
-                DateTimeUnit.YEAR -> "년"
-                DateTimeUnit.MONTH -> "달"
-                DateTimeUnit.DAY -> "일"
-                DateTimeUnit.WEEK -> "주"
-                DateTimeUnit.HOUR -> "시간"
-                DateTimeUnit.MINUTE -> "분"
-                DateTimeUnit.SECOND -> "초"
-            }
+        private fun getRelativeTime(pastDate: Date): String {
+            val now = Calendar.getInstance().time
+            val diffInMillis = now.time - pastDate.time
 
-            return "${pastTime.number} ${timeType} 전"
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+            val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+            val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+            val months = days / 30
+            val years = days / 365
+
+            return when {
+                seconds < 60 -> "${seconds}초 전"
+                minutes < 60 -> "${minutes}분 전"
+                hours < 24 -> "${hours}시간 전"
+                days < 30 -> "${days}일 전"
+                months < 12 -> "${months}달 전"
+                else -> "${years}년 전"
+            }
         }
 
         private fun setMarginEnd(view: TextView, end: Int) {
@@ -97,22 +90,20 @@ class CommunityListAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CommunityListAdapter.ViewHolder =
-        WritingPostViewHolder(
+    ): ViewHolder {
+        return ViewHolder(
             ItemCommunityPostwritingBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            postItemClick
+            )
         )
+    }
 
-
-    override fun onBindViewHolder(holder: CommunityListAdapter.ViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 }
