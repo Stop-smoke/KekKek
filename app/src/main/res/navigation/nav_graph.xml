@@ -101,4 +101,14 @@
         app:route="setting_language"
         tools:layout="@layout/fragment_language"/>
 
+    <fragment
+        android:id="@+id/user_profile"
+        android:name="com.stopsmoke.kekkek.presentation.userprofile.UserProfileFragment"
+        app:route="user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+
+        <argument android:name="uid"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

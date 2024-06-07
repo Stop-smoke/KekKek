@@ -3,45 +3,52 @@ package com.stopsmoke.kekkek.firestore.model
 import com.google.firebase.firestore.PropertyName
 
 data class PostEntity(
-    @get:PropertyName("id")
-    val id: String? = null,
+    @get:PropertyName("id") @set:PropertyName("id")
+    var id: String? = null,
 
-    @get:PropertyName("comment_id")
-    @set:PropertyName("comment_id")
+    @get:PropertyName("comment_id") @set:PropertyName("comment_id")
     var commentId: String? = null,
 
-    @get:PropertyName("written_uid")
-    @set:PropertyName("written_uid")
-    var writtenUid: String? = null,
+    @get:PropertyName("written") @set:PropertyName("written")
+    var written: Written? = null,
 
-    @get:PropertyName("title")
-    val title: String? = null,
+    @get:PropertyName("title") @set:PropertyName("title")
+    var title: String? = null,
 
-    @get:PropertyName("text")
-    val text: String? = null,
+    @get:PropertyName("text") @set:PropertyName("text")
+    var text: String? = null,
 
-    @get:PropertyName("date_time")
-    @set:PropertyName("date_time")
-    var dateTime: String? = null,
+    @get:PropertyName("date_time") @set:PropertyName("date_time")
+    var dateTime: DateTimeEntity? = null,
 
-    @get:PropertyName("bookmark")
-    val bookmark: Int? = null,
+    @get:PropertyName("like_user") @set:PropertyName("like_user")
+    var likeUser: List<String> = emptyList(),
 
-    @get:PropertyName("is_bookmark")
-    @set:PropertyName("is_bookmark")
-    var isBookmark: Boolean? = null,
+    @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
+    var unlikeUser: List<String> = emptyList(),
 
-    @get:PropertyName("like")
-    val like: Int? = null,
+    @get:PropertyName("categories") @set:PropertyName("categories")
+    var categories: String? = null,
 
-    @get:PropertyName("is_like")
-    @set:PropertyName("is_like")
-    var isLike: Boolean? = null,
+    @get:PropertyName("views") @set:PropertyName("views")
+    var views: Long? = null,
 
-    @get:PropertyName("unlike")
-    val unlike: Int? = null,
+    @get:PropertyName("comment_user") @set:PropertyName("comment_user")
+    var commentUser: List<String> = emptyList()
+) {
 
-    @get:PropertyName("is_unlike")
-    @set:PropertyName("is_unlike")
-    var isUnlike: Boolean? = null,
-)
+    data class Written(
+        @get:PropertyName("uid") @set:PropertyName("uid")
+        var uid: String? = null,
+
+        @get:PropertyName("name") @set:PropertyName("name")
+        var name: String? = null,
+
+        @get:PropertyName("profile_image") @set:PropertyName("profile_image")
+        var profileImage: String? = null,
+
+        @get:PropertyName("ranking") @set:PropertyName("ranking")
+        var ranking: Long? = null,
+    )
+
+}

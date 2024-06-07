@@ -69,7 +69,7 @@ dependencies {
     // CORE
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity)
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.androidx.fragment.ktx)
 
     // UI
     implementation(libs.androidx.appcompat)
@@ -77,7 +77,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.circleimageview)
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
@@ -127,8 +126,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
 
     // PAGING
-    implementation("androidx.paging:paging-runtime:3.3.0")
-    testImplementation("androidx.paging:paging-common:3.3.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    testImplementation("androidx.paging:paging-common-ktx:3.3.0")
 
     //google SNS with FireBase
     implementation("com.google.android.gms:play-services-auth:20.7.0")

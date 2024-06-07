@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.userprofile.UserProfileFragment">
+
+    <include
+        android:id="@+id/include_userprofile_app_bar"
+        layout="@layout/fragment_user_profile_app_bar" />
+
+    <include
+        android:id="@+id/include_userprofile_detail"
+        layout="@layout/fragment_user_profile_detail" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_userprofile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/black"
+        app:tabIndicatorFullWidth="true"
+        app:tabIndicatorHeight="3dp"
+        app:tabRippleColor="@null"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextAppearance="@style/UserProfileTabTextAppearance"
+        app:tabTextColor="@color/black" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager_userprofile_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
