@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.settings
+package com.stopsmoke.kekkek.presentation.settings.model
 
 enum class MultiViewEnum(val viewType : Int) {
     MY_PAGE(0),

@@ -8,24 +8,24 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentSettingBinding
+import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
+import com.stopsmoke.kekkek.presentation.settings.model.MultiViewEnum
+import com.stopsmoke.kekkek.presentation.settings.model.OnClickListener
+import com.stopsmoke.kekkek.presentation.settings.model.ProfileInfo
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 
-class SettingFragment : Fragment(), OnClickListener {
+class SettingsFragment : Fragment(), OnClickListener {
 
-    private var _binding: FragmentSettingBinding? = null
+    private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var settingAdapter: SettingAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var settingAdapter: SettingsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSettingBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -37,9 +37,9 @@ class SettingFragment : Fragment(), OnClickListener {
     }
 
     private fun initData() {
-        settingAdapter = SettingAdapter(this@SettingFragment)
+        settingAdapter = SettingsAdapter(this@SettingsFragment)
         settingAdapter.itemList = listOf(
-            SettingItem(
+            SettingsItem(
                 profileInfo = ProfileInfo(
                     profileImg = R.drawable.ic_launcher_background,
                     userNickname = "희진",
@@ -50,49 +50,49 @@ class SettingFragment : Fragment(), OnClickListener {
                 version = null,
                 cardViewType = MultiViewEnum.MY_PAGE
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "알림",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "언어",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "테마",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "친구",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "오픈 소스 고지",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "개인 정보 보호 및 보안 안내",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 settingTitle = "지원",
                 cardViewType = MultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
             ),
-            SettingItem(
+            SettingsItem(
                 version = "현재 버전 2.0.51",
                 cardViewType = MultiViewEnum.VERSION,
                 profileInfo = null,
@@ -117,12 +117,12 @@ class SettingFragment : Fragment(), OnClickListener {
         _binding = null
     }
 
-    override fun onClickProfile(settingItem: SettingItem) {
+    override fun onClickProfile(settingItem: SettingsItem) {
         // settingItem 에 정보를 담은 채로 보내야함
         findNavController().navigate("setting_profile")
     }
 
-    override fun onClickSettingList(settingItem: SettingItem) {
+    override fun onClickSettingList(settingItem: SettingsItem) {
         when(settingItem.settingTitle) {
             "알림" -> {
                 findNavController().navigate("setting_notification")
@@ -137,13 +137,13 @@ class SettingFragment : Fragment(), OnClickListener {
 
             }
             "오픈 소스 고지" -> {
-
+                findNavController().navigate("setting_oss")
             }
             "개인 정보 보호 및 보안 안내" -> {
-
+                findNavController().navigate("setting_privatepolicy")
             }
             "지원" -> {
-
+                findNavController().navigate("setting_support")
             }
         }
     }
