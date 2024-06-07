@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
 
-    fun getPost(categories: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
+    fun getPost(category: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
 }

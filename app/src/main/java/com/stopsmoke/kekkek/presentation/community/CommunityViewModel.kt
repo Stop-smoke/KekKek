@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,25 +28,14 @@ class CommunityViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<CommunityUiState> = MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    private var posts: Flow<PagingData<CommunityWritingItem>> = postRepository.getPost()
-        .let {
-            when (it) {
-                is Result.Error -> emptyFlow()
+    private var posts: Flow<PagingData<CommunityWritingItem>> = flowOf()
+    private var category: PostCategory = PostCategory.ALL
 
-                is Result.Loading -> emptyFlow()
-                is Result.Success -> it.data.map { pagingData->
-                    pagingData.map {
-                        updateWritingItem(it)
-                    }
-                }
-            }
-        }
-        .cachedIn(viewModelScope)
-
-    fun getPosts() = posts
-    fun reLoading() =  viewModelScope.launch {
-
-        posts = postRepository.getPost()
+    init {
+        reLoading()
+    }
+    fun reLoading() = viewModelScope.launch {
+        posts = postRepository.getPost(category)
             .let {
                 when (it) {
                     is Result.Error -> emptyFlow()
@@ -59,6 +49,8 @@ class CommunityViewModel @Inject constructor(
             }
             .cachedIn(viewModelScope)
     }
+
+    fun getPosts() = posts
 
     private fun updateWritingItem(post: Post): CommunityWritingItem =
         CommunityWritingItem(
@@ -89,4 +81,39 @@ class CommunityViewModel @Inject constructor(
             post = post.text,
             postTime = post.modifiedElapsedDateTime
         )
+
+    fun setCategory(categoryString: String) {
+        when(categoryString){
+            "커뮤니티 홈" -> {
+                category = PostCategory.ALL
+            }
+            "공지사항" -> {
+                category = PostCategory.NOTICE
+            }
+            "금연 지원 프로그램 공지" -> {
+                category = PostCategory.QUIT_SMOKING_SUPPORT
+            }
+            "인기글" -> {
+                category = PostCategory.POPULAR
+            }
+            "금연 보조제 후기" -> {
+                category = PostCategory.QUIT_SMOKING_AIDS_REVIEWS
+            }
+            "금연 성공 후기" -> {
+                category = PostCategory.SUCCESS_STORIES
+            }
+            "자유게시판" -> {
+                category = PostCategory.GENERAL_DISCUSSION
+            }
+            "금연 실패 후기" -> {
+                category = PostCategory.FAILURE_STORIES
+            }
+            "금연 다짐" -> {
+                category = PostCategory.RESOLUTIONS
+            }
+            else -> {
+                category = PostCategory.UNKNOWN
+            }
+        }
+    }
 }

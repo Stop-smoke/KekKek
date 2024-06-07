@@ -76,12 +76,7 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
-        rvCommunityCategory.layoutManager =
-            LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = CommunityCategoryListAdapter()
-        adapter.submitList(requireContext().resources.getStringArray(R.array.category).toList())
-        rvCommunityCategory.adapter = adapter
-
+        initCommunityCategory()
         setToolbarMenu()
 
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PostWriteItem?>("NEW_POST")
@@ -93,6 +88,17 @@ class CommunityFragment : Fragment() {
             }
     }
 
+    private fun initCommunityCategory() = with(binding){
+        rvCommunityCategory.layoutManager =
+            LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+        val adapterList = requireContext().resources.getStringArray(R.array.community_category).toList()
+        val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
+            viewModel.setCategory(adapterList[clickPosition])
+            viewModel.reLoading()
+        })
+        adapter.submitList(adapterList)
+        rvCommunityCategory.adapter = adapter
+    }
 
     private fun setToolbarMenu() {
         binding.toolbarCommunity.setOnMenuItemClickListener {
