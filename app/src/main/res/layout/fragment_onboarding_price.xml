@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.onboarding.OnboardingPriceFragment">
+
+    <TextView
+        android:id="@+id/tv_onboarding_price1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="담배 한 팩 당"
+        android:textColor="@color/primary_blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_onboarding_price2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="가격이 얼마인가요?"
+        android:textColor="@color/primary_blue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_onboarding_price1"
+        app:layout_constraintStart_toStartOf="@+id/tv_onboarding_price1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_price1" />
+
+    <EditText
+        android:id="@+id/et_onboarding_price"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:backgroundTint="@color/gray"
+        android:fontFamily="@font/pretendard_medium"
+        android:hint="가격을 입력하세요"
+        android:textColorHint="@color/gray"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_onboarding_price2"
+        app:layout_constraintStart_toStartOf="@+id/tv_onboarding_price2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_price2" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_onboarding_next"
+        android:layout_width="330dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/bg_onboarding_button"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="다음"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

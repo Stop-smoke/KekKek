@@ -4,7 +4,7 @@ data class SettingsItem(
     val profileInfo: ProfileInfo?,
     val settingTitle: String?,
     val version: String?,
-    val cardViewType: MultiViewEnum
+    val cardViewType: SettingsMultiViewEnum
 )
 
 data class ProfileInfo(

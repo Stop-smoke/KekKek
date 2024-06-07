@@ -26,7 +26,6 @@ class SettingsPrivatePolicyFragment : Fragment() {
         binding.ivPrivatepolicyBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
         return binding.root
     }
 
@@ -55,5 +54,4 @@ class SettingsPrivatePolicyFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
