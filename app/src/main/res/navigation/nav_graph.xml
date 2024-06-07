@@ -5,6 +5,8 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
 
+    <include app:graph="@navigation/nav_onboarding" />
+
     <fragment
         android:id="@+id/home"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
