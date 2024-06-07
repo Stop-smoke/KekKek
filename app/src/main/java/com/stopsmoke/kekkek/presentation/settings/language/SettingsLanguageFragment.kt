@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSettingsLanguageBinding
 
 class SettingsLanguageFragment : Fragment() {
@@ -18,6 +19,18 @@ class SettingsLanguageFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsLanguageBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAppBar()
+    }
+
+    private fun initAppBar() = with(binding) {
+        settingLanguage.tvUserProfileTitle.text = "언어"
+        settingLanguage.ivUserProfileBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {

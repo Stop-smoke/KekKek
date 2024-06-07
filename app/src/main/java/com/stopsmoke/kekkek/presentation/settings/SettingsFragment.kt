@@ -33,7 +33,6 @@ class SettingsFragment : Fragment(), OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initData()
         initView()
-        initListener()
     }
 
     private fun initData() {
@@ -101,13 +100,11 @@ class SettingsFragment : Fragment(), OnClickListener {
         )
     }
 
-    private fun initView() = with(binding.rvSetting) {
-        adapter = settingAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun initListener() = with(binding) {
-        ivSettingBack.setOnClickListener {
+    private fun initView() = with(binding) {
+        rvSetting.adapter = settingAdapter
+        rvSetting.layoutManager = LinearLayoutManager(requireContext())
+        setting.tvUserProfileTitle .text ="설정"
+        setting.ivUserProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }

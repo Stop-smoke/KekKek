@@ -17,7 +17,7 @@ class LanguageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_language, container, false)
+        return inflater.inflate(R.layout.fragment_settings_language, container, false)
     }
 
 }
