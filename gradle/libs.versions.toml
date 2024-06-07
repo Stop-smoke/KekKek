@@ -29,7 +29,7 @@ legacySupportV4 = "1.0.0"
 lifecycleLivedataKtx = "2.8.0"
 lifecycleViewmodelKtx = "2.8.0"
 fragmentKtx = "1.7.1"
-
+oss-licenses-plugin = "0.10.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
