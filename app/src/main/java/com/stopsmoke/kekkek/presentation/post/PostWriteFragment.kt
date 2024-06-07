@@ -121,6 +121,7 @@ class PostWriteFragment : Fragment() {
         tvPostWriteCancel.setOnClickListener {
             findNavController().popBackStack()
         }
+
         tvPostWriteRegister.setOnClickListener {
             val newPost = PostWriteItem(
                 postType = tvPostWriteType.text.toString(),
