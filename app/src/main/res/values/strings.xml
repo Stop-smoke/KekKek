@@ -153,4 +153,5 @@
     <string name="user_profile_achievements">업적</string>
     <string name="userprofile_following">팔로잉</string>
     <string name="userprofile_follower">팔로워</string>
+    <string name="setting_profile_title">계정</string>
 </resources>
