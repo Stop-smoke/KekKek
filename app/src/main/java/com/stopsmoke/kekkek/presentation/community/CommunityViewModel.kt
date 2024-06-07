@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.community
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
@@ -12,12 +11,11 @@ import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,49 +23,43 @@ import javax.inject.Inject
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
     private val postRepository: PostRepository
-): ViewModel() {
-    private val _uiState: MutableStateFlow<CommunityUiState> = MutableStateFlow(CommunityUiState.init())
+) : ViewModel() {
+    private val _uiState: MutableStateFlow<CommunityUiState> =
+        MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    private var posts: Flow<PagingData<CommunityWritingItem>> = flowOf()
-    private var category: PostCategory = PostCategory.ALL
-    private var postsJob: Job? = null
+    private val _category = MutableStateFlow(PostCategory.ALL)
+    val category get() = _category.asStateFlow()
 
-    init {
-        reLoading()
-    }
-    fun reLoading() {
-        postsJob?.cancel() // 이전 작업이 있으면 취소
-
-        postsJob = viewModelScope.launch {
-            posts = postRepository.getPost(category)
-                .let {
-                    when (it) {
-                        is Result.Error -> emptyFlow()
-                        is Result.Loading -> emptyFlow()
-                        is Result.Success -> it.data.map { pagingData->
-                            pagingData.map {
-                                updateWritingItem(it)
-                            }
+    val posts = category.flatMapLatest { postCategory ->
+        postRepository.getPost(postCategory)
+            .let {
+                when (it) {
+                    is Result.Error -> {
+                        it.exception?.printStackTrace()
+                        emptyFlow()
+                    }
+                    is Result.Loading -> emptyFlow()
+                    is Result.Success -> it.data.map { pagingData ->
+                        pagingData.map {
+                            updateWritingItem(it)
                         }
                     }
                 }
-                .cachedIn(viewModelScope)
-        }
-    }
+            }
+    }.cachedIn(viewModelScope)
 
-    fun getPosts() = posts
 
     private fun updateWritingItem(post: Post): CommunityWritingItem =
         CommunityWritingItem(
             userInfo = UserInfo(
                 name = post.written.name,
                 rank = post.written.ranking,
-                profileImage = if(post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
+                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
             ),
             postInfo = PostInfo(
                 title = post.title,
-                postType = when(post.categories){
+                postType = when (post.categories) {
                     PostCategory.NOTICE -> "공지사항"
                     PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
                     PostCategory.POPULAR -> "인기글"
@@ -89,37 +81,52 @@ class CommunityViewModel @Inject constructor(
         )
 
     fun setCategory(categoryString: String) {
-        when(categoryString){
+        when (categoryString) {
             "커뮤니티 홈" -> {
-                category = PostCategory.ALL
+                updateCategory(PostCategory.ALL)
             }
+
             "공지사항" -> {
-                category = PostCategory.NOTICE
+                updateCategory(PostCategory.NOTICE)
             }
+
             "금연 지원 프로그램 공지" -> {
-                category = PostCategory.QUIT_SMOKING_SUPPORT
+                updateCategory(PostCategory.QUIT_SMOKING_SUPPORT)
             }
+
             "인기글" -> {
-                category = PostCategory.POPULAR
+                updateCategory(PostCategory.POPULAR)
             }
+
             "금연 보조제 후기" -> {
-                category = PostCategory.QUIT_SMOKING_AIDS_REVIEWS
+                updateCategory(PostCategory.QUIT_SMOKING_AIDS_REVIEWS)
             }
+
             "금연 성공 후기" -> {
-                category = PostCategory.SUCCESS_STORIES
+                updateCategory(PostCategory.SUCCESS_STORIES)
             }
+
             "자유게시판" -> {
-                category = PostCategory.GENERAL_DISCUSSION
+                updateCategory(PostCategory.GENERAL_DISCUSSION)
             }
+
             "금연 실패 후기" -> {
-                category = PostCategory.FAILURE_STORIES
+                updateCategory(PostCategory.FAILURE_STORIES)
             }
+
             "금연 다짐" -> {
-                category = PostCategory.RESOLUTIONS
+                updateCategory(PostCategory.RESOLUTIONS)
             }
+
             else -> {
-                category = PostCategory.UNKNOWN
+                updateCategory(PostCategory.UNKNOWN)
             }
+        }
+    }
+
+    private fun updateCategory(postCategory: PostCategory) {
+        viewModelScope.launch {
+            _category.emit(postCategory)
         }
     }
 }

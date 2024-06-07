@@ -95,7 +95,6 @@ class CommunityFragment : Fragment() {
         val adapterList = requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
-            viewModel.reLoading()
         })
         adapter.submitList(adapterList)
         rvCommunityCategory.adapter = adapter
@@ -134,7 +133,7 @@ class CommunityFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            getPosts().flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
                     listAdapter.submitData(posts)
                 }
@@ -195,6 +194,6 @@ class CommunityFragment : Fragment() {
     }
 
     private fun onSwipeUp() {
-        viewModel.reLoading()
+        viewModel.setCategory("")
     }
 }

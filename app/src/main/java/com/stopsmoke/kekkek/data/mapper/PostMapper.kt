@@ -28,7 +28,7 @@ fun PostEntity.asExternalModel(): Post =
         ),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
-        categories = when (categories) {
+        categories = when (category) {
             "notice" -> PostCategory.NOTICE
             "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
             "popular" -> PostCategory.POPULAR
