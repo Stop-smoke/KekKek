@@ -63,6 +63,10 @@
         android:id="@+id/onboarding_finish"
         android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingFinishFragment"
         tools:layout="@layout/fragment_onboarding_finish">
+
+        <action
+            android:id="@+id/action_onboarding_finish_to_home"
+            app:destination="@+id/home"/>
     </fragment>
 
 </navigation>

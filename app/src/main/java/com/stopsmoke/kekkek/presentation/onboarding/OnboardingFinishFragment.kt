@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
+import com.stopsmoke.kekkek.presentation.DatastoreHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class OnboardingFinishFragment : Fragment() {
 
@@ -23,9 +27,10 @@ class OnboardingFinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.btnOnboardingNext.setOnClickListener {
-//            findNavController().navigate(R.id.)
-//        }
+        lifecycleScope.launch {
+            delay(6000)
+            DatastoreHelper.setOnboardingComplete(requireContext(), true)
+        }
     }
 
     override fun onDestroyView() {

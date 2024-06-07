@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingIntroduceBinding
 
 
@@ -25,7 +27,7 @@ class OnboardingIntroduceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnOnboardingNext.setOnClickListener {
-//            findNavController().navigate(R.id.)
+            findNavController().navigate(R.id.action_onboarding_introduce_to_onboarding_name)
         }
     }
 

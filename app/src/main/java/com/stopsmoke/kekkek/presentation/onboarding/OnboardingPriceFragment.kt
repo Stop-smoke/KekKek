@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingPerpackBinding
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingPriceBinding
 
@@ -25,9 +27,10 @@ class OnboardingPriceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.btnOnboardingNext.setOnClickListener {
-//            findNavController().navigate(R.id.)
-//        }
+        binding.btnOnboardingNext.setOnClickListener {
+            findNavController().navigate(R.id.action_onboarding_price_to_onboarding_birth)
+        }
+
     }
 
     override fun onDestroyView() {

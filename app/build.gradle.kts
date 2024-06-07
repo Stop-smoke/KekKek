@@ -145,4 +145,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
     implementation(libs.android.gms.oos.licenses)
 
+    //Datastore
+    implementation("androidx.datastore:datastore-preferences-android:1.1.1")
+
 }
