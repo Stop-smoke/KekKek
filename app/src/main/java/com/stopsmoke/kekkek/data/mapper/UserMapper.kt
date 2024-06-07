@@ -21,7 +21,7 @@ internal fun UserEntity.toExternalModel(): User =
     User(
         uid = uid ?: "",
         name = name ?: "",
-        location = location?.toExternalModel() ?: null,
+        location = location?.toExternalModel(),
         profileImage = if (profileImageUrl != null) ProfileImage.Web(url = profileImageUrl!!) else ProfileImage.Default,
         nickname = nickname,
         gender = gender,
@@ -29,9 +29,9 @@ internal fun UserEntity.toExternalModel(): User =
         phoneNumber = phoneNumber,
         fcmToken = fcmToken,
         introduction = introduction,
-        ranking = ranking,
-        postBookmark = post_bookmark ?: emptyList(),
-        postLike = post_like ?: emptyList(),
+        ranking = ranking ?: Long.MAX_VALUE,
+        postBookmark = postBookmark ?: emptyList(),
+        postLike = postLike ?: emptyList(),
         startTime = start_time?.toLocalDateTime()
     )
 
