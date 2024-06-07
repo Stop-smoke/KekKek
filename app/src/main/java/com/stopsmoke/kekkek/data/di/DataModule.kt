@@ -1,10 +1,12 @@
 package com.stopsmoke.kekkek.data.di
 
+import com.stopsmoke.kekkek.data.repository.AchievementRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.CommentRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.NotificationRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.PostRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.SearchRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.UserRepositoryImpl
+import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.NotificationRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
@@ -41,6 +43,11 @@ internal interface DataModule {
 
     @Binds
     fun bindCommentRepository(
-        commentRepositoryImpl: CommentRepositoryImpl
+        commentRepositoryImpl: CommentRepositoryImpl,
     ): CommentRepository
+
+    @Binds
+    fun bindAchievementRepository(
+        achievementRepository: AchievementRepositoryImpl,
+    ): AchievementRepository
 }
