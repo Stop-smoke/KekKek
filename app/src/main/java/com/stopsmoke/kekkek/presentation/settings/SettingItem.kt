@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.setting
+package com.stopsmoke.kekkek.presentation.settings
 
 data class SettingItem(
     val profileInfo: ProfileInfo?,

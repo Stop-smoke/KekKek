@@ -79,8 +79,26 @@
 
     <fragment
         android:id="@+id/setting"
-        android:name="com.stopsmoke.kekkek.presentation.setting.SettingFragment"
+        android:name="com.stopsmoke.kekkek.presentation.settings.SettingFragment"
         app:route="setting"
         tools:layout="@layout/fragment_setting"/>
+
+    <fragment
+        android:id="@+id/setting_profile"
+        android:name="com.stopsmoke.kekkek.presentation.settings.ProfileFragment"
+        app:route="setting_profile"
+        tools:layout="@layout/item_setting_profile"/>
+
+    <fragment
+        android:id="@+id/setting_notification"
+        android:name="com.stopsmoke.kekkek.presentation.settings.NotificationFragment"
+        app:route="setting_notification"
+        tools:layout="@layout/fragment_notification_setting"/>
+
+    <fragment
+        android:id="@+id/setting_language"
+        android:name="com.stopsmoke.kekkek.presentation.settings.LanguageFragment"
+        app:route="setting_language"
+        tools:layout="@layout/fragment_language"/>
 
 </navigation>

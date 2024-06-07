@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.setting
+package com.stopsmoke.kekkek.presentation.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -123,7 +123,29 @@ class SettingFragment : Fragment(), OnClickListener {
     }
 
     override fun onClickSettingList(settingItem: SettingItem) {
-        // 각각의 프래그먼트로 넘어가기
+        when(settingItem.settingTitle) {
+            "알림" -> {
+                findNavController().navigate("setting_notification")
+            }
+            "언어" -> {
+                findNavController().navigate("setting_language")
+            }
+            "테마" -> {
+
+            }
+            "친구" -> {
+
+            }
+            "오픈 소스 고지" -> {
+
+            }
+            "개인 정보 보호 및 보안 안내" -> {
+
+            }
+            "지원" -> {
+
+            }
+        }
     }
 
 }

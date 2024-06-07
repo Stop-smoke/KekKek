@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.setting
+package com.stopsmoke.kekkek.presentation.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
                 circleIvSettingProfile.load(setting.profileInfo?.profileImg) {
                     crossfade(true)
                 }
-                ivSettingProfileShowMore.setOnClickListener {
+                root.setOnClickListener {
                     onClickListener.onClickProfile(setting)
                 }
             }
@@ -33,7 +33,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(setting: SettingItem, onClickListener: OnClickListener) = with(binding) {
             tvSettingListName.text = setting.settingTitle
-            ivSettingListShowMore.setOnClickListener {
+            root.setOnClickListener {
                 onClickListener.onClickSettingList(setting)
             }
         }
