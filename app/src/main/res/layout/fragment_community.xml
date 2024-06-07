@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout_community_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.community.CommunityFragment">
@@ -20,22 +21,22 @@
                 android:id="@+id/toolbar_community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:elevation="2dp"
                 android:minHeight="60dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:layout_collapseMode="pin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:menu="@menu/menu_my_toolbar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:elevation="2dp"
-                app:layout_collapseMode="pin"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_community_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dp"
+                android:background="@color/white"
                 android:elevation="1dp"
-                app:layout_collapseMode="pin"
-                android:background="@color/white">
+                android:minHeight="60dp"
+                app:layout_collapseMode="pin">
 
                 <TextView
                     android:id="@+id/tv_my_myPage"
@@ -406,26 +407,26 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_community_category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_community_categoryTitle" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_community_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_community_categoryTitle" />
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:background="@color/bg_thin_gray"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@color/bg_thin_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -433,24 +434,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_community_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton_community"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/white"
-        android:clickable="true"
-        android:contentDescription="@string/floatingActionButton_community"
-        android:focusable="true"
-        android:src="@drawable/ic_community_floating"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_community_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton_community"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:contentDescription="@string/floatingActionButton_community"
+            android:focusable="true"
+            android:src="@drawable/ic_community_floating"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

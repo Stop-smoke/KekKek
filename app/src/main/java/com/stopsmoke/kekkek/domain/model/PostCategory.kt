@@ -9,5 +9,6 @@ enum class PostCategory {
     GENERAL_DISCUSSION,
     FAILURE_STORIES,
     RESOLUTIONS,
-    UNKNOWN
+    UNKNOWN,
+    ALL
 }
