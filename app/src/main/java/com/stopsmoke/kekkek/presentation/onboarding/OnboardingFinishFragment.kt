@@ -1,19 +1,26 @@
 package com.stopsmoke.kekkek.presentation.onboarding
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
-import com.stopsmoke.kekkek.presentation.DatastoreHelper
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.visible
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OnboardingFinishFragment : Fragment() {
+
+    @Inject
+    lateinit var userRepository: UserRepository
+
 
     private var _binding: FragmentOnboardingFinishBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +38,7 @@ class OnboardingFinishFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(3000)
-            DatastoreHelper.setOnboardingComplete(requireContext(), true)
+            userRepository.setOnboardingComplete(true)
             findNavController().navigate("home")
         }
     }
