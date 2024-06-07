@@ -66,6 +66,19 @@
         tools:layout="@layout/fragment_bookmark" />
 
     <fragment
+        android:id="@+id/my_writing_list"
+        android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
+        app:route="my_writing_list"
+        tools:layout="@layout/fragment_my_writing_list"/>
+
+    <fragment
+        android:id="@+id/popular_writing_list"
+        android:name="com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListFragment"
+        app:route="popular_writing_list"
+        tools:layout="@layout/fragment_popular_writing_list"/>
+
+
+    <fragment
         android:id="@+id/my_post"
         android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
         app:route="my_post"
@@ -129,5 +142,7 @@
             android:name="uid"
             app:argType="string" />
     </fragment>
+
+
 
 </navigation>

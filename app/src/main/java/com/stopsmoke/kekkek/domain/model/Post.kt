@@ -13,8 +13,8 @@ data class Post(
     val unlikeUser: List<String>,
     val categories: PostCategory,
     val views: Long,
-    val commentUser: List<String>,
+    val commentUser: List<String>
+    // Todo: proileImage 변수 추가 필요
 ) {
     val modifiedElapsedDateTime = dateTime.modified.getElapsedDateTime()
-
 }

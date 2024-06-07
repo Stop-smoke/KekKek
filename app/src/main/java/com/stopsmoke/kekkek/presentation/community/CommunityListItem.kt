@@ -1,33 +1,32 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.stopsmoke.kekkek.domain.model.DateTime
+import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 
 data class CommunityWritingItem(
     val userInfo: UserInfo,
-    val postInfo : PostInfo,
+    val postInfo: PostInfo,
     val postImage: String,
     val post: String,
-    val postTime: Date,
+    val postTime: ElapsedDateTime,
 )
 
 data class CommunityPopularItem(
-    val postInfo1 : PostInfo,
+    val postInfo1: PostInfo,
     val postInfo2: PostInfo
 )
 
 data class PostInfo(
     val title: String,
     val postType: String,
-    val view: Int,
-    val like: Int,
-    val comment: Int
+    val view: Long,
+    val like: Long,
+    val comment: Long
 )
 
 data class UserInfo(
     val name: String,
-    val rank: Int,
+    val rank: Long,
     val profileImage: String
 )
 

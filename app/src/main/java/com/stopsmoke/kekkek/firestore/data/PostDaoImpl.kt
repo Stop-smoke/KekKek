@@ -17,10 +17,10 @@ internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : PostDao {
 
-    override fun getPost(categories: List<String>): Flow<PagingData<PostEntity>> {
+    override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION).apply {
-            categories.ifEmpty { null }?.let {
-                whereIn("category", it)
+            if(category != null) {
+                whereEqualTo("category", category)
             }
             orderBy("date_time", Query.Direction.DESCENDING)
         }
