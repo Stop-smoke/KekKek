@@ -9,5 +9,5 @@ import javax.inject.Inject
 class ExamplePagingViewModel @Inject constructor(
     commentDao: CommentDao, // repository 패턴 이라서 그대로 따라 하시면 안돼요!
 ) : ViewModel() {
-    val data = commentDao.getComment()
+//    val data = commentDao.getComment()
 }

@@ -8,5 +8,6 @@ enum class PostCategory {
     SUCCESS_STORIES,
     GENERAL_DISCUSSION,
     FAILURE_STORIES,
-    RESOLUTIONS
+    RESOLUTIONS,
+    UNKNOWN
 }

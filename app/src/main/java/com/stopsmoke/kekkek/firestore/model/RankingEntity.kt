@@ -10,5 +10,5 @@ data class RankingEntity(
     @PropertyName("introduction")
     val introduction: String? = null,
     @get:PropertyName("date_time") @set:PropertyName("date_time")
-    var dateTime: String? = null
+    var dateTime: DateTimeEntity? = null
 )
