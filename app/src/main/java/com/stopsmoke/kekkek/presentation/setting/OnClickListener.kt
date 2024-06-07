@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.setting
 
 interface OnClickListener {
-    fun onClick()
+    fun onClickProfile(settingItem: SettingItem)
+    fun onClickSettingList(settingItem: SettingItem)
 }

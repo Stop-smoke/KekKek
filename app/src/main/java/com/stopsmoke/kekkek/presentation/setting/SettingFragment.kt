@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingBinding
 
-class SettingFragment : Fragment() {
+class SettingFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +37,7 @@ class SettingFragment : Fragment() {
     }
 
     private fun initData() {
+        settingAdapter = SettingAdapter(this@SettingFragment)
         settingAdapter.itemList = listOf(
             SettingItem(
                 profileInfo = ProfileInfo(
@@ -101,10 +102,8 @@ class SettingFragment : Fragment() {
     }
 
     private fun initView() = with(binding.rvSetting) {
-        settingAdapter = SettingAdapter(this@SettingFragment)
         adapter = settingAdapter
         layoutManager = LinearLayoutManager(requireContext())
-
     }
 
     private fun initListener() = with(binding) {
@@ -118,8 +117,13 @@ class SettingFragment : Fragment() {
         _binding = null
     }
 
-    private fun adapterOnClick(setting: SettingItem) {
-        // 각각 다른 화면으로 넘어가기
+    override fun onClickProfile(settingItem: SettingItem) {
+        // settingItem 에 정보를 담은 채로 보내야함
+        findNavController().navigate("setting_profile")
+    }
+
+    override fun onClickSettingList(settingItem: SettingItem) {
+        // 각각의 프래그먼트로 넘어가기
     }
 
 }

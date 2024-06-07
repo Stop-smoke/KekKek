@@ -23,7 +23,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
                     crossfade(true)
                 }
                 ivSettingProfileShowMore.setOnClickListener {
-                    onClickListener.onClick()
+                    onClickListener.onClickProfile(setting)
                 }
             }
         }
@@ -34,7 +34,7 @@ class SettingAdapter(private val onClickListener: OnClickListener) :
         fun bind(setting: SettingItem, onClickListener: OnClickListener) = with(binding) {
             tvSettingListName.text = setting.settingTitle
             ivSettingListShowMore.setOnClickListener {
-                onClickListener.onClick()
+                onClickListener.onClickSettingList(setting)
             }
         }
     }
