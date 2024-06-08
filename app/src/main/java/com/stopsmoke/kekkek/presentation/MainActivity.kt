@@ -1,26 +1,30 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,43 +37,35 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         setupNavigation()
+        setupBottomNavigation()
     }
 
     private fun setupNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
 
-        lifecycleScope.launch {
-            DatastoreHelper.isOnboardingComplete(this@MainActivity).collect { isComplete ->
-                if (isComplete) {
-                    navController.setGraph(R.navigation.nav_graph)
-                } else {
-                    navController.setGraph(R.navigation.nav_onboarding)
-                }
-            }
+        val isComplete = runBlocking {
+            userRepository.isOnboardingComplete().first()
         }
+        setNavGraph(isComplete)
+    }
 
-        // 노가다처럼 보이지만, 네비게이션 상태 변화에 따라 동적 업데이트 때문에 -> 온보딩에서 네비게이션을 숨기기 위해선 해당 리스너가 필요
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.onboarding_introduce,
-                R.id.onboarding_name,
-                R.id.onboarding_perday,
-                R.id.onboarding_perpack,
-                R.id.onboarding_price,
-                R.id.onboarding_birth,
-                R.id.onboarding_finish -> {
-                    binding.bottomNavigationViewHome.visibility = View.GONE
-                }
-                else -> {
-                    binding.bottomNavigationViewHome.visibility = View.VISIBLE
-                }
-            }
+    private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {
+        setupWithNavController(navController)
+        itemIconTintList =
+            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
+        itemTextColor =
+            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
+    }
+
+    private fun setNavGraph(isAlreadyLogin: Boolean) {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        if (isAlreadyLogin) {
+            navGraph.setStartDestination(R.id.home)
+        } else {
+            navGraph.setStartDestination(R.id.nav_onboarding)
         }
-
-        binding.bottomNavigationViewHome.setupWithNavController(navController)
-        binding.bottomNavigationViewHome.itemIconTintList = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
-        binding.bottomNavigationViewHome.itemTextColor = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
+        navController.setGraph(navGraph, null)
     }
 }

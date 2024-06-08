@@ -1,13 +1,14 @@
 package com.stopsmoke.kekkek.presentation.onboarding
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingIntroduceBinding
+import com.stopsmoke.kekkek.invisible
 
 
 class OnboardingIntroduceFragment : Fragment() {
@@ -15,9 +16,14 @@ class OnboardingIntroduceFragment : Fragment() {
     private var _binding: FragmentOnboardingIntroduceBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.invisible()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentOnboardingIntroduceBinding.inflate(inflater, container, false)
         return binding.root

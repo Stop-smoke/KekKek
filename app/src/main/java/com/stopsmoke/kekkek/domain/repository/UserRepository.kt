@@ -37,4 +37,14 @@ interface UserRepository {
      */
 
     suspend fun stopQuitSmokingTimer(): Result<Unit>
+
+    /**
+     *  온보딩 체크 함수
+     */
+    fun isOnboardingComplete(): Flow<Boolean>
+
+    /**
+     * 온보딩 설정 함수
+     */
+    suspend fun setOnboardingComplete(complete: Boolean)
 }
