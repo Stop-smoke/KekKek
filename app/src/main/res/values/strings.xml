@@ -154,6 +154,11 @@
     <string name="userprofile_following">팔로잉</string>
     <string name="userprofile_follower">팔로워</string>
 
+    <!--  achievement  -->
+    <string name="achievement_app_bar_title">업적</string>
+    <string name="achievement_total_quit_smoking_day">총 금연 일수</string>
+    <string name="achievment_attain">달성한 업적</string>
+
     <!--  settings  -->
     <string name="custom_license_title">오픈 소스 고지</string>
     <string name="setting_profile_title">설정</string>

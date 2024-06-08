@@ -85,4 +85,12 @@ internal class UserRepositoryImpl @Inject constructor(
         userDao.setUser(user.toEntity())
     }
 
+    override suspend fun startQuitSmokingTimer(): Result<Unit> {
+        return userDao.startQuitSmokingTimer("default")
+    }
+
+    override suspend fun stopQuitSmokingTimer(): Result<Unit> {
+        return userDao.stopQuitSmokingTimer("default")
+    }
+
 }

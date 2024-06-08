@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.achievement.AchievementFragment">
+
+    <include
+        android:id="@+id/include_achievement_app_bar"
+        layout="@layout/fragment_achievement_app_bar" />
+
+    <include
+        android:id="@+id/iclude_achievement_top"
+        layout="@layout/fragment_achievement_top" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_achievement_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F4F6F8"
+        android:paddingTop="10dp"
+        tools:listitem="@layout/recyclerview_achievement_item" />
+
+</LinearLayout>

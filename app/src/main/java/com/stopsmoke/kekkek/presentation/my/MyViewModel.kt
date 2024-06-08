@@ -28,7 +28,7 @@ class MyViewModel @Inject constructor(
                 myLoginUiState = MyLoginStatusState.LoggedUiState.MyIdLoggedUiState(
                     myItem = MyItem(
                         name = user.name,
-                        rank = user.ranking ?: 999999999,
+                        rank = user.ranking.toInt(),
                         profileImg = when(user.profileImage){
                             is ProfileImage.Default -> ""
                             is ProfileImage.Web -> (user.profileImage as ProfileImage.Web).url

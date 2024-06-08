@@ -25,4 +25,16 @@ interface UserRepository {
     fun getUserData(): Result<Flow<User>>
 
     suspend fun setUserData(user: User)
+
+    /**
+     *  금연을 시작 했을때 서버에 시간을 저장 하는 함수
+     */
+
+    suspend fun startQuitSmokingTimer(): Result<Unit>
+
+    /**
+     *  금연을 실패 했을때 서버에 시간을 저장 하는 함수
+     */
+
+    suspend fun stopQuitSmokingTimer(): Result<Unit>
 }

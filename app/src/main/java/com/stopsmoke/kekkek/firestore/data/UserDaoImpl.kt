@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.firestore.data
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,40 @@ internal class UserDaoImpl @Inject constructor(
             .set(userEntity)
             .addOnFailureListener { throw it }
             .await()
+    }
+
+    override suspend fun startQuitSmokingTimer(uid: String): Result<Unit> {
+        var result: Result<Unit> = Result.Loading
+
+        firestore.collection(COLLECTION)
+            .document(uid)
+            .set(UserEntity())
+            .addOnSuccessListener {
+                result = Result.Success(Unit)
+            }
+            .addOnFailureListener {
+                result = Result.Error(it)
+            }
+            .await()
+
+        return result
+    }
+
+    override suspend fun stopQuitSmokingTimer(uid: String): Result<Unit> {
+        var result: Result<Unit> = Result.Loading
+
+        firestore.collection(COLLECTION)
+            .document(uid)
+            .set(UserEntity())
+            .addOnSuccessListener {
+                result = Result.Success(Unit)
+            }
+            .addOnFailureListener {
+                result = Result.Error(it)
+            }
+            .await()
+
+        return result
     }
 
     companion object {

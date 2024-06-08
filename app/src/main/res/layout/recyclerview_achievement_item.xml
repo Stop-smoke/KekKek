@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:strokeColor="#E4E7F4">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_achievement_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_achievement_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_user_profile_test" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_achievement_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:barrierMargin="16dp"
+            app:constraint_referenced_ids="civ_achievement_image" />
+
+        <TextView
+            android:id="@+id/tv_achievement_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/barrier_achievement_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="돼지 저금통" />
+
+        <TextView
+            android:id="@+id/tv_achievement_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:textColor="#BBBBBB"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@+id/barrier_achievement_image"
+            app:layout_constraintTop_toBottomOf="@+id/tv_achievement_title"
+            tools:text="50개비를 금연하세요." />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/li_achievement_progress"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:indicatorColor="#3182F6"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_achievement_progress_number"
+            app:layout_constraintEnd_toStartOf="@+id/tv_achievement_progress_number"
+            app:layout_constraintStart_toEndOf="@+id/barrier_achievement_image"
+            app:layout_constraintTop_toTopOf="@+id/tv_achievement_progress_number"
+            app:trackColor="#EFF1F9"
+            app:trackCornerRadius="8dp"
+            app:trackThickness="16dp"
+            tools:progress="60" />
+
+        <TextView
+            android:id="@+id/tv_achievement_progress_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:textColor="#757575"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="32/50" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

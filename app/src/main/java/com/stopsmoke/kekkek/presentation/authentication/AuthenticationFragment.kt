@@ -84,7 +84,8 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                     uid = authResult.user?.uid ?: return@addOnSuccessListener,
                     name = user.kakaoAccount?.name ?: getString(R.string.login_default_nickname),
                     location = null,
-                    profileImage = ProfileImage.Default
+                    profileImage = ProfileImage.Default,
+                    ranking = Long.MAX_VALUE
                 ).let {
                     viewModel.updateUserData(it)
                 }
@@ -104,7 +105,8 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
             uid = user.uid,
             name = user.displayName ?: getString(R.string.login_default_nickname),
             location = null,
-            profileImage = ProfileImage.Default
+            profileImage = ProfileImage.Default,
+            ranking = Long.MAX_VALUE
         )
         viewModel.updateUserData(domainUser)
         Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
