@@ -19,7 +19,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION)
-            .whereEqualTo("category", category)
+            .whereNotNullEqualTo("category", category)
             .orderBy("date_time", Query.Direction.DESCENDING)
 
 
@@ -67,4 +67,11 @@ internal class PostDaoImpl @Inject constructor(
         private const val COLLECTION = "post"
         private const val PAGE_LIMIT = 30
     }
+}
+
+private fun Query.whereNotNullEqualTo(field: String, value: Any?): Query {
+    if (value == null) {
+        return this
+    }
+    return whereEqualTo(field, value)
 }

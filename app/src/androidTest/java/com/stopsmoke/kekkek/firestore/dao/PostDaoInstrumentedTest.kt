@@ -51,7 +51,7 @@ class PostDaoInstrumentedTest {
             ),
             likeUser = listOf("likeUser1", "likeUser2"),
             unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
-            categories = "dummyCategory",
+            category = "dummyCategory",
             views = Random.nextLong(1, 500),
             commentUser = listOf("commentUser1", "commentUser2")
         )
@@ -77,7 +77,7 @@ class PostDaoInstrumentedTest {
             ),
             likeUser = listOf("likeUser1", "likeUser2"),
             unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
-            categories = "dummyCategory",
+            category = "dummyCategory",
             views = Random.nextLong(1, 500),
             commentUser = listOf("commentUser1", "commentUser2")
         )

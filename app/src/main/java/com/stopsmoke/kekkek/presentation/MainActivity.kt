@@ -11,13 +11,20 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,18 +36,36 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
-
         setupNavigation()
+        setupBottomNavigation()
     }
 
     private fun setupNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
-        binding.bottomNavigationViewHome.setupWithNavController(navController)
 
-        // 클릭시 색상 변경용
-        binding.bottomNavigationViewHome.itemIconTintList = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
-        binding.bottomNavigationViewHome.itemTextColor = ContextCompat.getColorStateList(this, R.color.bottom_nav_color)
+        val isComplete = runBlocking {
+            userRepository.isOnboardingComplete().first()
+        }
+        setNavGraph(isComplete)
+    }
+
+    private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {
+        setupWithNavController(navController)
+        itemIconTintList =
+            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
+        itemTextColor =
+            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
+    }
+
+    private fun setNavGraph(isAlreadyLogin: Boolean) {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        if (isAlreadyLogin) {
+            navGraph.setStartDestination(R.id.home)
+        } else {
+            navGraph.setStartDestination(R.id.nav_onboarding)
+        }
+        navController.setGraph(navGraph, null)
     }
 }

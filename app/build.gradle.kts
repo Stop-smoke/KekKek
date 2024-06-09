@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     id("kotlin-parcelize")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 val properties = Properties().apply {
@@ -86,6 +87,7 @@ dependencies {
     // text editor
     implementation(libs.androidx.runtime.android)
     implementation(libs.androidx.ui.text.android)
+    implementation(libs.activity)
 
     // TEST
     testImplementation(libs.junit)
@@ -124,6 +126,7 @@ dependencies {
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation("com.google.android.material:material:1.12.0") // for Tablayout
 
     //admob
     implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
@@ -140,5 +143,9 @@ dependencies {
 
     //Oss-licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
+    implementation(libs.android.gms.oos.licenses)
+
+    //Datastore
+    implementation("androidx.datastore:datastore-preferences-android:1.1.1")
 
 }

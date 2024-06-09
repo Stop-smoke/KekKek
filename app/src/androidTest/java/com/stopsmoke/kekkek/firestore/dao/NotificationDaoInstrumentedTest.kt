@@ -61,7 +61,7 @@ class NotificationDaoInstrumentedTest {
                 ).let {
                     it[Random.nextInt(it.lastIndex)]
                 },
-                dateTime = generateRandomDateTime(),
+//                dateTime = generateRandomDateTime(),
                 category = categories.random()
             )
         }

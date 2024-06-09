@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,14 +47,10 @@ class HomeFragment : Fragment() {
             navigateToAttainmentsFragment()
         }
 
-        // 일단 걍 실험용
-        binding.clHomeMotivation.setOnClickListener {
-            findNavController().navigate("setting_support")
-        }
-
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
+
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
