@@ -157,4 +157,11 @@
         app:route="achievement"
         tools:layout="@layout/fragment_achievement" />
 
+
+    <fragment
+        android:id="@+id/ranking_list"
+        android:name="com.stopsmoke.kekkek.presentation.rankingList.RankingListFragment"
+        app:route="ranking_list"
+        tools:layout="@layout/fragment_ranking_list" />
+
 </navigation>

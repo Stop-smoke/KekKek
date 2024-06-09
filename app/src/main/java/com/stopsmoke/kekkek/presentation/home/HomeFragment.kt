@@ -56,6 +56,10 @@ class HomeFragment : Fragment() {
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
         initToolbar()
 
+
+        clHomeRank.setOnClickListener {
+            findNavController().navigate("ranking_list")
+        }
     }
 
     private fun initToolbar() {

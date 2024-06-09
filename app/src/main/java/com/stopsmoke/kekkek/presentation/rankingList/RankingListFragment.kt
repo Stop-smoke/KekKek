@@ -1,35 +1,64 @@
 package com.stopsmoke.kekkek.presentation.rankingList
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
 
 class RankingListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentRankingListBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
+    private val viewModel: RankingListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ranking_list, container, false)
+        _binding = FragmentRankingListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RankingListFragment()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
     }
+
+    private fun initView() = with(binding) {
+        initViewPager()
+
+        val ivRankingListBack =
+            requireActivity().findViewById<ImageView>(R.id.iv_rankingList_back)
+        ivRankingListBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun initViewPager() = with(binding) {
+        vpRankingListRegionalTopRank.adapter = RankingListViewpagerAdapter(this@RankingListFragment)
+        vpRankingListRegionalTopRank.isUserInputEnabled = false
+
+        val tabTitles = listOf("지역", "전국", "업적")
+
+        TabLayoutMediator(tabLayoutRankingListRegionalUnit, vpRankingListRegionalTopRank) { tab, position ->
+            val customView = LayoutInflater.from(context).inflate(R.layout.custom_tab_ranking_list, null)
+            val textView = customView as TextView
+            textView.text = tabTitles[position]
+            tab.customView = customView
+        }.attach()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }
