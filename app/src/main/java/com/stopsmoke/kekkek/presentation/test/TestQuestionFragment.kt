@@ -1,15 +1,21 @@
 package com.stopsmoke.kekkek.presentation.test
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentQuestionBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.MainActivity
+
 
 class TestQuestionFragment : Fragment() {
 
@@ -72,7 +78,40 @@ class TestQuestionFragment : Fragment() {
                 sharedViewModel.addScore(score)
                 testFragment.moveToNextQuestionPage()
             }
+
+            ivTestBack.setOnClickListener {
+                val layoutInflater = (activity as MainActivity).getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val view = layoutInflater.inflate(R.layout.fragment_test, null)
+                val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_test)
+                val previousPage = viewPager.currentItem - 1
+                viewPager.setCurrentItem(previousPage, true)
+            }
+            ivTestCancel.setOnClickListener {
+                // 테스트 종료 다이얼로그 띄우기
+                ToastDialog()
+            }
         }
+    }
+
+    private fun ToastDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("금연 테스트")
+        builder.setMessage("진행중인 금연 테스트를 종료하시겠습니까?")
+        builder.setIcon(R.drawable.ic_smoke)
+
+        val listener = DialogInterface.OnClickListener { _, type ->
+            when(type) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    findNavController().popBackStack()
+                    sharedViewModel.clearScore()
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {}
+            }
+        }
+
+        builder.setPositiveButton("예",listener)
+        builder.setNegativeButton("아니요",listener)
+        builder.show()
     }
 
     override fun onResume() {

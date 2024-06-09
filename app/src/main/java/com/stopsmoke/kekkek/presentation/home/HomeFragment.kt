@@ -70,7 +70,7 @@ class HomeFragment : Fragment() {
                     tvHomeTestDegree.text = "담배 중독 상태😱"
                 }
             }
-            ivHomeTest.text = "다시 검사하기" // livedata가 바뀔 때마다 실행되는데 livedata가 처음에 한번만 바뀌었을 때만 실행되도록 하는 방법은 없을까?
+            ivHomeTest.text = "다시 검사하기"
         }
     }
 
