@@ -164,4 +164,10 @@
         app:route="ranking_list"
         tools:layout="@layout/fragment_ranking_list" />
 
+    <fragment
+        android:id="@+id/ranking_map"
+        android:name="com.stopsmoke.kekkek.presentation.rankingMap.RankingMapFragment"
+        app:route="ranking_map"
+        tools:layout="@layout/fragment_ranking_map" />
+
 </navigation>

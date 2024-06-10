@@ -43,13 +43,6 @@ class HomeFragment : Fragment() {
 
         initViewModel()
         initView()
-        binding.clHomeSavedMoney.setOnClickListener {
-            navigateToAttainmentsFragment()
-        }
-
-        binding.ivHomeTest.setOnClickListener {
-            findNavController().navigate("test_page")
-        }
 
     }
 
@@ -58,7 +51,15 @@ class HomeFragment : Fragment() {
 
 
         clHomeRank.setOnClickListener {
-            findNavController().navigate("ranking_list")
+            findNavController().navigate("ranking_map")
+        }
+
+        binding.clHomeSavedMoney.setOnClickListener {
+            navigateToAttainmentsFragment()
+        }
+
+        binding.ivHomeTest.setOnClickListener {
+            findNavController().navigate("test_page")
         }
     }
 

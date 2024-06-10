@@ -46,6 +46,12 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
+        <!-- google app api key -->
+        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyC67A21F81zChcnH6mFa-M44BKanRz3jlA"/>
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
