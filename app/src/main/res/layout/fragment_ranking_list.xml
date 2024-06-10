@@ -15,8 +15,6 @@
         <include layout="@layout/fragment_ranking_list_app_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout_rankingList_regionalUnit"
         android:layout_width="wrap_content"
