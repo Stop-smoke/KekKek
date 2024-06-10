@@ -5,14 +5,19 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,8 +42,10 @@ class MessageService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        val uid = Firebase.auth.uid ?: return
+
         serviceLifeScope.launch {
-            userDao.getUser().firstOrNull()?.let {
+            userDao.getUser(uid).firstOrNull()?.let {
                 userDao.setUser(it.copy(fcmToken = token))
             }
         }

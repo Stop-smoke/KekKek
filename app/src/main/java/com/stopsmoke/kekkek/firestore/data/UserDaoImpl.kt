@@ -13,12 +13,6 @@ import javax.inject.Inject
 internal class UserDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : UserDao {
-    override fun getUser(): Flow<UserEntity> {
-        return firestore.collection(COLLECTION)
-            .document("default")
-            .dataObjects<UserEntity>()
-            .mapNotNull { it }
-    }
 
     override fun getUser(uid: String): Flow<UserEntity> {
         return firestore.collection(COLLECTION)
