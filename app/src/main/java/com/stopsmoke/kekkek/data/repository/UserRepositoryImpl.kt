@@ -102,4 +102,13 @@ internal class UserRepositoryImpl @Inject constructor(
         preferencesDataSource.setOnboardingComplete(complete)
     }
 
+    override fun isFirstRunning(): Flow<Boolean> =
+        preferencesDataSource.isFirstRunning()
+            .onEach {
+                if (it) {
+                    preferencesDataSource.setFirstRunning(false)
+                }
+            }
+
+
 }
