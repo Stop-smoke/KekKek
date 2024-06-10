@@ -3,19 +3,16 @@ package com.stopsmoke.kekkek.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +30,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun updateUserData(user: User) = viewModelScope.launch {
-        startTime = user.startTime ?: LocalDateTime.now()
+        startTime = (user as? User.Registered)?.startTime ?: LocalDateTime.now()
 
         val currentTime = LocalDateTime.now()
         val elapsedTimeMillis = Duration.between(startTime, currentTime).toMillis()

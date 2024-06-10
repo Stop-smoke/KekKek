@@ -124,7 +124,7 @@
 
     <fragment
         android:id="@+id/setting_profile"
-        android:name="com.stopsmoke.kekkek.presentation.settings.ProfileFragment"
+        android:name="com.stopsmoke.kekkek.presentation.settings.profile.ProfileFragment"
         app:route="setting_profile"
         tools:layout="@layout/item_settings_profile" />
 

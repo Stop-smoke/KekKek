@@ -20,9 +20,9 @@ class MyViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.init())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
-    val userData = userRepository.getUserData("테스트_계정")
+    val userData = userRepository.getUserData()
 
-    fun updateUserData(user : User) = viewModelScope.launch {
+    fun updateUserData(user : User.Registered) = viewModelScope.launch {
         _uiState.update {
             MyUiState(
                 myLoginUiState = MyLoginStatusState.LoggedUiState.MyIdLoggedUiState(

@@ -56,6 +56,7 @@
         android:fontFamily="@font/pretendard_semi_bold"
         android:inputType="number|numberDecimal"
         android:text="다음"
+        android:enabled="false"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"

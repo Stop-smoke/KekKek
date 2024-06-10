@@ -29,13 +29,13 @@ class UserProfileViewModel @Inject constructor(
     commentRepository: CommentRepository,
 ) : ViewModel() {
 
-    private val uid = savedStateHandle.getStateFlow("uid", "")
+    private val uid = savedStateHandle.getStateFlow("uid", "default")
 
     private val _errorHandler = MutableSharedFlow<Unit>()
     val errorHandler get() = _errorHandler.asSharedFlow()
 
 
-    val user: Flow<User> = userRepository.getUserData()
+    val user: Flow<User.Registered> = userRepository.getUserData(uid = uid.value)
         .let {
             when (it) {
                 is Result.Error -> {
