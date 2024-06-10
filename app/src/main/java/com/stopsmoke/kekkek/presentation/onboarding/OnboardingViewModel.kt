@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,12 +65,12 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private val _userBirthYear = MutableStateFlow(0) // 유저 태어난 년도
-    val userBirthYear = _userBirthYear.asStateFlow()
+    private val _userBirthDate = MutableStateFlow<LocalDateTime?>(null) // 유저 태어난 년도
+    val userBirthDate = _userBirthDate.asStateFlow()
 
-    fun updateUserBirthYear(year: Int) {
+    fun updateUserBirthDate(date: LocalDateTime) {
         viewModelScope.launch {
-            _userBirthYear.emit(year)
+            _userBirthDate.emit(date)
         }
     }
 
@@ -84,6 +85,12 @@ class OnboardingViewModel @Inject constructor(
                 return@launch
             }
 
+            if (userBirthDate.value == null) {
+                Log.e("OnboardingViewModel", "userBirthYear 값이 null 입니다")
+                _onboardingUiState.emit(OnboardingUiState.LoadFail)
+                return@launch
+            }
+
             val user = User.Registered(
                 uid = uid.value,
                 name = userName.value,
@@ -94,7 +101,7 @@ class OnboardingViewModel @Inject constructor(
                     dailyCigarettesSmoked = dailyCigarettePacks.value,
                     packCigaretteCount = cigarettesPerPack.value,
                     packPrice = cigarettePricePerPack.value,
-                    birthdayYear = userBirthYear.value
+                    birthDate = userBirthDate.value!!
                 )
             )
             userRepository.setUserData(user)

@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingBirthBinding
+import java.time.LocalDate
 
 
 class OnboardingBirthFragment : Fragment() {
@@ -21,8 +22,8 @@ class OnboardingBirthFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentOnboardingBirthBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,7 +42,9 @@ class OnboardingBirthFragment : Fragment() {
             }
             binding.btnOnboardingNext.isEnabled = true
 
-            viewModel.updateUserBirthYear(it.toString().toIntOrNull() ?: 0)
+            // TODO: 값 받아서 밑에 있는 코드 실행 시킬 것
+            val localDate = LocalDate.of(2001, 10, 29)
+            viewModel.updateUserBirthDate(localDate.atStartOfDay())
         }
     }
 
