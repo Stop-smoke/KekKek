@@ -19,6 +19,7 @@
     <!-- 배경 그레이, 각자 다른 명으로 구현해서 일단은 나눠놓음. 나중에 통합할 것-->
     <color name="gray_bggray">#F4F6F8</color>
     <color name="bg_gray">#F4F6F8</color>
+    <color name="gray_homebackground">#F7F7F9</color>
 
     <!-- 그레이, 각자 다른 명으로 구현해서 일단은 나눠놓음. 나중에 통합할 것 -->
     <color name="gray">#8B94A1</color>
