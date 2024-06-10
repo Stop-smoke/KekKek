@@ -16,9 +16,7 @@ class TestFragment : Fragment() {
     private var _binding: FragmentTestBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
-
-    val questionnaireResults = QuestionnaireResults()
+    private lateinit var testAdapter: TestAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,17 +47,17 @@ class TestFragment : Fragment() {
     }
 
     private fun setupView() {
-        viewPagerAdapter = ViewPagerAdapter(childFragmentManager, lifecycle) {
+        testAdapter = TestAdapter(childFragmentManager, lifecycle) {
             val nextItem = binding.viewpagerTest.currentItem + 1
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
-        binding.viewpagerTest.adapter = viewPagerAdapter
+        binding.viewpagerTest.adapter = testAdapter
         binding.viewpagerTest.isUserInputEnabled = false // 사용자가 페이지를 넘기지 못하도록 만듬
     }
 
     fun moveToNextQuestionPage() {
         val nextItem = binding.viewpagerTest.currentItem + 1
-        if (nextItem < (viewPagerAdapter.itemCount)) {
+        if (nextItem < (testAdapter.itemCount)) {
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
     }
@@ -76,10 +74,3 @@ class TestFragment : Fragment() {
     }
 }
 
-class QuestionnaireResults {
-    var totalResult = 0
-
-    fun addResponses(result: Int) {
-        totalResult += result
-    }
-}

@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
 
-        val isComplete = runBlocking {
-            userRepository.isOnboardingComplete().first()
+        val isFirstRunning = runBlocking {
+            userRepository.isFirstRunning().first()
         }
-        setNavGraph(isComplete)
+        setNavGraph(!isFirstRunning)
     }
 
     private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {

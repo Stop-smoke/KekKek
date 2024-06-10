@@ -1,10 +1,13 @@
 package com.stopsmoke.kekkek.presentation.test
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentTestResultBinding
@@ -12,9 +15,10 @@ import com.stopsmoke.kekkek.invisible
 
 class TestResultFragment : Fragment() {
 
-    var result = 0
     private var _binding: FragmentTestResultBinding? = null
     private val binding get() = _binding!!
+
+    private val sharedViewModel by activityViewModels<TestViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,20 +35,31 @@ class TestResultFragment : Fragment() {
     }
 
     private fun setupView() {
-        with(binding) {
-            if (result in 0..7) {
-                tvTestResultType.text = "가장 쉽게 금연할 수 있는 상태"
-                tvTestResultDescription.text =
-                    "흡연량과 흡연 시간이 늘어날수록 니코틴에 대한 의존도는 높아집니다. 오늘부터 금연 성공을 이어가세요!"
-                ivTestResultIcon.setImageResource(R.drawable.ic_test_good)
-            } else if (result in 8..16) {
-                tvTestResultType.text = "금연을 시작해야 할 상태"
-                tvTestResultDescription.text = "구체적인 증상이 나타나지 않아 큰 어려움 없이 금연할 수 있지만, 재흡연도 쉬운 시기입니다."
-                ivTestResultIcon.setImageResource(R.drawable.ic_test_soso)
-            } else {
-                tvTestResultType.text = "니코틴에 대한 의존이 이미 심한 상태"
-                tvTestResultDescription.text = "심한 금단증상으로 금연을 이어가기 힘든 경우 전문가의 도움을 받아보시는 것을 추천 드립니다."
-                ivTestResultIcon.setImageResource(R.drawable.ic_test_bad)
+        sharedViewModel.getTotalScore()
+        observeLiveData()
+    }
+
+
+    private fun observeLiveData() = with(binding) {
+        sharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
+            when (totalScore) {
+                in 8..13 -> {
+                    tvTestResultType.text = sharedViewModel.results[0][0].toString()
+                    tvTestResultDescription.text = sharedViewModel.results[0][1].toString()
+                    ivTestResultIcon.setImageResource(sharedViewModel.results[0][2] as Int)
+                }
+
+                in 14..19 -> {
+                    tvTestResultType.text = sharedViewModel.results[1][0].toString()
+                    tvTestResultDescription.text = sharedViewModel.results[1][1].toString()
+                    ivTestResultIcon.setImageResource(sharedViewModel.results[1][2] as Int)
+                }
+
+                else -> {
+                    tvTestResultType.text = sharedViewModel.results[2][0].toString()
+                    tvTestResultDescription.text = sharedViewModel.results[2][1].toString()
+                    ivTestResultIcon.setImageResource(sharedViewModel.results[2][2] as Int)
+                }
             }
         }
     }
@@ -62,8 +77,13 @@ class TestResultFragment : Fragment() {
         activity?.invisible()
     }
 
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        sharedViewModel.clearScore() // 이 코드를 onDestroyView 에다가 적는게 맞나요?
     }
 }

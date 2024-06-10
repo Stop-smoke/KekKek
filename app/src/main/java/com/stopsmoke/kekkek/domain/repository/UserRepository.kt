@@ -17,14 +17,14 @@ interface UserRepository {
      * 다른 유저 정보를 가져옴
      */
 
-    fun getUserData(uid: String): Result<Flow<User>>
+    fun getUserData(uid: String): Result<Flow<User.Registered>>
 
     /**
      * 자신의 유저 정보를 가져옴
      */
-    fun getUserData(): Result<Flow<User>>
+    fun getUserData(): Flow<User>
 
-    suspend fun setUserData(user: User)
+    suspend fun setUserData(user: User.Registered)
 
     /**
      *  금연을 시작 했을때 서버에 시간을 저장 하는 함수
@@ -47,4 +47,9 @@ interface UserRepository {
      * 온보딩 설정 함수
      */
     suspend fun setOnboardingComplete(complete: Boolean)
+
+    /**
+     * 앱 처음 실행 체크 함수
+     */
+    fun isFirstRunning(): Flow<Boolean>
 }

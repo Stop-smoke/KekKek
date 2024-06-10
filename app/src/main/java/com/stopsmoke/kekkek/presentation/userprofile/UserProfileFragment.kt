@@ -43,7 +43,7 @@ class UserProfileFragment : Fragment() {
         setupTabLayoutWithViewPager()
     }
 
-    private fun observeUserData() = FlowCollector<User> { user ->
+    private fun observeUserData() = FlowCollector<User.Registered> { user ->
         with(binding.includeUserprofileDetail) {
             tvUserProfileName.text = user.name
             tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
