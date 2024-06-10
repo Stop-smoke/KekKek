@@ -88,7 +88,7 @@ class MyFragment : Fragment() {
             findNavController().navigate("my_comment")
         }
         toolbarMy.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.toolbar_search -> {
                     true
                 }
@@ -96,10 +96,12 @@ class MyFragment : Fragment() {
                 R.id.toolbar_my_bell -> {
                     true
                 }
+
                 R.id.toolbar_my_setting -> {
                     findNavController().navigate("setting")
                     true
                 }
+
                 else -> false
             }
         }
@@ -133,7 +135,13 @@ class MyFragment : Fragment() {
     private fun onBind(myUiState: MyUiState) = with(binding) {
         when (myUiState.myLoginUiState) {
             is MyLoginStatusState.NeedLoginUiState -> { // 로그인 필요
+                with(binding) {
+                    tvMyName.text = "로그인이 필요합니다."
 
+                    tvMyWritingNum.text = "?"
+                    tvMyCommentNum.text = "?"
+                    tvMyBookmarkNum.text = "?"
+                }
             }
 
             is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState -> { //로그인 성공

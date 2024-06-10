@@ -103,10 +103,10 @@ dependencies {
 
     // DESUGAR
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-    
+
     // KAKAO
     implementation(libs.kakao.sdk.v2.user) // 카카오 로그인 API 모듈
-    
+
     //Naver Sns
     implementation("com.navercorp.nid:oauth:5.9.1") // jdk 11
 
@@ -129,7 +129,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0") // for Tablayout
 
     //admob
-    implementation ("com.google.android.gms:play-services-ads-lite:23.1.0")
+    implementation("com.google.android.gms:play-services-ads-lite:23.1.0")
 
     // PAGING
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
@@ -147,5 +147,13 @@ dependencies {
 
     //Datastore
     implementation("androidx.datastore:datastore-preferences-android:1.1.1")
+
+    //Google Map
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
+    //Google place
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
+    implementation ("com.google.android.libraries.places:places:3.5.0")
 
 }

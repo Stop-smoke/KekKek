@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.rankingList.RankingListFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_rankingList_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        app:layout_constraintTop_toTopOf="parent">
+        <include layout="@layout/fragment_ranking_list_app_bar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout_rankingList_regionalUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cl_rankingList_app_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        app:tabIndicatorColor="@color/black"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabRippleColor="@null"
+        app:tabBackground="@drawable/bg_custom_indicator"/>
+
+
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_rankingList_regionalTopRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout_rankingList_regionalUnit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_rankingList"
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544~3347511713"
+        app:layout_constraintTop_toBottomOf="@id/vp_rankingList_regionalTopRank" />
+
+    <TextView
+        android:id="@+id/tv_rankingList_rankState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/adView_rankingList"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        tools:text="전체 125,923명\n내 등수 352등 상위 0%"
+        android:fontFamily="@font/pretendard_regular"
+        android:textSize="12sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_rankingList_rankState"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_rankingList_rankState"
+        android:layout_marginTop="20dp"
+        tools:listitem="@layout/recyclerview_rankinglist_rankstate_item"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
