@@ -9,7 +9,7 @@ import com.stopsmoke.kekkek.firestore.model.UserEntity
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-internal fun User.toEntity(): UserEntity =
+internal fun User.Registered.toEntity(): UserEntity =
     UserEntity(
         uid = uid,
         name = name,
@@ -17,8 +17,8 @@ internal fun User.toEntity(): UserEntity =
         profileImageUrl = (profileImage as? ProfileImage.Web)?.url
     )
 
-internal fun UserEntity.toExternalModel(): User =
-    User(
+internal fun UserEntity.toExternalModel(): User.Registered =
+    User.Registered(
         uid = uid ?: "",
         name = name ?: "",
         location = location?.toExternalModel(),
@@ -27,7 +27,6 @@ internal fun UserEntity.toExternalModel(): User =
         gender = gender,
         age = age,
         phoneNumber = phoneNumber,
-        fcmToken = fcmToken,
         introduction = introduction,
         ranking = ranking ?: Long.MAX_VALUE,
         postBookmark = postBookmark ?: emptyList(),

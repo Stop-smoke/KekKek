@@ -12,8 +12,7 @@ import javax.inject.Inject
 class AuthenticationViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-
-    fun updateUserData(user: User) = try {
+    fun updateUserData(user: User.Registered) = try {
         viewModelScope.launch {
             userRepository.setUserData(user)
         }

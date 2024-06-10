@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.oAuthCredential
@@ -20,6 +21,7 @@ import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.invisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +38,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.invisible()
         googleAuthorization = GoogleAuthorization(this).apply {
             registerCallbackListener(this@AuthenticationFragment)
         }
@@ -72,15 +75,14 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     }
 
     override fun onSuccess(token: OAuthToken, user: User) {
-        val providerId = "oidc.kakao"
-        val credential = oAuthCredential(providerId) {
+        val credential = oAuthCredential(KAKAO_PROVIDER_ID) {
             idToken = token.idToken
             accessToken = token.accessToken
         }
         val auth = Firebase.auth
         auth.signInWithCredential(credential)
             .addOnSuccessListener { authResult ->
-                com.stopsmoke.kekkek.domain.model.User(
+                com.stopsmoke.kekkek.domain.model.User.Registered(
                     uid = authResult.user?.uid ?: return@addOnSuccessListener,
                     name = user.kakaoAccount?.name ?: getString(R.string.login_default_nickname),
                     location = null,
@@ -89,6 +91,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 ).let {
                     viewModel.updateUserData(it)
                 }
+                findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
 
                 authResult.user?.displayName?.let {
                     Toast.makeText(requireContext(), "${it}님 환영합니다", Toast.LENGTH_SHORT).show()
@@ -101,7 +104,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     }
 
     override fun onSuccess(user: FirebaseUser) {
-        val domainUser = com.stopsmoke.kekkek.domain.model.User(
+        val domainUser = com.stopsmoke.kekkek.domain.model.User.Registered(
             uid = user.uid,
             name = user.displayName ?: getString(R.string.login_default_nickname),
             location = null,
@@ -109,6 +112,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
             ranking = Long.MAX_VALUE
         )
         viewModel.updateUserData(domainUser)
+        findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
         Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
     }
 
@@ -119,7 +123,6 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance() = AuthenticationFragment()
+        private const val KAKAO_PROVIDER_ID = "oidc.kakao"
     }
 }
