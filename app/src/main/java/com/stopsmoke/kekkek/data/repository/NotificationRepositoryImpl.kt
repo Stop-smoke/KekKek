@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestore.dao.NotificationDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -24,7 +25,8 @@ class NotificationRepositoryImpl @Inject constructor(
         return kotlin.runCatching {
             userRepository.getUserData().flatMapLatest { user ->
                 if (user !is User.Registered) {
-                    throw GuestModeException()
+                    GuestModeException().printStackTrace()
+                    return@flatMapLatest emptyFlow()
                 }
 
                 notificationDao.getNotificationItems(user.uid)

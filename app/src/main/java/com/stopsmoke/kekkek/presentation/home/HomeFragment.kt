@@ -64,10 +64,7 @@ class HomeFragment : Fragment() {
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
-    }
 
-    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
-        initToolbar()
         sharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
             when(totalScore) {
                 in 8..13 -> {

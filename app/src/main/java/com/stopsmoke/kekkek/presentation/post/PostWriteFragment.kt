@@ -17,17 +17,26 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
+import com.stopsmoke.kekkek.domain.model.DateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.presentation.community.CommunityFragment
+import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 
-
+@AndroidEntryPoint
 class PostWriteFragment : Fragment() {
 
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: PostWriteViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()
@@ -123,12 +132,24 @@ class PostWriteFragment : Fragment() {
         }
 
         tvPostWriteRegister.setOnClickListener {
-            val newPost = PostWriteItem(
-                postType = tvPostWriteType.text.toString(),
+            val postWrite = PostWrite(
                 title = etPostWriteTitle.text.toString(),
-                content = etPostWriteContent.text.toString()
+                text = etPostWriteContent.text.toString(),
+                dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+                category = when (tvPostWriteType.text) {
+                    "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
+                    "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
+                    "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
+                    else -> throw IllegalStateException()
+                }
             )
-            findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", newPost)
+            viewModel.addPost(postWrite)
+//            val newPost = PostWriteItem(
+//                postType = tvPostWriteType.text.toString(),
+//                title = etPostWriteTitle.text.toString(),
+//                content = etPostWriteContent.text.toString()
+//            )
+//            findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", newPost)
             findNavController().popBackStack()
         }
     }

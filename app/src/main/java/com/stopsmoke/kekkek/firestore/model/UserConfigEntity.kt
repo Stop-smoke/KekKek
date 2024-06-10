@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestore.model
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 
 data class UserConfigEntity(
@@ -13,5 +14,5 @@ data class UserConfigEntity(
     var packPrice: Int? = null,
 
     @get:PropertyName("birthday") @set:PropertyName("birthday")
-    var birthdayYear: Int? = null,
+    var birthDate: Timestamp? = null,
 )
