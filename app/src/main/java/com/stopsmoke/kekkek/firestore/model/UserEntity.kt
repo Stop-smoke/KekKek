@@ -45,4 +45,7 @@ data class UserEntity(
 
     @get:PropertyName("start_time") @set:PropertyName("start_time")
     var start_time: Timestamp? = null,
+
+    @get:PropertyName("user_config") @set:PropertyName("user_config")
+    var userConfig: UserConfigEntity? = null
 )

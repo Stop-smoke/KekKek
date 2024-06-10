@@ -22,5 +22,6 @@ sealed interface User {
         var postBookmark: List<String> = emptyList(),
         var postLike: List<String> = emptyList(),
         var startTime: LocalDateTime? = null,
+        val userConfig: UserConfig,
     ) : User
 }
