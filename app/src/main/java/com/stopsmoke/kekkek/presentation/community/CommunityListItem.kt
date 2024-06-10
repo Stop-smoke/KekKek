@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 
 data class CommunityWritingItem(

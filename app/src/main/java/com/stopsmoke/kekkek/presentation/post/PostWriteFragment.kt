@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -15,7 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -29,9 +32,10 @@ class PostWriteFragment : Fragment() {
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
+    private val sharedViewModel by activityViewModels<PostViewModel>()
+
     override fun onStart() {
         super.onStart()
-        findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", null)
     }
 
     override fun onCreateView(
@@ -84,7 +88,6 @@ class PostWriteFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-
         }
     }
 
@@ -123,13 +126,29 @@ class PostWriteFragment : Fragment() {
         }
 
         tvPostWriteRegister.setOnClickListener {
-            val newPost = PostWriteItem(
-                postType = tvPostWriteType.text.toString(),
-                title = etPostWriteTitle.text.toString(),
-                content = etPostWriteContent.text.toString()
-            )
-            findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", newPost)
-            findNavController().popBackStack()
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("게시물 등록")
+            builder.setMessage("게시물을 등록하시겠습니까?")
+            builder.setIcon(R.drawable.ic_post)
+
+            val listener = DialogInterface.OnClickListener { _, type ->
+                when(type) {
+                    DialogInterface.BUTTON_POSITIVE -> {
+                        val newPost = PostWriteItem(
+                            postType = tvPostWriteType.text.toString(),
+                            title = etPostWriteTitle.text.toString(),
+                            content = etPostWriteContent.text.toString()
+                        )
+                        sharedViewModel.setupLiveData(newPost)
+                        findNavController().popBackStack()
+                    }
+                    DialogInterface.BUTTON_NEGATIVE -> {}
+                }
+            }
+
+            builder.setPositiveButton("예",listener)
+            builder.setNegativeButton("아니요",listener)
+            builder.show()
         }
     }
 
@@ -148,11 +167,6 @@ class PostWriteFragment : Fragment() {
             etPostWriteContent.text = spannableString
             etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
     }
 
     override fun onDestroyView() {
