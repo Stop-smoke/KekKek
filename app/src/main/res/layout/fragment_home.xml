@@ -36,7 +36,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_gray">
+            android:background="@color/gray_bggray">
 
             <TextView
                 android:id="@+id/tv_home_timer"
@@ -149,7 +149,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="절약한 돈"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/gray_lightgray2"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -197,7 +197,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="중독 테스트"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/gray_lightgray2"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -250,7 +250,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="랭킹"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/gray_lightgray2"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -297,7 +297,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="증가한 생명"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/gray_lightgray2"
                     android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -357,7 +357,7 @@
                     android:text="이것은 명언입니다.\n이것을 보고 담배를 끊을 수 있어!"
                     android:gravity="center"
                     android:fontFamily="@font/pretendard_bold"
-                    android:textColor="@color/bg_gray"/>
+                    android:textColor="@color/gray_lightgray2"/>
 
                 <ImageView
                     android:id="@+id/iv_home_motivationRe"
@@ -380,7 +380,7 @@
                 android:text="개인정보처리방침 보기"
                 android:fontFamily="@font/pretendard_medium"
                 android:textSize="11sp"
-                android:textColor="@color/gray"
+                android:textColor="@color/gray_lightgray2"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="40dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

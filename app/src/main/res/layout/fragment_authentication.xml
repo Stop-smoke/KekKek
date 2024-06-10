@@ -17,7 +17,7 @@
         android:id="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="80dp"
         android:src="@drawable/ic_brand_logo_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,8 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/fl_login_google"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="400dp">
 
         <include layout="@layout/btn_login_kakao" />
     </FrameLayout>
@@ -44,7 +45,8 @@
         android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_login_other"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="400dp">
 
         <include layout="@layout/btn_login_google" />
     </FrameLayout>
@@ -56,7 +58,7 @@
         android:layout_marginBottom="80dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="@string/login_other_btn"
-        android:textColor="#E0E0E0"
+        android:textColor="@color/gray_linegray"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

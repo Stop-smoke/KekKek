@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +51,22 @@ class HomeFragment : Fragment() {
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
         initToolbar()
 
+        sharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
+            when (totalScore) {
+                in 8..13 -> {
+                    tvHomeTestDegree.text = "담배 비중독 상태🙂"
+                }
+
+                in 14..19 -> {
+                    tvHomeTestDegree.text = "담배 의존 상태😥"
+                }
+
+                else -> {
+                    tvHomeTestDegree.text = "담배 중독 상태😱"
+                }
+            }
+            ivHomeTest.text = "다시 검사하기"
+        }
 
         clHomeRank.setOnClickListener {
             findNavController().navigate("ranking_map")
@@ -66,24 +81,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
-        initToolbar()
-        sharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
-            when(totalScore) {
-                in 8..13 -> {
-                    tvHomeTestDegree.text = "담배 비중독 상태🙂"
-                }
-                in 14..19 -> {
-                    tvHomeTestDegree.text = "담배 의존 상태😥"
-                }
-                else -> {
-                    tvHomeTestDegree.text = "담배 중독 상태😱"
-                }
-            }
-            ivHomeTest.text = "다시 검사하기"
-        }
-    }
-
     private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -95,7 +92,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -103,7 +99,6 @@ class HomeFragment : Fragment() {
                     onBind(state)
                 }
         }
-
 
         when (userData) {
             is Result.Error -> {
