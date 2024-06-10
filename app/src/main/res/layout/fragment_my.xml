@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_my_profile"
             app:layout_constraintStart_toEndOf="@id/iv_my_profile"
             app:layout_constraintTop_toTopOf="@id/iv_my_profile"
-            tools:text="maName" />
+            tools:text="maName"/>
 
         <TextView
             android:id="@+id/tv_my_rank"

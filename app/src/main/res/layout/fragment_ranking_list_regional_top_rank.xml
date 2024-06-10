@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/iv_topRank_medal"
+        android:layout_width="280dp"
+        android:layout_height="76dp"
+        android:layout_margin="20dp"
+        android:src="@drawable/img_rank_medal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_topRank_locationControlOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+
+    <TextView
+        android:id="@+id/tv_topRank_locationControlTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_locationControlThree"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_locationControlOne"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/tv_topRank_locationControlThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="98dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="3" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numOneName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_locationControlOne"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_locationControlOne"
+        app:layout_constraintTop_toBottomOf="@id/iv_topRank_medal"
+        tools:text="언제까지어깨춤" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numOneTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textColor="@color/tv_blue"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_numOneName"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_numOneName"
+        app:layout_constraintTop_toBottomOf="@id/tv_topRank_numOneName"
+        tools:text="38일23시간" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numTwoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_locationControlTwo"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_locationControlTwo"
+        app:layout_constraintTop_toTopOf="@id/tv_topRank_numOneName"
+        tools:text="언제까지어깨춤" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numTwoTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textColor="@color/tv_blue"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_numTwoName"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_numTwoName"
+        app:layout_constraintTop_toBottomOf="@id/tv_topRank_numTwoName"
+        tools:text="38일23시간" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numThreeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_locationControlThree"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_locationControlThree"
+        app:layout_constraintTop_toTopOf="@id/tv_topRank_numOneName"
+        tools:text="언제까지어깨춤" />
+
+    <TextView
+        android:id="@+id/tv_topRank_numThreeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textColor="@color/tv_blue"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/tv_topRank_numThreeName"
+        app:layout_constraintStart_toStartOf="@id/tv_topRank_numThreeName"
+        app:layout_constraintTop_toBottomOf="@id/tv_topRank_numThreeName"
+        tools:text="38일23시간" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

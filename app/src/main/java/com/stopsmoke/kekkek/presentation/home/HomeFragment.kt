@@ -43,6 +43,17 @@ class HomeFragment : Fragment() {
 
         initViewModel()
         initView()
+
+    }
+
+    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
+        initToolbar()
+
+
+        clHomeRank.setOnClickListener {
+            findNavController().navigate("ranking_map")
+        }
+
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
         }
@@ -50,12 +61,6 @@ class HomeFragment : Fragment() {
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
-
-    }
-
-    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
-        initToolbar()
-
     }
 
     private fun initToolbar() {
