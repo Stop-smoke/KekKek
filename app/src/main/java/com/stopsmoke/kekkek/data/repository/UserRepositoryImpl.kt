@@ -135,5 +135,12 @@ internal class UserRepositoryImpl @Inject constructor(
                 }
             }
 
+    override fun logout() {
+        authDataSource.logout()
+    }
+
+    override suspend fun withdraw(): Result<Unit> {
+        return authDataSource.withdraw()
+    }
 
 }

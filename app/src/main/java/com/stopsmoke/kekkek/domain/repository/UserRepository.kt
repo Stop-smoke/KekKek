@@ -52,4 +52,12 @@ interface UserRepository {
      * 앱 처음 실행 체크 함수
      */
     fun isFirstRunning(): Flow<Boolean>
+
+    fun logout()
+
+    /**
+     * 회원 탈퇴
+     */
+
+    suspend fun withdraw(): Result<Unit>
 }
