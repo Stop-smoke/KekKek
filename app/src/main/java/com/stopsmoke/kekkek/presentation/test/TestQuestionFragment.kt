@@ -80,14 +80,9 @@ class TestQuestionFragment : Fragment() {
             }
 
             ivTestBack.setOnClickListener {
-                val layoutInflater = (activity as MainActivity).getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                val view = layoutInflater.inflate(R.layout.fragment_test, null)
-                val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_test)
-                val previousPage = viewPager.currentItem - 1
-                viewPager.setCurrentItem(previousPage, true)
+                activity?.onBackPressed()
             }
             ivTestCancel.setOnClickListener {
-                // 테스트 종료 다이얼로그 띄우기
                 ToastDialog()
             }
         }
