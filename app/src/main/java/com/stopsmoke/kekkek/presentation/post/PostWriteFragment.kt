@@ -73,23 +73,7 @@ class PostWriteFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when (position) {
-                    0 -> {
-                        tvPostWriteType.text = category[0]
-                    }
-
-                    1 -> {
-                        tvPostWriteType.text = category[1]
-                    }
-
-                    2 -> {
-                        tvPostWriteType.text = category[2]
-                    }
-
-                    3 -> {
-                        tvPostWriteType.text = category[3]
-                    }
-                }
+                tvPostWriteType.text = category[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -151,6 +135,10 @@ class PostWriteFragment : Fragment() {
 //            )
 //            findNavController().previousBackStackEntry?.savedStateHandle?.set("NEW_POST", newPost)
             findNavController().popBackStack()
+        }
+
+        tvPostWriteType.setOnClickListener {
+            spinnerPostWrite.performClick()
         }
     }
 
