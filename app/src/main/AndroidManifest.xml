@@ -44,16 +44,17 @@
         <!-- adMpb, 추후 출시 applicationId 추가, kakaoApi 역시 hash key에 릴리즈키 등록해야한다는데.. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" /> <!-- google app api key -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyC67A21F81zChcnH6mFa-M44BKanRz3jlA" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <!-- google app api key -->
+        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyC67A21F81zChcnH6mFa-M44BKanRz3jlA"/>
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC67A21F81zChcnH6mFa-M44BKanRz3jlA" />
+            android:value="AIzaSyCKDdKcbgUyEPwozZHTDpUMk-WUeIe0Y_c" />
+
 
         <activity
             android:name=".presentation.MainActivity"

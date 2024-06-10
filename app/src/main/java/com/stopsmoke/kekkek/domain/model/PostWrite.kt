@@ -1,10 +1,8 @@
 package com.stopsmoke.kekkek.domain.model
 
-import java.io.InputStream
-
 data class PostWrite(
     val title: String,
-    val content: String,
+    val text: String,
+    val dateTime: DateTime,
     val category: PostWriteCategory,
-    val image: InputStream
 )

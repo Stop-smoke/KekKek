@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.post
 
-import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -20,23 +19,26 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
+import com.stopsmoke.kekkek.domain.model.DateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.presentation.community.CommunityFragment
+import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 
-
+@AndroidEntryPoint
 class PostWriteFragment : Fragment() {
 
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
-    private val sharedViewModel by activityViewModels<PostViewModel>()
-
-    override fun onStart() {
-        super.onStart()
-    }
+    private val viewModel: PostWriteViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +90,7 @@ class PostWriteFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+
         }
     }
 
@@ -134,12 +137,18 @@ class PostWriteFragment : Fragment() {
             val listener = DialogInterface.OnClickListener { _, type ->
                 when(type) {
                     DialogInterface.BUTTON_POSITIVE -> {
-                        val newPost = PostWriteItem(
-                            postType = tvPostWriteType.text.toString(),
+                        val postWrite = PostWrite(
                             title = etPostWriteTitle.text.toString(),
-                            content = etPostWriteContent.text.toString()
+                            text = etPostWriteContent.text.toString(),
+                            dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+                            category = when (tvPostWriteType.text) {
+                                "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
+                                "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
+                                "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
+                                else -> throw IllegalStateException()
+                            }
                         )
-                        sharedViewModel.setupLiveData(newPost)
+                        viewModel.addPost(postWrite)
                         findNavController().popBackStack()
                     }
                     DialogInterface.BUTTON_NEGATIVE -> {}
@@ -167,6 +176,11 @@ class PostWriteFragment : Fragment() {
             etPostWriteContent.text = spannableString
             etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
     }
 
     override fun onDestroyView() {
