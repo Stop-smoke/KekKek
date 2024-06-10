@@ -5,25 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.collectLatest
 import com.stopsmoke.kekkek.visible
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class OnboardingFinishFragment : Fragment() {
-
-    @Inject
-    lateinit var userRepository: UserRepository
-
 
     private var _binding: FragmentOnboardingFinishBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +30,11 @@ class OnboardingFinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            delay(3000)
-            userRepository.setOnboardingComplete(true)
+        viewModel.onboardingUiState.collectLatest(lifecycleScope) {
             findNavController().navigate("home")
         }
+
+        viewModel.updateUserData()
     }
 
     override fun onStop() {

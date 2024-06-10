@@ -25,7 +25,20 @@ class PreferencesDataSource @Inject constructor(
         }
     }
 
+    suspend fun setFirstRunning(isFirst: Boolean) {
+        preferencesDataStore.edit { preferences ->
+            preferences[IS_FIRST_RUNNING] = isFirst
+        }
+    }
+
+    fun isFirstRunning(): Flow<Boolean> =
+        preferencesDataStore.data
+            .map { preferences ->
+                preferences[IS_FIRST_RUNNING] ?: true
+            }
+
     companion object {
         private val ONBOARDING_COMPLETE_KEY = booleanPreferencesKey("onboarding_complete")
+        private val IS_FIRST_RUNNING = booleanPreferencesKey("is_first_running")
     }
 }
