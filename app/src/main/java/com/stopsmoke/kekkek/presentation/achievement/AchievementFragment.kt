@@ -42,7 +42,7 @@ class AchievementFragment : Fragment() {
     }
 
     private fun setupRecyclerView() = with(binding.rvAchievementItem) {
-        achievementListAdapter = AchievementListAdapter()
+        achievementListAdapter = AchievementListAdapter(viewModel)
         adapter = achievementListAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -55,9 +55,6 @@ class AchievementFragment : Fragment() {
 
     private fun observeAchievementsItems() = lifecycleScope.launch {
         viewModel.achievements.collectLatest {
-            binding.icludeAchievementTop.tvAchievementQuitSmokingCount.text =
-                "${it.count { it.maxProgress == it.currentProgress }}/${it.size}"
-            achievementListAdapter.submitList(it)
         }
     }
 

@@ -1,11 +1,13 @@
 package com.stopsmoke.kekkek.firestore.di
 
+import com.stopsmoke.kekkek.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.dao.NotificationDao
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.dao.RankingDao
 import com.stopsmoke.kekkek.firestore.dao.SearchDao
 import com.stopsmoke.kekkek.firestore.dao.UserDao
+import com.stopsmoke.kekkek.firestore.data.AchievementDaoImpl
 import com.stopsmoke.kekkek.firestore.data.CommentDaoImpl
 import com.stopsmoke.kekkek.firestore.data.NotificationDaoImpl
 import com.stopsmoke.kekkek.firestore.data.PostDaoImpl
@@ -50,4 +52,9 @@ internal interface FireStoreDaoModule {
     fun bindSearchDao(
         searchDaoImpl: SearchDaoImpl,
     ): SearchDao
+
+    @Binds
+    fun bindAchievement(
+        achievementDaoImpl: AchievementDaoImpl,
+    ): AchievementDao
 }

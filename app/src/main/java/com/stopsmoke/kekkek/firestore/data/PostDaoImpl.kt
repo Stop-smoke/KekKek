@@ -32,8 +32,7 @@ internal class PostDaoImpl @Inject constructor(
                 clazz = PostEntity::class.java
             )
 
-        }
-            .flow
+        }.flow
     }
 
     override suspend fun addPost(postEntity: PostEntity) {

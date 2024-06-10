@@ -3,13 +3,10 @@ package com.stopsmoke.kekkek.domain.model
 import kotlin.random.Random
 
 data class Achievement(
-    val id: String,
-    val title: String,
-    val description: String,
-    val imageUrl: String,
-    val maxProgress: Int,
-) {
-
-    val currentProgress = Random.nextInt(0, maxProgress)
-
-}
+    var id: String,
+    var name: String,
+    var content: String,
+    var image: String,
+    var category: DatabaseCategory,
+    var maxProgress: Int,
+)
