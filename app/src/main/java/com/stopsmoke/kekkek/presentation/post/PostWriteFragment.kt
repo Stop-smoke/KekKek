@@ -70,23 +70,7 @@ class PostWriteFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when (position) {
-                    0 -> {
-                        tvPostWriteType.text = category[0]
-                    }
-
-                    1 -> {
-                        tvPostWriteType.text = category[1]
-                    }
-
-                    2 -> {
-                        tvPostWriteType.text = category[2]
-                    }
-
-                    3 -> {
-                        tvPostWriteType.text = category[3]
-                    }
-                }
+                tvPostWriteType.text = category[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -158,6 +142,10 @@ class PostWriteFragment : Fragment() {
             builder.setPositiveButton("예",listener)
             builder.setNegativeButton("아니요",listener)
             builder.show()
+        }
+
+        tvPostWriteType.setOnClickListener {
+            spinnerPostWrite.performClick()
         }
     }
 

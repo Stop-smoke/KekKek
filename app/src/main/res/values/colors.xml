@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="gray">#CACACA</color>
-    <color name="yellow">#FFEB3B</color>
-    <color name="red">#ff0000</color>
-    <color name="bg_gray">#F4F6F8</color>
+
     <color name="bg_community_box_gray">#F3F3F3</color>
     <color name="community_box_blue">#E1F0FF</color>
     <color name="tv_blue">#437EF0</color>
     <color name="bg_thin_gray">#E7E7E7</color>
     <color name="tv_notice">#4B4B4B</color>
-    <color name="primary_blue">#3182F6</color>
     <color name="dark_gray">#8B94A1</color>
+
+    <color name="red">#FF0000</color>
+    <color name="yellow">#F2FA05</color>
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_dark">#000000</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary_blue">#3182F6</color>
+
+    <!-- 배경 그레이, 각자 다른 명으로 구현해서 일단은 나눠놓음. 나중에 통합할 것-->
+    <color name="gray_bggray">#F4F6F8</color>
+    <color name="bg_gray">#F4F6F8</color>
+    <color name="gray_homebackground">#F7F7F9</color>
+
+    <!-- 그레이, 각자 다른 명으로 구현해서 일단은 나눠놓음. 나중에 통합할 것 -->
+    <color name="gray">#8B94A1</color>
+    <color name="gray_lightgray1">#D0D5DB</color>
+    <color name="gray_lightgray2">#8B94A1</color>
+    <color name="gray_gray1">#777777</color>
+    <color name="gray_linegray">#E7E7E7</color>
+
 </resources>

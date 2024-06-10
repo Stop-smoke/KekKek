@@ -36,7 +36,18 @@
             tools:text="글 카테고리"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"/>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_post_write"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_category"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_post_write_type"
+            app:layout_constraintStart_toEndOf="@+id/tv_post_write_type"
+            app:layout_constraintTop_toTopOf="@+id/tv_post_write_type" />
 
         <TextView
             android:id="@+id/tv_post_write_register"
@@ -150,17 +161,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"
             app:layout_constraintStart_toEndOf="@+id/iv_post_write_background_color"
             app:layout_constraintTop_toTopOf="@+id/iv_post_write_background_color" />
-
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_post_write"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/ic_category"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_post_write_type"
-            app:layout_constraintStart_toEndOf="@+id/tv_post_write_type"
-            app:layout_constraintTop_toTopOf="@+id/tv_post_write_type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
