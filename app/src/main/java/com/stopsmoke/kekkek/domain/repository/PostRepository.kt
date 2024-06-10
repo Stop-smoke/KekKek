@@ -7,6 +7,5 @@ import com.stopsmoke.kekkek.domain.model.PostCategory
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
-
     fun getPost(category: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
 }
