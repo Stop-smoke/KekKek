@@ -42,6 +42,7 @@
         android:fontFamily="@font/pretendard_medium"
         android:hint="슬라이더로 변경 예정"
         android:textColorHint="@color/gray"
+        android:inputType="number|numberDecimal"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="@+id/tv_onboarding_perday2"
         app:layout_constraintStart_toStartOf="@+id/tv_onboarding_perday2"
