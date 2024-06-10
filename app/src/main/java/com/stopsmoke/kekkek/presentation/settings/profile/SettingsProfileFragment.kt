@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.settings
+package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

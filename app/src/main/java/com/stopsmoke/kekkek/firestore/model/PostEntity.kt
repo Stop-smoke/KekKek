@@ -10,7 +10,7 @@ data class PostEntity(
     var commentId: String? = null,
 
     @get:PropertyName("written") @set:PropertyName("written")
-    var written: Written? = null,
+    var written: WrittenEntity? = null,
 
     @get:PropertyName("title") @set:PropertyName("title")
     var title: String? = null,
@@ -35,20 +35,4 @@ data class PostEntity(
 
     @get:PropertyName("comment_user") @set:PropertyName("comment_user")
     var commentUser: List<String> = emptyList()
-) {
-
-    data class Written(
-        @get:PropertyName("uid") @set:PropertyName("uid")
-        var uid: String? = null,
-
-        @get:PropertyName("name") @set:PropertyName("name")
-        var name: String? = null,
-
-        @get:PropertyName("profile_image") @set:PropertyName("profile_image")
-        var profileImage: String? = null,
-
-        @get:PropertyName("ranking") @set:PropertyName("ranking")
-        var ranking: Long? = null,
-    )
-
-}
+)
