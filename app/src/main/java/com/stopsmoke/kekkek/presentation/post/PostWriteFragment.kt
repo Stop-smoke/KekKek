@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable

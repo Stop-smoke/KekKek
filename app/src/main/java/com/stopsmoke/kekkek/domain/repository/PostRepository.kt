@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.PostWrite
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
