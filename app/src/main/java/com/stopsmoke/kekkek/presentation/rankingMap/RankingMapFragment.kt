@@ -2,31 +2,22 @@ package com.stopsmoke.kekkek.presentation.rankingMap
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -38,13 +29,16 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
     private val binding: FragmentRankingMapBinding get() = _binding!!
 
     private lateinit var googleMap: GoogleMap
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
 
-    lateinit var locationCallback: LocationCallback
+//    private val placesClient: PlacesClient by lazy {
+//        Places.createClient(requireContext())
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     override fun onCreateView(
@@ -63,9 +57,17 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
 
     private fun initView() = with(binding) {
         setAppbar()
+        setGoogleMap()
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapView_rankingMap) as SupportMapFragment
+    }
+
+    private fun setGoogleMap() {
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapView_rankingMap) as SupportMapFragment
         mapFragment.getMapAsync(this@RankingMapFragment)
+        mapFragment.getMapAsync { googleMap ->
+            googleMap.uiSettings.setAllGesturesEnabled(false)
+        }
     }
 
     private fun setAppbar() {
@@ -95,7 +97,10 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
                 1
             )
             return
@@ -119,63 +124,11 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
                         .fillColor(0x220000FF) // 반투명 파란색
                 )
             } else {
-                // 위치가 null일 경우 처리
                 Toast.makeText(requireContext(), "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener {
-            // 위치 요청 실패 처리
             Toast.makeText(requireContext(), "위치를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
-
-        updateLocation()
-    }
-
-    private fun updateLocation() { // google map implementation으로 사용
-        val locationRequest = LocationRequest.create().apply {
-            interval = 1000 // 1초
-            fastestInterval = 500 // 0.5초
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                locationResult?.let {
-                    for (location in it.locations) {
-                        Log.d("위치정보", "위도: ${location.latitude} 경도: ${location.longitude}")
-                        setLastLocation(location)
-                    }
-                }
-            }
-        }
-
-        //권한 처리
-        if(ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED){
-            return
-        }
-
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.myLooper()!!)
-    }
-
-    private fun setLastLocation(lastLocation: Location){
-        val LATLNG = LatLng(lastLocation.latitude, lastLocation.longitude)
-        moveGoogleMap(LATLNG)
-    }
-
-    private fun moveGoogleMap(latLng: LatLng) {
-        val position = CameraPosition.Builder()
-            .target(latLng)
-            .zoom(18f)
-            .build()
-        googleMap?.moveCamera((CameraUpdateFactory.newCameraPosition(position)))
     }
 
 
