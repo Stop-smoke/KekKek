@@ -4,17 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.domain.model.DateTimeUnit
+import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class NoticeListAdapter
-    : ListAdapter<NoticeListItem, NoticeListAdapter.ViewHolder>(
+    : PagingDataAdapter<NoticeListItem, NoticeListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<NoticeListItem>() {
         override fun areItemsTheSame(
             oldItem: NoticeListItem,
@@ -62,25 +65,18 @@ class NoticeListAdapter
             }
         }
 
-        private fun getRelativeTime(pastDate: Date): String {
-            val now = Calendar.getInstance().time
-            val diffInMillis = now.time - pastDate.time
-
-            val seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
-            val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
-            val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
-            val months = days / 30
-            val years = days / 365
-
-            return when {
-                seconds < 60 -> "${seconds}초 전"
-                minutes < 60 -> "${minutes}분 전"
-                hours < 24 -> "${hours}시간 전"
-                days < 30 -> "${days}일 전"
-                months < 12 -> "${months}달 전"
-                else -> "${years}년 전"
+        private fun getRelativeTime(pastTime: ElapsedDateTime): String {
+            val timeType = when (pastTime.elapsedDateTime) {
+                DateTimeUnit.YEAR -> "년"
+                DateTimeUnit.MONTH -> "달"
+                DateTimeUnit.DAY -> "일"
+                DateTimeUnit.WEEK -> "주"
+                DateTimeUnit.HOUR -> "시간"
+                DateTimeUnit.MINUTE -> "분"
+                DateTimeUnit.SECOND -> "초"
             }
+
+            return "${pastTime.number} ${timeType} 전"
         }
 
         private fun setMarginEnd(view: TextView, end: Int) {
@@ -104,6 +100,6 @@ class NoticeListAdapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 }

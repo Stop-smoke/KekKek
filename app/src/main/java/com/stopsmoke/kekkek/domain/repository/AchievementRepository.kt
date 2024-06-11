@@ -1,10 +1,11 @@
 package com.stopsmoke.kekkek.domain.repository
 
+import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Achievement
+import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import kotlinx.coroutines.flow.Flow
 
 interface AchievementRepository {
-
-    fun getAchievementItems(): Result<Flow<List<Achievement>>>
+    fun getAchievementItems(category: DatabaseCategory = DatabaseCategory.ALL): Result<Flow<PagingData<Achievement>>>
 }

@@ -2,9 +2,7 @@
 <resources>
     <string-array name="community_category">
         <item>커뮤니티 홈</item>
-        <item>공지사항</item>
         <item>금연 지원 프로그램 공지</item>
-        <item>인기글</item>
         <item>금연 보조제 후기</item>
         <item>금연 성공 후기</item>
         <item>자유게시판</item>

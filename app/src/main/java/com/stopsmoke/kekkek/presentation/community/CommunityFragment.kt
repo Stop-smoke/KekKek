@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.presentation.post.PostWriteItem
+import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import com.stopsmoke.kekkek.presentation.post.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,8 +30,8 @@ class CommunityFragment : Fragment() {
     private val binding: FragmentCommunityBinding get() = _binding!!
 
     private val viewModel: CommunityViewModel by viewModels()
-    private val sharedViewModel by activityViewModels<PostViewModel>()
-
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter {
             findNavController().navigate("post_view")
@@ -85,10 +87,11 @@ class CommunityFragment : Fragment() {
         setToolbarMenu()
     }
 
-    private fun initCommunityCategory() = with(binding){
+    private fun initCommunityCategory() = with(binding) {
         rvCommunityCategory.layoutManager =
             LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapterList = requireContext().resources.getStringArray(R.array.community_category).toList()
+        val adapterList =
+            requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
         })
@@ -132,6 +135,13 @@ class CommunityFragment : Fragment() {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
                     listAdapter.submitData(posts)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePost ->
+                    binding.tvCommunityNoticeTitle.text = noticePost.title
                 }
         }
     }

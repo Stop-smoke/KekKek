@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.domain.repository
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
 import java.io.InputStream
 
@@ -29,6 +30,8 @@ interface UserRepository {
     /**
      *  금연을 시작 했을때 서버에 시간을 저장 하는 함수
      */
+
+    suspend fun updateUserData(user: User.Registered) // user 정보 업데이트
 
     suspend fun startQuitSmokingTimer(): Result<Unit>
 
