@@ -121,6 +121,7 @@ class HomeFragment : Fragment() {
                     userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                         .collectLatest { user ->
                             viewModel.updateUserData(user)
+                            Log.d("user",user.userConfig.packPrice.toString())
                         }
                 }
             }
@@ -137,13 +138,17 @@ class HomeFragment : Fragment() {
 
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
-            tvHomeSavedMoneyNum.text = "${it.savedMoney} 원"
-            tvHomeSavedLifeNum.text = "${it.savedLife} 일"
+            tvHomeSavedMoneyNum.text = formatToOneDecimalPlace(it.savedMoney) + " 원"
+            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
             tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTestDegree.text = it.addictionDegree
 
-            tvHomeTimerNum.text = it.timerString
+            tvHomeTimerNum.text = it.timeString
         }
+    }
+
+    private fun formatToOneDecimalPlace(value: Double): String {
+        return String.format("%.1f", value)
     }
 
 

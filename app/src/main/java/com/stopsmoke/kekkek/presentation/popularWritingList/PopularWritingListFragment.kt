@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPopularWritingListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PopularWritingListFragment : Fragment() {
     private var _binding: FragmentPopularWritingListBinding? = null
     val binding: FragmentPopularWritingListBinding get() = _binding!!
@@ -25,9 +28,7 @@ class PopularWritingListFragment : Fragment() {
         PopularWritingListAdapter()
     }
 
-    private val viewModel: PopularWritingListViewModel by lazy {
-        ViewModelProvider(this)[PopularWritingListViewModel::class.java]
-    }
+    private val viewModel: PopularWritingListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +73,16 @@ class PopularWritingListFragment : Fragment() {
                     onBind(state)
                 }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            popularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { popularPosts ->
+                    listAdapter.submitData(popularPosts)
+                }
+        }
     }
 
     private fun onBind(uiState: PopularWritingListUiState) = with(binding) {
-        listAdapter.submitList(uiState.list)
     }
 
     override fun onDestroy() {

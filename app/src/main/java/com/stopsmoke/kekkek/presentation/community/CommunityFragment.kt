@@ -139,7 +139,6 @@ class CommunityFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
-                    listAdapter.submitData(posts)
                 }
         }
 
