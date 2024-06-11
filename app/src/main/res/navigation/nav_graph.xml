@@ -92,55 +92,6 @@
         tools:layout="@layout/fragment_my_comment" />
 
     <fragment
-        android:id="@+id/setting"
-        android:name="com.stopsmoke.kekkek.presentation.settings.SettingsFragment"
-        app:route="setting"
-        tools:layout="@layout/fragment_settings">
-        <action
-            android:id="@+id/action_setting_to_setting_support"
-            app:destination="@id/setting_support" />
-        <action
-            android:id="@+id/action_setting_to_setting_privatepolicy"
-            app:destination="@id/setting_privatepolicy" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/setting_support"
-        android:name="com.stopsmoke.kekkek.presentation.settings.support.SettingsSupportFragment"
-        app:route="setting_support"
-        tools:layout="@layout/fragment_settings_support" />
-
-    <fragment
-        android:id="@+id/setting_oss"
-        android:name="com.stopsmoke.kekkek.presentation.settings.opensource.SettingsOpensourceFragment"
-        app:route="setting_oss"
-        tools:layout="@layout/fragment_settings_opensource" />
-
-    <fragment
-        android:id="@+id/setting_privatepolicy"
-        android:name="com.stopsmoke.kekkek.presentation.settings.privatepolicy.SettingsPrivatePolicyFragment"
-        app:route="setting_privatepolicy"
-        tools:layout="@layout/fragment_settings_private_policy" />
-
-    <fragment
-        android:id="@+id/setting_profile"
-        android:name="com.stopsmoke.kekkek.presentation.settings.profile.ProfileFragment"
-        app:route="setting_profile"
-        tools:layout="@layout/item_settings_profile" />
-
-    <fragment
-        android:id="@+id/setting_notification"
-        android:name="com.stopsmoke.kekkek.presentation.settings.notification.SettingsNotificationFragment"
-        app:route="setting_notification"
-        tools:layout="@layout/fragment_settings_notification" />
-
-    <fragment
-        android:id="@+id/setting_language"
-        android:name="com.stopsmoke.kekkek.presentation.settings.language.SettingsLanguageFragment"
-        app:route="setting_language"
-        tools:layout="@layout/fragment_settings_language" />
-
-    <fragment
         android:id="@+id/user_profile"
         android:name="com.stopsmoke.kekkek.presentation.userprofile.UserProfileFragment"
         app:route="user_profile"
