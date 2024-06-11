@@ -113,6 +113,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_show_more2" />
+        app:srcCompat="@drawable/ic_show_more"
+        app:tint="@color/gray_lightgray1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

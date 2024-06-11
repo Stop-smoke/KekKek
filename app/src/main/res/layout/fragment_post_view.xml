@@ -18,15 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_post_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_logo"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_post_back"
-        app:layout_constraintStart_toEndOf="@+id/iv_post_back"
-        app:layout_constraintTop_toTopOf="@+id/iv_post_back" />
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_post_logo"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:src="@drawable/ic_logo"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/iv_post_back"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/iv_post_back"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/iv_post_back" />-->
 
     <ImageView
         android:id="@+id/iv_post_share"

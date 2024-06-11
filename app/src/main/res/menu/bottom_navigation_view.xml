@@ -19,7 +19,7 @@
     <item
         android:id="@+id/my_page"
         android:enabled="true"
-        android:icon="@drawable/ic_mypage_bottom"
+        android:icon="@drawable/ic_mypage"
         android:title="@string/menu_mypage" />
 
 </menu>
