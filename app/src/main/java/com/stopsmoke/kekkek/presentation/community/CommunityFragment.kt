@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.post.PostWriteItem
+import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class CommunityFragment : Fragment() {
     private val binding: FragmentCommunityBinding get() = _binding!!
 
     private val viewModel: CommunityViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter {
@@ -137,6 +140,13 @@ class CommunityFragment : Fragment() {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
                     listAdapter.submitData(posts)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePost ->
+                    binding.tvCommunityNoticeTitle.text = noticePost.title
                 }
         }
     }

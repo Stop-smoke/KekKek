@@ -126,6 +126,13 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePost ->
+                    binding.tvHomeNoticeTitle.text = noticePost.title
+                }
+        }
     }
 
     private fun onBind(uiState: HomeUiState) = with(binding) {

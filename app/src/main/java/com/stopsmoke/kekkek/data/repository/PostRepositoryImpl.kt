@@ -79,4 +79,8 @@ internal class PostRepositoryImpl @Inject constructor(
             it.asExternalModel()
         }
 
+    override suspend fun getTopNotice(): Post =
+        postDao.getTopNotice().asExternalModel()
+
+
 }
