@@ -49,10 +49,6 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvMyBookmark.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
-
         initView()
         initListener()
         initViewModel()
@@ -81,10 +77,13 @@ class MyFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
-        tvMyWriting.setOnClickListener {
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate("bookmark")
+        }
+        clMyMypost.setOnClickListener {
             findNavController().navigate("my_post")
         }
-        tvMyComment.setOnClickListener {
+        clMyMycomment.setOnClickListener {
             findNavController().navigate("my_comment")
         }
         toolbarMy.setOnMenuItemClickListener {

@@ -50,7 +50,7 @@ class AttainmentsFragment : Fragment() {
         })
 
 
-        binding.ivAttainmentsBack.setOnClickListener {
+        binding.includeAttainmentsAppBar.ivAttainmentsBack.setOnClickListener {
             findNavController().popBackStack()
         }
 

@@ -33,7 +33,7 @@ class MyCommentFragment : Fragment() {
     }
 
     private fun setupListener() = with(binding) {
-        ivMyCommentBack.setOnClickListener {
+        includeMyCommentAppBar.ivMyCommentBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }

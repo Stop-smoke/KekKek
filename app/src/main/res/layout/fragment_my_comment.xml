@@ -6,47 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".presentation.my.MyCommentFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_my_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
-        android:id="@+id/iv_my_comment_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_back"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_my_comment"
-        app:layout_constraintStart_toStartOf="@+id/toolbar_my_comment"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_my_comment" />
-
-    <TextView
-        android:id="@+id/tv_my_comment_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_comment_title"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_my_comment"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar_my_comment"
-        app:layout_constraintStart_toStartOf="@+id/toolbar_my_comment"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_my_comment" />
+    <include
+        android:id="@+id/include_my_comment_app_bar"
+        layout="@layout/fragment_my_comment_app_bar" />
 
     <View
         android:id="@+id/view_my_comment"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
+        android:background="@color/bg_thin_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_my_comment" />
+        app:layout_constraintTop_toBottomOf="@+id/include_my_comment_app_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_my_comment"
