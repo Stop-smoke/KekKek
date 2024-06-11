@@ -21,21 +21,25 @@ class AchievementListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(achievement: AchievementItem) {
-            val currentProgress: Int = when (achievement.category) {
-                DatabaseCategory.COMMENT -> viewModel.currentProgressItem.comment
-                DatabaseCategory.POST ->  viewModel.currentProgressItem.post
-                DatabaseCategory.USER ->  viewModel.currentProgressItem.time
-                DatabaseCategory.ACHIEVEMENT ->  viewModel.currentProgressItem.achievement
-                DatabaseCategory.RANK ->  viewModel.currentProgressItem.rank
+            val currentProgressItem = viewModel.getCurrentItem()
+
+            val currentProgress: Long = when (achievement.category) {
+                DatabaseCategory.COMMENT -> currentProgressItem.comment
+                DatabaseCategory.POST -> currentProgressItem.post
+                DatabaseCategory.USER -> currentProgressItem.time
+                DatabaseCategory.ACHIEVEMENT -> currentProgressItem.achievement
+                DatabaseCategory.RANK -> currentProgressItem.rank
                 DatabaseCategory.ALL -> 0
             }
 
             binding.tvAchievementTitle.text = achievement.name
-            binding.liAchievementProgress.progress = currentProgress
+            binding.liAchievementProgress.progress = currentProgress.toInt()
             binding.liAchievementProgress.max = achievement.maxProgress
             binding.tvAchievementDescription.text = achievement.content
             binding.tvAchievementProgressNumber.text =
-                "${currentProgress}/${achievement.maxProgress}"
+                if (currentProgress < achievement.maxProgress) {
+                    "${currentProgress}/${achievement.maxProgress}"
+                } else "${achievement.maxProgress}/${achievement.maxProgress}"
         }
     }
 

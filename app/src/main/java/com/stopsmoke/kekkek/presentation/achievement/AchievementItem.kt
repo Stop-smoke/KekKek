@@ -12,9 +12,9 @@ data class AchievementItem (
 )
 
 data class CurrentProgress(
-    val time: Int,
-    val comment: Int,
-    val post: Int,
-    val rank: Int,
-    val achievement: Int
+    val time: Long,
+    val comment: Long,
+    val post: Long,
+    val rank: Long,
+    val achievement: Long
 )
