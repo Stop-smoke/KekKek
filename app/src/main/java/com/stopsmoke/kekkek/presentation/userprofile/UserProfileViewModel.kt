@@ -64,24 +64,13 @@ class UserProfileViewModel @Inject constructor(
             }
     }
 
-    val posts: Flow<PagingData<Post>> = postRepository.getPost()
-        .let {
-            when (it) {
-                is Result.Error -> {
-                    viewModelScope.launch {
-                        _errorHandler.emit(Unit)
-                    }
-                    emptyFlow()
-                }
-
-                is Result.Loading -> emptyFlow()
-                is Result.Success -> it.data
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val posts: Flow<PagingData<Post>> = uid.flatMapLatest { uid ->
+        if (uid == null) {
+            return@flatMapLatest emptyFlow()
         }
-        .cachedIn(viewModelScope)
 
-    val myCommentHistory: Flow<PagingData<Comment>> =
-        commentRepository.getCommentItems(CommentFilter.Me)
+        postRepository.getPost(uid)
             .let {
                 when (it) {
                     is Result.Error -> {
@@ -96,5 +85,29 @@ class UserProfileViewModel @Inject constructor(
                 }
             }
             .cachedIn(viewModelScope)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val myCommentHistory: Flow<PagingData<Comment>> = uid.flatMapLatest { uid ->
+        if (uid == null) {
+            return@flatMapLatest emptyFlow()
+        }
+
+        commentRepository.getCommentItems(CommentFilter.User(uid))
+            .let {
+                when (it) {
+                    is Result.Error -> {
+                        viewModelScope.launch {
+                            _errorHandler.emit(Unit)
+                        }
+                        emptyFlow()
+                    }
+
+                    is Result.Loading -> emptyFlow()
+                    is Result.Success -> it.data
+                }
+            }
+            .cachedIn(viewModelScope)
+    }
 
 }
