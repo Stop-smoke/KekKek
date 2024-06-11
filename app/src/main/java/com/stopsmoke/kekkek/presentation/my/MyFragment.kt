@@ -15,8 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -115,20 +115,25 @@ class MyFragment : Fragment() {
                 }
         }
 
-        lifecycleScope.launch {
-            userData.flowWithLifecycle(lifecycle).collectLatest {
-                when(it) {
-                    is User.Error -> {
-                        // 유저 정보가 에러
-                    }
-                    is User.Guest -> {  } // 게스트 모드 대응
-                    is User.Registered -> {
-                        viewModel.updateUserData(it)
-                    }
+
+        when (userData) {
+            is Result.Error -> {
+
+            }
+
+            is Result.Loading -> {
+
+            }
+
+            is Result.Success -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                        .collectLatest { user ->
+                            viewModel.updateUserData(user)
+                        }
                 }
             }
         }
-        Unit
     }
 
 
