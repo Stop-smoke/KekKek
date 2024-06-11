@@ -121,6 +121,8 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cl_post_view_comment"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.33">
@@ -160,7 +162,9 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cl_post_view_heart"
+            app:layout_constraintEnd_toStartOf="@+id/cl_post_view_view"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cl_post_view_heart"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.33">
 
@@ -193,13 +197,14 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_post_view_view"
             android:layout_width="0dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cl_post_view_comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cl_post_view_comment"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.33">
 

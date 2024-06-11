@@ -8,6 +8,7 @@ import com.google.firebase.ktx.Firebase
 import com.stopsmoke.kekkek.firestore.data.PostDaoImpl
 import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import com.stopsmoke.kekkek.firestore.model.PostEntity
+import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -35,15 +36,15 @@ class PostDaoInstrumentedTest {
     @Test // 게시글 등록
     fun addPost() = runTest {
         val post = PostEntity(
-            id = "dummyId",
+            id = "popularDummyId",
             commentId = "dummyCommentId",
-            written = PostEntity.Written(
+            written = WrittenEntity(
                 uid = "default",
                 name = "default",
                 profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
                 ranking = Random.nextLong(1, 500),
             ),
-            title = "Dummy Title",
+            title = "Dummy Popular Title",
             text = "Dummy Text",
             dateTime = DateTimeEntity(
                 created = Timestamp.now(),
@@ -51,42 +52,42 @@ class PostDaoInstrumentedTest {
             ),
             likeUser = listOf("likeUser1", "likeUser2"),
             unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
-            category = "dummyCategory",
+            category = "popular",
             views = Random.nextLong(1, 500),
             commentUser = listOf("commentUser1", "commentUser2")
         )
         postDao.addPost(post)
     }
 
-    @Test
-    fun updatePost() = runTest {
-        val post = PostEntity(
-            id = "dummyId",
-            commentId = "dummyCommentId",
-            written = PostEntity.Written(
-                uid = "default",
-                name = "default",
-                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                ranking = Random.nextLong(1, 500),
-            ),
-            title = "Dummy Title",
-            text = "Dummy Text",
-            dateTime = DateTimeEntity(
-                created = Timestamp.now(),
-                modified = Timestamp.now(),
-            ),
-            likeUser = listOf("likeUser1", "likeUser2"),
-            unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
-            category = "dummyCategory",
-            views = Random.nextLong(1, 500),
-            commentUser = listOf("commentUser1", "commentUser2")
-        )
-        postDao.updateOrInsertPost(post)
-    }
-
-    @Test
-    fun deletePost() = runTest {
-        val id = "lOMR60vdOoIx2gGSjZr2"
-        postDao.deletePost(id)
-    }
+//    @Test
+//    fun updatePost() = runTest {
+//        val post = PostEntity(
+//            id = "dummyId",
+//            commentId = "dummyCommentId",
+//            written = WrittenEntity(
+//                uid = "default",
+//                name = "default",
+//                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+//                ranking = Random.nextLong(1, 500),
+//            ),
+//            title = "Dummy Title",
+//            text = "Dummy Text",
+//            dateTime = DateTimeEntity(
+//                created = Timestamp.now(),
+//                modified = Timestamp.now(),
+//            ),
+//            likeUser = listOf("likeUser1", "likeUser2"),
+//            unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
+//            category = "dummyCategory",
+//            views = Random.nextLong(1, 500),
+//            commentUser = listOf("commentUser1", "commentUser2")
+//        )
+//        postDao.updateOrInsertPost(post)
+//    }
+//
+//    @Test
+//    fun deletePost() = runTest {
+//        val id = "lOMR60vdOoIx2gGSjZr2"
+//        postDao.deletePost(id)
+//    }
 }

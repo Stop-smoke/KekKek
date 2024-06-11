@@ -25,7 +25,10 @@ internal fun User.Registered.toEntity(): UserEntity =
                 seconds = userConfig.birthDate.toEpochSecond(ZoneOffset.UTC),
                 nanoseconds = userConfig.birthDate.nano
             )
-        )
+        ),
+        clearAchievementsList = clearAchievementsList,
+        commentMy = commentMy,
+        postMy = postMy
     )
 
 internal fun UserEntity.toExternalModel(): User.Registered =
@@ -48,7 +51,10 @@ internal fun UserEntity.toExternalModel(): User.Registered =
             packCigaretteCount = userConfig?.packCigaretteCount ?: 0,
             packPrice = userConfig?.packPrice ?: 0,
             birthDate = userConfig?.birthDate?.toLocalDateTime() ?: LocalDateTime.MIN
-        )
+        ),
+        clearAchievementsList = clearAchievementsList ?: emptyList(),
+        commentMy = commentMy ?: emptyList(),
+        postMy = postMy ?: emptyList()
     )
 
 internal fun LocationEntity.toExternalModel() = Location(
@@ -57,4 +63,5 @@ internal fun LocationEntity.toExternalModel() = Location(
     region = region ?: ""
 )
 
-internal fun Timestamp.toLocalDateTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.seconds, this.nanoseconds, ZoneOffset.UTC)
+internal fun Timestamp.toLocalDateTime(): LocalDateTime =
+    LocalDateTime.ofEpochSecond(this.seconds, this.nanoseconds, ZoneOffset.UTC)

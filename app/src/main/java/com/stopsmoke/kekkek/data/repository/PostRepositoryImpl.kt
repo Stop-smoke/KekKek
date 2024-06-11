@@ -73,4 +73,14 @@ internal class PostRepositoryImpl @Inject constructor(
     override suspend fun editPost(post: PostWrite): Result<Unit> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getTopPopularItems(): List<Post> =
+        postDao.getPopularPostItems().map {
+            it.asExternalModel()
+        }
+
+    override suspend fun getTopNotice(): Post =
+        postDao.getTopNotice().asExternalModel()
+
+
 }

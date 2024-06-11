@@ -43,8 +43,27 @@ class CommunityListAdapter(
     ) : ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener {
-                postItemClick(bindingAdapterPosition)
+            with(binding) {
+                root.setOnClickListener {
+//                    val post = CommunityWritingItem(
+//                        userInfo = UserInfo(
+//                            name = tvItemWritingName.text.toString(),
+//                            rank = tvItemWritingRank.text.to,
+//                            profileImage = circleIvItemWritingProfile
+//                        ),
+//                        postInfo = PostInfo(
+//                            title = tvItemWritingTitle.text.toString(),
+//                            postType = "",
+//                            view = tvItemWritingViewNum.text,
+//                            like = tvItemWritingLikeNum,
+//                            comment = tvItemWritingCommentNum
+//                        ),
+//                        postImage = "",
+//                        post = tvItemWritingPost,
+//                        postTime = tvItemWritingTimeStamp
+//                    )
+                    postItemClick(bindingAdapterPosition)
+                }
             }
         }
 

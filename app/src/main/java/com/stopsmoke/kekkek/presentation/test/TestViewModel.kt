@@ -11,6 +11,8 @@ class TestViewModel: ViewModel() {
     private val _testResult: MutableLiveData<Int> = MutableLiveData()
     val testResult: LiveData<Int> get() = _testResult
 
+//    private val _firstTest = SingleLiveEvent<Any>()
+
     private var score = 0
 
     fun addScore(currentScore: Int) {

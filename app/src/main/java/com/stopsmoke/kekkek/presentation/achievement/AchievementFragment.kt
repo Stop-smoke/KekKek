@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
+import com.stopsmoke.kekkek.domain.model.Achievement
+import com.stopsmoke.kekkek.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -21,7 +25,9 @@ class AchievementFragment : Fragment() {
     private var _binding: FragmentAchievementBinding? = null
     private val binding: FragmentAchievementBinding get() = _binding!!
 
-    private lateinit var achievementListAdapter: AchievementListAdapter
+    private val achievementListAdapter: AchievementListAdapter by lazy {
+        AchievementListAdapter(viewModel)
+    }
 
     private val viewModel: AchievementViewModel by viewModels()
     override fun onCreateView(
@@ -35,14 +41,17 @@ class AchievementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAppBar()
-        setupRecyclerView()
-        observeAchievementsItems()
-        binding.icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = "183 일"
+        initView()
+        initViewModel()
+        binding.icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = viewModel.getCurrentItem().time.toString()
     }
 
+
+    private fun initView() = with(binding){
+        setupAppBar()
+        setupRecyclerView()
+    }
     private fun setupRecyclerView() = with(binding.rvAchievementItem) {
-        achievementListAdapter = AchievementListAdapter()
         adapter = achievementListAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -53,17 +62,44 @@ class AchievementFragment : Fragment() {
         }
     }
 
-    private fun observeAchievementsItems() = lifecycleScope.launch {
-        viewModel.achievements.collectLatest {
-            binding.icludeAchievementTop.tvAchievementQuitSmokingCount.text =
-                "${it.count { it.maxProgress == it.currentProgress }}/${it.size}"
-            achievementListAdapter.submitList(it)
+    private fun initViewModel() = with(viewModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            achievements.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { achievements ->
+                    achievementListAdapter.submitData(achievements)
+                }
         }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }
+
+internal fun AchievementEntity.asExternalModel() = Achievement(
+    id = id ?: "null",
+    name = name ?: "null",
+    content = content ?: "null",
+    image = image ?: "null",
+    category = when (category) {
+        "comment" -> DatabaseCategory.COMMENT
+        "post" -> DatabaseCategory.POST
+        "user" -> DatabaseCategory.USER
+        "achievement" -> DatabaseCategory.ACHIEVEMENT
+        "rank" -> DatabaseCategory.RANK
+        "all" -> DatabaseCategory.ALL
+        else -> DatabaseCategory.ALL
+    },
+    maxProgress = maxProgress ?: 0,
+)
+
+internal fun Achievement.getItem() = AchievementItem(
+    id = id,
+    name = name,
+    content = content,
+    image = image,
+    category = category,
+    maxProgress = maxProgress,
+)

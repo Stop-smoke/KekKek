@@ -30,14 +30,15 @@
         android:id="@+id/tv_itemWriting_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:inputType="number"
+        android:textColor="@color/gray"
+        android:textSize="11sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_name"
         app:layout_constraintStart_toEndOf="@id/tv_itemWriting_name"
-        android:textSize="11sp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:textStyle="bold"
-        android:textColor="@color/gray"
-        android:layout_marginStart="4dp"
-        tools:text="랭킹 111위"/>
+        tools:text="랭킹 111위" />
 
     <TextView
         android:id="@+id/tv_itemWriting_postType"

@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
@@ -32,8 +33,7 @@ internal class PostDaoImpl @Inject constructor(
                 clazz = PostEntity::class.java
             )
 
-        }
-            .flow
+        }.flow
     }
 
     override suspend fun addPost(postEntity: PostEntity) {
@@ -61,6 +61,38 @@ internal class PostDaoImpl @Inject constructor(
             .addOnFailureListener { throw it }
             .addOnCanceledListener { throw CancellationException() }
             .await()
+    }
+
+    override suspend fun getPopularPostItems(): List<PostEntity> {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("category", "popular")
+                .limit(2)
+                .get()
+                .await()
+
+            query.documents.mapNotNull { document ->
+                document.toObject<PostEntity>()
+            }
+        } catch (e: Exception) {
+            // 예외 처리
+            emptyList()
+        }
+    }
+
+    override suspend fun getTopNotice(): PostEntity {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("category", "notice")
+                .limit(1)
+                .get()
+                .await()
+
+            val document = query.documents.firstOrNull()
+            document?.toObject<PostEntity>() ?: PostEntity()
+        } catch (e: Exception) {
+            PostEntity()
+        }
     }
 
     companion object {

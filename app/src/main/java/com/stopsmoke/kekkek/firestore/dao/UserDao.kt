@@ -9,6 +9,8 @@ interface UserDao {
 
     suspend fun setUser(userEntity: UserEntity)
 
+    suspend fun updateUser(userEntity: UserEntity)
+
     suspend fun startQuitSmokingTimer(uid: String): Result<Unit>
 
     suspend fun stopQuitSmokingTimer(uid: String): Result<Unit>

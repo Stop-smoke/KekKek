@@ -105,7 +105,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     private fun initView() = with(binding) {
         rvSetting.adapter = settingAdapter
         rvSetting.layoutManager = LinearLayoutManager(requireContext())
-        setting.tvUserProfileTitle .text ="설정"
+        setting.tvUserProfileTitle.text ="설정"
         setting.ivUserProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -118,16 +118,16 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     override fun onClickProfile(settingItem: SettingsItem) {
         // settingItem 에 정보를 담은 채로 보내야함
-        findNavController().navigate("setting_profile")
+        findNavController().navigate(R.id.action_setting_to_setting_profile)
     }
 
     override fun onClickSettingList(settingItem: SettingsItem) {
         when(settingItem.settingTitle) {
             "알림" -> {
-                findNavController().navigate("setting_notification")
+                findNavController().navigate(R.id.action_setting_to_setting_notification)
             }
             "언어" -> {
-                findNavController().navigate("setting_language")
+                findNavController().navigate(R.id.action_setting_to_setting_language)
             }
             "테마" -> {
 

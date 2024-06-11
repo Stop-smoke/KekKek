@@ -21,7 +21,10 @@ sealed interface User {
         var ranking: Long,
         var postBookmark: List<String> = emptyList(),
         var postLike: List<String> = emptyList(),
+        var postMy: List<String> = emptyList(),
+        var commentMy: List<String> = emptyList(),
         var startTime: LocalDateTime? = null,
         val userConfig: UserConfig,
+        var clearAchievementsList: List<String> = emptyList(),
     ) : User
 }

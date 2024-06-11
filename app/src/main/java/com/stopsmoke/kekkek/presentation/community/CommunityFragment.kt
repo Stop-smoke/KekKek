@@ -1,13 +1,14 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.post.PostWriteItem
+import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
+import com.stopsmoke.kekkek.presentation.post.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,7 +30,8 @@ class CommunityFragment : Fragment() {
     private val binding: FragmentCommunityBinding get() = _binding!!
 
     private val viewModel: CommunityViewModel by viewModels()
-
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter {
             findNavController().navigate("post_view")
@@ -53,7 +57,6 @@ class CommunityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
         initViewModel()
         initGestureDetector()
@@ -76,23 +79,19 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
+//        sharedViewModel.newPost.observe(viewLifecycleOwner) {
+//            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
+//        }
+
         initCommunityCategory()
         setToolbarMenu()
-
-        // 이 부분 향후에 Shared View Model 로 바꾸는게 좋을 듯
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<PostWriteItem?>("NEW_POST")
-            ?.observe(viewLifecycleOwner) { newPost ->
-                Log.d("items", newPost.toString())
-                // 성공해서 초기화 해야 될 때
-
-                // 게시물 등록을 안 했을 때
-            }
     }
 
-    private fun initCommunityCategory() = with(binding){
+    private fun initCommunityCategory() = with(binding) {
         rvCommunityCategory.layoutManager =
             LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapterList = requireContext().resources.getStringArray(R.array.community_category).toList()
+        val adapterList =
+            requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
         })
@@ -136,6 +135,13 @@ class CommunityFragment : Fragment() {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
                     listAdapter.submitData(posts)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePost ->
+                    binding.tvCommunityNoticeTitle.text = noticePost.title
                 }
         }
     }
