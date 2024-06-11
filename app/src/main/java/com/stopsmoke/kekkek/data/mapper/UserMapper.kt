@@ -18,11 +18,17 @@ internal fun User.Registered.toEntity(): UserEntity =
         location = location?.run { LocationEntity(latitude, longitude, region) },
         profileImageUrl = (profileImage as? ProfileImage.Web)?.url,
         userConfig = UserConfigEntity(
-            userConfig.dailyCigarettesSmoked,
-            userConfig.packCigaretteCount,
-            userConfig.packPrice,
-            userConfig.birthdayYear
-        )
+            dailyCigarettesSmoked = userConfig.dailyCigarettesSmoked,
+            packCigaretteCount = userConfig.packCigaretteCount,
+            packPrice = userConfig.packPrice,
+            birthDate = Timestamp(
+                seconds = userConfig.birthDate.toEpochSecond(ZoneOffset.UTC),
+                nanoseconds = userConfig.birthDate.nano
+            )
+        ),
+        clearAchievementsList = clearAchievementsList,
+        commentMy = commentMy,
+        postMy = postMy
     )
 
 internal fun UserEntity.toExternalModel(): User.Registered =
@@ -44,8 +50,11 @@ internal fun UserEntity.toExternalModel(): User.Registered =
             dailyCigarettesSmoked = userConfig?.dailyCigarettesSmoked ?: 0,
             packCigaretteCount = userConfig?.packCigaretteCount ?: 0,
             packPrice = userConfig?.packPrice ?: 0,
-            birthdayYear = userConfig?.birthdayYear ?: 0
-        )
+            birthDate = userConfig?.birthDate?.toLocalDateTime() ?: LocalDateTime.MIN
+        ),
+        clearAchievementsList = clearAchievementsList ?: emptyList(),
+        commentMy = commentMy ?: emptyList(),
+        postMy = postMy ?: emptyList()
     )
 
 internal fun LocationEntity.toExternalModel() = Location(
@@ -54,4 +63,5 @@ internal fun LocationEntity.toExternalModel() = Location(
     region = region ?: ""
 )
 
-internal fun Timestamp.toLocalDateTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.seconds, this.nanoseconds, ZoneOffset.UTC)
+internal fun Timestamp.toLocalDateTime(): LocalDateTime =
+    LocalDateTime.ofEpochSecond(this.seconds, this.nanoseconds, ZoneOffset.UTC)

@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import com.stopsmoke.kekkek.presentation.test.TestViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -26,7 +27,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by viewModels()
-    private val sharedViewModel by activityViewModels<TestViewModel>()
+    private val testSharedViewModel by activityViewModels<TestViewModel>()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,6 @@ class HomeFragment : Fragment() {
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
         initToolbar()
 
-
         clHomeRank.setOnClickListener {
             findNavController().navigate("ranking_map")
         }
@@ -64,23 +65,35 @@ class HomeFragment : Fragment() {
         binding.ivHomeTest.setOnClickListener {
             findNavController().navigate("test_page")
         }
-    }
 
-    private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
-        initToolbar()
-        sharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
-            when(totalScore) {
+        testSharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
+            when (totalScore) {
                 in 8..13 -> {
                     tvHomeTestDegree.text = "담배 비중독 상태🙂"
                 }
+
                 in 14..19 -> {
                     tvHomeTestDegree.text = "담배 의존 상태😥"
                 }
+
                 else -> {
                     tvHomeTestDegree.text = "담배 중독 상태😱"
                 }
             }
             ivHomeTest.text = "다시 검사하기"
+        }
+
+
+        clHomeRank.setOnClickListener {
+            findNavController().navigate("ranking_map")
+        }
+
+        binding.clHomeSavedMoney.setOnClickListener {
+            navigateToAttainmentsFragment()
+        }
+
+        binding.ivHomeTest.setOnClickListener {
+            findNavController().navigate("test_page")
         }
     }
 
@@ -122,6 +135,14 @@ class HomeFragment : Fragment() {
                         }
                 }
             }
+        }
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePost ->
+                    binding.tvHomeNoticeTitle.text = noticePost.title
+                }
         }
     }
 

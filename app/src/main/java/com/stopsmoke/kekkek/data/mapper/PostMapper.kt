@@ -2,10 +2,13 @@ package com.stopsmoke.kekkek.data.mapper
 
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Written
+import com.stopsmoke.kekkek.domain.model.toRequestString
 import com.stopsmoke.kekkek.firestore.model.PostEntity
+import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 import java.time.LocalDateTime
 
 fun PostEntity.asExternalModel(): Post =
@@ -42,3 +45,20 @@ fun PostEntity.asExternalModel(): Post =
         views = views ?: 0,
         commentUser = commentUser
     )
+
+internal fun PostWrite.toEntity(written: Written) = PostEntity(
+    written = WrittenEntity(
+        uid = written.uid,
+        name = written.name,
+        profileImage = (written.profileImage as? ProfileImage.Web)?.url,
+        ranking = written.ranking,
+    ),
+    title = title,
+    text = text,
+    dateTime = dateTime.toEntity(),
+    likeUser = emptyList(),
+    unlikeUser = emptyList(),
+    category = category.toRequestString(),
+    views = 0,
+    commentUser = emptyList()
+)

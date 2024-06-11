@@ -7,16 +7,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
+@AndroidEntryPoint
 class NoticeListFragment : Fragment() {
     private var _binding: FragmentNoticeListBinding? = null
     val binding: FragmentNoticeListBinding get() = _binding!!
@@ -25,9 +28,7 @@ class NoticeListFragment : Fragment() {
         NoticeListAdapter()
     }
 
-    private val viewModel: NoticeListViewModel by lazy {
-        ViewModelProvider(this)[NoticeListViewModel::class.java]
-    }
+    private val viewModel: NoticeListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,10 +77,16 @@ class NoticeListFragment : Fragment() {
                     onBind(state)
                 }
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            noticePosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { noticePosts ->
+                    listAdapter.submitData(noticePosts)
+                }
+        }
     }
 
     private fun onBind(uiState: NoticeListUiState) = with(binding) {
-        listAdapter.submitList(uiState.list)
     }
 
     override fun onDestroy() {

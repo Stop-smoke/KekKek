@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.settings
+package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 
-class ProfileFragment : Fragment() {
+class SettingsProfileFragment : Fragment() {
 
     private var _binding: FragmentSettingsProfileBinding ?= null
     private val binding get() = _binding!!

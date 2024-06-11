@@ -47,5 +47,15 @@ data class UserEntity(
     var start_time: Timestamp? = null,
 
     @get:PropertyName("user_config") @set:PropertyName("user_config")
-    var userConfig: UserConfigEntity? = null
-)
+    var userConfig: UserConfigEntity? = null,
+
+    @get:PropertyName("clear_Achievements_List") @set:PropertyName("clear_Achievements_List")
+    var clearAchievementsList: List<String>? = null,
+
+    @get:PropertyName("post_my") @set:PropertyName("post_my")
+    var postMy: List<String>? = null,
+
+    @get:PropertyName("comment_my") @set:PropertyName("comment_my")
+    var commentMy: List<String>? = null,
+
+    )

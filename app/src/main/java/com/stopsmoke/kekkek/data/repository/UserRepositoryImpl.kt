@@ -111,6 +111,10 @@ internal class UserRepositoryImpl @Inject constructor(
         userDao.setUser(user.toEntity())
     }
 
+    override suspend fun updateUserData(user: User.Registered) {
+        userDao.updateUser(user.toEntity())
+    }
+
     override suspend fun startQuitSmokingTimer(): Result<Unit> {
         return userDao.startQuitSmokingTimer("default")
     }
@@ -135,5 +139,12 @@ internal class UserRepositoryImpl @Inject constructor(
                 }
             }
 
+    override fun logout() {
+        authDataSource.logout()
+    }
+
+    override suspend fun withdraw(): Result<Unit> {
+        return authDataSource.withdraw()
+    }
 
 }
