@@ -98,7 +98,7 @@ class MyFragment : Fragment() {
                 }
 
                 R.id.toolbar_my_setting -> {
-                    findNavController().navigate("setting")
+                    findNavController().navigate(R.id.action_my_page_to_nav_settings)
                     true
                 }
 
