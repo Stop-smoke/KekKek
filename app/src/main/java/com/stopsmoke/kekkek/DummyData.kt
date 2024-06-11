@@ -25,7 +25,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "2123"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
@@ -42,7 +43,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "21232"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
@@ -59,7 +61,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "2123"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
@@ -75,7 +78,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "2123"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
@@ -91,7 +95,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "2123"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
@@ -108,7 +113,8 @@ object DummyData{
             userInfo = UserInfo(
                 name = "양동원",
                 rank = 1,
-                profileImage = ""
+                profileImage = "",
+                uid = "2123"
             ),
             postInfo = PostInfo(
                 title="인기 많은 사람들을 위한 비결이 궁금하신가요? 저도 궁금합니다.",
