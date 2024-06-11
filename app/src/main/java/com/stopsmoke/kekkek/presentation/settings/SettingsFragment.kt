@@ -51,30 +51,30 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
                 version = null,
                 cardViewType = SettingsMultiViewEnum.MY_PAGE
             ),
-            SettingsItem(
-                settingTitle = "알림",
-                cardViewType = SettingsMultiViewEnum.LIST,
-                profileInfo = null,
-                version = null
-            ),
-            SettingsItem(
-                settingTitle = "언어",
-                cardViewType = SettingsMultiViewEnum.LIST,
-                profileInfo = null,
-                version = null
-            ),
-            SettingsItem(
-                settingTitle = "테마",
-                cardViewType = SettingsMultiViewEnum.LIST,
-                profileInfo = null,
-                version = null
-            ),
-            SettingsItem(
-                settingTitle = "친구",
-                cardViewType = SettingsMultiViewEnum.LIST,
-                profileInfo = null,
-                version = null
-            ),
+//            SettingsItem(
+//                settingTitle = "알림",
+//                cardViewType = SettingsMultiViewEnum.LIST,
+//                profileInfo = null,
+//                version = null
+//            ),
+//            SettingsItem(
+//                settingTitle = "언어",
+//                cardViewType = SettingsMultiViewEnum.LIST,
+//                profileInfo = null,
+//                version = null
+//            ),
+//            SettingsItem(
+//                settingTitle = "테마",
+//                cardViewType = SettingsMultiViewEnum.LIST,
+//                profileInfo = null,
+//                version = null
+//            ),
+//            SettingsItem(
+//                settingTitle = "친구",
+//                cardViewType = SettingsMultiViewEnum.LIST,
+//                profileInfo = null,
+//                version = null
+//            ),
             SettingsItem(
                 settingTitle = "오픈 소스 고지",
                 cardViewType = SettingsMultiViewEnum.LIST,

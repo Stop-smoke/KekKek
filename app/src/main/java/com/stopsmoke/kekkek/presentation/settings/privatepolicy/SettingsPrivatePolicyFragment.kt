@@ -36,7 +36,7 @@ class SettingsPrivatePolicyFragment : Fragment() {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            loadUrl("https://limheejin.tistory.com")
+            loadUrl("https://stopsmoke.notion.site/1862f151530b46cc8d615c8ef9b636ba")
         }
     }
 

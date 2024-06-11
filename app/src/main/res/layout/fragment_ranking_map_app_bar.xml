@@ -6,7 +6,7 @@
     android:minHeight="60dp">
 
     <ImageView
-        android:id="@+id/iv_rankingList_back"
+        android:id="@+id/iv_rankingMap_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -17,11 +17,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_rangkingList_title"
+        android:id="@+id/tv_rangkingMap_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_bold"
-        android:text="랭킹"
+        android:text="내 지역 설정"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

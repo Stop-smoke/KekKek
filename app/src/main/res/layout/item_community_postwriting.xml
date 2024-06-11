@@ -9,7 +9,7 @@
         android:id="@+id/circleIv_itemWriting_profile"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_user_profile_test"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
@@ -87,7 +87,7 @@
         android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_post"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/bg_home"
         android:clipToOutline="true"
         android:background="@drawable/bg_post_image"
         android:scaleType="centerCrop"
@@ -169,11 +169,11 @@
         android:id="@+id/iv_itemWriting_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
         android:src="@drawable/ic_chat"
-        app:layout_constraintEnd_toStartOf="@id/tv_itemWriting_commentNum"
-        app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
-        android:layout_marginEnd="10dp"/>
+        app:layout_constraintEnd_toStartOf="@id/tv_itemWriting_commentNum"
+        app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp" />
 
     <TextView
         android:id="@+id/tv_itemWriting_commentNum"

@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
 
 
         clHomeRank.setOnClickListener {
-            findNavController().navigate("ranking_map")
+            findNavController().navigate("ranking_list")
         }
 
         binding.clHomeSavedMoney.setOnClickListener {

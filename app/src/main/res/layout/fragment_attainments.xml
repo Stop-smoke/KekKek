@@ -10,15 +10,6 @@
         android:id="@+id/include_attainments_app_bar"
         layout="@layout/fragment_attainments_app_bar" />
 
-    <View
-        android:id="@+id/grayline"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E7E7E7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_attainments_app_bar" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_attainments_top"
         android:layout_width="match_parent"
