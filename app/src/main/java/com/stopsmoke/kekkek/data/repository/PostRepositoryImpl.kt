@@ -52,7 +52,7 @@ internal class PostRepositoryImpl @Inject constructor(
 
     override fun getPost(uid: String): Result<Flow<PagingData<Post>>> {
         return try {
-            postDao.getPost(uid).map { pagingData ->
+            postDao.getPostUserFilter(uid).map { pagingData ->
                 pagingData.map {
                     it.asExternalModel()
                 }

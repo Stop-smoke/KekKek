@@ -36,7 +36,7 @@ internal class PostDaoImpl @Inject constructor(
         }.flow
     }
 
-    override fun getPost(uid: String): Flow<PagingData<PostEntity>> {
+    override fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION)
             .whereEqualTo("written.uid", uid)
             .orderBy("comment_user", Query.Direction.DESCENDING)
