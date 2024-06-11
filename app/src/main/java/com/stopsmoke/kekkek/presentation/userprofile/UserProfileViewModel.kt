@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.userprofile
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -14,41 +13,56 @@ import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     userRepository: UserRepository,
     postRepository: PostRepository,
     commentRepository: CommentRepository,
 ) : ViewModel() {
 
-    private val uid = savedStateHandle.getStateFlow("uid", "default")
+    private val _uid = MutableStateFlow<String?>(null)
+    private val uid get() = _uid
+
+    fun updateUid(uid: String) {
+        viewModelScope.launch {
+            _uid.emit(uid)
+        }
+    }
 
     private val _errorHandler = MutableSharedFlow<Unit>()
     val errorHandler get() = _errorHandler.asSharedFlow()
 
-
-    val user: Flow<User.Registered> = userRepository.getUserData(uid = uid.value)
-        .let {
-            when (it) {
-                is Result.Error -> {
-                    viewModelScope.launch {
-                        _errorHandler.emit(Unit)
-                    }
-                    emptyFlow()
-                }
-
-                is Result.Loading -> emptyFlow()
-                is Result.Success -> it.data
-            }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val user: Flow<User.Registered> = uid.flatMapLatest { userId ->
+        if (userId == null) {
+            return@flatMapLatest emptyFlow()
         }
+
+        userRepository.getUserData(uid = userId)
+            .let {
+                when (it) {
+                    is Result.Error -> {
+                        viewModelScope.launch {
+                            _errorHandler.emit(Unit)
+                        }
+                        emptyFlow()
+                    }
+
+                    is Result.Loading -> emptyFlow()
+                    is Result.Success -> it.data
+                }
+            }
+    }
 
     val posts: Flow<PagingData<Post>> = postRepository.getPost()
         .let {
