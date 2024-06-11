@@ -18,4 +18,6 @@ interface PostDao {
     suspend fun updateOrInsertPost(postEntity: PostEntity)
 
     suspend fun deletePost(postId: String)
+
+    suspend fun getPopularPostItems(): List<PostEntity>
 }

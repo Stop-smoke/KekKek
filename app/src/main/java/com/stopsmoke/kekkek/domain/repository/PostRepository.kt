@@ -15,4 +15,6 @@ interface PostRepository {
     suspend fun deletePost(postId: String): Result<Unit>
 
     suspend fun editPost(post: PostWrite): Result<Unit>
+
+    suspend fun getTopPopularItems(): List<Post>
 }

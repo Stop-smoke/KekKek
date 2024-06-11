@@ -9,6 +9,7 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -53,34 +54,25 @@ class CommunityViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val itemList = mutableListOf<PostInfo>()
-            postRepository.getPost(PostCategory.POPULAR).let {
-                when (it) {
-                    is Result.Error -> {
-                        it.exception?.printStackTrace()
-                    }
-
-                    is Result.Loading -> {}
-                    is Result.Success -> it.data.take(2).collectLatest { pagingData ->
-                        pagingData.map { post ->
-                            itemList.add(updatePostInfo(post))
-                        }
-                    }
-                }
-            }
-            if(itemList.size >= 2) {
-                _uiState.emit(
-                    CommunityUiState.CommunityNormalUiState(
-                        popularItem = CommunityPopularItem(
-                            postInfo1 = itemList[0],
-                            postInfo2 = itemList[1]
-                        ),
-                        isLoading = false
+            val postItems = postRepository.getTopPopularItems()
+            _uiState.emit(
+                CommunityUiState.CommunityNormalUiState(
+                    popularItem = CommunityPopularItem(
+                        postInfo1 = if (postItems.isNotEmpty()) updatePostInfo(postItems[0]) else emptyPostInfo(),
+                        postInfo2 = if (postItems.size > 1) updatePostInfo(postItems[1]) else emptyPostInfo()
                     )
                 )
-            }
+            )
         }
     }
+
+    private fun emptyPostInfo() = PostInfo(
+        title = "",
+        postType = "",
+        view = 0,
+        like = 0,
+        comment = 0
+    )
 
     private fun updatePostInfo(post: Post): PostInfo = PostInfo(
         title = post.title,
@@ -170,7 +162,9 @@ class CommunityViewModel @Inject constructor(
             }
 
             else -> {
+                val category = _category.value
                 updateCategory(PostCategory.UNKNOWN)
+                updateCategory(category)
             }
         }
     }
@@ -180,4 +174,5 @@ class CommunityViewModel @Inject constructor(
             _category.emit(postCategory)
         }
     }
+
 }

@@ -89,10 +89,11 @@ class CommunityFragment : Fragment() {
             }
     }
 
-    private fun initCommunityCategory() = with(binding){
+    private fun initCommunityCategory() = with(binding) {
         rvCommunityCategory.layoutManager =
             LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapterList = requireContext().resources.getStringArray(R.array.community_category).toList()
+        val adapterList =
+            requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
         })
