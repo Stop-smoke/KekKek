@@ -54,7 +54,7 @@ internal interface FireStoreDaoModule {
     ): SearchDao
 
     @Binds
-    fun bindAchievement(
+    fun bindAchievementDao(
         achievementDaoImpl: AchievementDaoImpl,
     ): AchievementDao
 }

@@ -8,17 +8,18 @@ import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
-import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.tasks.await
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class AchievementDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore
-):AchievementDao {
+) : AchievementDao {
     override fun getAchievementItems(category: String?): Flow<PagingData<AchievementEntity>> {
-        val query = firestore.collection(AchievementDaoImpl.COLLECTION)
+        val query = firestore.collection(COLLECTION)
             .whereNotNullEqualTo("category", category)
-            .orderBy("max", Query.Direction.DESCENDING)
+//            .orderBy("max_progress") //orderBy 지정 시 오류 발생..
 
 
         return Pager(
@@ -32,6 +33,19 @@ class AchievementDaoImpl @Inject constructor(
 
         }.flow
     }
+
+    override suspend fun addAchievementItem(achievementEntity: AchievementEntity) {
+        val collection = firestore.collection(COLLECTION)
+        collection.document().let { documentReference ->
+            documentReference.set(
+                achievementEntity
+            )
+        }
+            .addOnFailureListener { throw it }
+            .addOnCanceledListener { throw CancellationException() }
+            .await()
+    }
+
 
     companion object {
         private const val COLLECTION = "achievement"

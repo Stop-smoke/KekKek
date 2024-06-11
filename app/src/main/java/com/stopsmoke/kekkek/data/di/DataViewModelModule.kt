@@ -41,6 +41,6 @@ internal interface DataViewModelModule {
 
     @Binds
     fun bindAchievementRepository(
-        achievementRepository: AchievementRepositoryImpl,
+        achievementRepositoryImpl: AchievementRepositoryImpl,
     ): AchievementRepository
 }

@@ -23,7 +23,7 @@ class AchievementRepositoryImpl @Inject constructor(
                 DatabaseCategory.USER -> "user"
                 DatabaseCategory.ACHIEVEMENT -> "achievement"
                 DatabaseCategory.RANK -> "rank"
-                DatabaseCategory.ALL -> "all"
+                DatabaseCategory.ALL -> null
             }
 
             achievementDao.getAchievementItems(category = categoryString).map { pagingData ->

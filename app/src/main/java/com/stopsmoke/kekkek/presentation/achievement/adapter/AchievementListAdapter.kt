@@ -2,23 +2,28 @@ package com.stopsmoke.kekkek.presentation.achievement.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.achievement.AchievementViewModel
 
 class AchievementListAdapter(
     private val viewModel: AchievementViewModel
 ) :
-    ListAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
+    PagingDataAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
 
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
         private val viewModel: AchievementViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
+        val clearList = when (viewModel.userData) {
+            is User.Registered -> viewModel.userData.clearAchievementsList
+            else -> emptyList()
+        }
 
         fun bind(achievement: AchievementItem) {
             val currentProgressItem = viewModel.getCurrentItem()
@@ -36,10 +41,17 @@ class AchievementListAdapter(
             binding.liAchievementProgress.progress = currentProgress.toInt()
             binding.liAchievementProgress.max = achievement.maxProgress
             binding.tvAchievementDescription.text = achievement.content
-            binding.tvAchievementProgressNumber.text =
-                if (currentProgress < achievement.maxProgress) {
+            if (currentProgress < achievement.maxProgress) {
+                binding.tvAchievementProgressNumber.text =
                     "${currentProgress}/${achievement.maxProgress}"
-                } else "${achievement.maxProgress}/${achievement.maxProgress}"
+            } else {
+                binding.tvAchievementProgressNumber.text =
+                    "${achievement.maxProgress}/${achievement.maxProgress}"
+
+                if (achievement.id !in clearList) {
+                    viewModel.upDateUserAchievementList(achievement.id)
+                }
+            }
         }
     }
 
