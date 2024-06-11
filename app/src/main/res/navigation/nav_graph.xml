@@ -126,4 +126,11 @@
         app:route="ranking_map"
         tools:layout="@layout/fragment_ranking_map" />
 
+
+    <fragment
+        android:id="@+id/notice_list"
+        android:name="com.stopsmoke.kekkek.presentation.noticeWritingList.NoticeListFragment"
+        app:route="notice_list"
+        tools:layout="@layout/fragment_notice_list" />
+
 </navigation>
