@@ -85,9 +85,6 @@ internal class UserRepositoryImpl @Inject constructor(
                     }
                 }
             }
-            .onEach {
-                bitmap.deleteOnExit()
-            }
     }
 
     override fun getUserData(uid: String): Result<Flow<User.Registered>> {
