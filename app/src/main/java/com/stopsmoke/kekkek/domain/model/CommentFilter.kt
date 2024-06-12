@@ -11,4 +11,6 @@ sealed interface CommentFilter {
 
     data class Post(val postId: String) : CommentFilter
 
+    data class User(val uid: String) : CommentFilter
+
 }

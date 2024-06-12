@@ -13,6 +13,8 @@ interface PostDao {
     // https://www.notion.so/stopsmoke/enum-PostCategory-c6956f5b008d4185bcd3dfe42dfbc14e?pvs=4
     fun getPost(category: String? = null): Flow<PagingData<PostEntity>>
 
+    fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>>
+
     suspend fun addPost(postEntity: PostEntity)
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)

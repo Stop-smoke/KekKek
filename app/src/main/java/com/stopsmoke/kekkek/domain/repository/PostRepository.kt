@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface PostRepository {
     fun getPost(category: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
 
+    fun getPost(uid: String): Result<Flow<PagingData<Post>>>
+
     suspend fun addPost(post: PostWrite): Result<Unit>
 
     suspend fun deletePost(postId: String): Result<Unit>
