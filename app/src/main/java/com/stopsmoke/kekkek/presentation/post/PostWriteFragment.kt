@@ -29,7 +29,9 @@ import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostWriteCategory
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.community.CommunityFragment
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 
@@ -172,8 +174,14 @@ class PostWriteFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.visible()
         _binding = null
     }
 

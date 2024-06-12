@@ -36,7 +36,7 @@ class SupportCenterFragment : Fragment() {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            loadUrl("https://stopsmoke.notion.site/1862f151530b46cc8d615c8ef9b636ba")
+            loadUrl("https://docs.google.com/forms/d/e/1FAIpQLSdtFqgdIcfTw99XSvOzbsyiOqxTDFkm1_BDqIIqOw2YzLnzxA/viewform")
         }
     }
 
