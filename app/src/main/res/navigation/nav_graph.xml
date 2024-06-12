@@ -12,7 +12,26 @@
         android:id="@+id/home"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
         app:route="home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_home_center"
+            app:destination="@id/home_center" />
+        <action
+            android:id="@+id/action_home_to_home_tip"
+            app:destination="@id/home_tip" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/home_tip"
+        android:name="com.stopsmoke.kekkek.presentation.home.tip.HomeTipFragment"
+        app:route="home_tip"
+        tools:layout="@layout/fragment_home_tip" />
+
+    <fragment
+        android:id="@+id/home_center"
+        android:name="com.stopsmoke.kekkek.presentation.home.center.HomeCenterFragment"
+        app:route="home_center"
+        tools:layout="@layout/fragment_home_center" />
 
     <fragment
         android:id="@+id/community"
