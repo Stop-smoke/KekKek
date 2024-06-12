@@ -7,8 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".presentation.community.CommunityFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton_community"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:contentDescription="@string/floatingActionButton_community"
+        android:focusable="true"
+        android:src="@drawable/ic_community_floating"
+        android:layout_gravity="end|bottom" />
 
     <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/background_light"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <include
@@ -29,16 +42,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
-                android:elevation="-99dp"
                 app:layout_collapseMode="parallax">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_community_notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
+                    android:paddingStart="20dp"
                     android:paddingTop="8dp"
-                    android:paddingEnd="16dp"
+                    android:paddingEnd="20dp"
                     android:paddingBottom="8dp"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -121,7 +133,7 @@
                     android:id="@+id/tv_community_categoryTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="12dp"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="카테고리"
@@ -135,11 +147,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_community_category"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -167,18 +180,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton_community"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:contentDescription="@string/floatingActionButton_community"
-            android:focusable="true"
-            android:src="@drawable/ic_community_floating"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

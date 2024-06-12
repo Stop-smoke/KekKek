@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentAttainmentsBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.visible
 
 class AttainmentsFragment : Fragment() {
 
@@ -57,8 +59,14 @@ class AttainmentsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.visible()
         _binding = null
     }
 
