@@ -2,23 +2,14 @@ package com.stopsmoke.kekkek.presentation.popularWritingList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.map
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
-import com.stopsmoke.kekkek.presentation.community.CommunityPopularItem
-import com.stopsmoke.kekkek.presentation.community.CommunityUiState
-import com.stopsmoke.kekkek.presentation.community.PostInfo
-import com.stopsmoke.kekkek.presentation.community.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,7 +36,7 @@ class PopularWritingListViewModel @Inject constructor(
         PopularWritingListItem(
             userInfo = UserInfo(
                 name = post.written.name,
-                rank = post.written.ranking,
+                rank = post.written.ranking.toInt(),
                 profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
             ),
             postInfo = PostInfo(
@@ -62,9 +53,9 @@ class PopularWritingListViewModel @Inject constructor(
                     PostCategory.UNKNOWN -> ""
                     PostCategory.ALL -> ""
                 },
-                view = post.views,
-                like = post.likeUser.size.toLong(),
-                comment = post.commentUser.size.toLong()
+                view = post.views.toInt(),
+                like = post.likeUser.size,
+                comment = post.commentUser.size
             ),
             postImage = "",
             post = post.text,

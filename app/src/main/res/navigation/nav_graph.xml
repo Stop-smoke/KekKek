@@ -6,7 +6,7 @@
     app:startDestination="@+id/home">
 
     <include app:graph="@navigation/nav_onboarding" />
-    <include app:graph="@navigation/nav_settings" />
+    <include app:graph="@navigation/nav_settings"/>
 
     <fragment
         android:id="@+id/home"
@@ -19,6 +19,17 @@
         android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
         app:route="community"
         tools:layout="@layout/fragment_community">
+
+        <action
+            android:id="@+id/action_community_to_user_profile_screen"
+            app:destination="@id/user_profile" >
+
+            <argument
+                android:name="uid"
+                app:argType="string" />
+
+        </action>
+
         <action
             android:id="@+id/action_community_page_to_nav_settings"
             app:destination="@id/nav_settings" />

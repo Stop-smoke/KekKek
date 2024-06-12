@@ -78,6 +78,21 @@ internal class PostRepositoryImpl @Inject constructor(
         Result.Error(e)
     }
 
+    override fun getPost(uid: String): Result<Flow<PagingData<Post>>> {
+        return try {
+            postDao.getPostUserFilter(uid).map { pagingData ->
+                pagingData.map {
+                    it.asExternalModel()
+                }
+            }
+                .let {
+                    Result.Success(it)
+                }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     override suspend fun addPost(post: PostWrite): Result<Unit> =
         try {
             val user = (userRepository.getUserData().first() as User.Registered)

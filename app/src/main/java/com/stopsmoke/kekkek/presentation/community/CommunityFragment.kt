@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -30,11 +31,9 @@ class CommunityFragment : Fragment() {
 
     private val viewModel: CommunityViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
+    
     private val listAdapter: CommunityListAdapter by lazy {
-        CommunityListAdapter {
-            findNavController().navigate("post_view")
-        }
+        CommunityListAdapter()
     }
 
     private val gestureDetector: GestureDetector by lazy {
@@ -59,50 +58,48 @@ class CommunityFragment : Fragment() {
         initView()
         initViewModel()
         initGestureDetector()
+
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {
+
+                    findNavController().navigate(
+                        resId = R.id.action_community_to_user_profile_screen,
+                        args = bundleOf("uid" to uid)
+                    )
+                }
+
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate("post_view")
+                }
+            }
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        listAdapter.unregisterCallbackListener()
     }
 
 
     private fun initView() = with(binding) {
         rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
         rvCommunityList.adapter = listAdapter
+        ivCommunityNoticeArrow.setOnClickListener {
+            // 인기글 전체보기 클릭
+        }
 
         floatingActionButtonCommunity.setOnClickListener {
             findNavController().navigate("post_write")
         }
 
 //        sharedViewModel.newPost.observe(viewLifecycleOwner) {
-//            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
+            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
 //        }
 
         initCommunityCategory()
         setToolbarMenu()
-
-        clCommunityNotice.setOnClickListener {
-            findNavController().navigate("notice_list")
-        }
-
-
-        val tvCommunityPopularFullView =
-            requireActivity().findViewById<TextView>(R.id.tv_community_popularFullView)
-        val clCommunityPostPopular1 =
-            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular1)
-        val clCommunityPostPopular2 =
-            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
-        tvCommunityPopularFullView.setOnClickListener {
-            findNavController().navigate("popular_writing_list")
-        }
-
-        clCommunityPostPopular1.setOnClickListener {
-            findNavController().navigate("post_view")
-        }
-        clCommunityPostPopular2.setOnClickListener {
-            findNavController().navigate("post_view")
-        }
     }
 
     private fun initCommunityCategory() = with(binding) {

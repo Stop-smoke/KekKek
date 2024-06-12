@@ -29,7 +29,6 @@ class CommentDaoInstrumentedTest {
     fun addComment() = runTest {
         val comment = CommentEntity(
             id = "12345",
-            postId = "67890",
             text = "This is a sample comment.",
             dateTime = DateTimeEntity(
                 Timestamp.now(),
@@ -66,7 +65,6 @@ class CommentDaoInstrumentedTest {
     fun updateOrInsert() = runTest {
         val comment = CommentEntity(
             id = "12345",
-            postId = "67890",
             text = "This is a sample comment.",
             dateTime = DateTimeEntity(
                 Timestamp.now(),

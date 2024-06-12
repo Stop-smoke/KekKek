@@ -9,14 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileInfo
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     private var _binding: FragmentSettingsBinding? = null
@@ -94,7 +96,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
                 version = null
             ),
             SettingsItem(
-                version = "현재 버전 2.0.51",
+                version = "현재 버전 ${BuildConfig.VERSION_NAME}",
                 cardViewType = SettingsMultiViewEnum.VERSION,
                 profileInfo = null,
                 settingTitle = null

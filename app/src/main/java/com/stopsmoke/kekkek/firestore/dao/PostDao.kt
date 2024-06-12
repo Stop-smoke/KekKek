@@ -17,6 +17,8 @@ interface PostDao {
 
     fun getBookmark(postIdList: List<String>): Flow<PagingData<PostEntity>>
 
+    fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>>
+
     suspend fun addPost(postEntity: PostEntity)
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)

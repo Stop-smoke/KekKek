@@ -114,6 +114,23 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>> {
+        val query = firestore.collection(COLLECTION)
+            .whereEqualTo("written.uid", uid)
+            .orderBy("comment_user", Query.Direction.DESCENDING)
+
+        return Pager(
+            config = PagingConfig(PAGE_LIMIT)
+        ) {
+            FireStorePagingSource(
+                query = query,
+                limit = PAGE_LIMIT.toLong(),
+                clazz = PostEntity::class.java
+            )
+
+        }.flow
+    }
+
     override suspend fun addPost(postEntity: PostEntity) {
         firestore.collection(COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
