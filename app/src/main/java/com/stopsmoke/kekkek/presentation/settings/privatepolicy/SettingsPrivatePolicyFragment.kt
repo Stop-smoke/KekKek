@@ -23,7 +23,7 @@ class SettingsPrivatePolicyFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsPrivatePolicyBinding.inflate(inflater, container, false)
 
-        binding.ivPrivatepolicyBack.setOnClickListener {
+        binding.includeSettingsPrivatePolicyAppBar.ivSettingsPrivatePolicyBack.setOnClickListener {
             findNavController().popBackStack()
         }
         return binding.root

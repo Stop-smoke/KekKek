@@ -23,7 +23,7 @@ class SettingsSupportFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsSupportBinding.inflate(inflater, container, false)
 
-        binding.ivSupportBack.setOnClickListener {
+        binding.includeSettingsSupportAppBar.ivSettingsSupportBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
