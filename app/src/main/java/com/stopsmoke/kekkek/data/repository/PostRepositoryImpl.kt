@@ -50,6 +50,49 @@ internal class PostRepositoryImpl @Inject constructor(
         Result.Error(e)
     }
 
+    override fun getPostForWrittenUid(writtenUid: String): Result<Flow<PagingData<Post>>> = try {
+        postDao.getPostForWrittenUid(writtenUid = writtenUid)
+            .map { pagingData ->
+                pagingData.map {
+                    it.asExternalModel()
+                }
+            }.let {
+                Result.Success(it)
+            }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.Error(e)
+    }
+
+    override fun getBookmark(postIdList: List<String>): Result<Flow<PagingData<Post>>> = try {
+        postDao.getBookmark(postIdList)
+            .map { pagingData ->
+                pagingData.map {
+                    it.asExternalModel()
+                }
+            }.let {
+                Result.Success(it)
+            }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.Error(e)
+    }
+
+    override fun getPost(uid: String): Result<Flow<PagingData<Post>>> {
+        return try {
+            postDao.getPostUserFilter(uid).map { pagingData ->
+                pagingData.map {
+                    it.asExternalModel()
+                }
+            }
+                .let {
+                    Result.Success(it)
+                }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     override suspend fun addPost(post: PostWrite): Result<Unit> =
         try {
             val user = (userRepository.getUserData().first() as User.Registered)
@@ -82,5 +125,8 @@ internal class PostRepositoryImpl @Inject constructor(
     override suspend fun getTopNotice(): Post =
         postDao.getTopNotice().asExternalModel()
 
-
+    override suspend fun getPopularPostList(): List<Post> =
+        postDao.getPopularPostList().map {
+            it.asExternalModel()
+        }
 }

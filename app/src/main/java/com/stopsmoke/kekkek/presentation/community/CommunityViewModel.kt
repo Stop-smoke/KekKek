@@ -96,6 +96,7 @@ class CommunityViewModel @Inject constructor(
     private fun updateWritingItem(post: Post): CommunityWritingItem =
         CommunityWritingItem(
             userInfo = UserInfo(
+                uid = post.written.uid,
                 name = post.written.name,
                 rank = post.written.ranking,
                 profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
@@ -120,7 +121,8 @@ class CommunityViewModel @Inject constructor(
             ),
             postImage = "",
             post = post.text,
-            postTime = post.modifiedElapsedDateTime
+            postTime = post.modifiedElapsedDateTime,
+            postType = post.categories
         )
 
     fun setCategory(categoryString: String) {

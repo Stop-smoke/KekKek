@@ -51,7 +51,8 @@ class NoticeListViewModel @Inject constructor(
             userInfo = UserInfo(
                 name = post.written.name,
                 rank = post.written.ranking,
-                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
+                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else "",
+                uid = post.written.uid
             ),
             postInfo = PostInfo(
                 title = post.title,
@@ -73,7 +74,8 @@ class NoticeListViewModel @Inject constructor(
             ),
             postImage = "",
             post = post.text,
-            postTime = post.modifiedElapsedDateTime
+            postTime = post.modifiedElapsedDateTime,
+            postType = post.categories
         )
 
 }

@@ -23,6 +23,7 @@ interface UserRepository {
      */
     fun getUserData(): Flow<User>
 
+    suspend fun getUserDataFormatUser(uid: String): User
     suspend fun setUserData(user: User.Registered)
 
     /**

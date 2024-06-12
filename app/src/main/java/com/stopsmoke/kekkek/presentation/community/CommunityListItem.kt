@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
 
 data class CommunityWritingItem(
     val userInfo: UserInfo,
@@ -8,6 +9,7 @@ data class CommunityWritingItem(
     val postImage: String,
     val post: String,
     val postTime: ElapsedDateTime,
+    val postType: PostCategory
 )
 
 data class CommunityPopularItem(
@@ -24,6 +26,7 @@ data class PostInfo(
 )
 
 data class UserInfo(
+    val uid: String,
     val name: String,
     val rank: Long,
     val profileImage: String

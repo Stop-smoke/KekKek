@@ -27,19 +27,19 @@ class PostDaoInstrumentedTest {
         postDao = PostDaoImpl(Firebase.firestore)
     }
 
-    @Test // 게시글 가져오기
-    fun getPost() = runTest {
-        val post = postDao.getPost().first()
-        Log.d("result", post.toString())
-    }
+//    @Test // 게시글 가져오기
+//    fun getPost() = runTest {
+//        val post = postDao.getPost().first()
+//        Log.d("result", post.toString())
+//    }
 
     @Test // 게시글 등록
     fun addPost() = runTest {
         val post = PostEntity(
-            id = "popularDummyId",
+            id = "DummyId",
             commentId = "dummyCommentId",
             written = WrittenEntity(
-                uid = "default",
+                uid = "테스트_계정",
                 name = "default",
                 profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
                 ranking = Random.nextLong(1, 500),
