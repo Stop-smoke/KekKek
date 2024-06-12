@@ -45,6 +45,7 @@ class NoticeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {

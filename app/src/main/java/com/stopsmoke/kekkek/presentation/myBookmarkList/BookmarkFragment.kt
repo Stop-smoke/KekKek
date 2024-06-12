@@ -1,34 +1,31 @@
-package com.stopsmoke.kekkek.presentation.bookmark
+package com.stopsmoke.kekkek.presentation.myBookmarkList
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.stopsmoke.kekkek.DummyData
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
-import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class BookmarkFragment : Fragment() {
 
     private var _binding: FragmentBookmarkBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: BookmarkViewModel by lazy {
-        ViewModelProvider(this)[BookmarkViewModel::class.java]
-    }
+    private val viewModel: BookmarkViewModel by viewModels()
 
-    private val listAdapter: BookmarkListAdapter by lazy{
+    private val listAdapter: BookmarkListAdapter by lazy {
         BookmarkListAdapter()
     }
 
@@ -45,40 +42,33 @@ class BookmarkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-//        initViewModel()
+        initViewModel()
     }
-    
-    private fun initView() = with(binding){
+
+    private fun initView() = with(binding) {
         initAppBar()
         rvBookmark.layoutManager = LinearLayoutManager(requireContext())
         rvBookmark.adapter = listAdapter
-        listAdapter.submitList(DummyData.bookmarkList)
+
+        viewModel.updateUserState()
     }
 
     private fun initAppBar() = with(binding) {
-        val ivNotificationBack = requireActivity().findViewById<ImageView>(R.id.iv_notification_back)
-        val ivNotificationDelete = requireActivity().findViewById<ImageView>(R.id.iv_notification_delete)
-        val tvNotificationTitle = requireActivity().findViewById<TextView>(R.id.tv_notification_title)
-
-        ivNotificationBack.setOnClickListener {
+        val ivBookmarkBack = requireActivity().findViewById<ImageView>(R.id.iv_bookmark_back)
+        ivBookmarkBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        tvNotificationTitle.text = "북마크"
     }
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { state ->
-                    onBind(state)
+            myBookmarkPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { myBookmarkPosts ->
+                    listAdapter.submitData(myBookmarkPosts)
                 }
         }
     }
 
-    private fun onBind(uiState: BookmarkUiState) = with(binding){
-        listAdapter.submitList(uiState.bookmarkList)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
