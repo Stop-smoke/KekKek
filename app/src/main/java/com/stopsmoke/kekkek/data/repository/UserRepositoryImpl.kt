@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.datastore.PreferencesDataSource
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
@@ -13,7 +14,6 @@ import com.stopsmoke.kekkek.firebaseauth.AuthenticationDataSource
 import com.stopsmoke.kekkek.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.firestorage.model.StorageUploadResult
 import com.stopsmoke.kekkek.firestore.dao.UserDao
-import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,7 +76,9 @@ internal class UserRepositoryImpl @Inject constructor(
             .map {
                 when (it) {
                     is StorageUploadResult.Success -> {
-                        userDao.setUser(UserEntity(profileImageUrl = it.imageUrl))
+                        val user = (user.value as User.Registered)
+                            .copy(profileImage = ProfileImage.Web(it.imageUrl))
+                        userDao.setUser(user.toEntity())
                         ProfileImageUploadResult.Success
                     }
 

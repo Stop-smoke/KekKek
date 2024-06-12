@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -61,11 +62,13 @@ class SettingsViewModel @Inject constructor(
                 when (it) {
                     is ProfileImageUploadResult.Error -> {}
                     is ProfileImageUploadResult.Progress -> {}
-                    is ProfileImageUploadResult.Success -> {}
+                    is ProfileImageUploadResult.Success -> {
+
+                    }
                 }
             }
         }
     }
 
-    val user = userRepository.getUserData()
+    val user: Flow<User> = userRepository.getUserData()
 }
