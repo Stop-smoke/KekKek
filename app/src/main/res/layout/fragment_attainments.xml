@@ -16,30 +16,37 @@
         android:layout_height="155dp"
         app:layout_constraintTop_toBottomOf="@id/include_attainments_app_bar">
 
-        <TextView
-            android:id="@+id/tv_attainments_day"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_home_toptext"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="3일"
-            android:textSize="48sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tv_attainments_time"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_attainments_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="15:50:3"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/tv_attainments_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="금연한 지"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_attainments_timerNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="203시간 5분"
+                android:textSize="28sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_attainments_timer" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,13 +89,13 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:text="피우지 않은 담배"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description1"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description_cigarette"
                     app:layout_constraintStart_toEndOf="@+id/iv_attainments_1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/tv_attainments_description1"
+                    android:id="@+id/tv_attainments_description_cigarette"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -128,13 +135,13 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:text="절약한 돈"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description2"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description_money"
                     app:layout_constraintStart_toEndOf="@+id/iv_attainments_2"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/tv_attainments_description2"
+                    android:id="@+id/tv_attainments_description_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -174,13 +181,13 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:text="생명 연장"
                     android:textSize="15sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description3"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_attainments_description_life"
                     app:layout_constraintStart_toEndOf="@+id/iv_attainments_3"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/tv_attainments_description3"
+                    android:id="@+id/tv_attainments_description_life"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"

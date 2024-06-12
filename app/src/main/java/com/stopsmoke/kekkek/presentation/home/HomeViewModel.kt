@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Timestamp
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.HistoryTime
 import com.stopsmoke.kekkek.domain.model.User
@@ -196,5 +195,4 @@ class HomeViewModel @Inject constructor(
         // 하루에 소비하는 갑의 시간당 비용
         savedMoneyPerMinute = totalPackCostPerDay / totalMinutesSmokedPerDay
     }
-
 }
