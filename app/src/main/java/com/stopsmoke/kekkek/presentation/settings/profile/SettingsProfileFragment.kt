@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,26 +8,24 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import com.stopsmoke.kekkek.presentation.collectLatest
+import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
 
-@AndroidEntryPoint
 class SettingsProfileFragment : Fragment() {
 
     private var _binding: FragmentSettingsProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val viewModel by viewModels<ProfileSettingsViewModel>()
+    private val viewModel: SettingsViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +47,7 @@ class SettingsProfileFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSettingsProfileBinding.inflate(inflater, container, false)
         return binding.root
@@ -75,19 +72,19 @@ class SettingsProfileFragment : Fragment() {
 //        tvSettingProfileBirthDetail.text = viewModel.updateBirthDate()
 //        tvSettingProfileIntroductionDetail.text = viewModel.updateIntroduce()
 
-        when (viewModel.user) {
-            is Result.Error -> {}
-            Result.Loading -> {}
-            is Result.Success -> {
-                lifecycleScope.launch {
-                    (viewModel.user as Result.Success<Flow<User.Registered>>).data.collect {
-                        when(it.profileImage) {
-                            is ProfileImage.Default -> {}
-                            is ProfileImage.Web -> {
-                                circleIvProfile.load((it.profileImage as ProfileImage.Web).url) {
-                                    crossfade(true)
-                                }
-                            }
+        viewModel.user.collectLatest(lifecycleScope) {
+            when(it) {
+                is User.Error -> {
+                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT).show()
+                }
+                is User.Guest -> {
+                    Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
+                }
+                is User.Registered -> {
+                    when (it.profileImage) {
+                        is ProfileImage.Default -> {}
+                        is ProfileImage.Web -> {
+                            circleIvProfile.load((it.profileImage as ProfileImage.Web).url)
                         }
                     }
                 }

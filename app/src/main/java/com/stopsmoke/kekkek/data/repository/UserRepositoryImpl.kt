@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.data.repository
 
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
@@ -60,14 +61,17 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override fun setProfileImage(
-        imageInputStream: InputStream,
-        userId: String,
+        imageInputStream: InputStream
     ): Flow<ProfileImageUploadResult> {
+        if (user.value !is User.Registered) {
+            throw GuestModeException()
+        }
+
         val bitmap = BitmapCompressor(imageInputStream)
 
         return storageDao.uploadFile(
             inputStream = bitmap.getCompressedFile().inputStream(),
-            path = "users/$userId/profile_image.jpeg"
+            path = "users/${(user.value as User.Registered).uid}/profile_image.jpeg"
         )
             .map {
                 when (it) {
