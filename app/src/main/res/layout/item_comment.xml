@@ -45,8 +45,9 @@
         android:id="@+id/tv_comment_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="13sp"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_medium"
         app:layout_constraintStart_toStartOf="@+id/iv_comment_profile"
         app:layout_constraintTop_toBottomOf="@+id/iv_comment_profile"
         tools:text="댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다." />
@@ -55,11 +56,12 @@
         android:id="@+id/tv_comment_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:textSize="10sp"
+        android:fontFamily="@font/pretendard_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_comment_description"
-        tools:text="5시간 전" />
+        android:text="5시간 전" />
 
     <ImageView
         android:id="@+id/iv_comment_like"
@@ -79,6 +81,7 @@
         android:layout_marginStart="4dp"
         android:text="@string/comment_like"
         android:textSize="10sp"
+        android:fontFamily="@font/pretendard_medium"
         app:layout_constraintBottom_toBottomOf="@+id/iv_comment_like"
         app:layout_constraintStart_toEndOf="@+id/iv_comment_like"
         app:layout_constraintTop_toTopOf="@+id/iv_comment_like" />
