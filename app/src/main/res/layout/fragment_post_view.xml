@@ -42,6 +42,7 @@
             tools:text="단짠단짠" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_post_poster_ranking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,9 +81,9 @@
         android:id="@+id/tv_post_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="20sp"
@@ -95,20 +96,21 @@
     <TextView
         android:id="@+id/tv_post_description"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_post_title"
-        tools:text="글 내용" />
+        tools:text="아리랑아리랑아리랑 아리랑아라리" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
+        android:background="@color/bg_thin_gray"
         app:layout_constraintBottom_toTopOf="@+id/cl_post_view_information"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -265,34 +267,38 @@
 
         <EditText
             android:id="@+id/et_post_add_comment"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_comment_btn"
+            android:background="#F2F2F2"
             android:ems="10"
-            android:textSize="14sp"
             android:hint="@string/post_add_comment"
             android:inputType="text"
-            android:padding="0dp"
-            android:paddingStart="15dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_post_add_comment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_post_add_comment"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
+            style="@style/NoShadowButton"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/bg_btn_register"
-            android:textColor="@color/white"
-            android:layout_marginRight="4dp"
+            android:backgroundTint="@color/gray"
+            android:fontFamily="@font/pretendard_medium"
             android:text="등록"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/et_post_add_comment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/et_post_add_comment"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/et_post_add_comment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
