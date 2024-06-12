@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.stopsmoke.kekkek.domain.model.RankingCategory
 import com.stopsmoke.kekkek.firestore.dao.RankingDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.RankingEntity
@@ -14,10 +15,14 @@ import javax.inject.Inject
 class RankingDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : RankingDao {
-    override suspend fun getRankingList(): Flow<PagingData<RankingEntity>> {
+    override suspend fun getRankingList(
+        uid: String,
+        category: RankingCategory
+    ): Flow<PagingData<RankingEntity>> {
 
         val query = firestore.collection(COLLECTION)
-            .orderBy("date_time", Query.Direction.ASCENDING)
+            .orderBy("history.quit_smoking_start_date_time", Query.Direction.ASCENDING)
+            .orderBy("history.quit_smoking_stop_date_time", Query.Direction.DESCENDING)
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)
@@ -36,7 +41,7 @@ class RankingDaoImpl @Inject constructor(
 
 
     companion object {
-        private const val COLLECTION = "ranking"
+        private const val COLLECTION = "user"
         private const val PAGE_LIMIT = 30
     }
 }
