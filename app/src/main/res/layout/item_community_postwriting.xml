@@ -9,47 +9,59 @@
         android:id="@+id/circleIv_itemWriting_profile"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_user_profile_test"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_user_profile_test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_itemWriting_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_community_postwriting_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/circleIv_itemWriting_profile"
-        app:layout_constraintStart_toEndOf="@id/circleIv_itemWriting_profile"
         android:layout_marginStart="8dp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:text="단짠단짠"
-        android:textSize="14sp" />
+        app:layout_constraintBottom_toBottomOf="@+id/circleIv_itemWriting_profile"
+        app:layout_constraintStart_toEndOf="@+id/circleIv_itemWriting_profile"
+        app:layout_constraintTop_toTopOf="@+id/circleIv_itemWriting_profile">
 
-    <TextView
-        android:id="@+id/tv_itemWriting_rank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:inputType="number"
-        android:textColor="@color/gray"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_name"
-        app:layout_constraintStart_toEndOf="@id/tv_itemWriting_name"
-        tools:text="랭킹 111위" />
+        <TextView
+            android:id="@+id/tv_itemWriting_postType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:textColor="#777777"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="자유게시판" />
 
-    <TextView
-        android:id="@+id/tv_itemWriting_postType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="자유게시판"
-        app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_name"
-        app:layout_constraintStart_toStartOf="@id/tv_itemWriting_name"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:textSize="11sp"
-        android:textColor="#777777"/>
+        <TextView
+            android:id="@+id/tv_itemWriting_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="단짠단짠"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemWriting_postType" />
+
+        <TextView
+            android:id="@+id/tv_itemWriting_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:inputType="number"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_itemWriting_name"
+            app:layout_constraintStart_toEndOf="@id/tv_itemWriting_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_itemWriting_name"
+            tools:text="랭킹 111위" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tv_itemWriting_title"
@@ -93,7 +105,7 @@
         android:background="@drawable/bg_post_image"
         android:scaleType="centerCrop"
         android:layout_marginEnd="20dp"/>
-    
+
     <View
         android:id="@+id/view_itemWriting_div"
         android:layout_width="0dp"
