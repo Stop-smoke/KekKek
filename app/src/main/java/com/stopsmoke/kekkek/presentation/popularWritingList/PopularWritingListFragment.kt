@@ -45,6 +45,7 @@ class PopularWritingListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
@@ -74,15 +75,10 @@ class PopularWritingListFragment : Fragment() {
                 }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            popularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { popularPosts ->
-                    listAdapter.submitData(popularPosts)
-                }
-        }
     }
 
     private fun onBind(uiState: PopularWritingListUiState) = with(binding) {
+        listAdapter.submitList(uiState.list)
     }
 
     override fun onDestroy() {

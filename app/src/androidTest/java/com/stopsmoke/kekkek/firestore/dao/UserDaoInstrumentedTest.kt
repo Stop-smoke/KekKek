@@ -49,7 +49,8 @@ class UserDaoInstrumentedTest {
                 dailyCigarettesSmoked = 5,
                 packCigaretteCount = 20,
                 packPrice = 5500
-            )
+            ),
+            postMy = listOf("haha","dummyPostId")
         )
         userDao.setUser(user)
         Assert.assertEquals(user, userDao.getUser("테스트_계정").first())

@@ -9,6 +9,8 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.presentation.community.CommunityPopularItem
+import com.stopsmoke.kekkek.presentation.community.CommunityUiState
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,21 +30,16 @@ class PopularWritingListViewModel @Inject constructor(
         MutableStateFlow(PopularWritingListUiState.init())
     val uiState: StateFlow<PopularWritingListUiState> = _uiState.asStateFlow()
 
-    val popularPosts = postRepository.getPost(category = PostCategory.POPULAR).let {
-        when (it) {
-            is Result.Error -> {
-                it.exception?.printStackTrace()
-                emptyFlow()
-            }
-
-            is Result.Loading -> emptyFlow()
-            is Result.Success -> it.data.map { pagingData ->
-                pagingData.map { post ->
-                    updatePopularWritingListItem(post)
-                }
-            }
+    init {
+        viewModelScope.launch {
+            val postItems = postRepository.getPopularPostList()
+            _uiState.emit(
+                PopularWritingListUiState(
+                    list = postItems.map { updatePopularWritingListItem(it) }
+                )
+            )
         }
-    }.cachedIn(viewModelScope)
+    }
 
     private fun updatePopularWritingListItem(post: Post): PopularWritingListItem =
         PopularWritingListItem(
@@ -70,6 +68,7 @@ class PopularWritingListViewModel @Inject constructor(
             ),
             postImage = "",
             post = post.text,
-            postTime = post.modifiedElapsedDateTime
+            postTime = post.modifiedElapsedDateTime,
+            postType = post.categories
         )
 }

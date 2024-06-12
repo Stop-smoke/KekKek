@@ -22,14 +22,14 @@ class MyViewModel @Inject constructor(
 
     val userData = userRepository.getUserData("테스트_계정")
 
-    fun updateUserData(user : User.Registered) = viewModelScope.launch {
+    fun updateUserData(user: User.Registered) = viewModelScope.launch {
         _uiState.update {
             MyUiState(
                 myLoginUiState = MyLoginStatusState.LoggedUiState.MyIdLoggedUiState(
                     myItem = MyItem(
                         name = user.name,
                         rank = user.ranking,
-                        profileImg = when(user.profileImage){
+                        profileImg = when (user.profileImage) {
                             is ProfileImage.Default -> ""
                             is ProfileImage.Web -> (user.profileImage as ProfileImage.Web).url
                         },

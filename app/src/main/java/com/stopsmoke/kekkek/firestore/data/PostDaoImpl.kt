@@ -3,6 +3,9 @@ package com.stopsmoke.kekkek.firestore.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
@@ -12,6 +15,7 @@ import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
+import java.util.Calendar
 import javax.inject.Inject
 
 internal class PostDaoImpl @Inject constructor(
@@ -34,6 +38,44 @@ internal class PostDaoImpl @Inject constructor(
             )
 
         }.flow
+    }
+
+    override fun getPostForWrittenUid(writtenUid: String): Flow<PagingData<PostEntity>> {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("written.uid", writtenUid)
+                .orderBy("date_time", Query.Direction.DESCENDING)
+                .limit(10)
+
+            return Pager(
+                config = PagingConfig(PAGE_LIMIT)
+            ) {
+                FireStorePagingSource(
+                    query = query,
+                    limit = PAGE_LIMIT.toLong(),
+                    clazz = PostEntity::class.java
+                )
+
+            }.flow
+        } catch (e: Exception) {
+            e.printStackTrace()
+            //빈 페이저
+            Pager(
+                config = PagingConfig(PAGE_LIMIT)
+            ) {
+                object : PagingSource<Int, PostEntity>() {
+                    override fun getRefreshKey(state: PagingState<Int, PostEntity>): Int? = null
+
+                    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostEntity> {
+                        return LoadResult.Page(
+                            data = emptyList(),
+                            prevKey = null,
+                            nextKey = null
+                        )
+                    }
+                }
+            }.flow
+        }
     }
 
     override suspend fun addPost(postEntity: PostEntity) {
@@ -65,8 +107,14 @@ internal class PostDaoImpl @Inject constructor(
 
     override suspend fun getPopularPostItems(): List<PostEntity> {
         return try {
+            // 현재 시간에서 7일 전 시간 계산
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -7)
+            val sevenDaysAgo = Timestamp(calendar.time)
+
             val query = firestore.collection(COLLECTION)
-                .whereEqualTo("category", "popular")
+                .whereGreaterThan("date_time.created", sevenDaysAgo)
+                .orderBy("views", Query.Direction.DESCENDING)
                 .limit(2)
                 .get()
                 .await()
@@ -84,7 +132,7 @@ internal class PostDaoImpl @Inject constructor(
         return try {
             val query = firestore.collection(COLLECTION)
                 .whereEqualTo("category", "notice")
-                .limit(1)
+                .limit(2)
                 .get()
                 .await()
 
@@ -92,6 +140,31 @@ internal class PostDaoImpl @Inject constructor(
             document?.toObject<PostEntity>() ?: PostEntity()
         } catch (e: Exception) {
             PostEntity()
+        }
+    }
+
+    override suspend fun getPopularPostList(): List<PostEntity> {
+        return try {
+            // 현재 시간에서 7일 전 시간 계산
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -7)
+            val sevenDaysAgo = Timestamp(calendar.time)
+
+            val query = firestore.collection(COLLECTION)
+                .whereGreaterThan("date_time.created", sevenDaysAgo)
+                .orderBy("views", Query.Direction.DESCENDING)
+                .limit(10)
+                .get()
+                .await()
+
+            // Firestore 쿼리 결과를 PostEntity 리스트로 변환
+            query.documents.mapNotNull { document ->
+                document.toObject<PostEntity>()
+            }
+        } catch (e: Exception) {
+            // 예외가 발생하면 빈 리스트 반환
+            e.printStackTrace()
+            emptyList()
         }
     }
 

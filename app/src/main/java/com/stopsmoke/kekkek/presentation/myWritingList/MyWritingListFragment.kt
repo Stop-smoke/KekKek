@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyWritingListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyWritingListFragment : Fragment() {
     private var _binding: FragmentMyWritingListBinding? = null
     val binding: FragmentMyWritingListBinding get() = _binding!!
@@ -25,13 +28,7 @@ class MyWritingListFragment : Fragment() {
         MyWritingListAdapter()
     }
 
-    private val viewModel: MyWritingLIstViewModel by lazy {
-        ViewModelProvider(this)[MyWritingLIstViewModel::class.java]
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel: MyWritingLIstViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +41,7 @@ class MyWritingListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
@@ -73,13 +71,18 @@ class MyWritingListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    onBind(state)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            myWritingPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { myWritingPosts ->
+                    listAdapter.submitData(myWritingPosts)
                 }
         }
     }
 
     private fun onBind(uiState: MyWritingListUiState) = with(binding) {
-        listAdapter.submitList(uiState.list)
     }
 
     override fun onDestroy() {

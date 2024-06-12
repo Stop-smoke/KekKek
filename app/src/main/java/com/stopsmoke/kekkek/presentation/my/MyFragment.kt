@@ -78,6 +78,13 @@ class MyFragment : Fragment() {
             title = "My Toolbar Title"
             setDisplayShowTitleEnabled(false)
         }
+
+        tvMyWritingNum.setOnClickListener {
+            findNavController().navigate("my_writing_list")
+        }
+        tvMyCommentNum.setOnClickListener { }
+        tvMyBookmarkNum.setOnClickListener { }
+
     }
 
     private fun initListener() = with(binding) {
@@ -89,10 +96,6 @@ class MyFragment : Fragment() {
         }
         toolbarMy.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.toolbar_search -> {
-                    true
-                }
-
                 R.id.toolbar_my_bell -> {
                     true
                 }
