@@ -6,20 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.noticeWritingList.NoticeListFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_noticeList_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
-        app:layout_constraintTop_toTopOf="parent">
-        <include layout="@layout/fragment_notification_app_bar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/include_notice_list_app_bar"
+        layout="@layout/fragment_notice_list_app_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_noticeList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf ="@id/cl_noticeList_app_bar"
+        app:layout_constraintTop_toBottomOf ="@id/include_notice_list_app_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/bg_gray"
         tools:listitem="@layout/item_community_postwriting"/>

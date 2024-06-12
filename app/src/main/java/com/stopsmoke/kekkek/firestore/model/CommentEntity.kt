@@ -6,9 +6,6 @@ data class CommentEntity(
     @get:PropertyName("id") @set:PropertyName("id")
     var id: String? = null,
 
-    @get:PropertyName("post_id") @set:PropertyName("post_id")
-    var postId: String? = null,
-
     @get:PropertyName("text") @set:PropertyName("text")
     var text: String? = null,
 
@@ -25,5 +22,8 @@ data class CommentEntity(
     var reply: ReplyEntity? = null,
 
     @get:PropertyName("written") @set:PropertyName("written")
-    var written: WrittenEntity? = null
+    var written: WrittenEntity? = null,
+
+    @get:PropertyName("post_data") @set:PropertyName("post_data")
+    var postData: CommentPostDataEntity? = null
 )

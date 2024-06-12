@@ -6,14 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".presentation.popularWritingList.PopularWritingListFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_popularWritingList_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
-        app:layout_constraintTop_toTopOf="parent">
-        <include layout="@layout/item_popularwritinglist_app_bar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/include_popular_writing_list_app_bar"
+        layout="@layout/fragment_popular_writing_list_app_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_popularWritingList"
@@ -21,7 +16,7 @@
         android:layout_height="0dp"
         android:background="@color/bg_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_popularWritingList_app_bar"
+        app:layout_constraintTop_toBottomOf="@id/include_popular_writing_list_app_bar"
         tools:listitem="@layout/item_community_postwriting" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

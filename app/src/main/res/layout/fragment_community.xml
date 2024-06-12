@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.community.CommunityFragment">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,43 +15,14 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_community"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="2dp"
-                android:minHeight="60dp"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:layout_collapseMode="pin"
-                app:layout_constraintTop_toTopOf="parent"
-                app:menu="@menu/menu_my_toolbar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_community_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:elevation="1dp"
-                android:minHeight="60dp"
-                app:layout_collapseMode="pin">
-
-                <TextView
-                    android:id="@+id/tv_my_myPage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="31dp"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:text="커뮤니티"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/include_community_app_bar"
+                layout="@layout/fragment_community_app_bar"
+                app:layout_collapseMode="pin" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_community_parallaxItems"
@@ -122,272 +94,26 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/cl_community_notice">
 
-                    <ImageView
-                        android:id="@+id/iv_community_fire"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/ic_popular_fire"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_community_popular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:text="인기글"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_community_fire"
-                        app:layout_constraintStart_toEndOf="@id/iv_community_fire"
-                        app:layout_constraintTop_toTopOf="@id/iv_community_fire" />
-
-                    <TextView
-                        android:id="@+id/tv_community_popularFullView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/pretendard_medium"
-                        android:text="전체보기"
-                        android:textColor="@color/gray_lightgray2"
-                        android:textSize="11sp"
-                        app:layout_constraintBottom_toBottomOf="@id/iv_community_fire"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/iv_community_fire" />
-
-
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_community_postPopular1"
+                        android:id="@+id/cl_community_popularBanner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:background="@drawable/bg_community_popularbox"
-                        android:minHeight="40dp"
-                        android:padding="12dp"
-                        app:layout_constraintTop_toBottomOf="@id/tv_community_popular">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:id="@+id/tv_community_title1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/pretendard_semi_bold"
-                            android:maxLines="1"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="인기글. 핫해 핫해. 한번 들어와봐 진짜 핫해!! so Hot! so Hot!!!!" />
+                        <include
+                            android:id="@+id/include_community_popularBanner"
+                            layout="@layout/item_community_main_popular_banner" />
 
-                        <TextView
-                            android:id="@+id/tv_community_postType1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_community_title1"
-                            tools:text="자유 게시판" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_view1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_view"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_viewNum1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
-
-                        <TextView
-                            android:id="@+id/tv_community_viewNum1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toStartOf="@id/iv_community_like1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
-                            tools:text="22222" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_like1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_heart_none"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_likeNum1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
-
-                        <TextView
-                            android:id="@+id/tv_community_likeNum1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toStartOf="@id/iv_community_comment1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
-                            tools:text="22222" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_comment1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_comment"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
-
-                        <TextView
-                            android:id="@+id/tv_community_commentNum1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
-                            tools:text="22222" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <!-- box 2 -->
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_community_postPopular2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/bg_community_popularbox"
-                        android:minHeight="40dp"
-                        android:padding="12dp"
-                        app:layout_constraintBottom_toTopOf="@id/view_community_bottomView"
-                        app:layout_constraintEnd_toEndOf="@id/cl_community_postPopular1"
-                        app:layout_constraintStart_toStartOf="@id/cl_community_postPopular1"
-                        app:layout_constraintTop_toBottomOf="@id/cl_community_postPopular1">
-
-                        <TextView
-                            android:id="@+id/tv_community_title2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/pretendard_semi_bold"
-                            android:maxLines="1"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="인기글. 핫해 핫해. 한번 들어와봐 진짜 핫해!! so Hot! so Hot!!!!" />
-
-                        <TextView
-                            android:id="@+id/tv_community_postType2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_community_title2"
-                            tools:text="자유 게시판" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_view2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_view"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_viewNum2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
-
-                        <TextView
-                            android:id="@+id/tv_community_viewNum2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toStartOf="@id/iv_community_like2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
-                            tools:text="22222" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_like2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_heart_none"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_likeNum2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
-
-                        <TextView
-                            android:id="@+id/tv_community_likeNum2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toStartOf="@id/iv_community_comment2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
-                            tools:text="22222" />
-
-                        <ImageView
-                            android:id="@+id/iv_community_comment2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_comment"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
-
-                        <TextView
-                            android:id="@+id/tv_community_commentNum2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/pretendard_regular"
-                            android:minWidth="45dp"
-                            android:textColor="@color/gray_lightgray2"
-                            android:textSize="11dp"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
-                            tools:text="22222" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:id="@+id/view_community_bottomView"
                         android:layout_width="match_parent"
                         android:layout_height="12dp"
+                        android:layout_marginTop="12dp"
                         android:background="@color/gray_bggray"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/cl_community_popularBanner" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

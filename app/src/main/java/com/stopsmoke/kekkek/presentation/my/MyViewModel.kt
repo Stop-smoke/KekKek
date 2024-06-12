@@ -20,25 +20,25 @@ class MyViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.init())
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
-    val userData = userRepository.getUserData()
+    val userData = userRepository.getUserData("테스트_계정")
 
-    fun updateUserData(user : User.Registered) = viewModelScope.launch {
+    fun updateUserData(user: User.Registered) = viewModelScope.launch {
         _uiState.update {
             MyUiState(
                 myLoginUiState = MyLoginStatusState.LoggedUiState.MyIdLoggedUiState(
                     myItem = MyItem(
                         name = user.name,
-                        rank = user.ranking.toInt(),
-                        profileImg = when(user.profileImage){
+                        rank = user.ranking,
+                        profileImg = when (user.profileImage) {
                             is ProfileImage.Default -> ""
                             is ProfileImage.Web -> (user.profileImage as ProfileImage.Web).url
                         },
                         myWriting = MyWritingNum(
-                            user.age ?: 0,
-                            user.age ?: 0,
-                            user.age ?: 0
+                            user.postMy.size ?: 0,
+                            user.commentMy.size ?: 0,
+                            user.postBookmark.size ?: 0
                         ),
-                        achievementNum = user.age ?: 0,
+                        achievementNum = user.clearAchievementsList.size ?: 0,
                         id = user.uid // id로 내가 쓴 글, 업적 데이터 조회?
                     )
                 )

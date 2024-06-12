@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface PostRepository {
     fun getPost(category: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
 
+    fun getPostForWrittenUid(writtenUid: String): Result<Flow<PagingData<Post>>>
+
+    fun getBookmark(postIdList: List<String>): Result<Flow<PagingData<Post>>>
+
     fun getPost(uid: String): Result<Flow<PagingData<Post>>>
 
     suspend fun addPost(post: PostWrite): Result<Unit>
@@ -21,4 +25,6 @@ interface PostRepository {
     suspend fun getTopPopularItems(): List<Post>
 
     suspend fun getTopNotice(): Post
+
+    suspend fun getPopularPostList(): List<Post>
 }

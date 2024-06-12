@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -15,8 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -49,13 +48,9 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvMyBookmark.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
-
-        initView()
         initListener()
         initViewModel()
+        initView()
 
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
@@ -73,37 +68,31 @@ class MyFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbarMy)
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "My Toolbar Title"
-            setDisplayShowTitleEnabled(false)
-        }
+
+
     }
 
     private fun initListener() = with(binding) {
-        tvMyWriting.setOnClickListener {
-            findNavController().navigate("my_post")
+        clMyMypost.setOnClickListener {
+            findNavController().navigate(R.id.action_myPage_to_myWritingList)
         }
-        tvMyComment.setOnClickListener {
-            findNavController().navigate("my_comment")
+        clMyMycomment.setOnClickListener {
+            findNavController().navigate(R.id.action_myPage_to_myCommentList)
         }
-        toolbarMy.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.toolbar_search -> {
-                    true
-                }
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
+        }
 
-                R.id.toolbar_my_bell -> {
-                    true
-                }
+        clMyCustomerService.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
+        }
 
-                R.id.toolbar_my_setting -> {
-                    findNavController().navigate(R.id.action_my_page_to_nav_settings)
-                    true
-                }
+        includeFragmentMyAppBar.icMyBell.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_notification)
+        }
 
-                else -> false
-            }
+        includeFragmentMyAppBar.icMySettings.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_nav_settings)
         }
     }
 
@@ -115,20 +104,25 @@ class MyFragment : Fragment() {
                 }
         }
 
-        lifecycleScope.launch {
-            userData.flowWithLifecycle(lifecycle).collectLatest {
-                when(it) {
-                    is User.Error -> {
-                        // 유저 정보가 에러
-                    }
-                    is User.Guest -> {  } // 게스트 모드 대응
-                    is User.Registered -> {
-                        viewModel.updateUserData(it)
-                    }
+
+        when (userData) {
+            is Result.Error -> {
+
+            }
+
+            is Result.Loading -> {
+
+            }
+
+            is Result.Success -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                        .collectLatest { user ->
+                            viewModel.updateUserData(user)
+                        }
                 }
             }
         }
-        Unit
     }
 
 

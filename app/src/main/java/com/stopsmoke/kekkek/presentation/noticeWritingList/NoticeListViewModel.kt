@@ -74,7 +74,8 @@ class NoticeListViewModel @Inject constructor(
             ),
             postImage = "",
             post = post.text,
-            postTime = post.modifiedElapsedDateTime
+            postTime = post.modifiedElapsedDateTime,
+            postType = post.categories
         )
 
 }

@@ -39,6 +39,7 @@
             android:text="@string/test_title"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="@font/pretendard_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,6 +53,7 @@
             android:layout_marginEnd="16dp"
             android:text="@string/test_description"
             android:textAlignment="center"
+            android:fontFamily="@font/pretendard_medium"
             android:textColor="#AAAAAA"
             app:layout_constraintEnd_toEndOf="@+id/tv_test_title"
             app:layout_constraintStart_toStartOf="@+id/tv_test_title"
@@ -59,11 +61,12 @@
 
         <Button
             android:id="@+id/btn_test_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#3F51B5"
+            android:backgroundTint="@color/primary_blue"
             android:text="@string/test_start"
+            android:fontFamily="@font/pretendard_medium"
             app:layout_constraintEnd_toEndOf="@+id/tv_test_description"
             app:layout_constraintStart_toStartOf="@+id/tv_test_description"
             app:layout_constraintTop_toBottomOf="@+id/tv_test_description" />
