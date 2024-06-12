@@ -261,7 +261,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_post_add_comment"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="-13dp">
 
