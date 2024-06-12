@@ -7,6 +7,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -51,4 +52,10 @@ class ProfileSettingsViewModel @Inject constructor(
             userRepository.withdraw()
         }
     }
+
+    fun settingProfile(inputStream: InputStream) {
+        userRepository.setProfileImage(inputStream,"default")
+    }
+
+    val user = userRepository.getUserData("default")
 }
