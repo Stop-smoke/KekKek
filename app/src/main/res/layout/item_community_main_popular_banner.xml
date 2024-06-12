@@ -49,9 +49,9 @@
         android:id="@+id/cl_community_postPopular1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/bg_community_popularbox"
         android:minHeight="40dp"
         android:padding="12dp"
@@ -133,13 +133,14 @@
 
         <ImageView
             android:id="@+id/iv_community_comment1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_comment"
             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum1"
-            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
+            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
+            app:tint="@color/gray_lightgray2" />
 
         <TextView
             android:id="@+id/tv_community_commentNum1"
@@ -245,13 +246,14 @@
 
         <ImageView
             android:id="@+id/iv_community_comment2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_comment"
             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum2"
-            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
+            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
+            app:tint="@color/gray_lightgray2" />
 
         <TextView
             android:id="@+id/tv_community_commentNum2"
