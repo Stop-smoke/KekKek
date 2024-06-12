@@ -35,7 +35,7 @@ class MyPostFragment : Fragment() {
     }
 
     private fun setupListener() = with(binding) {
-        ivMyPostBack.setOnClickListener {
+        includeMyPostAppBar.ivMyPostBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }

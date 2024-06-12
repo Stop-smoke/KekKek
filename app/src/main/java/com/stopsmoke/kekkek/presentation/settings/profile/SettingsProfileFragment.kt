@@ -66,7 +66,7 @@ class SettingsProfileFragment : Fragment() {
 
     private fun initView() = with(binding) {
         settingProfile.tvUserProfileTitle.text = "계정"
-        settingProfile.ivUserProfileBack.setOnClickListener {
+        includeSettingsProfileAppBar.ivSettingsProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
         circleIvProfile.setOnClickListener {

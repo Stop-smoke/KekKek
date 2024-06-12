@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <ImageView
         android:id="@+id/iv_topRank_medal"
         android:layout_width="280dp"
@@ -112,6 +111,5 @@
         app:layout_constraintStart_toStartOf="@id/tv_topRank_numThreeName"
         app:layout_constraintTop_toBottomOf="@id/tv_topRank_numThreeName"
         tools:text="38일23시간" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

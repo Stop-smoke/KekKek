@@ -49,11 +49,6 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvMyBookmark.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
-
-        initView()
         initListener()
         initViewModel()
 
@@ -72,38 +67,27 @@ class MyFragment : Fragment() {
         _binding = null
     }
 
-    private fun initView() = with(binding) {
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbarMy)
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "My Toolbar Title"
-            setDisplayShowTitleEnabled(false)
-        }
-    }
-
     private fun initListener() = with(binding) {
-        tvMyWriting.setOnClickListener {
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate("bookmark")
+        }
+        clMyMypost.setOnClickListener {
             findNavController().navigate("my_post")
         }
-        tvMyComment.setOnClickListener {
+        clMyMycomment.setOnClickListener {
             findNavController().navigate("my_comment")
         }
-        toolbarMy.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.toolbar_search -> {
-                    true
-                }
 
-                R.id.toolbar_my_bell -> {
-                    true
-                }
+        clMyCustomerService.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
+        }
 
-                R.id.toolbar_my_setting -> {
-                    findNavController().navigate(R.id.action_my_page_to_nav_settings)
-                    true
-                }
+        includeFragmentMyAppBar.icMyBell.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_notification)
+        }
 
-                else -> false
-            }
+        includeFragmentMyAppBar.icMySettings.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_nav_settings)
         }
     }
 

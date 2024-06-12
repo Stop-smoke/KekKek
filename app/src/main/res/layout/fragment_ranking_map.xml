@@ -6,16 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".presentation.rankingMap.RankingMapFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_rankingMap_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <include layout="@layout/fragment_ranking_list_app_bar" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <include
+        android:id="@+id/include_ranking_map_app_bar"
+        layout="@layout/fragment_ranking_map_app_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <fragment
         android:id="@+id/mapView_rankingMap"
@@ -23,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/cl_rankingMap_botRadius"
-        app:layout_constraintTop_toBottomOf="@id/cl_rankingMap_app_bar" />
-
+        app:layout_constraintTop_toBottomOf="@id/include_ranking_map_app_bar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_rankingMap_botRadius"
@@ -32,8 +27,6 @@
         android:layout_height="148dp"
         android:background="@drawable/bg_topcorner"
         app:layout_constraintBottom_toBottomOf="parent">
-
-
 
         <TextView
             android:id="@+id/tv_rankingMap_myNeighborhood"
@@ -46,14 +39,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <Spinner
             android:id="@+id/spn_rankingMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/tv_rankingMap_myNeighborhood"
             app:layout_constraintStart_toEndOf="@id/tv_rankingMap_myNeighborhood" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_rankingMap_radiusLongBar"
@@ -64,7 +55,6 @@
             android:background="@color/bg_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_rankingMap_myNeighborhood" />
-
 
         <TextView
             android:id="@+id/tv_rankingMap_5KmSelectDot"
@@ -103,7 +93,6 @@
             app:layout_constraintBottom_toBottomOf="@id/cl_rankingMap_radiusLongBar"
             app:layout_constraintEnd_toEndOf="@id/cl_rankingMap_radiusLongBar"
             app:layout_constraintTop_toTopOf="@id/cl_rankingMap_radiusLongBar" />
-
 
         <TextView
             android:id="@+id/tv_rankingMap_5KmSelectText"
@@ -156,7 +145,6 @@
             android:textSize="11sp"
             android:fontFamily="@font/pretendard_medium"
             android:textColor="@color/gray"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

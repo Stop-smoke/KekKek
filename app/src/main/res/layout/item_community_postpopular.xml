@@ -132,11 +132,11 @@
             android:id="@+id/iv_itemPopular_comment1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_comment"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum1"
-            app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_chat"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType1"
-            android:layout_marginEnd="10dp"/>
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum1"
+            app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType1" />
 
         <TextView
             android:id="@+id/tv_itemPopular_commentNum1"
@@ -245,11 +245,11 @@
             android:id="@+id/iv_itemPopular_comment2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_comment"
-            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum2"
-            app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_chat"
             app:layout_constraintBottom_toBottomOf="@id/tv_itemPopular_postType2"
-            android:layout_marginEnd="10dp"/>
+            app:layout_constraintEnd_toStartOf="@id/tv_itemPopular_commentNum2"
+            app:layout_constraintTop_toTopOf="@id/tv_itemPopular_postType2" />
 
         <TextView
             android:id="@+id/tv_itemPopular_commentNum2"

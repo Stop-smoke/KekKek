@@ -96,19 +96,14 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setToolbarMenu() {
-        binding.toolbarCommunity.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.toolbar_search -> {
-                    findNavController().navigate("search")
-                }
 
-                R.id.toolbar_my_bell -> {
-                    findNavController().navigate("notification")
-                }
-
-                R.id.toolbar_community_setting -> {}
+        with(binding.includeCommunityAppBar){
+            icCommunityBell.setOnClickListener {
+                findNavController().navigate("notification")
             }
-            true
+            icCommunitySettings.setOnClickListener {
+                findNavController().navigate(R.id.action_community_page_to_nav_settings)
+            }
         }
     }
 

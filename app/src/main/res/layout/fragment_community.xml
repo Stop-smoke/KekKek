@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.community.CommunityFragment">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,43 +15,14 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_community"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="2dp"
-                android:minHeight="60dp"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:layout_collapseMode="pin"
-                app:layout_constraintTop_toTopOf="parent"
-                app:menu="@menu/menu_my_toolbar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_community_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:elevation="1dp"
-                android:minHeight="60dp"
-                app:layout_collapseMode="pin">
-
-                <TextView
-                    android:id="@+id/tv_my_myPage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="31dp"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/pretendard_bold"
-                    android:text="커뮤니티"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/include_community_app_bar"
+                layout="@layout/fragment_community_app_bar"
+                app:layout_collapseMode="pin" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_community_parallaxItems"
@@ -247,13 +219,14 @@
 
                         <ImageView
                             android:id="@+id/iv_community_comment1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
                             android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
                             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
+                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
+                            app:tint="@color/gray" />
 
                         <TextView
                             android:id="@+id/tv_community_commentNum1"
@@ -360,13 +333,14 @@
 
                         <ImageView
                             android:id="@+id/iv_community_comment2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
                             android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
                             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
+                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
+                            app:tint="@color/gray" />
 
                         <TextView
                             android:id="@+id/tv_community_commentNum2"
