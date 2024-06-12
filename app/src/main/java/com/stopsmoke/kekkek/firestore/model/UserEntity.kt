@@ -57,4 +57,7 @@ data class UserEntity(
 
     @get:PropertyName("comment_my") @set:PropertyName("comment_my")
     var commentMy: List<String>? = null,
+
+    @get:PropertyName("history") @set:PropertyName("history")
+    var history: HistoryEntity? = null,
     )

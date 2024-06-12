@@ -11,6 +11,8 @@ import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.community.PostInfo
+import com.stopsmoke.kekkek.presentation.community.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,8 +70,9 @@ class MyWritingLIstViewModel @Inject constructor(
         MyWritingListItem(
             userInfo = UserInfo(
                 name = post.written.name,
-                rank = post.written.ranking.toInt(),
-                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
+                rank = post.written.ranking,
+                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else "",
+                uid = post.written.uid
             ),
             postInfo = PostInfo(
                 title = post.title,
@@ -85,9 +88,10 @@ class MyWritingLIstViewModel @Inject constructor(
                     PostCategory.UNKNOWN -> ""
                     PostCategory.ALL -> ""
                 },
-                view = post.views.toInt(),
-                like = post.likeUser.size,
-                comment = post.commentUser.size
+                view = post.views,
+                like = post.likeUser.size.toLong(),
+                comment = post.commentUser.size.toLong(),
+                id = post.id
             ),
             postImage = "",
             post = post.text,
