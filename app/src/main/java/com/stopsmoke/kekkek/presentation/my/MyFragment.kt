@@ -79,7 +79,7 @@ class MyFragment : Fragment() {
         }
 
         clMyCustomerService.setOnClickListener {
-            findNavController().navigate("my_supportcenter")
+            findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
         }
 
         includeFragmentMyAppBar.icMyBell.setOnClickListener {
