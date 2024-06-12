@@ -389,23 +389,24 @@
                             android:id="@+id/tv_home_motivation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="40dp"
                             android:fontFamily="@font/pretendard_bold"
-                            android:text="이것은 명언입니다.\n이것을 보고 담배를 끊을 수 있어!"
+                            android:gravity="end"
+                            android:text="담배를 피워도 괴롭고,\n끊어도 괴롭다면,\n 어떤 괴로움을 선택하겠는가?"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-<!--                        <ImageView-->
-<!--                            android:id="@+id/iv_home_motivationRe"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_margin="20dp"-->
-<!--                            android:src="@drawable/ic_re"-->
-<!--                            app:layout_constraintEnd_toEndOf="parent"-->
-<!--                            app:layout_constraintTop_toTopOf="parent" />-->
+                        <!--                        <ImageView-->
+                        <!--                            android:id="@+id/iv_home_motivationRe"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_margin="20dp"-->
+                        <!--                            android:src="@drawable/ic_re"-->
+                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
