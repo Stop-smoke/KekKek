@@ -23,7 +23,7 @@ class SettingsSupportFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsSupportBinding.inflate(inflater, container, false)
 
-        binding.ivSupportBack.setOnClickListener {
+        binding.includeSettingsSupportAppBar.ivSettingsSupportBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -37,7 +37,7 @@ class SettingsSupportFragment : Fragment() {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            loadUrl("https://limheejin.tistory.com")
+            loadUrl("https://docs.google.com/forms/d/e/1FAIpQLSdtFqgdIcfTw99XSvOzbsyiOqxTDFkm1_BDqIIqOw2YzLnzxA/viewform")
         }
     }
 

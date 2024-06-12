@@ -18,7 +18,7 @@
         android:id="@+id/rv_achievement_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4F6F8"
+        android:background="@color/gray_bggray"
         android:paddingTop="10dp"
         tools:listitem="@layout/recyclerview_achievement_item" />
 

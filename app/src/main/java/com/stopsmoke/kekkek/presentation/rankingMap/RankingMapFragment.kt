@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -117,16 +116,9 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setAppbar() {
-        val ivMyWritingMapBack =
-            requireActivity().findViewById<ImageView>(R.id.iv_rankingList_back)
-        val tvMyWritingMapTitle =
-            requireActivity().findViewById<TextView>(R.id.tv_rankingList_title)
-
-        ivMyWritingMapBack.setOnClickListener {
+        binding.includeRankingMapAppBar.ivRankingMapBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        tvMyWritingMapTitle.text = "내 지역 설정"
     }
 
 

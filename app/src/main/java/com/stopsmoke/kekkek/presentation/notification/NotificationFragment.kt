@@ -42,7 +42,7 @@ class NotificationFragment : Fragment() {
     }
 
     private fun initAppBar() = with(binding) {
-        clNotificationAppBar.setOnClickListener {
+        includeNotificationAppBar.ivNotificationBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }

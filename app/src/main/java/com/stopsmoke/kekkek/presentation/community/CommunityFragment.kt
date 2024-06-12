@@ -79,9 +79,9 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
-        sharedViewModel.newPost.observe(viewLifecycleOwner) {
-            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
-        }
+//        sharedViewModel.newPost.observe(viewLifecycleOwner) {
+//            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
+//        }
 
         initCommunityCategory()
         setToolbarMenu()
@@ -100,19 +100,14 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setToolbarMenu() {
-        binding.toolbarCommunity.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.toolbar_search -> {
-                    findNavController().navigate("search")
-                }
 
-                R.id.toolbar_my_bell -> {
-                    findNavController().navigate("notification")
-                }
-
-                R.id.toolbar_community_setting -> {}
+        with(binding.includeCommunityAppBar){
+            icCommunityBell.setOnClickListener {
+                findNavController().navigate("notification")
             }
-            true
+            icCommunitySettings.setOnClickListener {
+                findNavController().navigate(R.id.action_community_page_to_nav_settings)
+            }
         }
     }
 
