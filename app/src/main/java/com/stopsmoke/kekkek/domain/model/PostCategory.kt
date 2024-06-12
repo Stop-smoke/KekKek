@@ -13,7 +13,7 @@ enum class PostCategory {
     ALL
 }
 
-fun PostCategory.toRequestString(): String? = when(this) {
+fun PostCategory.toRequestString(): String? = when (this) {
     PostCategory.NOTICE -> "notice"
     PostCategory.QUIT_SMOKING_SUPPORT -> "quit_smoking_support"
     PostCategory.POPULAR -> "popular"
@@ -24,4 +24,17 @@ fun PostCategory.toRequestString(): String? = when(this) {
     PostCategory.RESOLUTIONS -> "resolutions"
     PostCategory.UNKNOWN -> null
     PostCategory.ALL -> null
+}
+
+fun String.toPostCategory(): PostCategory = when (this) {
+    "notice" -> PostCategory.NOTICE
+    "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
+    "popular" -> PostCategory.POPULAR
+    "quit_smoking_aids_reviews" -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
+    "success_stories" -> PostCategory.SUCCESS_STORIES
+    "general_discussion" -> PostCategory.GENERAL_DISCUSSION
+    "failure_stories" -> PostCategory.FAILURE_STORIES
+    "resolutions" -> PostCategory.RESOLUTIONS
+    "all" -> PostCategory.ALL
+    else -> PostCategory.UNKNOWN
 }

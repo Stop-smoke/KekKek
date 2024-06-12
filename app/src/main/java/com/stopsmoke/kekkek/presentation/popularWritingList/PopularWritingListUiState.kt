@@ -1,6 +1,6 @@
 package com.stopsmoke.kekkek.presentation.popularWritingList
 
-class PopularWritingListUiState (
+data class PopularWritingListUiState (
     val list: List<PopularWritingListItem>
 ) {
     companion object {

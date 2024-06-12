@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,7 +34,7 @@ class CommunityFragment : Fragment() {
 
     private val viewModel: CommunityViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    
+
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
     }
@@ -98,8 +100,34 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
+//        sharedViewModel.newPost.observe(viewLifecycleOwner) {
+//            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
+//        }
+
         initCommunityCategory()
         setToolbarMenu()
+
+        clCommunityNotice.setOnClickListener {
+            findNavController().navigate("notice_list")
+        }
+
+
+        val tvCommunityPopularFullView =
+            requireActivity().findViewById<TextView>(R.id.tv_community_popularFullView)
+        val clCommunityPostPopular1 =
+            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular1)
+        val clCommunityPostPopular2 =
+            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
+        tvCommunityPopularFullView.setOnClickListener {
+            findNavController().navigate("popular_writing_list")
+        }
+
+        clCommunityPostPopular1.setOnClickListener {
+            findNavController().navigate("post_view")
+        }
+        clCommunityPostPopular2.setOnClickListener {
+            findNavController().navigate("post_view")
+        }
     }
 
     private fun initCommunityCategory() = with(binding) {
@@ -115,8 +143,7 @@ class CommunityFragment : Fragment() {
     }
 
     private fun setToolbarMenu() {
-
-        with(binding.includeCommunityAppBar){
+        with(binding.includeCommunityAppBar) {
             icCommunityBell.setOnClickListener {
                 findNavController().navigate("notification")
             }
@@ -156,9 +183,32 @@ class CommunityFragment : Fragment() {
         }
     }
 
-    private fun onBind(communityUiState: CommunityUiState) = with(binding) {
+    private fun onBind(communityUiState: CommunityUiState) {
         when (communityUiState) {
+
             is CommunityUiState.CommunityNormalUiState -> {
+                val tvCommunityTitle1 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_title1)
+                val tvCommunityViewNum1 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_viewNum1)
+                val tvCommunityLikeNum1 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_likeNum1)
+                val tvCommunityCommentNum1 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_commentNum1)
+                val tvCommunityPostType1 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_postType1)
+
+                val tvCommunityTitle2 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_title2)
+                val tvCommunityViewNum2 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_viewNum2)
+                val tvCommunityLikeNum2 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_likeNum2)
+                val tvCommunityCommentNum2 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_commentNum2)
+                val tvCommunityPostType2 =
+                    requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
+
                 communityUiState.popularItem.postInfo1.let {
                     tvCommunityTitle1.text = it.title
                     tvCommunityViewNum1.text = it.view.toString()
@@ -173,10 +223,6 @@ class CommunityFragment : Fragment() {
                     tvCommunityLikeNum2.text = it.like.toString()
                     tvCommunityCommentNum2.text = it.comment.toString()
                     tvCommunityPostType2.text = it.postType
-                }
-
-                tvCommunityPopularFullView.setOnClickListener {
-                    // 전체보기로 이동 추가
                 }
 
             }

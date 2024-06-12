@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation.community
 import android.os.Parcelable
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import kotlinx.android.parcel.Parcelize
+import com.stopsmoke.kekkek.domain.model.PostCategory
 
 @Parcelize
 data class CommunityWritingItem(
@@ -10,7 +11,8 @@ data class CommunityWritingItem(
     val postInfo: PostInfo,
     val postImage: String,
     val post: String,
-    val postTime: ElapsedDateTime
+    val postTime: ElapsedDateTime,
+    val postType: PostCategory
 ) : Parcelable
 
 @Parcelize

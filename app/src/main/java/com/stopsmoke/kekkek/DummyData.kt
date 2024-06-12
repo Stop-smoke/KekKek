@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 import com.stopsmoke.kekkek.presentation.my.MyItem
 import com.stopsmoke.kekkek.presentation.my.MyWritingNum
+import com.stopsmoke.kekkek.presentation.myBookmarkList.BookmarkWritingItem
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.UUID

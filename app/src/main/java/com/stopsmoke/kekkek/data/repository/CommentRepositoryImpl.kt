@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class CommentRepositoryImpl @Inject constructor(
     private val commentDao: CommentDao
-): CommentRepository {
+) : CommentRepository {
     override fun getCommentItems(commentFilter: CommentFilter): Result<Flow<PagingData<Comment>>> {
         return try {
             when (commentFilter) {
@@ -25,6 +25,7 @@ class CommentRepositoryImpl @Inject constructor(
                         }
                     }
                 }
+
                 is CommentFilter.Post -> {
                     commentDao.getComment(commentFilter.postId).map { pagingData ->
                         pagingData.map {
@@ -49,6 +50,22 @@ class CommentRepositoryImpl @Inject constructor(
             Result.Error(e)
         }
     }
+
+    override fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>> =
+        try {
+            commentDao.getCommentItems(commentIdList)
+                .map { pagingData ->
+                    pagingData.map {
+                        it.asExternalModel()
+                    }
+                }.let {
+                    Result.Success(it)
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(e)
+        }
+
 
     override fun addCommentItem(comment: Comment): Result<Unit> {
         TODO("Not yet implemented")

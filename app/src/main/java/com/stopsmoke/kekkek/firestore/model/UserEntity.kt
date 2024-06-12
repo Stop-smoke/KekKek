@@ -57,5 +57,4 @@ data class UserEntity(
 
     @get:PropertyName("comment_my") @set:PropertyName("comment_my")
     var commentMy: List<String>? = null,
-
     )

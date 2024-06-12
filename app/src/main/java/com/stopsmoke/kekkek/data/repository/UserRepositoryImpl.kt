@@ -107,6 +107,20 @@ internal class UserRepositoryImpl @Inject constructor(
         return user
     }
 
+    override suspend fun getUserDataFormatUser(uid: String): User {
+        return try {
+            val userEntity = userDao.getUserDataFormatUser(uid)
+           return  if (userEntity != null) {
+                userEntity.toExternalModel()
+            } else {
+                User.Guest
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            User.Error(e)
+        }
+    }
+
     override suspend fun setUserData(user: User.Registered) {
         userDao.setUser(user.toEntity())
     }
