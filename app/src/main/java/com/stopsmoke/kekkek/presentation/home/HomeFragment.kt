@@ -54,10 +54,6 @@ class HomeFragment : Fragment() {
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
         initToolbar()
 
-        clHomeRank.setOnClickListener {
-            findNavController().navigate("ranking_list")
-        }
-
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
         }
@@ -83,17 +79,16 @@ class HomeFragment : Fragment() {
             ivHomeTest.text = "다시 검사하기"
         }
 
+        binding.clHomeTip.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_home_tip)
+        }
 
-        clHomeRank.setOnClickListener {
-            findNavController().navigate("ranking_map")
+        binding.clHomeCenter.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_home_center)
         }
 
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
-        }
-
-        binding.ivHomeTest.setOnClickListener {
-            findNavController().navigate("test_page")
         }
     }
 
@@ -149,9 +144,9 @@ class HomeFragment : Fragment() {
 
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
-            tvHomeSavedMoneyNum.text = formatToOneDecimalPlace(it.savedMoney) + " 원"
-            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-            tvHomeRankNum.text = "${it.rank} 위"
+//            tvHomeSavedMoneyNum.text = formatToOneDecimalPlace(it.savedMoney) + " 원"
+//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+//            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTestDegree.text = it.addictionDegree
 
             tvHomeTimerNum.text = it.timeString
@@ -167,19 +162,6 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_home_toolbar, menu)
-//        return super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle menu item clicks here
-//        when (item.itemId) {
-//            R.id.toolbar_home_bell -> {}
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
