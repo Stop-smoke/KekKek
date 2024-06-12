@@ -1,10 +1,10 @@
 package com.stopsmoke.kekkek.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -12,7 +12,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import com.stopsmoke.kekkek.presentation.test.TestViewModel
@@ -90,7 +89,32 @@ class HomeFragment : Fragment() {
         binding.clHomeSavedMoney.setOnClickListener {
             navigateToAttainmentsFragment()
         }
+
+        binding.ivHomeTest.setOnClickListener {
+            findNavController().navigate("test_page")
+        }
+
+        viewModel.updateUserData()
+        initTimerControllerListener()
     }
+
+
+    private fun initTimerControllerListener() {
+        val startDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_start)
+        val stopDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_stop)
+
+        val currentDrawable = binding.ivHomeTimerController.drawable
+
+        binding.ivHomeTimerController.setOnClickListener {
+            if (viewModel.uiState.value.startTimerSate
+            ) {
+                viewModel.setStopUserHistory()
+            } else {
+                viewModel.setStartUserHistory()
+            }
+        }
+    }
+
 
     private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
@@ -112,28 +136,6 @@ class HomeFragment : Fragment() {
                 }
         }
 
-
-        when (userData) {
-            is Result.Error -> {
-
-            }
-
-            is Result.Loading -> {
-
-            }
-
-            is Result.Success -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                        .collectLatest { user ->
-                            viewModel.updateUserData(user)
-                            Log.d("user",user.userConfig.packPrice.toString())
-                        }
-                }
-            }
-        }
-
-
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePost ->
@@ -150,6 +152,14 @@ class HomeFragment : Fragment() {
             tvHomeTestDegree.text = it.addictionDegree
 
             tvHomeTimerNum.text = it.timeString
+        }
+
+        if (uiState.startTimerSate) {
+            ivHomeTimerController.setImageResource(R.drawable.ic_home_stop)
+            viewModel.startTimer()
+        } else if (!uiState.startTimerSate) {
+            ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
+            viewModel.stopTimer()
         }
     }
 

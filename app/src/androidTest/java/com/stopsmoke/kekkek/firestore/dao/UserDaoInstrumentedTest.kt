@@ -6,6 +6,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.stopsmoke.kekkek.firestore.data.UserDaoImpl
+import com.stopsmoke.kekkek.firestore.model.HistoryEntity
+import com.stopsmoke.kekkek.firestore.model.HistoryTimeEntity
 import com.stopsmoke.kekkek.firestore.model.LocationEntity
 import com.stopsmoke.kekkek.firestore.model.UserConfigEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
@@ -15,6 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
@@ -36,6 +39,33 @@ class UserDaoInstrumentedTest {
 
     @Test
     fun setUsersData() = runTest {
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd")
+
+        val startDates = listOf(
+            "2022.04.01",
+            "2022.05.01",
+            "2022.06.01",
+            "2022.07.01",
+            "2022.08.01"
+        )
+
+        val stopDates = listOf(
+            "2022.04.05",
+            "2022.05.05",
+            "2022.06.05",
+            "2022.07.05",
+            null
+        )
+
+        val historyEntities = startDates.zip(stopDates).map { (start, stop) ->
+            val startDate = dateFormat.parse(start)
+            val stopDate = if(stop == null) null else dateFormat.parse(stop)
+            HistoryTimeEntity(
+                quitSmokingStartDateTime = Timestamp(startDate),
+                quitSmokingStopDateTime = if(stopDate == null) null else Timestamp(stopDate)
+            )
+        }
+
         val user = UserEntity(
             uid = "테스트_계정",
             name = "김민준",
@@ -51,7 +81,11 @@ class UserDaoInstrumentedTest {
                 packPrice = 5500
             ),
             postMy = listOf("haha", "dummyPostId"),
-            postBookmark = listOf("FIWO0bsaJxLz3MpFtCha", "MWdTXOEJ7RReWZuUarac")
+            postBookmark = listOf("FIWO0bsaJxLz3MpFtCha", "MWdTXOEJ7RReWZuUarac"),
+            history = HistoryEntity(
+                historyTimeList = historyEntities,
+                totalMinutesTime = 1000
+            )
         )
         userDao.setUser(user)
         Assert.assertEquals(user, userDao.getUser("테스트_계정").first())

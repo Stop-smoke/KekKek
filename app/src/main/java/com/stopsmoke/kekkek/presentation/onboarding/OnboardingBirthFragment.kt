@@ -8,9 +8,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.Timestamp
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingBirthBinding
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 class OnboardingBirthFragment : Fragment() {
@@ -44,7 +46,7 @@ class OnboardingBirthFragment : Fragment() {
 
             // TODO: 값 받아서 밑에 있는 코드 실행 시킬 것
             val localDate = LocalDate.of(2001, 10, 29)
-            viewModel.updateUserBirthDate(localDate.atStartOfDay())
+            viewModel.updateUserBirthDate(LocalDateTime.now())
         }
     }
 
