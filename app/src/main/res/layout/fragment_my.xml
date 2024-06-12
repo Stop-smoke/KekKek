@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include_fragment_my_app_bar"
-        layout="@layout/fragment_my_app_bar"/>
+        layout="@layout/fragment_my_app_bar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_my_profile"
@@ -208,6 +208,7 @@
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:background="@color/bg_gray"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/adView_my" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -215,6 +216,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/view_my_div2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -361,9 +363,6 @@
                 tools:text="황금 돼지" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
