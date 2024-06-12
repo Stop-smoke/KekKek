@@ -12,6 +12,8 @@ interface PostRepository {
 
     fun getPostForWrittenUid(writtenUid: String): Result<Flow<PagingData<Post>>>
 
+    fun getBookmark(postIdList: List<String>): Result<Flow<PagingData<Post>>>
+
     suspend fun addPost(post: PostWrite): Result<Unit>
 
     suspend fun deletePost(postId: String): Result<Unit>

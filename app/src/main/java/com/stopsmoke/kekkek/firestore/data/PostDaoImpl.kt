@@ -78,6 +78,42 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override fun getBookmark(postIdList: List<String>): Flow<PagingData<PostEntity>> {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereIn("id", postIdList)
+
+            Pager(
+                config = PagingConfig(PAGE_LIMIT)
+            ) {
+                FireStorePagingSource(
+                    query = query,
+                    limit = PAGE_LIMIT.toLong(),
+                    clazz = PostEntity::class.java
+                )
+
+            }.flow
+        } catch (e: Exception) {
+            e.printStackTrace()
+            //빈 페이저
+            Pager(
+                config = PagingConfig(PAGE_LIMIT)
+            ) {
+                object : PagingSource<Int, PostEntity>() {
+                    override fun getRefreshKey(state: PagingState<Int, PostEntity>): Int? = null
+
+                    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostEntity> {
+                        return LoadResult.Page(
+                            data = emptyList(),
+                            prevKey = null,
+                            nextKey = null
+                        )
+                    }
+                }
+            }.flow
+        }
+    }
+
     override suspend fun addPost(postEntity: PostEntity) {
         firestore.collection(COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
@@ -132,7 +168,7 @@ internal class PostDaoImpl @Inject constructor(
         return try {
             val query = firestore.collection(COLLECTION)
                 .whereEqualTo("category", "notice")
-                .limit(2)
+                .limit(1)
                 .get()
                 .await()
 

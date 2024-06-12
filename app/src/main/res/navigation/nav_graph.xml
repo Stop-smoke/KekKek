@@ -6,7 +6,7 @@
     app:startDestination="@+id/home">
 
     <include app:graph="@navigation/nav_onboarding" />
-    <include app:graph="@navigation/nav_settings"/>
+    <include app:graph="@navigation/nav_settings" />
 
     <fragment
         android:id="@+id/home"
@@ -38,6 +38,15 @@
         <action
             android:id="@+id/action_my_page_to_my_supportcenter"
             app:destination="@id/my_supportcenter" />
+        <action
+            android:id="@+id/action_myPage_to_myWritingList"
+            app:destination="@id/my_writing_list" />
+        <action
+            android:id="@+id/action_myPage_to_myBookmarkList"
+            app:destination="@id/my_bookmark_list" />
+        <action
+            android:id="@+id/action_myPage_to_myCommentList"
+            app:destination="@id/my_comment_list" />
     </fragment>
 
     <fragment
@@ -83,9 +92,9 @@
         tools:layout="@layout/fragment_attainments" />
 
     <fragment
-        android:id="@+id/bookamrk"
-        android:name="com.stopsmoke.kekkek.presentation.bookmark.BookmarkFragment"
-        app:route="bookmark"
+        android:id="@+id/my_bookmark_list"
+        android:name="com.stopsmoke.kekkek.presentation.myBookmarkList.BookmarkFragment"
+        app:route="my_bookmark_list"
         tools:layout="@layout/fragment_bookmark" />
 
     <fragment
@@ -107,9 +116,9 @@
         tools:layout="@layout/fragment_my_post" />
 
     <fragment
-        android:id="@+id/my_comment"
-        android:name="com.stopsmoke.kekkek.presentation.my.MyCommentFragment"
-        app:route="my_comment"
+        android:id="@+id/my_comment_list"
+        android:name="com.stopsmoke.kekkek.presentation.myCommentList.MyCommentFragment"
+        app:route="my_comment_list"
         tools:layout="@layout/fragment_my_comment" />
 
     <fragment

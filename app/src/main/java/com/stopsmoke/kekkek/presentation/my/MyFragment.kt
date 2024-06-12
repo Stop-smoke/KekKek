@@ -69,23 +69,18 @@ class MyFragment : Fragment() {
 
     private fun initView() = with(binding) {
 
-        tvMyWritingNum.setOnClickListener {
-            findNavController().navigate("my_writing_list")
-        }
-        tvMyCommentNum.setOnClickListener { }
-        tvMyBookmarkNum.setOnClickListener { }
 
     }
 
     private fun initListener() = with(binding) {
-        clMyMybookmarknum.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
         clMyMypost.setOnClickListener {
-            findNavController().navigate("my_post")
+            findNavController().navigate(R.id.action_myPage_to_myWritingList)
         }
         clMyMycomment.setOnClickListener {
-            findNavController().navigate("my_comment")
+            findNavController().navigate(R.id.action_myPage_to_myCommentList)
+        }
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
         }
 
         clMyCustomerService.setOnClickListener {

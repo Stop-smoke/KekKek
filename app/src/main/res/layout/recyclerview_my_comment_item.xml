@@ -25,25 +25,29 @@
         app:constraint_referenced_ids="iv_my_comment_icon"/>
 
     <TextView
-        android:id="@+id/tv_my_comment_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_my_comment_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="내가 쓴 댓글 제목"
         android:fontFamily="@font/pretendard_medium"
         android:textSize="15sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/barrier_my_comment"/>
+        app:layout_constraintStart_toEndOf="@+id/barrier_my_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
     <TextView
-        android:id="@+id/tv_my_comment_content"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_my_comment_state"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_medium"
         android:textColor="#8B94A1"
         android:textSize="13sp"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@+id/barrier_my_comment"
-        app:layout_constraintTop_toBottomOf="@+id/tv_my_comment_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_my_comment_content"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="○○게시판에 등록한 ○○게시글에 댓글을 남겼습니다."/>
 
     <TextView
@@ -56,6 +60,6 @@
         android:textSize="13sp"
         tools:text="댓글 남긴 날짜(ex. 2024.05.25)"
         app:layout_constraintStart_toEndOf="@id/barrier_my_comment"
-        app:layout_constraintTop_toBottomOf="@+id/tv_my_comment_content"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_my_comment_state"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
