@@ -149,3 +149,4 @@ class CommunityListAdapter(
         getItem(position)?.let { holder.bind(it) }
     }
 }
+

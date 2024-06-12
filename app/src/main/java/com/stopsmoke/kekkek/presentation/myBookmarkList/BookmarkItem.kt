@@ -13,17 +13,3 @@ data class BookmarkWritingItem(
     val postTime: ElapsedDateTime,
     val postType: PostCategory
 )
-
-data class PostInfo(
-    val title: String,
-    val postType: String,
-    val view: Int,
-    val like: Int,
-    val comment: Int
-)
-
-data class UserInfo(
-    val name: String,
-    val rank: Int,
-    val profileImage: String
-)

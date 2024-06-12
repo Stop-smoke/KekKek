@@ -2,23 +2,16 @@ package com.stopsmoke.kekkek.presentation.popularWritingList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.map
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
-import com.stopsmoke.kekkek.presentation.community.CommunityPopularItem
-import com.stopsmoke.kekkek.presentation.community.CommunityUiState
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

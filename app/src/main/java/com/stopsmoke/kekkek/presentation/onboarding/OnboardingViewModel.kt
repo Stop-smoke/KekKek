@@ -3,6 +3,9 @@ package com.stopsmoke.kekkek.presentation.onboarding
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
+import com.stopsmoke.kekkek.data.mapper.emptyHistory
+import com.stopsmoke.kekkek.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.UserConfig
@@ -102,7 +105,8 @@ class OnboardingViewModel @Inject constructor(
                     packCigaretteCount = cigarettesPerPack.value,
                     packPrice = cigarettePricePerPack.value,
                     birthDate = userBirthDate.value!!
-                )
+                ),
+                history = emptyHistory()
             )
             userRepository.setUserData(user)
             userRepository.setOnboardingComplete(true)

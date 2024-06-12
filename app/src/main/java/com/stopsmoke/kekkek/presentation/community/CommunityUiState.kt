@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import androidx.paging.PagingData
-
 sealed interface CommunityUiState {
     data class CommunityNormalUiState(
         val popularItem: CommunityPopularItem,

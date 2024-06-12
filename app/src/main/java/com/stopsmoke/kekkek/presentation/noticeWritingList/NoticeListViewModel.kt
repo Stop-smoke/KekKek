@@ -9,7 +9,6 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
