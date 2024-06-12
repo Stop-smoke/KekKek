@@ -28,14 +28,11 @@ class SettingsProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAppBar()
-    }
 
-    private fun initAppBar() = with(binding) {
-        settingProfile.tvUserProfileTitle.text = "계정"
-        settingProfile.ivUserProfileBack.setOnClickListener {
+        binding.includeSettingsProfileAppBar.ivSettingsProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
     }
 
     override fun onDestroyView() {

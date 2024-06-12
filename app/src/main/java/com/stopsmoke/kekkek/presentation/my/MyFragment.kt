@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -49,13 +48,9 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvMyBookmark.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
-
-        initView()
         initListener()
         initViewModel()
+        initView()
 
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
@@ -73,11 +68,6 @@ class MyFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbarMy)
-        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-            title = "My Toolbar Title"
-            setDisplayShowTitleEnabled(false)
-        }
 
         tvMyWritingNum.setOnClickListener {
             findNavController().navigate("my_writing_list")
@@ -88,25 +78,26 @@ class MyFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
-        tvMyWriting.setOnClickListener {
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate("bookmark")
+        }
+        clMyMypost.setOnClickListener {
             findNavController().navigate("my_post")
         }
-        tvMyComment.setOnClickListener {
+        clMyMycomment.setOnClickListener {
             findNavController().navigate("my_comment")
         }
-        toolbarMy.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.toolbar_my_bell -> {
-                    true
-                }
 
-                R.id.toolbar_my_setting -> {
-                    findNavController().navigate(R.id.action_my_page_to_nav_settings)
-                    true
-                }
+        clMyCustomerService.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
+        }
 
-                else -> false
-            }
+        includeFragmentMyAppBar.icMyBell.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_notification)
+        }
+
+        includeFragmentMyAppBar.icMySettings.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_nav_settings)
         }
     }
 

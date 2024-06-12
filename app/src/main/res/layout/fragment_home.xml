@@ -142,7 +142,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_home_widget"
                 android:layout_width="match_parent"
@@ -356,7 +355,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cl_home_motivation"
                 android:layout_width="match_parent"
@@ -400,25 +398,20 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/iv_home_motivationRe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:src="@drawable/ic_re"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+<!--                        <ImageView-->
+<!--                            android:id="@+id/iv_home_motivationRe"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_margin="20dp"-->
+<!--                            android:src="@drawable/ic_re"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </FrameLayout>
 
             </androidx.cardview.widget.CardView>
-
-
-
-
-
 
             <TextView
                 android:id="@+id/tv_home_personalPolicy"
@@ -434,6 +427,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_home_motivation" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

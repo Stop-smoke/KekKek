@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -40,6 +38,7 @@ class MyWritingListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
         initViewModel()
     }
@@ -50,21 +49,13 @@ class MyWritingListFragment : Fragment() {
         rvMyWritingList.layoutManager = LinearLayoutManager(requireActivity())
     }
 
-    private fun initAppBar() = with(binding) {
-        val ivMyWritingListBack =
-            requireActivity().findViewById<ImageView>(R.id.iv_notification_back)
-        val ivMyWritingListDelete =
-            requireActivity().findViewById<ImageView>(R.id.iv_notification_delete)
-        val tvMyWritingListTitle =
-            requireActivity().findViewById<TextView>(R.id.tv_notification_title)
+    private fun initAppBar() {
+        val ivMyPostBack =
+            requireActivity().findViewById<ImageView>(R.id.iv_my_post_back)
 
-        ivMyWritingListBack.setOnClickListener {
+        ivMyPostBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        ivMyWritingListDelete.visibility = View.GONE
-
-        tvMyWritingListTitle.text = "내가 쓴 글"
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -90,8 +81,4 @@ class MyWritingListFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) = MyWritingListFragment()
-    }
 }
