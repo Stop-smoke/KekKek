@@ -6,48 +6,54 @@
     android:layout_height="wrap_content"
     android:minHeight="60dp">
 
-    <ImageView
-        android:id="@+id/iv_notification_back"
+    <TextView
+        android:id="@+id/tv_post_write_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_app_bar_left_arrow"
+        android:clickable="true"
+        android:padding="14dp"
+        android:text="@string/post_write_cancel"
+        android:textColor="#D0D5DB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_notification_title"
+        android:id="@+id/tv_post_write_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:fontFamily="@font/pretendard_bold"
-        tools:text="알림"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="글 카테고리" />
 
-    <ImageView
-        android:id="@+id/iv_notification_delete"
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinner_post_write"
+        android:layout_width="10dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/ic_category"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_post_write_type"
+        app:layout_constraintStart_toEndOf="@+id/tv_post_write_type"
+        app:layout_constraintTop_toTopOf="@+id/tv_post_write_type" />
+
+    <TextView
+        android:id="@+id/tv_post_write_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:padding="4dp"
-        android:visibility="invisible"
-        android:src="@drawable/ic_notification_delete"
+        android:clickable="true"
+        android:padding="14dp"
+        android:text="@string/post_write_register"
+        android:textColor="#D0D5DB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/grayline"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/bg_thin_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

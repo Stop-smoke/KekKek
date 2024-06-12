@@ -259,14 +259,14 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_rank"
+                    android:id="@+id/cl_home_center"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
                     android:background="@drawable/bg_home_widget_ninepatch"
                     app:layout_constraintDimensionRatio="1"
-                    app:layout_constraintEnd_toStartOf="@+id/cl_home_savedLife"
+                    app:layout_constraintEnd_toStartOf="@+id/cl_home_tip"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
@@ -279,7 +279,7 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/pretendard_medium"
-                        android:text="랭킹"
+                        android:text="보건복지부 산하"
                         android:textColor="@color/gray_lightgray2"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -291,17 +291,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:text="15,325 원"
+                        android:text="금연 길라잡이"
                         android:textSize="19sp"
                         app:layout_constraintStart_toStartOf="@id/tv_home_rankTitle"
                         app:layout_constraintTop_toBottomOf="@id/tv_home_rankTitle" />
 
                     <ImageView
                         android:id="@+id/iv_home_rank"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_marginBottom="28dp"
-                        android:src="@drawable/ic_home_trophy"
+                        android:src="@drawable/ic_center"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -309,15 +309,15 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home_savedLife"
+                    android:id="@+id/cl_home_tip"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/bg_home_widget_ninepatch"
                     app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/cl_home_rank"
-                    app:layout_constraintTop_toTopOf="@id/cl_home_rank">
+                    app:layout_constraintStart_toEndOf="@+id/cl_home_center"
+                    app:layout_constraintTop_toTopOf="@id/cl_home_center">
 
                     <TextView
                         android:id="@+id/tv_home_savedLifeTitle"
@@ -326,7 +326,7 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/pretendard_medium"
-                        android:text="증가한 생명"
+                        android:text="금단 증상 팁"
                         android:textColor="@color/gray_lightgray2"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -338,22 +338,123 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:text="35 원"
+                        android:text="팁 확인"
                         android:textSize="19sp"
                         app:layout_constraintStart_toStartOf="@id/tv_home_savedLifeTitle"
                         app:layout_constraintTop_toBottomOf="@id/tv_home_savedLifeTitle" />
 
                     <ImageView
                         android:id="@+id/iv_home_savedLife"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginBottom="28dp"
-                        android:src="@drawable/ic_home_heart"
+                        android:layout_width="60dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="30dp"
+                        android:src="@drawable/ic_tip"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--랭킹 기능 일단 주석 처리-->
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/cl_home_rank"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginTop="6dp"-->
+<!--                android:layout_marginEnd="6dp"-->
+<!--                android:background="@drawable/bg_home_widget_ninepatch"-->
+<!--                app:layout_constraintDimensionRatio="1"-->
+<!--                app:layout_constraintEnd_toStartOf="@+id/cl_home_savedLife"-->
+<!--                app:layout_constraintHorizontal_bias="0.5"-->
+<!--                app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/cl_home_savedMoney">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_home_rankTitle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:fontFamily="@font/pretendard_medium"-->
+<!--                    android:text="랭킹"-->
+<!--                    android:textColor="@color/gray_lightgray2"-->
+<!--                    android:textSize="13sp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_home_rankNum"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="4dp"-->
+<!--                    android:fontFamily="@font/pretendard_bold"-->
+<!--                    android:text="15,325 원"-->
+<!--                    android:textSize="19sp"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/tv_home_rankTitle"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/tv_home_rankTitle" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_home_rank"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_marginBottom="28dp"-->
+<!--                    android:src="@drawable/ic_home_trophy"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/cl_home_savedLife"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:background="@drawable/bg_home_widget_ninepatch"-->
+<!--                app:layout_constraintDimensionRatio="1"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.5"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/cl_home_rank"-->
+<!--                app:layout_constraintTop_toTopOf="@id/cl_home_rank">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_home_savedLifeTitle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="24dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:fontFamily="@font/pretendard_medium"-->
+<!--                    android:text="증가한 생명"-->
+<!--                    android:textColor="@color/gray_lightgray2"-->
+<!--                    android:textSize="13sp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_home_savedLifeNum"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="4dp"-->
+<!--                    android:fontFamily="@font/pretendard_bold"-->
+<!--                    android:text="35 원"-->
+<!--                    android:textSize="19sp"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/tv_home_savedLifeTitle"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/tv_home_savedLifeTitle" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_home_savedLife"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_marginBottom="28dp"-->
+<!--                    android:src="@drawable/ic_home_heart"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent" />-->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cl_home_motivation"
@@ -389,13 +490,14 @@
                             android:id="@+id/tv_home_motivation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="40dp"
                             android:fontFamily="@font/pretendard_bold"
-                            android:text="이것은 명언입니다.\n이것을 보고 담배를 끊을 수 있어!"
+                            android:gravity="end"
+                            android:text="담배를 피워도 괴롭고,\n끊어도 괴롭다면,\n 어떤 괴로움을 선택하겠는가?"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <!--                        <ImageView-->
@@ -420,13 +522,14 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="40dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="개인정보처리방침 보기"
+                android:text=""
                 android:textColor="@color/gray_lightgray2"
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_home_motivation" />
+                app:layout_constraintTop_toBottomOf="@id/cl_home_motivation"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

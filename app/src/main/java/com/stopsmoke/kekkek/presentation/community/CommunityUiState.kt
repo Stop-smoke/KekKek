@@ -14,14 +14,16 @@ sealed interface CommunityUiState {
                     postType = "",
                     view = 0,
                     like = 0,
-                    comment = 0
+                    comment = 0,
+                    id = ""
                 ),
                 postInfo2 = PostInfo(
                     title = "",
                     postType = "",
                     view = 0,
                     like = 0,
-                    comment = 0
+                    comment = 0,
+                    id = ""
                 ),
             )
         )

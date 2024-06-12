@@ -5,14 +5,14 @@ import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 
-class PopularWritingListItem (
+class PopularWritingListItem(
     val userInfo: UserInfo,
-    val postInfo : PostInfo,
+    val postInfo: PostInfo,
     val postImage: String,
     val post: String,
     val postTime: ElapsedDateTime,
     val postType: PostCategory
-){
+) {
     override fun equals(other: Any?): Boolean {
         return super.equals(other)
     }

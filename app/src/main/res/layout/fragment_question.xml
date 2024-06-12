@@ -7,44 +7,26 @@
     android:layout_height="match_parent"
     tools:context=".presentation.test.TestQuestionFragment">
 
-
-    <ImageView
-        android:id="@+id/iv_test_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_cancel"
-        android:background="@drawable/custom_ripple_effect"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_question_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_question_title" />
-
-    <TextView
-        android:id="@+id/tv_question_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/test_title"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
+    <include
+        android:id="@+id/include_question_app_bar"
+        layout="@layout/fragment_question_app_bar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressbar_question"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#5877E4"
         android:backgroundTintMode="src_in"
         android:progressBackgroundTint="#5877E4"
         android:progressBackgroundTintMode="add"
-        app:layout_constraintEnd_toEndOf="@+id/tv_question_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_question_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_question_title" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include_question_app_bar" />
 
     <!-- 프로그래스 바 부분 나중에 수정 필요해 보입니다. -->
 
@@ -101,8 +83,8 @@
         android:id="@+id/btn_question_answer_3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/bg_text_button"
         android:text="@string/question1_answer3"
@@ -111,16 +93,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_test_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:clickable="true"
-        android:background="@drawable/custom_ripple_effect"
-        android:src="@drawable/ic_app_bar_left_arrow"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_question_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_question_title" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

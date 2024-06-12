@@ -1,10 +1,13 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.os.Parcelable
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class CommunityWritingItem(
     val userInfo: UserInfo,
     val postInfo: PostInfo,
@@ -12,32 +15,38 @@ data class CommunityWritingItem(
     val post: String,
     val postTime: ElapsedDateTime,
     val postType: PostCategory
-)
+) : Parcelable
 
+@Parcelize
 data class CommunityPopularItem(
     val postInfo1: PostInfo,
     val postInfo2: PostInfo
-)
+) : Parcelable
 
+@Parcelize
 data class PostInfo(
+    val id: String,
     val title: String,
     val postType: String,
     val view: Long,
     val like: Long,
     val comment: Long
-)
+) : Parcelable
 
+@Parcelize
 data class UserInfo(
+    val uid: String,
     val name: String,
     val rank: Long,
     val profileImage: String
-)
+) : Parcelable
 
-fun Post.toCommunityWritingListItem() =  CommunityWritingItem(
+fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     userInfo = UserInfo(
         name = written.name,
         rank = written.ranking,
-        profileImage = if (written.profileImage is ProfileImage.Web) written.profileImage.url else ""
+        profileImage = if (written.profileImage is ProfileImage.Web) written.profileImage.url else "",
+        uid = written.uid
     ),
     postInfo = PostInfo(
         title = title,
@@ -55,7 +64,8 @@ fun Post.toCommunityWritingListItem() =  CommunityWritingItem(
         },
         view = views,
         like = likeUser.size.toLong(),
-        comment = commentUser.size.toLong()
+        comment = commentUser.size.toLong(),
+        id = id
     ),
     postImage = "",
     post = text,

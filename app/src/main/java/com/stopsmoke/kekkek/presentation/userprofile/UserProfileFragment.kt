@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
@@ -27,6 +28,13 @@ class UserProfileFragment : Fragment() {
 
     private val viewModel: UserProfileViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getString("uid")?.let {
+            viewModel.updateUid(it)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -41,6 +49,9 @@ class UserProfileFragment : Fragment() {
         lifecycleScope.launch { viewModel.user.collect(observeUserData()) }
         setupViewpager()
         setupTabLayoutWithViewPager()
+        binding.includeUserprofileAppBar.ivUserProfileBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun observeUserData() = FlowCollector<User.Registered> { user ->

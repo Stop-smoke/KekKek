@@ -79,10 +79,10 @@ class TestQuestionFragment : Fragment() {
                 testFragment.moveToNextQuestionPage()
             }
 
-            ivTestBack.setOnClickListener {
+            includeQuestionAppBar.ivTestBack.setOnClickListener {
                 activity?.onBackPressed()
             }
-            ivTestCancel.setOnClickListener {
+            includeQuestionAppBar.ivTestCancel.setOnClickListener {
                 ToastDialog()
             }
         }

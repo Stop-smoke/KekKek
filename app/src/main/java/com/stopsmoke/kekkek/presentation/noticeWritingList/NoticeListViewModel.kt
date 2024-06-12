@@ -48,7 +48,8 @@ class NoticeListViewModel @Inject constructor(
             userInfo = UserInfo(
                 name = post.written.name,
                 rank = post.written.ranking,
-                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else ""
+                profileImage = if (post.written.profileImage is ProfileImage.Web) post.written.profileImage.url else "",
+                uid = post.written.uid
             ),
             postInfo = PostInfo(
                 title = post.title,
@@ -66,7 +67,8 @@ class NoticeListViewModel @Inject constructor(
                 },
                 view = post.views,
                 like = post.likeUser.size.toLong(),
-                comment = post.commentUser.size.toLong()
+                comment = post.commentUser.size.toLong(),
+                id = post.id
             ),
             postImage = "",
             post = post.text,
