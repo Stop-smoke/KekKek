@@ -6,20 +6,21 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
-import com.stopsmoke.kekkek.databinding.RecyclerviewExamplePagingBinding
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.firestore.model.CommentEntity
 
 private class PostCommentAdapter :
     PagingDataAdapter<Comment, PostCommentAdapter.PostCommentViewHolder>(diffUtil) {
 
-    class PostCommentViewHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(comment: Comment)
+    class PostCommentViewHolder(val binding: ItemCommentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(comment: Comment) {
+            //
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostCommentViewHolder {
         val view =
-            RecyclerviewExamplePagingBinding.inflate(
+            ItemCommentBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -33,14 +34,14 @@ private class PostCommentAdapter :
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<CommentEntity>() {
-            override fun areItemsTheSame(oldItem: CommentEntity, newItem: CommentEntity): Boolean {
+        private val diffUtil = object : DiffUtil.ItemCallback<Comment>() {
+            override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: CommentEntity,
-                newItem: CommentEntity,
+                oldItem: Comment,
+                newItem: Comment,
             ): Boolean {
                 return oldItem == newItem
             }
