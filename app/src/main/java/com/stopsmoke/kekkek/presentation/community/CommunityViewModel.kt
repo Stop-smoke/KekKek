@@ -71,7 +71,8 @@ class CommunityViewModel @Inject constructor(
         postType = "",
         view = 0,
         like = 0,
-        comment = 0
+        comment = 0,
+        id = ""
     )
 
     private fun updatePostInfo(post: Post): PostInfo = PostInfo(
@@ -90,7 +91,8 @@ class CommunityViewModel @Inject constructor(
         },
         view = post.views,
         like = post.likeUser.size.toLong(),
-        comment = post.commentUser.size.toLong()
+        comment = post.commentUser.size.toLong(),
+        id = post.id
     )
 
     private fun updateWritingItem(post: Post): CommunityWritingItem =
@@ -117,7 +119,8 @@ class CommunityViewModel @Inject constructor(
                 },
                 view = post.views,
                 like = post.likeUser.size.toLong(),
-                comment = post.commentUser.size.toLong()
+                comment = post.commentUser.size.toLong(),
+                id = post.id
             ),
             postImage = "",
             post = post.text,

@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -19,9 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
-import com.stopsmoke.kekkek.presentation.post.PostWriteItem
 import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
-import com.stopsmoke.kekkek.presentation.post.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,7 +31,7 @@ class CommunityFragment : Fragment() {
 
     private val viewModel: CommunityViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    
+
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
     }
@@ -73,7 +70,10 @@ class CommunityFragment : Fragment() {
                 }
 
                 override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
-                    findNavController().navigate("post_view")
+                    findNavController().navigate(
+                        resId = R.id.action_community_to_post_view,
+                        args = bundleOf("item" to communityWritingItem)
+                    )
                 }
             }
         )
@@ -97,12 +97,30 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
-//        sharedViewModel.newPost.observe(viewLifecycleOwner) {
-//            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
-//        }
-
         initCommunityCategory()
         setToolbarMenu()
+
+        clCommunityNotice.setOnClickListener {
+            findNavController().navigate("notice_list")
+        }
+
+
+        val tvCommunityPopularFullView =
+            requireActivity().findViewById<TextView>(R.id.tv_community_popularFullView)
+        val clCommunityPostPopular1 =
+            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular1)
+        val clCommunityPostPopular2 =
+            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
+        tvCommunityPopularFullView.setOnClickListener {
+            findNavController().navigate("popular_writing_list")
+        }
+
+        clCommunityPostPopular1.setOnClickListener {
+            findNavController().navigate("post_view")
+        }
+        clCommunityPostPopular2.setOnClickListener {
+            findNavController().navigate("post_view")
+        }
     }
 
     private fun initCommunityCategory() = with(binding) {
