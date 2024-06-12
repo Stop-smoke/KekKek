@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestorage.data
 
+import android.net.Uri
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Tasks
@@ -25,14 +26,17 @@ internal class StorageDaoImpl @Inject constructor(
         inputStream: InputStream,
         path: String
     ): Flow<StorageUploadResult> = callbackFlow {
+        val downloadUrl = OnSuccessListener<Uri> {
+            trySendBlocking(StorageUploadResult.Success(it.toString()))
+        }
+
         val storageReference = reference.child(path)
 
         val progressListener = OnProgressListener<UploadTask.TaskSnapshot> {
             trySendBlocking(StorageUploadResult.Progress)
         }
         val successListener = OnSuccessListener<UploadTask.TaskSnapshot> {
-            val downloadUrl = Tasks.await(storageReference.downloadUrl)
-            trySendBlocking(StorageUploadResult.Success(downloadUrl.toString()))
+            storageReference.downloadUrl.addOnSuccessListener(downloadUrl)
         }
         val failureListener = OnFailureListener {
             trySendBlocking(StorageUploadResult.Error(it))
