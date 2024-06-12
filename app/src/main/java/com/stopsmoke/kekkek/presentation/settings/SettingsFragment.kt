@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -18,7 +17,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.collectLatest
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
@@ -34,7 +33,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -49,15 +48,17 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     private fun observeUserInformation() {
 
-        viewModel.user.collectLatest(lifecycleScope) {
-            when(it) {
+        viewModel.user.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
                 is User.Error -> {
-                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
+                        .show()
                 }
+
                 is User.Guest -> {
                     binding.includeSettingsProfile.tvSettingUsername.text = "로그인이 필요합니다."
-
                 }
+
                 is User.Registered -> {
                     binding.includeSettingsProfile.tvSettingUsername.text = it.name
                     when (it.profileImage) {
@@ -67,7 +68,8 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
                         }
 
                         is ProfileImage.Web -> {
-                            binding.includeSettingsProfile.circleIvSettingProfile.load((it.profileImage as ProfileImage.Web).url)
+                            binding.includeSettingsProfile.circleIvSettingProfile
+                                .load((it.profileImage as? ProfileImage.Web)?.url)
                         }
                     }
                 }
