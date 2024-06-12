@@ -63,15 +63,15 @@ class PostWriteFragment : Fragment() {
         val category = resources.getStringArray(R.array.post_category)
         val adapter =
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
-        spinnerPostWrite.adapter = adapter
-        spinnerPostWrite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        includePostWriteAppBar.spinnerPostWrite.adapter = adapter
+        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
-                tvPostWriteType.text = category[position]
+                includePostWriteAppBar.tvPostWriteType.text = category[position]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -80,40 +80,40 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
-        ivPostWriteBold.setOnClickListener {
-            val span = StyleSpan(Typeface.BOLD)
-            runTextEditor(span)
-        }
-        ivPostWriteItalic.setOnClickListener {
-            val span = StyleSpan(Typeface.ITALIC)
-            runTextEditor(span)
-        }
-        ivPostWriteUnderline.setOnClickListener {
-            val span = UnderlineSpan()
-            runTextEditor(span)
-        }
-        ivPostWriteLineThrough.setOnClickListener {
-            val span = StrikethroughSpan()
-            runTextEditor(span)
-        }
-        ivPostWriteTextColor.setOnClickListener {
-            val span = ForegroundColorSpan(requireContext().getColor(R.color.red))
-            runTextEditor(span)
-        }
-        ivPostWriteBackgroundColor.setOnClickListener {
-            val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
-            runTextEditor(span)
-        }
-        ivPostWriteLink.setOnClickListener {
-            val span = URLSpan("https://github.com/Stop-smoke/KekKek")
-            runTextEditor(span)
-        }
+//        ivPostWriteBold.setOnClickListener {
+//            val span = StyleSpan(Typeface.BOLD)
+//            runTextEditor(span)
+//        }
+//        ivPostWriteItalic.setOnClickListener {
+//            val span = StyleSpan(Typeface.ITALIC)
+//            runTextEditor(span)
+//        }
+//        ivPostWriteUnderline.setOnClickListener {
+//            val span = UnderlineSpan()
+//            runTextEditor(span)
+//        }
+//        ivPostWriteLineThrough.setOnClickListener {
+//            val span = StrikethroughSpan()
+//            runTextEditor(span)
+//        }
+//        ivPostWriteTextColor.setOnClickListener {
+//            val span = ForegroundColorSpan(requireContext().getColor(R.color.red))
+//            runTextEditor(span)
+//        }
+//        ivPostWriteBackgroundColor.setOnClickListener {
+//            val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
+//            runTextEditor(span)
+//        }
+//        ivPostWriteLink.setOnClickListener {
+//            val span = URLSpan("https://github.com/Stop-smoke/KekKek")
+//            runTextEditor(span)
+//        }
 
-        tvPostWriteCancel.setOnClickListener {
+        includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        tvPostWriteRegister.setOnClickListener {
+        includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("게시물 등록")
             builder.setMessage("게시물을 등록하시겠습니까?")
@@ -126,7 +126,7 @@ class PostWriteFragment : Fragment() {
                             title = etPostWriteTitle.text.toString(),
                             text = etPostWriteContent.text.toString(),
                             dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
-                            category = when (tvPostWriteType.text) {
+                            category = when (includePostWriteAppBar.tvPostWriteType.text) {
                                 "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
                                 "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
                                 "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
@@ -145,8 +145,8 @@ class PostWriteFragment : Fragment() {
             builder.show()
         }
 
-        tvPostWriteType.setOnClickListener {
-            spinnerPostWrite.performClick()
+        includePostWriteAppBar.tvPostWriteType.setOnClickListener {
+            includePostWriteAppBar.spinnerPostWrite.performClick()
         }
     }
 
