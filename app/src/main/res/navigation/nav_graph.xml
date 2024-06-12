@@ -28,7 +28,16 @@
         <action
             android:id="@+id/action_my_page_to_nav_settings"
             app:destination="@id/nav_settings" />
+        <action
+            android:id="@+id/action_my_page_to_notification"
+            app:destination="@id/notification" />
     </fragment>
+
+    <fragment
+        android:id="@+id/my_supportcenter"
+        android:name="com.stopsmoke.kekkek.presentation.my.supportcenter.SupportCenterFragment"
+        app:route="my_supportcenter"
+        tools:layout="@layout/fragment_support_center" />
 
     <fragment
         android:id="@+id/test_page"
