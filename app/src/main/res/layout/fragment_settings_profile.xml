@@ -237,6 +237,7 @@
                 android:id="@+id/md_width_three"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
+                android:visibility="gone"
                 app:dividerColor="#F4F6F8"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
