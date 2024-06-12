@@ -37,7 +37,7 @@ class HomeCenterFragment : Fragment() {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            loadUrl("https://docs.google.com/forms/d/e/1FAIpQLSdtFqgdIcfTw99XSvOzbsyiOqxTDFkm1_BDqIIqOw2YzLnzxA/viewform")
+            loadUrl("https://www.nosmokeguide.go.kr/index.do")
         }
     }
 
