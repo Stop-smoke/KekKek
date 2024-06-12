@@ -2,8 +2,6 @@ package com.stopsmoke.kekkek.presentation.myBookmarkList
 
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.presentation.community.PostInfo
-import com.stopsmoke.kekkek.presentation.community.UserInfo
 
 data class BookmarkWritingItem(
     val userInfo: UserInfo,

@@ -16,8 +16,9 @@ import com.stopsmoke.kekkek.presentation.settings.model.ProfileInfo
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     private var _binding: FragmentSettingsBinding? = null
