@@ -54,11 +54,8 @@ class PostViewFragment : Fragment() {
     }
 
     private fun setupListener() = with(binding) {
-        ivPostBack.setOnClickListener {
+        includePostViewAppBar.ivPostBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
-        }
-        btnPostViewCommentRegister.setOnClickListener {
-            val comment = etPostAddComment.text.toString()
         }
     }
 

@@ -1,8 +1,5 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,15 +13,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
-import coil.transform.CircleCropTransformation
-import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.io.File
 
+@AndroidEntryPoint
 class SettingsProfileFragment : Fragment() {
 
     private var _binding: FragmentSettingsProfileBinding? = null
@@ -46,7 +43,7 @@ class SettingsProfileFragment : Fragment() {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
             } else {
-
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -65,21 +62,32 @@ class SettingsProfileFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        settingProfile.tvUserProfileTitle.text = "계정"
+        includeSettingsProfileAppBar.tvSettingsProfileTitle.text = "계정"
         includeSettingsProfileAppBar.ivSettingsProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
         circleIvProfile.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
+        // 온보딩 데이터를 넣어줘야함.
+//        tvSettingProfileNicknameDetail.text = viewModel.updateNickname()
+//        tvSettingProfileBirthDetail.text = viewModel.updateBirthDate()
+//        tvSettingProfileIntroductionDetail.text = viewModel.updateIntroduce()
+
         when (viewModel.user) {
             is Result.Error -> {}
             Result.Loading -> {}
             is Result.Success -> {
                 lifecycleScope.launch {
                     (viewModel.user as Result.Success<Flow<User.Registered>>).data.collect {
-                        circleIvProfile.load(it.profileImage) {
-                            crossfade(true)
+                        when(it.profileImage) {
+                            is ProfileImage.Default -> {}
+                            is ProfileImage.Web -> {
+                                circleIvProfile.load((it.profileImage as ProfileImage.Web).url) {
+                                    crossfade(true)
+                                }
+                            }
                         }
                     }
                 }
