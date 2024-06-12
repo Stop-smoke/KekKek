@@ -1,18 +1,23 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -56,6 +61,7 @@ class SettingsProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initListener()
     }
 
     private fun initView() = with(binding) {
@@ -90,6 +96,38 @@ class SettingsProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initListener() = with(binding) {
+        ivSettingEditNickname.setOnClickListener {
+            editDialog(binding.tvSettingProfileNicknameDetail)
+        }
+        ivSettingEditBirth.setOnClickListener {
+            editDialog(binding.tvSettingProfileBirthDetail)
+        }
+        ivSettingEditIntroduction.setOnClickListener {
+            editDialog(binding.tvSettingProfileIntroductionDetail)
+        }
+    }
+
+    private fun editDialog(textView: TextView) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("편집하기")
+        builder.setIcon(R.drawable.ic_post)
+
+        val customView = layoutInflater.inflate(R.layout.profile_edit_custom_dialog,null)
+        builder.setView(customView)
+
+        val listener = DialogInterface.OnClickListener { p0, _ ->
+            val alert = p0 as AlertDialog
+            val edit: EditText? = alert.findViewById(R.id.et_edit)
+            textView.text = edit?.text
+        }
+
+        builder.setPositiveButton("수정하기", listener)
+        builder.setNegativeButton("취소", null)
+
+        builder.show()
     }
 
     override fun onDestroyView() {
