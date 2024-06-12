@@ -12,7 +12,7 @@
         android:src="@drawable/ic_user_profile_test"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"/>
 
     <TextView
@@ -92,7 +92,7 @@
         android:clipToOutline="true"
         android:background="@drawable/bg_post_image"
         android:scaleType="centerCrop"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="20dp"/>
     
     <View
         android:id="@+id/view_itemWriting_div"
@@ -102,8 +102,8 @@
         app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_post"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="12dp"/>
 
     <TextView
@@ -188,7 +188,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_itemWriting_timeStamp"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_timeStamp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="20dp"/>
 
     <View
         android:id="@+id/view_itemWriting_bottomView"
