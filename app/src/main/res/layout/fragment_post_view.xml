@@ -250,6 +250,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:adSize="BANNER"
+        android:visibility="gone"
         app:adUnitId="ca-app-pub-9360439257056668~3215355425"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

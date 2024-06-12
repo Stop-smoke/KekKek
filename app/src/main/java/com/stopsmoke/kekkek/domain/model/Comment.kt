@@ -6,7 +6,7 @@ data class Comment(
     val dateTime: DateTime,
     val likeUser: List<String>,
     val unlikeUser: List<String>,
-    val reply: Reply,
+    val reply: List<Reply>,
     val written: Written,
     val postData: CommentPostData
 )

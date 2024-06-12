@@ -22,8 +22,8 @@ class CommentDaoImpl @Inject constructor(
 
     override fun getComment(postId: String): Flow<PagingData<CommentEntity>> {
         val query = firestore.collection(COLLECTION)
-            .whereEqualTo("post_id", postId)
-            .orderBy("date_time", Query.Direction.DESCENDING)
+            .whereEqualTo("post_data.post_id", postId)
+            .orderBy("date_time.created", Query.Direction.ASCENDING)
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)

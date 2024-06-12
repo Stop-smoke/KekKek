@@ -18,8 +18,8 @@ data class CommentEntity(
     @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
     var unlikeUser: List<String> = emptyList(),
 
-    @get:PropertyName("reply") @set:PropertyName("reply")
-    var reply: ReplyEntity? = null,
+    @get:PropertyName("reply")
+    val reply: List<ReplyEntity> = emptyList(),
 
     @get:PropertyName("written") @set:PropertyName("written")
     var written: WrittenEntity? = null,
