@@ -1,11 +1,13 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -17,7 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.presentation.post.PostWriteItem
 import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
+import com.stopsmoke.kekkek.presentation.post.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,11 +34,9 @@ class CommunityFragment : Fragment() {
 
     private val viewModel: CommunityViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
-
+    
     private val listAdapter: CommunityListAdapter by lazy {
-        CommunityListAdapter {
-            findNavController().navigate("post_view")
-        }
+        CommunityListAdapter()
     }
 
     private val gestureDetector: GestureDetector by lazy {
@@ -59,17 +61,37 @@ class CommunityFragment : Fragment() {
         initView()
         initViewModel()
         initGestureDetector()
+
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {
+
+                    findNavController().navigate(
+                        resId = R.id.action_community_to_user_profile_screen,
+                        args = bundleOf("uid" to uid)
+                    )
+                }
+
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate("post_view")
+                }
+            }
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        listAdapter.unregisterCallbackListener()
     }
 
 
     private fun initView() = with(binding) {
         rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
         rvCommunityList.adapter = listAdapter
+        ivCommunityNoticeArrow.setOnClickListener {
+            // 인기글 전체보기 클릭
+        }
 
         floatingActionButtonCommunity.setOnClickListener {
             findNavController().navigate("post_write")
@@ -81,28 +103,6 @@ class CommunityFragment : Fragment() {
 
         initCommunityCategory()
         setToolbarMenu()
-
-        clCommunityNotice.setOnClickListener {
-            findNavController().navigate("notice_list")
-        }
-
-
-        val tvCommunityPopularFullView =
-            requireActivity().findViewById<TextView>(R.id.tv_community_popularFullView)
-        val clCommunityPostPopular1 =
-            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular1)
-        val clCommunityPostPopular2 =
-            requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
-        tvCommunityPopularFullView.setOnClickListener {
-            findNavController().navigate("popular_writing_list")
-        }
-
-        clCommunityPostPopular1.setOnClickListener {
-            findNavController().navigate("post_view")
-        }
-        clCommunityPostPopular2.setOnClickListener {
-            findNavController().navigate("post_view")
-        }
     }
 
     private fun initCommunityCategory() = with(binding) {

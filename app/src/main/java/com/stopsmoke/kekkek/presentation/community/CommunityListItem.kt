@@ -26,6 +26,7 @@ data class PostInfo(
 )
 
 data class UserInfo(
+    val uid: String,
     val name: String,
     val rank: Long,
     val profileImage: String

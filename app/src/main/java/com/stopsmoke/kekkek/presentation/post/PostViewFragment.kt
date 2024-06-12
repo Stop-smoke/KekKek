@@ -41,26 +41,23 @@ class PostViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setupView()
-//        setupListener()
+        setupListener()
     }
 
     private fun setupView() = with(binding) {
         MobileAds.initialize(requireContext())
         val adRequest = AdRequest.Builder().build()
-//        binding.run {
-//            adviewPost.loadAd(adRequest)
-//        }
-//        tvPostTitle.text = postTitle
+        binding.run {
+            adviewPost.loadAd(adRequest)
+        }
+        tvPostTitle.text = postTitle
     }
 
-//    private fun setupListener() = with(binding) {
-//        ivPostBack.setOnClickListener {
-//            requireActivity().supportFragmentManager.popBackStack()
-//        }
-//        btnPostViewCommentRegister.setOnClickListener {
-//            val comment = etPostAddComment.text.toString()
-//        }
-//    }
+    private fun setupListener() = with(binding) {
+        includePostViewAppBar.ivPostBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
 
     override fun onResume() {
         super.onResume()

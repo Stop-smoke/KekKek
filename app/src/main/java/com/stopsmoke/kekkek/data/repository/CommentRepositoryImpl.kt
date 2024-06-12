@@ -33,6 +33,14 @@ class CommentRepositoryImpl @Inject constructor(
                         }
                     }
                 }
+
+                is CommentFilter.User -> {
+                    commentDao.getMyCommentItems(commentFilter.uid).map { pagingData ->
+                        pagingData.map {
+                            it.asExternalModel()
+                        }
+                    }
+                }
             }
                 .let {
                     Result.Success(it)

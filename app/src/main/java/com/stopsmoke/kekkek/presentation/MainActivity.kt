@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
@@ -52,7 +52,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {
-        setupWithNavController(navController)
+        setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    navController.popBackStack(route = "home", inclusive = false)
+                }
+
+                R.id.community -> {
+                    navController.popBackStack(route = "community", inclusive = false)
+                }
+
+                R.id.my_page -> {
+                    navController.popBackStack(route = "my_page", inclusive = false)
+                }
+            }
+            item.onNavDestinationSelected(navController)
+        }
+
         itemIconTintList =
             ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
         itemTextColor =
