@@ -66,13 +66,14 @@
 
     <ImageView
         android:id="@+id/iv_comment_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginStart="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_comment_hour"
         app:layout_constraintStart_toEndOf="@+id/tv_comment_hour"
         app:layout_constraintTop_toTopOf="@+id/tv_comment_hour"
-        app:srcCompat="@drawable/ic_thumb_up" />
+        app:srcCompat="@drawable/ic_thumb_up"
+        app:tint="@color/gray" />
 
     <TextView
         android:id="@+id/tv_comment_like"
@@ -87,13 +88,14 @@
 
     <ImageView
         android:id="@+id/iv_comment_recomment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_comment_like"
         app:layout_constraintStart_toEndOf="@+id/tv_comment_like"
         app:layout_constraintTop_toTopOf="@+id/tv_comment_like"
-        app:srcCompat="@drawable/ic_re_comment" />
+        app:srcCompat="@drawable/ic_re_comment"
+        app:tint="@color/gray"/>
 
     <TextView
         android:id="@+id/tv_comment_recomment"
@@ -108,8 +110,8 @@
 
     <ImageView
         android:id="@+id/iv_comment_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_show_more"

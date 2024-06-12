@@ -70,7 +70,8 @@ class NoticeListViewModel @Inject constructor(
                 },
                 view = post.views,
                 like = post.likeUser.size.toLong(),
-                comment = post.commentUser.size.toLong()
+                comment = post.commentUser.size.toLong(),
+                id = post.id
             ),
             postImage = "",
             post = post.text,
