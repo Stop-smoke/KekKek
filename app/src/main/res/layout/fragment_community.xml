@@ -8,23 +8,21 @@
     tools:context=".presentation.community.CommunityFragment">
 
 
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?attr/colorPrimary"
             android:background="@color/white"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <include
                 android:id="@+id/include_community_app_bar"
                 layout="@layout/fragment_community_app_bar"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_community_parallaxItems"
@@ -221,13 +219,14 @@
 
                         <ImageView
                             android:id="@+id/iv_community_comment1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
                             android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType1"
                             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum1"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1" />
+                            app:layout_constraintTop_toTopOf="@id/tv_community_postType1"
+                            app:tint="@color/gray" />
 
                         <TextView
                             android:id="@+id/tv_community_commentNum1"
@@ -334,13 +333,14 @@
 
                         <ImageView
                             android:id="@+id/iv_community_comment2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
                             android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="@id/tv_community_postType2"
                             app:layout_constraintEnd_toStartOf="@id/tv_community_commentNum2"
-                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2" />
+                            app:layout_constraintTop_toTopOf="@id/tv_community_postType2"
+                            app:tint="@color/gray" />
 
                         <TextView
                             android:id="@+id/tv_community_commentNum2"

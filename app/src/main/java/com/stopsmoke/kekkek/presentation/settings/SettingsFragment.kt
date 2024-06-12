@@ -105,8 +105,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     private fun initView() = with(binding) {
         rvSetting.adapter = settingAdapter
         rvSetting.layoutManager = LinearLayoutManager(requireContext())
-        setting.tvUserProfileTitle.text ="설정"
-        setting.ivUserProfileBack.setOnClickListener {
+        includeSettingsAppBar.ivSupportCenterBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
