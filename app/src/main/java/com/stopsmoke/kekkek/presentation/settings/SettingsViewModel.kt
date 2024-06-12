@@ -1,17 +1,20 @@
-package com.stopsmoke.kekkek.presentation.settings.profile
+package com.stopsmoke.kekkek.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileSettingsViewModel @Inject constructor(
+class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
@@ -51,4 +54,18 @@ class ProfileSettingsViewModel @Inject constructor(
             userRepository.withdraw()
         }
     }
+
+    fun settingProfile(inputStream: InputStream) {
+        viewModelScope.launch {
+            userRepository.setProfileImage(inputStream).collectLatest {
+                when (it) {
+                    is ProfileImageUploadResult.Error -> {}
+                    is ProfileImageUploadResult.Progress -> {}
+                    is ProfileImageUploadResult.Success -> {}
+                }
+            }
+        }
+    }
+
+    val user = userRepository.getUserData()
 }
