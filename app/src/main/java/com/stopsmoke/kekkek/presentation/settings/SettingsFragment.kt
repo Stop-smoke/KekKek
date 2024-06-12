@@ -15,7 +15,6 @@ import coil.load
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -23,8 +22,6 @@ import com.stopsmoke.kekkek.presentation.collectLatest
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
-import kotlinx.coroutines.flow.collectLatest
-import dagger.hilt.android.AndroidEntryPoint
 
 
 class SettingsFragment : Fragment(), SettingsOnClickListener {
@@ -81,17 +78,17 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     private fun initData() {
         settingAdapter = SettingsAdapter(this@SettingsFragment)
         settingAdapter.itemList = listOf(
-            SettingsItem(
-                profileInfo = ProfileInfo(
-                    profileImg = com.stopsmoke.kekkek.R.drawable.ic_launcher_background,
-                    userNickname = "희진",
-                    userDateOfBirth = "2024년 3월 1일",
-                    userIntroduction = "글이 길면 이렇게 요약됩니다. 글이 길면 이렇게 요약됩니다. 글이 길면 이렇게 요약됩니다."
-                ),
-                settingTitle = null,
-                version = null,
-                cardViewType = SettingsMultiViewEnum.MY_PAGE
-            ),
+//            SettingsItem(
+//                profileInfo = ProfileInfo(
+//                    profileImg = R.drawable.ic_launcher_background,
+//                    userNickname = "희진",
+//                    userDateOfBirth = "2024년 3월 1일",
+//                    userIntroduction = "글이 길면 이렇게 요약됩니다. 글이 길면 이렇게 요약됩니다. 글이 길면 이렇게 요약됩니다."
+//                ),
+//                settingTitle = null,
+//                version = null,
+//                cardViewType = SettingsMultiViewEnum.MY_PAGE
+//            ),
 //            SettingsItem(
 //                settingTitle = "알림",
 //                cardViewType = SettingsMultiViewEnum.LIST,
