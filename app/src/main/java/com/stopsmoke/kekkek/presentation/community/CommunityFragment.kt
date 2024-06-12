@@ -79,10 +79,6 @@ class CommunityFragment : Fragment() {
             findNavController().navigate("post_write")
         }
 
-        sharedViewModel.newPost.observe(viewLifecycleOwner) {
-            // CommunityListAdapter 에 대한 notifyDataSetChanged 를 해야할 것 같음
-        }
-
         initCommunityCategory()
         setToolbarMenu()
     }
