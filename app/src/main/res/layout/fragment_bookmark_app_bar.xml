@@ -7,7 +7,7 @@
     android:minHeight="60dp">
 
     <ImageView
-        android:id="@+id/iv_notification_back"
+        android:id="@+id/iv_bookmark_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

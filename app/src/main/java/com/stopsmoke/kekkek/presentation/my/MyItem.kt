@@ -1,8 +1,8 @@
 package com.stopsmoke.kekkek.presentation.my
 
-data class MyItem (
+data class MyItem(
     val name: String,
-    val rank: Int,
+    val rank: Long,
     val profileImg: String,
     val myWriting: MyWritingNum,
     val achievementNum: Int,

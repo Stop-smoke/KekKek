@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -15,8 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +50,7 @@ class MyFragment : Fragment() {
 
         initListener()
         initViewModel()
+        initView()
 
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
@@ -67,15 +67,20 @@ class MyFragment : Fragment() {
         _binding = null
     }
 
+    private fun initView() = with(binding) {
+
+
+    }
+
     private fun initListener() = with(binding) {
-        clMyMybookmarknum.setOnClickListener {
-            findNavController().navigate("bookmark")
-        }
         clMyMypost.setOnClickListener {
-            findNavController().navigate("my_post")
+            findNavController().navigate(R.id.action_myPage_to_myWritingList)
         }
         clMyMycomment.setOnClickListener {
-            findNavController().navigate("my_comment")
+            findNavController().navigate(R.id.action_myPage_to_myCommentList)
+        }
+        clMyMybookmarknum.setOnClickListener {
+            findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
         }
 
         clMyCustomerService.setOnClickListener {
@@ -99,20 +104,25 @@ class MyFragment : Fragment() {
                 }
         }
 
-        lifecycleScope.launch {
-            userData.flowWithLifecycle(lifecycle).collectLatest {
-                when(it) {
-                    is User.Error -> {
-                        // 유저 정보가 에러
-                    }
-                    is User.Guest -> {  } // 게스트 모드 대응
-                    is User.Registered -> {
-                        viewModel.updateUserData(it)
-                    }
+
+        when (userData) {
+            is Result.Error -> {
+
+            }
+
+            is Result.Loading -> {
+
+            }
+
+            is Result.Success -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                        .collectLatest { user ->
+                            viewModel.updateUserData(user)
+                        }
                 }
             }
         }
-        Unit
     }
 
 

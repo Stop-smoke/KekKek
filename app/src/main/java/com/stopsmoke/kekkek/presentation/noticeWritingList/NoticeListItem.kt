@@ -1,15 +1,17 @@
 package com.stopsmoke.kekkek.presentation.noticeWritingList
 
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 
-data class NoticeListItem (
+data class NoticeListItem(
     val userInfo: UserInfo,
-    val postInfo : PostInfo,
+    val postInfo: PostInfo,
     val postImage: String,
     val post: String,
-    val postTime: ElapsedDateTime
+    val postTime: ElapsedDateTime,
+    val postType: PostCategory
 )
 
 data class PostInfo(

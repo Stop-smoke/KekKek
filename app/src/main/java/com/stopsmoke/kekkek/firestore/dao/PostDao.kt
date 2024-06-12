@@ -13,6 +13,10 @@ interface PostDao {
     // https://www.notion.so/stopsmoke/enum-PostCategory-c6956f5b008d4185bcd3dfe42dfbc14e?pvs=4
     fun getPost(category: String? = null): Flow<PagingData<PostEntity>>
 
+    fun getPostForWrittenUid(writtenUid: String): Flow<PagingData<PostEntity>>
+
+    fun getBookmark(postIdList: List<String>): Flow<PagingData<PostEntity>>
+
     suspend fun addPost(postEntity: PostEntity)
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)
@@ -22,4 +26,6 @@ interface PostDao {
     suspend fun getPopularPostItems(): List<PostEntity>
 
     suspend fun getTopNotice(): PostEntity
+
+    suspend fun getPopularPostList(): List<PostEntity>
 }

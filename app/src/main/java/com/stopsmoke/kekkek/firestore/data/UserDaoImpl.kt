@@ -3,7 +3,9 @@ package com.stopsmoke.kekkek.firestore.data
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
+import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +22,16 @@ internal class UserDaoImpl @Inject constructor(
             .document(uid)
             .dataObjects<UserEntity>()
             .mapNotNull { it }
+    }
+
+    override suspend fun getUserDataFormatUser(uid: String): UserEntity? {
+        return try {
+            val document = firestore.collection(COLLECTION).document(uid).get().await()
+            document.toObject<UserEntity>()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     override suspend fun setUser(userEntity: UserEntity) {

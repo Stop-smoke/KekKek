@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myWritingList
+package com.stopsmoke.kekkek.presentation.myBookmarkList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,15 +23,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyWritingLIstViewModel @Inject constructor(
-    private val postRepository: PostRepository,
-    private val userRepository: UserRepository
+class BookmarkViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val postRepository: PostRepository
 ) : ViewModel() {
     val _userState: MutableStateFlow<User> = MutableStateFlow(User.Guest)
     val userState = _userState.asStateFlow()
 
-    val myWritingPosts = userState.flatMapLatest { userData ->
-        postRepository.getPostForWrittenUid(if (userData is User.Registered) userData.uid else "")
+    val myBookmarkPosts = userState.flatMapLatest { userData ->
+        postRepository.getBookmark(if (userData is User.Registered) userData.postBookmark else emptyList())
             .let {
                 when (it) {
                     is Result.Error -> {
@@ -42,7 +42,7 @@ class MyWritingLIstViewModel @Inject constructor(
                     is Result.Loading -> emptyFlow()
                     is Result.Success -> it.data.map { pagingData ->
                         pagingData.map { post ->
-                            updateMyWritingListItem(post)
+                            updateBookmarkWritingListItem(post)
                         }
                     }
                 }
@@ -66,8 +66,8 @@ class MyWritingLIstViewModel @Inject constructor(
         }
     }
 
-    private fun updateMyWritingListItem(post: Post): MyWritingListItem =
-        MyWritingListItem(
+    private fun updateBookmarkWritingListItem(post: Post): BookmarkWritingItem =
+        BookmarkWritingItem(
             userInfo = UserInfo(
                 name = post.written.name,
                 rank = post.written.ranking,
