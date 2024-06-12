@@ -187,6 +187,7 @@
                 android:id="@+id/cl_profile_show_setting"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/md_width_two">
@@ -227,6 +228,7 @@
                 android:id="@+id/md_width_three"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
+                android:visibility="gone"
                 app:dividerColor="#F4F6F8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
