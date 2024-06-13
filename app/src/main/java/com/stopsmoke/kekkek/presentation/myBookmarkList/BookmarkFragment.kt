@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -13,6 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,10 +52,26 @@ class BookmarkFragment : Fragment() {
 
     private fun initView() = with(binding) {
         initAppBar()
+        initListAdapterCallback()
         rvBookmark.layoutManager = LinearLayoutManager(requireContext())
         rvBookmark.adapter = listAdapter
 
         viewModel.updateUserState()
+    }
+
+    private fun initListAdapterCallback() {
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {}
+
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate(
+                        resId = R.id.action_myBookmarkList_to_postView,
+                        args = bundleOf("item" to communityWritingItem)
+                    )
+                }
+            }
+        )
     }
 
     private fun initAppBar() = with(binding) {
@@ -70,9 +91,15 @@ class BookmarkFragment : Fragment() {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        listAdapter.unregisterCallbackListener()
         _binding = null
+        activity?.visible()
+    }
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     companion object {

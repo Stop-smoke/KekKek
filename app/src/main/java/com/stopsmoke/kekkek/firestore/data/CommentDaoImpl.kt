@@ -56,7 +56,7 @@ class CommentDaoImpl @Inject constructor(
     override fun getCommentItems(commentIdList: List<String>): Flow<PagingData<CommentEntity>> {
         try {
             val query = firestore.collection(COLLECTION)
-                .whereEqualTo("id", commentIdList)
+                .whereIn("id", commentIdList)
                 .orderBy("date_time", Query.Direction.DESCENDING)
 
             return Pager(

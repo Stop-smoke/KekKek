@@ -27,4 +27,6 @@ interface PostRepository {
     suspend fun getTopNotice(): Post
 
     suspend fun getPopularPostList(): List<Post>
+
+    suspend fun getPostForPostId(postId: String): Post
 }

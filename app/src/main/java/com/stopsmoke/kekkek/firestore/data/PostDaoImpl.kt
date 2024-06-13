@@ -221,6 +221,21 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPostForPostId(postId: String): PostEntity {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("id", postId)
+                .get()
+                .await()
+
+            val document = query.documents.firstOrNull()
+            document?.toObject<PostEntity>() ?: PostEntity()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            PostEntity()
+        }
+    }
+
     companion object {
         private const val COLLECTION = "post"
         private const val PAGE_LIMIT = 30

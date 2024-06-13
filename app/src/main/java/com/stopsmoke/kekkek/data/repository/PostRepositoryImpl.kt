@@ -129,4 +129,8 @@ internal class PostRepositoryImpl @Inject constructor(
         postDao.getPopularPostList().map {
             it.asExternalModel()
         }
+
+    override suspend fun getPostForPostId(postId: String): Post {
+        return postDao.getPostForPostId(postId).asExternalModel()
+    }
 }

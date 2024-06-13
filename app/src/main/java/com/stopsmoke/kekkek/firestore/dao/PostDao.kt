@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.firestore.dao
 
 import androidx.paging.PagingData
+import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -30,4 +31,6 @@ interface PostDao {
     suspend fun getTopNotice(): PostEntity
 
     suspend fun getPopularPostList(): List<PostEntity>
+
+    suspend fun getPostForPostId(postId: String): PostEntity
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -26,7 +30,7 @@ class MyCommentFragment : Fragment() {
     private val viewModel: MyCommentViewModel by viewModels()
 
     private val listAdapter: MyCommentListAdapter by lazy {
-        MyCommentListAdapter()
+        MyCommentListAdapter(viewModel)
     }
 
 
@@ -52,6 +56,22 @@ class MyCommentFragment : Fragment() {
         rvMyComment.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.updateUserState()
+        initListAdapterCallback()
+    }
+
+    private fun initListAdapterCallback() {
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {}
+
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate(
+                        resId = R.id.action_myCommentList_to_postView,
+                        args = bundleOf("item" to communityWritingItem)
+                    )
+                }
+            }
+        )
     }
 
     private fun initAppBar() {
@@ -66,8 +86,8 @@ class MyCommentFragment : Fragment() {
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             myCommentPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { myWritingPosts ->
-                    listAdapter.submitData(myWritingPosts)
+                .collectLatest { myComments ->
+                    listAdapter.submitData(myComments)
                 }
         }
     }
@@ -77,8 +97,10 @@ class MyCommentFragment : Fragment() {
         activity?.invisible()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
+        listAdapter.unregisterCallbackListener()
+        activity?.visible()
     }
 }
