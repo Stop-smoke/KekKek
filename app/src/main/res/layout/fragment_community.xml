@@ -5,6 +5,7 @@
     android:id="@+id/coordinatorLayout_community_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_bggray"
     tools:context=".presentation.community.CommunityFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
