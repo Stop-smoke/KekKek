@@ -14,7 +14,6 @@ import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,23 +38,6 @@ class PostViewModel @Inject constructor(
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
-
-    private val _bookmarkPosts = MutableLiveData<List<CommunityWritingItem>>()
-    val bookmarkPosts : LiveData<List<CommunityWritingItem>> get() = _bookmarkPosts
-
-    private val currentBookmarkPost = arrayListOf<CommunityWritingItem>()
-
-    fun addBookmarkPost(post: CommunityWritingItem) {
-        currentBookmarkPost.add(post)
-    }
-
-    fun deleteBookmarkPost(post: CommunityWritingItem) {
-        currentBookmarkPost.remove(post)
-    }
-
-    fun updateMyBookmark() {
-        _bookmarkPosts.postValue(currentBookmarkPost)
-    }
 
     fun updatePostId(id: String) {
         viewModelScope.launch {

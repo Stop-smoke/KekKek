@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.test
 
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +10,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentQuestionBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.MainActivity
 
 
 class TestQuestionFragment : Fragment() {
@@ -49,43 +52,12 @@ class TestQuestionFragment : Fragment() {
         setupListener()
     }
 
-    private fun setupView() = with(binding) {
-        tvQuestionMainText.text = getString(sharedViewModel.questionTitles[pageNum])
-        btnQuestionAnswer1.text = getString(sharedViewModel.questionAnswers[pageNum][0])
-        btnQuestionAnswer2.text = getString(sharedViewModel.questionAnswers[pageNum][1])
-        btnQuestionAnswer3.text = getString(sharedViewModel.questionAnswers[pageNum][2])
-        when (pageNum) {
-            0 -> {
-                progressbarQuestion.progress = 0
-            }
-
-            1 -> {
-                progressbarQuestion.progress = 1
-            }
-
-            2 -> {
-                progressbarQuestion.progress = 2
-            }
-
-            3 -> {
-                progressbarQuestion.progress = 3
-            }
-
-            4 -> {
-                progressbarQuestion.progress = 4
-            }
-
-            5 -> {
-                progressbarQuestion.progress = 5
-            }
-
-            6 -> {
-                progressbarQuestion.progress = 6
-            }
-
-            7 -> {
-                progressbarQuestion.progress = 7
-            }
+    private fun setupView() {
+        binding.run {
+            tvQuestionMainText.text = getString(sharedViewModel.questionTitles[pageNum])
+            btnQuestionAnswer1.text = getString(sharedViewModel.questionAnswers[pageNum][0])
+            btnQuestionAnswer2.text = getString(sharedViewModel.questionAnswers[pageNum][1])
+            btnQuestionAnswer3.text = getString(sharedViewModel.questionAnswers[pageNum][2])
         }
     }
 
@@ -123,18 +95,17 @@ class TestQuestionFragment : Fragment() {
         builder.setIcon(R.drawable.ic_smoke)
 
         val listener = DialogInterface.OnClickListener { _, type ->
-            when (type) {
+            when(type) {
                 DialogInterface.BUTTON_POSITIVE -> {
                     findNavController().popBackStack()
                     sharedViewModel.clearScore()
                 }
-
                 DialogInterface.BUTTON_NEGATIVE -> {}
             }
         }
 
-        builder.setPositiveButton("예", listener)
-        builder.setNegativeButton("아니요", listener)
+        builder.setPositiveButton("예",listener)
+        builder.setNegativeButton("아니요",listener)
         builder.show()
     }
 

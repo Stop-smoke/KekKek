@@ -5,6 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
 
+    <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
 
     <fragment
@@ -78,51 +79,6 @@
         <action
             android:id="@+id/action_myPage_to_myCommentList"
             app:destination="@id/my_comment_list" />
-        <action
-            android:id="@+id/action_my_page_to_nav_onboarding"
-            app:destination="@id/nav_onboarding" />
-        <action
-            android:id="@+id/action_my_page_to_onboarding_perday"
-            app:destination="@id/onboarding_perday" />
-        <action
-            android:id="@+id/action_my_page_to_resetting_onboarding_smoking_per_day"
-            app:destination="@id/resetting_onboarding_smoking_per_day" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_per_day"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerDayFragment"
-        tools:layout="@layout/fragment_smoking_per_day">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_per_day_to_resetting_onboarding_smoking_per_pack"
-            app:destination="@id/resetting_onboarding_smoking_per_pack" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_per_pack"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerPackFragment"
-        tools:layout="@layout/fragment_smoking_per_pack">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_per_pack_to_resetting_onboarding_smoking_price"
-            app:destination="@id/resetting_onboarding_smoking_price" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_price"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPriceFragment"
-        tools:layout="@layout/fragment_smoking_price">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_price_to_resetting_onboarding_smoking_finish"
-            app:destination="@id/resetting_onboarding_smoking_finish" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_finish"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFinishFragment"
-        tools:layout="@layout/fragment_smoking_setting_finish">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
-            app:destination="@id/my_page" />
     </fragment>
 
     <fragment
