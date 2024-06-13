@@ -2,9 +2,11 @@ package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -100,34 +102,55 @@ class SettingsProfileFragment : Fragment() {
 
     private fun initListener() = with(binding) {
         ivSettingEditNickname.setOnClickListener {
-            editDialog(binding.tvSettingProfileNicknameDetail)
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("닉네임 편집하기")
+            builder.setIcon(R.drawable.ic_post)
+
+            val customView = layoutInflater.inflate(R.layout.profile_edit_nickname,null)
+            builder.setView(customView)
+
+            builder.setPositiveButton("수정하기", null)
+            builder.setNegativeButton("취소", null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val edit = customView.findViewById<EditText>(R.id.et_edit_nickname)
+                if(edit.text.length > 10) {
+                    Toast.makeText(requireContext(),"10글자를 초과하시면 안됩니다!",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    tvSettingProfileNicknameDetail.text = edit.text
+                    dialog.dismiss()
+                }
+            }
         }
-        ivSettingEditBirth.setOnClickListener {
-            editDialog(binding.tvSettingProfileBirthDetail)
-        }
+
         ivSettingEditIntroduction.setOnClickListener {
-            editDialog(binding.tvSettingProfileIntroductionDetail)
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("소개글 편집하기")
+            builder.setIcon(R.drawable.ic_post)
+
+            val customView = layoutInflater.inflate(R.layout.profile_edit_introduction,null)
+            builder.setView(customView)
+
+            builder.setPositiveButton("수정하기",null)
+            builder.setNegativeButton("취소",null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val edit = customView.findViewById<EditText>(R.id.et_edit_introduction)
+                if(edit.text.length > 50) {
+                    Toast.makeText(requireContext(),"글자 수는 50글자 이하로 제한되어 있습니다!",Toast.LENGTH_SHORT).show()
+                } else {
+                    tvSettingProfileIntroductionDetail.text = edit.text
+                    dialog.dismiss()
+                }
+            }
         }
-    }
-
-    private fun editDialog(textView: TextView) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("편집하기")
-        builder.setIcon(R.drawable.ic_post)
-
-        val customView = layoutInflater.inflate(R.layout.profile_edit_custom_dialog,null)
-        builder.setView(customView)
-
-        val listener = DialogInterface.OnClickListener { p0, _ ->
-            val alert = p0 as AlertDialog
-            val edit: EditText? = alert.findViewById(R.id.et_edit)
-            textView.text = edit?.text
-        }
-
-        builder.setPositiveButton("수정하기", listener)
-        builder.setNegativeButton("취소", null)
-
-        builder.show()
     }
 
     override fun onDestroyView() {
