@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.snackbar.Snackbar
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.getRelativeTime
@@ -87,6 +89,8 @@ class PostViewFragment : Fragment() {
             tvPostHeartNum.text = it.postInfo.like.toString()
             tvPostCommentNum.text = it.postInfo.comment.toString()
             tvPostViewNum.text = it.postInfo.view.toString()
+            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
     }
 
@@ -112,6 +116,19 @@ class PostViewFragment : Fragment() {
             binding.etPostAddComment.setText("")
 //            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //            inputMethodManager.hideSoftInputFromWindow(edittext.windowToken, 0)
+        }
+        includePostViewAppBar.ivPostBookmark.setOnClickListener {
+            if(post?.bookmark == true) {
+                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+                post?.bookmark = false
+                Snackbar.make(postView,"해당 게시글을 북마크에서 제거했습니다.", Snackbar.LENGTH_SHORT).show()
+                post?.let{ viewModel.deleteBookmarkPost(it)}
+            } else {
+                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                post?.bookmark = true
+                Snackbar.make(postView,"해당 게시글을 북마크에 추가했습니다.", Snackbar.LENGTH_SHORT).show()
+                post?.let { viewModel.addBookmarkPost(it) }
+            }
         }
     }
 
