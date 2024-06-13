@@ -35,7 +35,37 @@ class AttainmentsViewModel @Inject constructor(
     private var savedCigarettePerMinute: Double = 0.0
     private var savedDatePerMinute: Double = 0.0
 
+
     fun updateUserData() = viewModelScope.launch {
+        val userData = userRepository.getUserData()
+        userData.collect { user ->
+            when (user) {
+                is User.Registered -> {
+                    _currentUserState.value = user
+
+                    val totalMinutesTime = user.history.getTotalMinutesTime()
+                    val totalSecondsTime = user.history.getTotalSecondsTime()
+                    timeString = formatElapsedTime(totalMinutesTime)
+                    calculateSavedValues(user.userConfig)
+                    _uiState.emit(
+                        AttainmentsItem(
+                            history = user.history,
+                            savedDate = savedDatePerMinute,
+                            savedMoney = savedMoneyPerMinute * totalMinutesTime,
+                            savedLife = savedLifePerMinute * totalMinutesTime,
+                            savedCigarette = savedCigarettePerMinute * totalMinutesTime,
+                            timeString = formatElapsedTime(totalSecondsTime)
+                        )
+                    )
+                    if (user.history.getStartTimerState()) startTimer()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    fun updateTestUserData() = viewModelScope.launch {
         val userData = userRepository.getUserData("테스트_계정")
         when (userData) {
             is Result.Success -> {
