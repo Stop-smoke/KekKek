@@ -27,6 +27,9 @@ data class PostEntity(
     @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
     var unlikeUser: List<String> = emptyList(),
 
+    @get:PropertyName("bookmark_user") @set:PropertyName("bookmark_user")
+    var bookmarkUser: List<String> = emptyList(),
+
     @get:PropertyName("category") @set:PropertyName("category")
     var category: String? = null,
 

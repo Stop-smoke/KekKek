@@ -38,4 +38,8 @@ interface PostRepository {
 
     suspend fun deleteLikeToPost(postId: String): Result<Unit>
 
+    suspend fun addBookmark(postId: String): Result<Unit>
+
+    suspend fun deleteBookmark(postId: String): Result<Unit>
+
 }

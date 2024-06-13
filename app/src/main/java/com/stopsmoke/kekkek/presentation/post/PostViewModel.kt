@@ -110,18 +110,6 @@ class PostViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-//    fun deletePost(postId: String) {
-//        viewModelScope.launch {
-//            when (val result = postRepository.deletePost(postId)) {
-//                is Result.Success -> {
-//
-//                }
-//                is Result.Error -> {
-//
-//                }
-//            }
-//        }
-//    }
     fun addComment(commentPostData: CommentPostData, text: String) {
         viewModelScope.launch {
             val user = user.firstOrNull() as? User.Registered ?: return@launch
@@ -182,4 +170,16 @@ class PostViewModel @Inject constructor(
         }
     }
 
+    fun toggleBookmark() {
+        viewModelScope.launch {
+            val user = user.first() as? User.Registered ?: return@launch
+            val postId = postId.value ?: return@launch
+
+            if (post.value.first().bookmarkUser.contains(user.uid)) {
+                postRepository.deleteBookmark(postId)
+                return@launch
+            }
+            postRepository.addBookmark(postId)
+        }
+    }
 }

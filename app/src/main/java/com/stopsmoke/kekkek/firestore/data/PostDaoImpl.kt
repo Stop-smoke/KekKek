@@ -335,6 +335,30 @@ internal class PostDaoImpl @Inject constructor(
         return Result.Error(task.exception)
     }
 
+    override suspend fun addBookmark(postId: String, uid: String): Result<Unit> {
+        val task = firestore.collection(COLLECTION)
+            .document(postId)
+            .update("bookmark_user", FieldValue.arrayUnion(uid))
+            .also { it.await() }
+
+        if (task.isSuccessful) {
+            return Result.Success(Unit)
+        }
+        return Result.Error(task.exception)
+    }
+
+    override suspend fun deleteBookmark(postId: String, uid: String): Result<Unit> {
+        val task = firestore.collection(COLLECTION)
+            .document(postId)
+            .update("bookmark_user", FieldValue.arrayRemove(uid))
+            .also { it.await() }
+
+        if (task.isSuccessful) {
+            return Result.Success(Unit)
+        }
+        return Result.Error(task.exception)
+    }
+
     companion object {
         private const val COLLECTION = "post"
         private const val COMMENT_COLLECTION = "comment"

@@ -48,4 +48,8 @@ interface PostDao {
     suspend fun deleteLike(postId: String, uid: String): Result<Unit>
 
     suspend fun addViews(postId: String): Result<Unit>
+
+    suspend fun addBookmark(postId: String, uid: String): Result<Unit>
+
+    suspend fun deleteBookmark(postId: String, uid: String): Result<Unit>
 }
