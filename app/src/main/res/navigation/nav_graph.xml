@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_home_to_home_tip"
             app:destination="@id/home_tip" />
+        <action
+            android:id="@+id/action_home_to_attainments"
+            app:destination="@id/attainments" />
+        <action
+            android:id="@+id/action_home_to_test_page"
+            app:destination="@id/test_page" />
     </fragment>
 
     <fragment
@@ -54,6 +60,18 @@
         <action
             android:id="@+id/action_community_to_post_view"
             app:destination="@id/post_view" />
+        <action
+            android:id="@+id/action_community_to_popular_writing_list"
+            app:destination="@id/popular_writing_list" />
+        <action
+            android:id="@+id/action_community_to_notice_list"
+            app:destination="@id/notice_list" />
+        <action
+            android:id="@+id/action_community_to_post_write"
+            app:destination="@id/post_write" />
+        <action
+            android:id="@+id/action_community_to_notification"
+            app:destination="@id/notification" />
     </fragment>
 
     <fragment
@@ -152,13 +170,14 @@
         android:id="@+id/popular_writing_list"
         android:name="com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListFragment"
         app:route="popular_writing_list"
-        tools:layout="@layout/fragment_popular_writing_list" />
-
-    <fragment
-        android:id="@+id/my_post"
-        android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
-        app:route="my_post"
-        tools:layout="@layout/fragment_my_post" />
+        tools:layout="@layout/fragment_popular_writing_list" >
+        <action
+            android:id="@+id/action_popular_writing_list_to_user_profile"
+            app:destination="@id/user_profile" />
+        <action
+            android:id="@+id/action_popular_writing_list_to_post_view"
+            app:destination="@id/post_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/my_comment_list"
@@ -201,6 +220,10 @@
         android:id="@+id/notice_list"
         android:name="com.stopsmoke.kekkek.presentation.noticeWritingList.NoticeListFragment"
         app:route="notice_list"
-        tools:layout="@layout/fragment_notice_list" />
+        tools:layout="@layout/fragment_notice_list" >
+        <action
+            android:id="@+id/action_notice_list_to_post_view"
+            app:destination="@id/post_view" />
+    </fragment>
 
 </navigation>
