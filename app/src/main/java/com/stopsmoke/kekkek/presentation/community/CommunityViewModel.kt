@@ -177,4 +177,14 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
+    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val noticeBannerPost = postRepository.getTopNotice()
+            _noticeBanner.emit(noticeBannerPost)
+        }
+    }
+
 }
