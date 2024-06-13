@@ -15,6 +15,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -93,6 +94,20 @@ internal class PostRepositoryImpl @Inject constructor(
         Result.Error(e)
     }
 
+    override fun getPostItem(postId: String): Result<Flow<List<Post>>> {
+        return try {
+            postDao.getPostItem(postId)
+                .map {
+                    it.map { it.asExternalModel() }
+                }
+                .let {
+                    Result.Success(it)
+                }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     override suspend fun addPost(post: PostWrite): Result<Unit> =
         try {
             val user = (userRepository.getUserData().first() as User.Registered)
@@ -132,5 +147,26 @@ internal class PostRepositoryImpl @Inject constructor(
 
     override suspend fun getPostForPostId(postId: String): Post {
         return postDao.getPostForPostId(postId).asExternalModel()
+
+    override suspend fun addViews(postId: String): Result<Unit> {
+        return postDao.addViews(postId)
+    }
+
+    override suspend fun addLikeToPost(postId: String): Result<Unit> {
+        return try {
+            val user = (userRepository.getUserData().first() as User.Registered)
+            postDao.addLike(postId, user.uid)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun deleteLikeToPost(postId: String): Result<Unit> {
+        return try {
+            val user = (userRepository.getUserData().first() as User.Registered)
+            postDao.deleteLike(postId, user.uid)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

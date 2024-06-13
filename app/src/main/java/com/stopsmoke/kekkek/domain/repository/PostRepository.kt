@@ -16,6 +16,8 @@ interface PostRepository {
 
     fun getPost(uid: String): Result<Flow<PagingData<Post>>>
 
+    fun getPostItem(postId: String): Result<Flow<List<Post>>>
+
     suspend fun addPost(post: PostWrite): Result<Unit>
 
     suspend fun deletePost(postId: String): Result<Unit>
@@ -29,4 +31,11 @@ interface PostRepository {
     suspend fun getPopularPostList(): List<Post>
 
     suspend fun getPostForPostId(postId: String): Post
+
+    suspend fun addViews(postId: String): Result<Unit>
+
+    suspend fun addLikeToPost(postId: String): Result<Unit>
+
+    suspend fun deleteLikeToPost(postId: String): Result<Unit>
+
 }

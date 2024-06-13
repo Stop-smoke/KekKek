@@ -113,6 +113,9 @@
         <argument
             android:name="postArgument"
             app:argType="com.stopsmoke.kekkek.presentation.community.CommunityWritingItem" />
+        <action
+            android:id="@+id/action_post_view_to_user_profile"
+            app:destination="@id/user_profile" />
     </fragment>
 
     <fragment

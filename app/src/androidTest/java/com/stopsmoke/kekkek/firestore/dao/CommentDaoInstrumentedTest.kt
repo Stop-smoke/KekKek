@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestore.dao
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -9,6 +10,7 @@ import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +25,6 @@ class CommentDaoInstrumentedTest {
     fun init() {
         commentDao = CommentDaoImpl(Firebase.firestore)
     }
-
 
     @Test
     fun addComment() = runTest {
@@ -85,6 +86,17 @@ class CommentDaoInstrumentedTest {
             )
         )
         commentDao.updateOrInsertComment(comment)
+
+
+    @Test
+    fun getCount() = runTest {
+
+        commentDao.getCommentCount("zyr92XFIJxHRG72h2vSd")
+            .first()
+            .let {
+                Log.d("TEST", it.toString())
+            }
+
     }
 
     @Test

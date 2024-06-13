@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.firestore.dao
 
 import androidx.paging.PagingData
 import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,6 +21,8 @@ interface PostDao {
 
     fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>>
 
+    fun getPostItem(postId: String): Flow<List<PostEntity>>
+
     suspend fun addPost(postEntity: PostEntity)
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)
@@ -33,4 +36,14 @@ interface PostDao {
     suspend fun getPopularPostList(): List<PostEntity>
 
     suspend fun getPostForPostId(postId: String): PostEntity
+
+    fun getCommentCount(postId: String): Flow<Long>
+
+    fun getLikeCount(postId: String): Flow<Long>
+
+    suspend fun addLike(postId: String, uid: String): Result<Unit>
+
+    suspend fun deleteLike(postId: String, uid: String): Result<Unit>
+
+    suspend fun addViews(postId: String): Result<Unit>
 }
