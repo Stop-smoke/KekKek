@@ -81,6 +81,9 @@
         app:route="my"
         tools:layout="@layout/fragment_my">
         <action
+            android:id="@+id/action_my_page_to_setting_profile"
+            />
+        <action
             android:id="@+id/action_my_page_to_nav_settings"
             app:destination="@id/nav_settings" />
         <action
@@ -293,7 +296,6 @@
         android:name="com.stopsmoke.kekkek.presentation.rankingMap.RankingMapFragment"
         app:route="ranking_map"
         tools:layout="@layout/fragment_ranking_map" />
-
 
     <fragment
         android:id="@+id/notice_list"

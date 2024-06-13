@@ -56,6 +56,9 @@ class MyFragment : Fragment() {
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
         }
+//        binding.clMyProfile.setOnClickListener {
+//            findNavController().navigate(R.id.action_my_page_to_setting_profile)
+//        }
     }
 
     override fun onResume() {
