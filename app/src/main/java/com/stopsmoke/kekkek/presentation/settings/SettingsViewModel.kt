@@ -20,24 +20,27 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    val user: Flow<User> = userRepository.getUserData()
+
     private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
     val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
 
+
     fun nameDuplicateInspection(name: String) = viewModelScope.launch {
-        val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
-        _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
+        if (name.isNullOrBlank()) _nameDuplicationInspectionResult.emit(null)
+        else {
+            val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
+            _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
+        }
     }
 
-    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch{
+    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch {
         _nameDuplicationInspectionResult.emit(setBool)
     }
 
-
-    fun updateNickname(nickname: String) {
-        viewModelScope.launch {
-            val registeredUser =
-                (userRepository.getUserData().first() as? User.Registered) ?: return@launch
-            userRepository.setUserData(registeredUser.copy(name = nickname))
+    fun setUserData(name: String) = viewModelScope.launch {
+        user.collect { user ->
+            if(user is User.Registered) userRepository.setUserDataForName(user, name)
         }
     }
 
@@ -84,5 +87,6 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    val user: Flow<User> = userRepository.getUserData()
+
+
 }

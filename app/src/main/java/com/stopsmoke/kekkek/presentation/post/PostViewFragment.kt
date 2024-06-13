@@ -116,7 +116,10 @@ class PostViewFragment : Fragment() {
         val adRequest = AdRequest.Builder().build()
         adviewPost.loadAd(adRequest)
         post?.let {
-            ivPostPoster.load(it.userInfo.profileImage)
+            it.userInfo.profileImage.let {imgUrl ->
+                if(imgUrl.isNullOrBlank()) ivPostPoster.setImageResource(R.drawable.ic_user_profile_test)
+                else ivPostPoster.load(imgUrl)
+            }
             tvPostPosterNickname.text = it.userInfo.name
             tvPostPosterRanking.text = "랭킹 ${it.userInfo.rank}위"
             tvPostHour.text = getRelativeTime(it.postTime)

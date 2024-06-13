@@ -160,15 +160,12 @@ class AttainmentsViewModel @Inject constructor(
         val minutes = (elapsedTimeSeconds % 3600) / 60
         val seconds = elapsedTimeSeconds % 60
 
-        return if (days > 0) {
-            "${days}일 ${hours}:${minutes}:${seconds}"
-        } else if (hours > 0) {
-            "${hours}:${minutes}:${seconds}"
-        } else if (minutes > 0) {
-            "${minutes}:${seconds}"
-        } else {
-            "$seconds"
-        }
+        val daysString = days.toString().padStart(2, '0')
+        val hoursString = hours.toString().padStart(2, '0')
+        val minutesString = minutes.toString().padStart(2, '0')
+        val secondsString = seconds.toString().padStart(2, '0')
+
+        return "${daysString}일 ${hoursString}:${minutesString}:${secondsString}"
     }
 
     fun timeStringToMinutes(timeString: String): Long {
