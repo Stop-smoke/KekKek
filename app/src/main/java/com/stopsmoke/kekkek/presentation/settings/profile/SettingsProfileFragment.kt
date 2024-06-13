@@ -10,14 +10,18 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatest
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SettingsProfileFragment : Fragment() {
 
@@ -44,6 +48,7 @@ class SettingsProfileFragment : Fragment() {
             }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +95,9 @@ class SettingsProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initDuplicateInspection() = with(binding) {
     }
 
     override fun onDestroyView() {

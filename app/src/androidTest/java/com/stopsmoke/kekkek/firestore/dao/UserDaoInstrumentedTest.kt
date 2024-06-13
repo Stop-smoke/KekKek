@@ -82,6 +82,7 @@ class UserDaoInstrumentedTest {
             ),
             postMy = listOf("haha", "dummyPostId"),
             postBookmark = listOf("FIWO0bsaJxLz3MpFtCha", "MWdTXOEJ7RReWZuUarac"),
+            commentMy = listOf("0SaeAiRM6MUnyMbUXcib"),
             history = HistoryEntity(
                 historyTimeList = historyEntities,
                 totalMinutesTime = 1000

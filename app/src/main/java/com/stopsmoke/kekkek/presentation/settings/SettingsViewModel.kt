@@ -7,6 +7,8 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -18,6 +20,18 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+    private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
+    val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
+
+    fun nameDuplicateInspection(name: String) = viewModelScope.launch {
+        val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
+        _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
+    }
+
+    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch{
+        _nameDuplicationInspectionResult.emit(setBool)
+    }
+
 
     fun updateNickname(nickname: String) {
         viewModelScope.launch {

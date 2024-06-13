@@ -41,6 +41,8 @@ data class UserInfo(
     val profileImage: String
 ) : Parcelable
 
+
+
 fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     userInfo = UserInfo(
         name = written.name,

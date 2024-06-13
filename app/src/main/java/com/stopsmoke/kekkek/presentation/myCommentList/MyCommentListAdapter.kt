@@ -6,9 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 
-class MyCommentListAdapter
-    : PagingDataAdapter<MyCommentItem, MyCommentListAdapter.ViewHolder>(
+class MyCommentListAdapter(
+    private val viewModel: MyCommentViewModel
+) : PagingDataAdapter<MyCommentItem, MyCommentListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<MyCommentItem>() {
         override fun areItemsTheSame(
             oldItem: MyCommentItem,
@@ -25,13 +27,34 @@ class MyCommentListAdapter
         }
     }
 ) {
+
+    private var callback: CommunityCallbackListener? = null
+
+    fun registerCallbackListener(callback: CommunityCallbackListener) {
+        this.callback = callback
+    }
+
+    fun unregisterCallbackListener() {
+        callback = null
+    }
+
+
     class ViewHolder(
-        private val binding: RecyclerviewMyCommentItemBinding
+        private val binding: RecyclerviewMyCommentItemBinding,
+        private val callback: CommunityCallbackListener?,
+        private val viewModel: MyCommentViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MyCommentItem) = with(binding) {
             tvMyCommentContent.text = item.content
             tvMyCommentDatetime.text = ""
             tvMyCommentState.text = getCommentStateString(item)
+
+            binding.root.setOnClickListener {
+                viewModel.setCommunityWritingItem(item.postData.postId)
+                viewModel.getCommunityWritingItem()?.let {
+                    callback?.navigateToPost(it)
+                }
+            }
         }
 
         private fun getCommentStateString(item: MyCommentItem): String =
@@ -47,7 +70,7 @@ class MyCommentListAdapter
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), callback, viewModel
         )
     }
 

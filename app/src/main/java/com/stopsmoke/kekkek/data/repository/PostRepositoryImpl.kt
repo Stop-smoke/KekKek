@@ -145,6 +145,9 @@ internal class PostRepositoryImpl @Inject constructor(
             it.asExternalModel()
         }
 
+    override suspend fun getPostForPostId(postId: String): Post {
+        return postDao.getPostForPostId(postId).asExternalModel()
+
     override suspend fun addViews(postId: String): Result<Unit> {
         return postDao.addViews(postId)
     }

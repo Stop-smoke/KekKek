@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
         initToolbar()
 
         binding.clHomeSavedMoney.setOnClickListener {
-            navigateToAttainmentsFragment()
+            findNavController().navigate("attainments")
         }
 
         binding.ivHomeTest.setOnClickListener {
@@ -146,9 +146,9 @@ class HomeFragment : Fragment() {
 
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
-//            tvHomeSavedMoneyNum.text = formatToOneDecimalPlace(it.savedMoney) + " 원"
-//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-//            tvHomeRankNum.text = "${it.rank} 위"
+            tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
+            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTestDegree.text = it.addictionDegree
 
             tvHomeTimerNum.text = it.timeString

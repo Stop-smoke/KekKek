@@ -237,6 +237,20 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPostForPostId(postId: String): PostEntity {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("id", postId)
+                .get()
+                .await()
+
+            val document = query.documents.firstOrNull()
+            document?.toObject<PostEntity>() ?: PostEntity()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            PostEntity()
+        }
+        
     override fun getCommentCount(postId: String): Flow<Long> = callbackFlow {
         firestore.collection(COMMENT_COLLECTION)
             .whereEqualTo("post_data.post_id", postId)
