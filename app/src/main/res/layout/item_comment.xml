@@ -72,6 +72,7 @@
         app:layout_constraintStart_toEndOf="@+id/tv_comment_hour"
         app:layout_constraintTop_toTopOf="@+id/tv_comment_hour"
         app:srcCompat="@drawable/ic_thumb_up"
+        android:visibility="gone"
         app:tint="@color/gray_lightgray2" />
 
     <TextView
@@ -80,6 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="@string/comment_like"
+        android:visibility="gone"
         android:textSize="10sp"
         android:fontFamily="@font/pretendard_medium"
         app:layout_constraintBottom_toBottomOf="@+id/iv_comment_like"
