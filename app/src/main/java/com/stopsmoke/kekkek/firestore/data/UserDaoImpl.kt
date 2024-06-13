@@ -5,11 +5,10 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ internal class UserDaoImpl @Inject constructor(
         return firestore.collection(COLLECTION)
             .document(uid)
             .dataObjects<UserEntity>()
-            .mapNotNull { it }
+            .map { it ?: UserEntity() }
     }
 
     override suspend fun getUserDataFormatUser(uid: String): UserEntity? {
