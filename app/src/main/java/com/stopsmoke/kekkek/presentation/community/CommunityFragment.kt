@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -89,6 +89,7 @@ class CommunityFragment : Fragment() {
     private fun initView() = with(binding) {
         rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
         rvCommunityList.adapter = listAdapter
+
         ivCommunityNoticeArrow.setOnClickListener {
             // 인기글 전체보기 클릭
         }
@@ -112,14 +113,26 @@ class CommunityFragment : Fragment() {
         val clCommunityPostPopular2 =
             requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
         tvCommunityPopularFullView.setOnClickListener {
-            findNavController().navigate("popular_writing_list")
+            findNavController().navigate(R.id.action_community_to_popularWritingList)
         }
 
         clCommunityPostPopular1.setOnClickListener {
-            findNavController().navigate("post_view")
+            val item = viewModel.uiState.value
+            if (item is CommunityUiState.CommunityNormalUiState) {
+                findNavController().navigate(
+                    resId = R.id.action_community_to_post_view,
+                    args = bundleOf("item" to item.popularItem.postInfo1)
+                )
+            }
         }
         clCommunityPostPopular2.setOnClickListener {
-            findNavController().navigate("post_view")
+            val item = viewModel.uiState.value
+            if (item is CommunityUiState.CommunityNormalUiState) {
+                findNavController().navigate(
+                    resId = R.id.action_community_to_post_view,
+                    args = bundleOf("item" to item.popularItem.postInfo2)
+                )
+            }
         }
     }
 
@@ -202,7 +215,7 @@ class CommunityFragment : Fragment() {
                 val tvCommunityPostType2 =
                     requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
 
-                communityUiState.popularItem.postInfo1.let {
+                communityUiState.popularItem.postInfo1.postInfo.let {
                     tvCommunityTitle1.text = it.title
                     tvCommunityViewNum1.text = it.view.toString()
                     tvCommunityLikeNum1.text = it.like.toString()
@@ -210,7 +223,7 @@ class CommunityFragment : Fragment() {
                     tvCommunityPostType1.text = it.postType
                 }
 
-                communityUiState.popularItem.postInfo2.let {
+                communityUiState.popularItem.postInfo2.postInfo.let {
                     tvCommunityTitle2.text = it.title
                     tvCommunityViewNum2.text = it.view.toString()
                     tvCommunityLikeNum2.text = it.like.toString()

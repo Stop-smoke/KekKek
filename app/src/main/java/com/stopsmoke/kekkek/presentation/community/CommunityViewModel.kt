@@ -55,8 +55,8 @@ class CommunityViewModel @Inject constructor(
             _uiState.emit(
                 CommunityUiState.CommunityNormalUiState(
                     popularItem = CommunityPopularItem(
-                        postInfo1 = if (postItems.isNotEmpty()) updatePostInfo(postItems[0]) else emptyPostInfo(),
-                        postInfo2 = if (postItems.size > 1) updatePostInfo(postItems[1]) else emptyPostInfo()
+                        postInfo1 = if (postItems.isNotEmpty()) postItems[0].toCommunityWritingListItem() else emptyCommunityWritingListItem(),
+                        postInfo2 = if (postItems.size > 1) postItems[1].toCommunityWritingListItem() else emptyCommunityWritingListItem()
                     )
                 )
             )

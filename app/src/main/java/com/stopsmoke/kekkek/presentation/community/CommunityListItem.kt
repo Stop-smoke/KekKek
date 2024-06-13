@@ -1,11 +1,14 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Parcelable
+import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import kotlinx.android.parcel.Parcelize
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Parcelize
 data class CommunityWritingItem(
@@ -20,8 +23,8 @@ data class CommunityWritingItem(
 
 @Parcelize
 data class CommunityPopularItem(
-    val postInfo1: PostInfo,
-    val postInfo2: PostInfo
+    val postInfo1: CommunityWritingItem,
+    val postInfo2: CommunityWritingItem
 ) : Parcelable
 
 @Parcelize
@@ -42,6 +45,29 @@ data class UserInfo(
     val profileImage: String
 ) : Parcelable
 
+
+fun emptyCommunityWritingListItem() = CommunityWritingItem(
+    userInfo = UserInfo(
+        uid = "",
+        name = "",
+        rank = 0,
+        profileImage = ""
+    ),
+    postInfo = PostInfo(
+        id = "",
+        title = "",
+        postType = "",
+        view = 0,
+        like = 0,
+        comment = 0
+    ),
+    postImage = "",
+    post = "",
+    postTime = ElapsedDateTime(
+        DateTimeUnit.DAY, 0
+    ),
+    postType = PostCategory.UNKNOWN
+)
 
 
 fun Post.toCommunityWritingListItem() = CommunityWritingItem(
