@@ -125,7 +125,13 @@ internal class PostRepositoryImpl @Inject constructor(
         }
 
     override suspend fun deletePost(postId: String): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            postDao.deletePost(postId)
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+
     }
 
     override suspend fun editPost(post: PostWrite): Result<Unit> {

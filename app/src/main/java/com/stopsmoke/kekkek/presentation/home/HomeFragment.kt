@@ -69,20 +69,22 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.user.distinctUntilChanged().collectLatestWithLifecycle(lifecycle) {
-            when(it) {
+            when (it) {
                 is User.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show() }
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                }
+
                 is User.Guest -> {
-                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show() }
+                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show()
+                }
+
                 is User.Registered -> {
-                    requireActivity().runOnUiThread {
-                        if (it.cigaretteAddictionTestResult == null) {
-                            tvHomeTestDegree.text = "테스트 필요"
-                            ivHomeTest.text = "검사하기"
-                        } else {
-                            tvHomeTestDegree.text = it.cigaretteAddictionTestResult
-                            ivHomeTest.text = "다시 검사하기"
-                        }
+                    if (it.cigaretteAddictionTestResult == null) {
+                        tvHomeTestDegree.text = "테스트 필요"
+                        ivHomeTest.text = "검사하기"
+                    } else {
+                        tvHomeTestDegree.text = it.cigaretteAddictionTestResult
+                        ivHomeTest.text = "다시 검사하기"
                     }
                 }
             }
@@ -157,8 +159,8 @@ class HomeFragment : Fragment() {
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
-            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-            tvHomeRankNum.text = "${it.rank} 위"
+//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+//            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTimerNum.text = it.timeString
         }
 
