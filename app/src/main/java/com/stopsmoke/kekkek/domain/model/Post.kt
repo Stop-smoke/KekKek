@@ -16,7 +16,7 @@ data class Post(
     val categories: PostCategory,
     val views: Long,
     val commentUser: List<String>
-    // Todo: proileImage 변수 추가 필요
+    // Todo: profileImage 변수 추가 필요
 ) {
     val modifiedElapsedDateTime = dateTime.modified.getElapsedDateTime()
 

@@ -16,6 +16,7 @@
         layout="@layout/fragment_user_profile_detail" />
 
     <com.google.android.material.tabs.TabLayout
+        android:background="@color/white"
         android:id="@+id/tab_userprofile_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

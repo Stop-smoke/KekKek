@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
@@ -62,6 +63,12 @@ class PostViewModel @Inject constructor(
     fun updatePostId(id: String) {
         viewModelScope.launch {
             _postId.emit(id)
+        }
+    }
+
+    fun deletePost(postId: String) {
+        viewModelScope.launch {
+            postRepository.deletePost(postId)
         }
     }
 
