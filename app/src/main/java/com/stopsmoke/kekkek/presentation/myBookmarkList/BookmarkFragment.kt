@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.invisible
@@ -67,7 +68,6 @@ class BookmarkFragment : Fragment() {
         initListAdapterCallback()
         rvBookmark.layoutManager = LinearLayoutManager(requireContext())
         rvBookmark.adapter = listAdapter
-
         viewModel.updateUserState()
     }
 
@@ -92,19 +92,14 @@ class BookmarkFragment : Fragment() {
     }
 
     private fun initObserveLiveData() {
+        //
+        val db = FirebaseFirestore.getInstance()
+
         postViewModel.bookmarkPosts.observe(viewLifecycleOwner) {
-//            val bookmarkPosts = it.map { bookmark ->
-//                CommunityWritingItem(
-//                    userInfo = bookmark.userInfo,
-//                    postInfo = bookmark.postInfo,
-//                    postImage = bookmark.postImage,
-//                    post = bookmark.post,
-//                    postTime = bookmark.postTime,
-//                    postType = bookmark.postType
-//                )
-//            }
-//            val paging = PagingData.from(bookmarkPosts)
-//            listAdapter.submitData(paging)
+            val paging = PagingData.from(it)
+            viewLifecycleOwner.lifecycleScope.launch {
+                listAdapter.submitData(paging)
+            }
         }
     }
 
