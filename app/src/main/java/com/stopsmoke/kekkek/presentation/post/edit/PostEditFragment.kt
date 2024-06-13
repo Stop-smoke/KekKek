@@ -9,20 +9,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
+ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.stopsmoke.kekkek.DummyData.category
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
-import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import com.stopsmoke.kekkek.presentation.post.PostCommentAdapter
-import com.stopsmoke.kekkek.presentation.post.PostViewModel
 import com.stopsmoke.kekkek.presentation.post.PostWriteItem
 import com.stopsmoke.kekkek.presentation.post.PostWriteViewModel
 import com.stopsmoke.kekkek.visible
@@ -121,15 +115,15 @@ class PostEditFragment : Fragment() {
 
     private fun createPostEditFromInputs(): PostWrite {
         return PostWrite(
-        title = binding.etPostEditTitle.text.toString(),
-        text = binding.etPostWriteContent.text.toString(),
-        dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
-        category = when (binding.includePostEditAppBar.tvPostEditType.text) {
-            "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
-            "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
-            "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
-            else -> throw IllegalStateException()
-        })
+            title = binding.etPostEditTitle.text.toString(),
+            text = binding.etPostWriteContent.text.toString(),
+            dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+            category = when (binding.includePostEditAppBar.tvPostEditType.text) {
+                "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
+                "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
+                "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
+                else -> throw IllegalStateException()
+            })
     }
 
     override fun onResume() {

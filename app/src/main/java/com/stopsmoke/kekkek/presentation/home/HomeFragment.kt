@@ -4,19 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import com.stopsmoke.kekkek.domain.model.CommentFilter
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import com.stopsmoke.kekkek.presentation.test.TestViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -26,8 +32,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by viewModels()
-    private val testSharedViewModel by activityViewModels<TestViewModel>()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +48,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModel()
         initView()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.visible()
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
@@ -61,21 +68,26 @@ class HomeFragment : Fragment() {
             findNavController().navigate("test_page")
         }
 
-        testSharedViewModel.testResult.observe(viewLifecycleOwner) { totalScore ->
-            when (totalScore) {
-                in 8..13 -> {
-                    tvHomeTestDegree.text = "담배 비중독 상태🙂"
+        viewModel.user.distinctUntilChanged().collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is User.Error -> {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
 
-                in 14..19 -> {
-                    tvHomeTestDegree.text = "담배 의존 상태😥"
+                is User.Guest -> {
+                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show()
                 }
 
-                else -> {
-                    tvHomeTestDegree.text = "담배 중독 상태😱"
+                is User.Registered -> {
+                    if (it.cigaretteAddictionTestResult == null) {
+                        tvHomeTestDegree.text = "테스트 필요"
+                        ivHomeTest.text = "검사하기"
+                    } else {
+                        tvHomeTestDegree.text = it.cigaretteAddictionTestResult
+                        ivHomeTest.text = "다시 검사하기"
+                    }
                 }
             }
-            ivHomeTest.text = "다시 검사하기"
         }
 
         binding.clHomeTip.setOnClickListener {
@@ -137,7 +149,7 @@ class HomeFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePost ->
                     binding.tvHomeNoticeTitle.text = noticePost.title
                 }
@@ -147,10 +159,8 @@ class HomeFragment : Fragment() {
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
-            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-            tvHomeRankNum.text = "${it.rank} 위"
-            tvHomeTestDegree.text = it.addictionDegree
-
+//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+//            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTimerNum.text = it.timeString
         }
 

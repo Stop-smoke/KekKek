@@ -17,6 +17,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
@@ -44,6 +45,11 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
         initData()
         initView()
         observeUserInformation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     private fun observeUserInformation() {

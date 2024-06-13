@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.my_page -> {
-                    navController.popBackStack(route = "my_page", inclusive = false)
+                    navController.popBackStack(route = "my", inclusive = false)
                 }
             }
             item.onNavDestinationSelected(navController)

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/background_light"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -42,11 +43,15 @@
             android:layout_marginTop="2dp"
             android:fontFamily="@font/pretendard_semi_bold"
             android:text="단짠단짠"
+            android:maxLines="1"
+            android:maxWidth="200dp"
+            android:ellipsize="end"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_itemWriting_postType" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/tv_itemWriting_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

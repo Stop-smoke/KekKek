@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingPerDayBinding
+import com.stopsmoke.kekkek.invisible
 
 
 class SmokingPerDayFragment : Fragment() {
@@ -32,6 +33,11 @@ class SmokingPerDayFragment : Fragment() {
         btnResetingOnboardingNext.setOnClickListener {
             findNavController().navigate(R.id.action_resetting_onboarding_smoking_per_day_to_resetting_onboarding_smoking_per_pack)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {

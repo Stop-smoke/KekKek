@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
 
-    <include app:graph="@navigation/nav_onboarding"/>
+    <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
 
     <fragment
@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_my_page_to_resetting_onboarding_smoking_per_day"
             app:destination="@id/resetting_onboarding_smoking_per_day" />
+        <action
+            android:id="@+id/action_my_page_to_my_complaint"
+            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
@@ -143,9 +146,6 @@
         <action
             android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
             app:destination="@id/my_page" />
-        <action
-            android:id="@+id/action_my_page_to_my_complaint"
-            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
@@ -189,6 +189,9 @@
         <action
             android:id="@+id/action_post_view_to_user_profile"
             app:destination="@id/user_profile"/>
+        <action
+            android:id="@+id/action_post_view_to_post_edit"
+            app:destination="@id/post_edit" />
     </fragment>
 
     <fragment
@@ -196,6 +199,12 @@
         android:name="com.stopsmoke.kekkek.presentation.post.PostWriteFragment"
         app:route="post_write"
         tools:layout="@layout/fragment_post_write" />
+
+    <fragment
+        android:id="@+id/post_edit"
+        android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
+        app:route="post_edit"
+        tools:layout="@layout/fragment_post_edit" />
 
     <fragment
         android:id="@+id/attainments"
