@@ -21,7 +21,9 @@ import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
+import com.stopsmoke.kekkek.visible
 
 class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     GoogleAuthorizationCallbackListener {
@@ -31,8 +33,8 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
 
     private val viewModel: OnboardingViewModel by activityViewModels()
 
-    private lateinit var kakaoAuthorization: KakaoAuthorization
-    private lateinit var googleAuthorization: GoogleAuthorization
+    private var kakaoAuthorization: KakaoAuthorization? = null
+    private var googleAuthorization: GoogleAuthorization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,14 +63,26 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         }
 
         binding.flLoginGoogle.setOnClickListener {
-            googleAuthorization.launchGoogleAuthActivity()
+            googleAuthorization?.launchGoogleAuthActivity()
+        }
+
+        viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
+            if (it == true) {
+                findNavController().navigate("home")
+                return@collectLatestWithLifecycle
+            }
+
+            if (it == false) {
+                findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        kakaoAuthorization.unregisterCallbackListener()
-        googleAuthorization.unregisterCallbackListener()
+        activity?.visible()
+        kakaoAuthorization?.unregisterCallbackListener()
+        googleAuthorization?.unregisterCallbackListener()
         _binding = null
     }
 
@@ -84,7 +98,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 viewModel.updateUserName(
                     authResult.user?.displayName ?: getString(R.string.login_default_nickname)
                 )
-                findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+                viewModel.updateRegisteredUser(authResult.user?.uid?: "")
 
                 authResult.user?.displayName?.let {
                     Toast.makeText(requireContext(), "${it}님 환영합니다", Toast.LENGTH_SHORT).show()
@@ -99,7 +113,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     override fun onSuccess(user: FirebaseUser) {
         viewModel.updateUid(user.uid)
         viewModel.updateUserName(user.displayName ?: getString(R.string.login_default_nickname))
-        findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+        viewModel.updateRegisteredUser(user.uid)
         Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
     }
 
