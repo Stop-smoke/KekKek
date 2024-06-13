@@ -33,8 +33,8 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
 
     private val viewModel: OnboardingViewModel by activityViewModels()
 
-    private lateinit var kakaoAuthorization: KakaoAuthorization
-    private lateinit var googleAuthorization: GoogleAuthorization
+    private var kakaoAuthorization: KakaoAuthorization? = null
+    private var googleAuthorization: GoogleAuthorization? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,24 +63,26 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         }
 
         binding.flLoginGoogle.setOnClickListener {
-            googleAuthorization.launchGoogleAuthActivity()
+            googleAuthorization?.launchGoogleAuthActivity()
         }
 
         viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
-            if (it) {
+            if (it == true) {
                 findNavController().navigate("home")
                 return@collectLatestWithLifecycle
             }
 
-            findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+            if (it == false) {
+                findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         activity?.visible()
-        kakaoAuthorization.unregisterCallbackListener()
-        googleAuthorization.unregisterCallbackListener()
+        kakaoAuthorization?.unregisterCallbackListener()
+        googleAuthorization?.unregisterCallbackListener()
         _binding = null
     }
 

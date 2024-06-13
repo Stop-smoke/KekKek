@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         val isFirstRunning = runBlocking {
             userRepository.isOnboardingComplete().first()
         }
-        setNavGraph(!isFirstRunning)
+        setNavGraph(isFirstRunning)
     }
 
     private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {

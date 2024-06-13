@@ -130,26 +130,27 @@ class OnboardingViewModel @Inject constructor(
         _nameDuplicationInspectionResult.emit(setBool)
     }
 
-    private val _isRegisteredUser = MutableSharedFlow<Boolean>()
-    val isRegisteredUser get() = _isRegisteredUser.asSharedFlow()
+    private val _isRegisteredUser = MutableStateFlow<Boolean?>(null)
+    val isRegisteredUser get() = _isRegisteredUser.asStateFlow()
 
     fun updateRegisteredUser(uid: String) {
         viewModelScope.launch {
-            userRepository.getUserData(uid)
-                .let {
-                    when (it) {
-                        is Result.Error -> {}
-                        is Result.Loading -> {}
-                        is Result.Success -> {
-                            val isRegistered = it.data.firstOrNull()?.name != null
-                            _isRegisteredUser.emit(isRegistered)
+            when (val result = userRepository.getUserData(uid)) {
+                is Result.Error -> {
+                }
+                is Result.Loading -> {
 
-                            if (isRegistered) {
-                                userRepository.setOnboardingComplete(true)
-                            }
-                        }
+                }
+                is Result.Success -> {
+                    val user = result.data.firstOrNull()
+                    val isRegistered = !user?.name.isNullOrBlank()
+                    _isRegisteredUser.emit(isRegistered)
+
+                    if (isRegistered) {
+                        userRepository.setOnboardingComplete(true)
                     }
                 }
+            }
         }
     }
 }
