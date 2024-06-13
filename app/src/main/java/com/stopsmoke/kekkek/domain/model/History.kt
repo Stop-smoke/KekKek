@@ -16,7 +16,7 @@ data class HistoryTime(
 )
 
 fun History.getTotalMinutesTime(): Long {
-    var totalMinutesTime = this.totalMinutesTime
+    var totalMinutesTime:Long = 0
 
     if (historyTimeList.isNotEmpty()) {
         val lastHistoryTime = historyTimeList.last()
@@ -34,7 +34,7 @@ fun History.getTotalMinutesTime(): Long {
 }
 
 fun History.getTotalSecondsTime(): Long {
-    var totalSecondsTime = this.totalMinutesTime * 60 // 분을 초로 변환
+    var totalSecondsTime: Long = 0 // 분을 초로 변환
 
     if (historyTimeList.isNotEmpty()) {
         val lastHistoryTime = historyTimeList.last()

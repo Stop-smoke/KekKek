@@ -6,7 +6,7 @@
     android:minHeight="60dp">
 
     <ImageView
-        android:id="@+id/iv_my_post_back"
+        android:id="@+id/iv_my_complaint_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -17,11 +17,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_my_post_title"
+        android:id="@+id/tv_my_complaint_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_bold"
-        android:text="내가 쓴 글"
+        android:text="커뮤니티 신고하기"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
+import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.getRelativeTime
 import com.stopsmoke.kekkek.invisible
@@ -157,6 +160,31 @@ class PostViewFragment : Fragment() {
                 post?.let { viewModel.addBookmarkPost(it) }
             }
         }
+        includePostViewAppBar.ivPostMore.setOnClickListener {
+            showBottomSheetDialog()
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomsheetDialogBinding = FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
+
+        bottomsheetDialogBinding.tvEditPost.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+            Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            bottomSheetDialog.dismiss()
+        }
+        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
+            Toast.makeText(requireContext(), "게시물 신고를 작성해주세요.", Toast.LENGTH_SHORT).show()
+            findNavController().navigate("my_complaint")
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
+
     }
 
     override fun onResume() {

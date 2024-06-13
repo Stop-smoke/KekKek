@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -15,10 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -32,9 +34,6 @@ class NoticeListFragment : Fragment() {
 
     private val viewModel: NoticeListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +53,8 @@ class NoticeListFragment : Fragment() {
         initAppBar()
         rvNoticeList.adapter = listAdapter
         rvNoticeList.layoutManager = LinearLayoutManager(requireActivity())
+
+        initListAdapterCallback()
     }
 
     private fun initAppBar() = with(binding) {
@@ -73,14 +74,21 @@ class NoticeListFragment : Fragment() {
         tvNoticeListTitle.text = "공지사항"
     }
 
-    private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { state ->
-                    onBind(state)
+    private fun initListAdapterCallback() {
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate(
+                        resId = R.id.action_noticeList_to_postView,
+                        args = bundleOf("item" to communityWritingItem)
+                    )
                 }
-        }
+            }
+        )
+    }
 
+    private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             noticePosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePosts ->
@@ -89,14 +97,14 @@ class NoticeListFragment : Fragment() {
         }
     }
 
-    private fun onBind(uiState: NoticeListUiState) = with(binding) {
-    }
 
     override fun onDestroy() {
         super.onDestroy()
+        listAdapter.unregisterCallbackListener()
         _binding = null
         activity?.visible()
     }
+
     override fun onResume() {
         super.onResume()
         activity?.invisible()

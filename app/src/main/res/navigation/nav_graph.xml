@@ -18,6 +18,12 @@
         <action
             android:id="@+id/action_home_to_home_tip"
             app:destination="@id/home_tip" />
+        <action
+            android:id="@+id/action_home_to_attainments"
+            app:destination="@id/attainments" />
+        <action
+            android:id="@+id/action_home_to_test_page"
+            app:destination="@id/test_page" />
     </fragment>
 
     <fragment
@@ -54,6 +60,18 @@
         <action
             android:id="@+id/action_community_to_popularWritingList"
             app:destination="@id/popular_writing_list" />
+        <action
+            android:id="@+id/action_community_to_popular_writing_list"
+            app:destination="@id/popular_writing_list" />
+        <action
+            android:id="@+id/action_community_to_notice_list"
+            app:destination="@id/notice_list" />
+        <action
+            android:id="@+id/action_community_to_post_write"
+            app:destination="@id/post_write" />
+        <action
+            android:id="@+id/action_community_to_notification"
+            app:destination="@id/notification" />
     </fragment>
 
     <fragment
@@ -124,6 +142,9 @@
         <action
             android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
             app:destination="@id/my_page" />
+        <action
+            android:id="@+id/action_my_page_to_my_complaint"
+            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
@@ -131,6 +152,12 @@
         android:name="com.stopsmoke.kekkek.presentation.my.supportcenter.SupportCenterFragment"
         app:route="my_supportcenter"
         tools:layout="@layout/fragment_support_center" />
+
+    <fragment
+        android:id="@+id/my_complaint"
+        android:name="com.stopsmoke.kekkek.presentation.my.complaint.MyComplaintFragment"
+        app:route="my_complaint"
+        tools:layout="@layout/fragment_my_complaint" />
 
     <fragment
         android:id="@+id/test_page"
@@ -184,6 +211,10 @@
         <action
             android:id="@+id/action_myBookmarkList_to_postView"
             app:destination="@id/post_view" />
+
+        <action
+            android:id="@+id/action_myBookmarkList_to_userProfile"
+            app:destination="@id/user_profile" />
     </fragment>
 
     <fragment
@@ -201,13 +232,16 @@
         android:id="@+id/popular_writing_list"
         android:name="com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListFragment"
         app:route="popular_writing_list"
-        tools:layout="@layout/fragment_popular_writing_list" />
+        tools:layout="@layout/fragment_popular_writing_list" >
 
-    <fragment
-        android:id="@+id/my_post"
-        android:name="com.stopsmoke.kekkek.presentation.my.MyPostFragment"
-        app:route="my_post"
-        tools:layout="@layout/fragment_my_post" />
+        <action
+            android:id="@+id/action_popularWritingList_to_postView"
+            app:destination="@id/post_view" />
+
+        <action
+            android:id="@+id/action_popularWritingList_to_userProfile"
+            app:destination="@id/user_profile" />
+    </fragment>
 
     <fragment
         android:id="@+id/my_comment_list"
@@ -255,6 +289,10 @@
         android:id="@+id/notice_list"
         android:name="com.stopsmoke.kekkek.presentation.noticeWritingList.NoticeListFragment"
         app:route="notice_list"
-        tools:layout="@layout/fragment_notice_list" />
+        tools:layout="@layout/fragment_notice_list" >
+
+        <action android:id="@+id/action_noticeList_to_postView"
+            app:destination="@id/post_view"/>
+    </fragment>
 
 </navigation>
