@@ -135,6 +135,7 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun setUserDataForName(user: User.Registered, name: String) {
         userDao.setUserDataForName(user.toEntity(), name)
+        postDao.setUserDataForName(user.toEntity(), name)
     }
 
     override suspend fun setUserDataForIntroduction(user: User.Registered, introduction: String) {

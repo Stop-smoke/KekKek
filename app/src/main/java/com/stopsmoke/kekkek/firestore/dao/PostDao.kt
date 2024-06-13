@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.model.PostEntity
+import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 interface PostDao {
@@ -50,4 +51,6 @@ interface PostDao {
     suspend fun addViews(postId: String): Result<Unit>
 
     suspend fun setProfileImage(userId: String, imgUrl: String)
+
+    suspend fun setUserDataForName(userEntity: UserEntity, name:String)
 }

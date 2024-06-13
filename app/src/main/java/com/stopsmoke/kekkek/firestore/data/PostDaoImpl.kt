@@ -17,6 +17,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
+import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -345,6 +346,31 @@ internal class PostDaoImpl @Inject constructor(
             val postList = getQuery.documents.mapNotNull { document ->
                 document.toObject<PostEntity>()?.apply {
                     written?.profileImage = imgUrl
+                }
+            }
+
+            postList.forEach { post ->
+                firestore.collection(COLLECTION)
+                    .document(post.id!!)
+                    .set(post)
+                    .await()
+            }
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
+        try {
+            val getQuery = firestore.collection(COLLECTION)
+                .whereEqualTo("written.uid", userEntity.uid!!)
+                .get()
+                .await()
+
+            val postList = getQuery.documents.mapNotNull { document ->
+                document.toObject<PostEntity>()?.apply {
+                    written?.name = name
                 }
             }
 
