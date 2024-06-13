@@ -3,9 +3,7 @@ package com.stopsmoke.kekkek.presentation.onboarding
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Timestamp
 import com.stopsmoke.kekkek.data.mapper.emptyHistory
-import com.stopsmoke.kekkek.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.UserConfig
@@ -13,6 +11,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -41,7 +40,8 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private val _dailyCigarettePacks: MutableStateFlow<Int> = MutableStateFlow(0) // 하루에 담배를 몇 개비 정도 피우시나요?
+    private val _dailyCigarettePacks: MutableStateFlow<Int> =
+        MutableStateFlow(0) // 하루에 담배를 몇 개비 정도 피우시나요?
     val dailyCigarettePacks = _dailyCigarettePacks.asStateFlow()
 
     fun updateDailyCigarettePacks(day: Int) {
@@ -112,5 +112,17 @@ class OnboardingViewModel @Inject constructor(
             userRepository.setOnboardingComplete(true)
             _onboardingUiState.emit(OnboardingUiState.Success)
         }
+    }
+
+    private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
+    val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
+
+    fun nameDuplicateInspection(name: String) = viewModelScope.launch {
+        val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
+        _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
+    }
+
+    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch{
+        _nameDuplicationInspectionResult.emit(setBool)
     }
 }

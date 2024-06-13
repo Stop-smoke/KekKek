@@ -82,6 +82,20 @@ internal class UserDaoImpl @Inject constructor(
         return result
     }
 
+    override suspend fun nameDuplicateInspection(name: String): Boolean {
+        return try {
+            val querySnapshot = firestore.collection(COLLECTION)
+                .whereEqualTo("name", name)
+                .get()
+                .await()
+
+            querySnapshot.isEmpty
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
     companion object {
         private const val COLLECTION = "user"
     }

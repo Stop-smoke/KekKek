@@ -113,7 +113,7 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun getUserDataFormatUser(uid: String): User {
         return try {
             val userEntity = userDao.getUserDataFormatUser(uid)
-           return  if (userEntity != null) {
+            return if (userEntity != null) {
                 userEntity.toExternalModel()
             } else {
                 User.Guest
@@ -162,6 +162,10 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun withdraw(): Result<Unit> {
         return authDataSource.withdraw()
+    }
+
+    override suspend fun nameDuplicateInspection(name: String): Boolean {
+        return userDao.nameDuplicateInspection(name)
     }
 
 }

@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingNameBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class OnboardingNameFragment : Fragment() {
 
@@ -33,15 +37,34 @@ class OnboardingNameFragment : Fragment() {
             if (editable.isNullOrBlank()) {
                 binding.btnOnboardingNext.isEnabled = false
                 return@addTextChangedListener
-            }
-            binding.btnOnboardingNext.isEnabled = true
-            viewModel.updateUserName(editable.toString())
+            } else binding.btnOnboardingNext.isEnabled = true
+            binding.tvOnboardingWarning.visibility = View.INVISIBLE
         }
 
-        binding.btnOnboardingNext.setOnClickListener {
-            findNavController().navigate(R.id.action_onboarding_name_to_onboarding_perday)
+
+        initDuplicateInspection()
+    }
+
+    private fun initDuplicateInspection() = with(binding) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.nameDuplicationInspectionResult.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { duplicateInspectionResult ->
+                    if (duplicateInspectionResult == false) {
+                        binding.tvOnboardingWarning.visibility = View.VISIBLE
+                        binding.tvOnboardingWarning.text = "이미 존재하는 이름이에요!"
+                    } else if (duplicateInspectionResult == true) {
+                        findNavController().navigate(R.id.action_onboarding_name_to_onboarding_perday)
+                        viewModel.setNameDuplicationInspectionResult(null)
+                    } else if (duplicateInspectionResult == null) {
+                        binding.tvOnboardingWarning.visibility = View.INVISIBLE
+                    }
+                }
         }
 
+
+        btnOnboardingNext.setOnClickListener {
+            viewModel.nameDuplicateInspection(binding.etOnboardingName.text.toString())
+        }
     }
 
     override fun onDestroyView() {
