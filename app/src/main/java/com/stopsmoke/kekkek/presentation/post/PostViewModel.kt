@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
@@ -65,6 +66,12 @@ class PostViewModel @Inject constructor(
         }
     }
 
+    fun deletePost(postId: String) {
+        viewModelScope.launch {
+            postRepository.deletePost(postId)
+        }
+    }
+
     val user = userRepository.getUserData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -110,18 +117,6 @@ class PostViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-//    fun deletePost(postId: String) {
-//        viewModelScope.launch {
-//            when (val result = postRepository.deletePost(postId)) {
-//                is Result.Success -> {
-//
-//                }
-//                is Result.Error -> {
-//
-//                }
-//            }
-//        }
-//    }
     fun addComment(commentPostData: CommentPostData, text: String) {
         viewModelScope.launch {
             val user = user.firstOrNull() as? User.Registered ?: return@launch

@@ -7,7 +7,6 @@
 
     <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
-    <include app:graph="@navigation/nav_onboarding"/>
 
     <fragment
         android:id="@+id/home"
