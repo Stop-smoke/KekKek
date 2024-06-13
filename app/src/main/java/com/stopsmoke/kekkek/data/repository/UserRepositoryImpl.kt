@@ -13,6 +13,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firebaseauth.AuthenticationDataSource
 import com.stopsmoke.kekkek.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.firestorage.model.StorageUploadResult
+import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,7 @@ internal class UserRepositoryImpl @Inject constructor(
     private val storageDao: StorageDao,
     private val userDao: UserDao,
     private val preferencesDataSource: PreferencesDataSource,
+    private val postDao: PostDao,
     coroutineScope: CoroutineScope,
     private val authDataSource: AuthenticationDataSource,
 ) : UserRepository {
@@ -69,6 +71,7 @@ internal class UserRepositoryImpl @Inject constructor(
 
         val bitmap = BitmapCompressor(imageInputStream)
 
+
         return storageDao.uploadFile(
             inputStream = bitmap.getCompressedFile().inputStream(),
             path = "users/${(user.value as User.Registered).uid}/profile_image.jpeg"
@@ -79,6 +82,8 @@ internal class UserRepositoryImpl @Inject constructor(
                         val user = (user.value as User.Registered)
                             .copy(profileImage = ProfileImage.Web(it.imageUrl))
                         userDao.setUser(user.toEntity())
+                        postDao.setProfileImage(user.uid, it.imageUrl)
+
                         ProfileImageUploadResult.Success
                     }
 
@@ -126,6 +131,15 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun setUserData(user: User.Registered) {
         userDao.setUser(user.toEntity())
+    }
+
+    override suspend fun setUserDataForName(user: User.Registered, name: String) {
+        userDao.setUserDataForName(user.toEntity(), name)
+        postDao.setUserDataForName(user.toEntity(), name)
+    }
+
+    override suspend fun setUserDataForIntroduction(user: User.Registered, introduction: String) {
+        userDao.setUserDataForIntroduction(user.toEntity(), introduction)
     }
 
     override suspend fun updateUserData(user: User.Registered) {

@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestore.data
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
@@ -38,6 +39,54 @@ internal class UserDaoImpl @Inject constructor(
             .set(userEntity)
             .addOnFailureListener { throw it }
             .await()
+    }
+
+    override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
+        try {
+            val querySnapshot = firestore.collection(COLLECTION).document(userEntity.uid!!)
+                .get()
+                .await()
+
+            val setUserItem = querySnapshot.toObject<UserEntity>()?.copy(name = name)
+
+            if (setUserItem != null) {
+                firestore.collection(COLLECTION).document(userEntity.uid!!)
+                    .set(setUserItem)
+                    .addOnFailureListener { exception ->
+                        Log.e("Firestore", "Failed to set document", exception)
+                        throw exception
+                    }
+                    .await()
+            } else {
+                Log.e("Firestore", "Failed to convert document to UserEntity or userEntity.uid is null")
+            }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Exception occurred", e)
+        }
+    }
+
+    override suspend fun setUserDataForIntroduction(userEntity: UserEntity, introduction: String) {
+        try {
+            val querySnapshot = firestore.collection(COLLECTION).document(userEntity.uid!!)
+                .get()
+                .await()
+
+            val setUserItem = querySnapshot.toObject<UserEntity>()?.copy(introduction = introduction)
+
+            if (setUserItem != null) {
+                firestore.collection(COLLECTION).document(userEntity.uid!!)
+                    .set(setUserItem)
+                    .addOnFailureListener { exception ->
+                        Log.e("Firestore", "Failed to set document", exception)
+                        throw exception
+                    }
+                    .await()
+            } else {
+                Log.e("Firestore", "Failed to convert document to UserEntity or userEntity.uid is null")
+            }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Exception occurred", e)
+        }
     }
 
     override suspend fun updateUser(userEntity: UserEntity) {
@@ -94,6 +143,7 @@ internal class UserDaoImpl @Inject constructor(
             false
         }
     }
+
 
     companion object {
         private const val COLLECTION = "user"
