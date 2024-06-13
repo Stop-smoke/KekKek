@@ -2,16 +2,12 @@ package com.stopsmoke.kekkek.presentation.post
 
 //import com.google.android.gms.ads.AdRequest
 //import com.google.android.gms.ads.MobileAds
-import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
