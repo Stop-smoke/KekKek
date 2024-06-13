@@ -49,6 +49,8 @@ class PostEditFragment : Fragment() {
         initView()
         initListener()
 
+        // 기존의 내용을 가져오는 것이 필요
+        // 수정 완료 시 업데이트 필요
     }
 
     private fun initView() {
