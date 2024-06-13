@@ -42,7 +42,7 @@ class CommunityViewModel @Inject constructor(
                     is Result.Loading -> emptyFlow()
                     is Result.Success -> it.data.map { pagingData ->
                         pagingData.map {
-                            updateWritingItem(it)
+                            it.toCommunityWritingListItem()
                         }
                     }
                 }
