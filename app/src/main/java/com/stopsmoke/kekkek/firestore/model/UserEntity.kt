@@ -60,4 +60,8 @@ data class UserEntity(
 
     @get:PropertyName("history") @set:PropertyName("history")
     var history: HistoryEntity? = null,
-    )
+
+    @get:PropertyName("cigarette_addiction_test_result") @set:PropertyName("cigarette_addiction_test_result")
+    var cigaretteAddictionTestResult: String? = null
+
+)

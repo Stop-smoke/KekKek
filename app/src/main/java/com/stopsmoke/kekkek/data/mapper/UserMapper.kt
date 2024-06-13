@@ -27,7 +27,8 @@ internal fun User.Registered.toEntity(): UserEntity =
         clearAchievementsList = clearAchievementsList,
         commentMy = commentMy,
         postMy = postMy,
-        history = history.toEntity()
+        history = history.toEntity(),
+        cigaretteAddictionTestResult = cigaretteAddictionTestResult
     )
 
 internal fun UserEntity.toExternalModel(): User.Registered =
@@ -54,7 +55,8 @@ internal fun UserEntity.toExternalModel(): User.Registered =
         clearAchievementsList = clearAchievementsList ?: emptyList(),
         commentMy = commentMy ?: emptyList(),
         postMy = postMy ?: emptyList(),
-        history = history?.asExternalModel() ?: emptyHistory()
+        history = history?.asExternalModel() ?: emptyHistory(),
+        cigaretteAddictionTestResult = cigaretteAddictionTestResult
     )
 
 internal fun LocationEntity.toExternalModel() = Location(
