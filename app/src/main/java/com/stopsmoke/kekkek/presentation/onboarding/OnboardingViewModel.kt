@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation.onboarding
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.data.mapper.emptyHistory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -10,16 +11,19 @@ import com.stopsmoke.kekkek.domain.model.UserConfig
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _uid = MutableStateFlow("")
@@ -124,5 +128,28 @@ class OnboardingViewModel @Inject constructor(
 
     fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch{
         _nameDuplicationInspectionResult.emit(setBool)
+    }
+
+    private val _isRegisteredUser = MutableSharedFlow<Boolean>()
+    val isRegisteredUser get() = _isRegisteredUser.asSharedFlow()
+
+    fun updateRegisteredUser(uid: String) {
+        viewModelScope.launch {
+            userRepository.getUserData(uid)
+                .let {
+                    when (it) {
+                        is Result.Error -> {}
+                        is Result.Loading -> {}
+                        is Result.Success -> {
+                            val isRegistered = it.data.firstOrNull()?.name != null
+                            _isRegisteredUser.emit(isRegistered)
+
+                            if (isRegistered) {
+                                userRepository.setOnboardingComplete(true)
+                            }
+                        }
+                    }
+                }
+        }
     }
 }
