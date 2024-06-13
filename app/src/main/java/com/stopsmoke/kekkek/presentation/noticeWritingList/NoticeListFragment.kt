@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -93,6 +95,11 @@ class NoticeListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        activity?.visible()
+    }
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     companion object {

@@ -12,33 +12,47 @@ import coil.load
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.getRelativeTime
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class BookmarkListAdapter
-    : PagingDataAdapter<BookmarkWritingItem, BookmarkListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<BookmarkWritingItem>() {
+    : PagingDataAdapter<CommunityWritingItem, BookmarkListAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
         override fun areItemsTheSame(
-            oldItem: BookmarkWritingItem,
-            newItem: BookmarkWritingItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: BookmarkWritingItem,
-            newItem: BookmarkWritingItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
     }
 ) {
+
+    private var callback: CommunityCallbackListener? = null
+
+    fun registerCallbackListener(callback: CommunityCallbackListener) {
+        this.callback = callback
+    }
+
+    fun unregisterCallbackListener() {
+        callback = null
+    }
+
+
     class ViewHolder(
-        private val binding: ItemCommunityPostwritingBinding
+        private val binding: ItemCommunityPostwritingBinding,
+        private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: BookmarkWritingItem) = with(binding) {
+        fun bind(item: CommunityWritingItem) = with(binding) {
             item.postInfo.let {
                 tvItemWritingTitle.text = it.title
                 tvItemWritingViewNum.text = it.view.toString()
@@ -63,7 +77,25 @@ class BookmarkListAdapter
 
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
+
+                binding.root.setOnClickListener {
+                    callback?.navigateToPost(item)
+                }
             }
+        }
+
+        private fun getRelativeTime(pastTime: ElapsedDateTime): String {
+            val timeType = when (pastTime.elapsedDateTime) {
+                DateTimeUnit.YEAR -> "년"
+                DateTimeUnit.MONTH -> "달"
+                DateTimeUnit.DAY -> "일"
+                DateTimeUnit.WEEK -> "주"
+                DateTimeUnit.HOUR -> "시간"
+                DateTimeUnit.MINUTE -> "분"
+                DateTimeUnit.SECOND -> "초"
+            }
+
+            return "${pastTime.number} ${timeType} 전"
         }
 
         private fun setMarginEnd(view: TextView, end: Int) {
@@ -82,7 +114,7 @@ class BookmarkListAdapter
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), callback
         )
     }
 

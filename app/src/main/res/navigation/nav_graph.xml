@@ -157,6 +157,9 @@
         <argument
             android:name="postArgument"
             app:argType="com.stopsmoke.kekkek.presentation.community.CommunityWritingItem" />
+        <action
+            android:id="@+id/action_post_view_to_user_profile"
+            app:destination="@id/user_profile" />
     </fragment>
 
     <fragment
@@ -175,13 +178,23 @@
         android:id="@+id/my_bookmark_list"
         android:name="com.stopsmoke.kekkek.presentation.myBookmarkList.BookmarkFragment"
         app:route="my_bookmark_list"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_bookmark" >
+
+        <action
+            android:id="@+id/action_myBookmarkList_to_postView"
+            app:destination="@id/post_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/my_writing_list"
         android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
         app:route="my_writing_list"
-        tools:layout="@layout/fragment_my_writing_list" />
+        tools:layout="@layout/fragment_my_writing_list" >
+
+        <action
+            android:id="@+id/action_myWritingList_to_postView"
+            app:destination="@id/post_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/popular_writing_list"
@@ -199,7 +212,12 @@
         android:id="@+id/my_comment_list"
         android:name="com.stopsmoke.kekkek.presentation.myCommentList.MyCommentFragment"
         app:route="my_comment_list"
-        tools:layout="@layout/fragment_my_comment" />
+        tools:layout="@layout/fragment_my_comment" >
+
+        <action
+            android:id="@+id/action_myCommentList_to_postView"
+            app:destination="@id/post_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/user_profile"

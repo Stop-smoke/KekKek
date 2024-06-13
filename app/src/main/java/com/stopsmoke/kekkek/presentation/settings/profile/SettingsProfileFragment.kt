@@ -1,8 +1,6 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -25,6 +24,8 @@ import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatest
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SettingsProfileFragment : Fragment() {
 
@@ -52,6 +53,7 @@ class SettingsProfileFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -63,7 +65,6 @@ class SettingsProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initListener()
     }
 
     private fun initView() = with(binding) {
@@ -151,6 +152,9 @@ class SettingsProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initDuplicateInspection() = with(binding) {
     }
 
     override fun onDestroyView() {

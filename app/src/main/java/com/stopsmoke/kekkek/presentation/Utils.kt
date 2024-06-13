@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.content.Context
+import android.os.Build
+import android.os.Bundle
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
@@ -42,3 +44,10 @@ internal fun<T> Flow<T>.collectLatestWithLifecycle(
         this@collectLatestWithLifecycle.flowWithLifecycle(lifecycle).collectLatest(action)
     }
 }
+
+internal fun<T> Bundle.getParcelableAndroidVersionSupport(key: String, clazz: Class<T>) =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelable(key, clazz)
+    } else {
+        getParcelable(key)
+    }

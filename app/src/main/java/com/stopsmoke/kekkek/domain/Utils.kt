@@ -29,6 +29,10 @@ internal fun LocalDateTime.getElapsedDateTime(): ElapsedDateTime {
 
     val duration = Duration.between(this, currentDateTime)
 
+    if (duration.toHours() > 0) {
+        return ElapsedDateTime(DateTimeUnit.HOUR, duration.toHours().toInt())
+    }
+
     if (duration.toMinutes() > 0) {
         return ElapsedDateTime(DateTimeUnit.MINUTE, duration.toMinutes().toInt())
     }

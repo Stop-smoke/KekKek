@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestore.dao
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -9,6 +10,7 @@ import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +26,6 @@ class CommentDaoInstrumentedTest {
         commentDao = CommentDaoImpl(Firebase.firestore)
     }
 
-
     @Test
     fun addComment() = runTest {
         val comment = CommentEntity(
@@ -36,20 +37,15 @@ class CommentDaoInstrumentedTest {
             ),
             likeUser = listOf("user1", "user2"),
             unlikeUser = listOf("user3"),
-            reply = ReplyEntity(
-                written = WrittenEntity(
-                    uid = "default",
-                    name = "김민준",
-                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                    ranking = Long.MAX_VALUE
+            reply = listOf(
+                ReplyEntity(
+                    written = WrittenEntity(
+                        uid = "default",
+                        name = "김민준",
+                        profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+                        ranking = Long.MAX_VALUE
+                    )
                 ),
-                likeUser = listOf("user4"),
-                unlikeUser = listOf("user5"),
-                dateTime = DateTimeEntity(
-                    Timestamp.now(),
-                    Timestamp.now()
-                ),
-                text = "This is a sample reply."
             ),
             written = WrittenEntity(
                 uid = "default",
@@ -72,20 +68,15 @@ class CommentDaoInstrumentedTest {
             ),
             likeUser = listOf("user1", "user2"),
             unlikeUser = listOf("user3"),
-            reply = ReplyEntity(
-                written = WrittenEntity(
-                    uid = "default",
-                    name = "김민준",
-                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                    ranking = Long.MAX_VALUE
+            reply = listOf(
+                ReplyEntity(
+                    written = WrittenEntity(
+                        uid = "default",
+                        name = "김민준",
+                        profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+                        ranking = Long.MAX_VALUE
+                    )
                 ),
-                likeUser = listOf("user4"),
-                unlikeUser = listOf("user5"),
-                dateTime = DateTimeEntity(
-                    Timestamp.now(),
-                    Timestamp.now()
-                ),
-                text = "This is a sample reply."
             ),
             written = WrittenEntity(
                 uid = "default",
@@ -95,6 +86,17 @@ class CommentDaoInstrumentedTest {
             )
         )
         commentDao.updateOrInsertComment(comment)
+
+
+    @Test
+    fun getCount() = runTest {
+
+        commentDao.getCommentCount("zyr92XFIJxHRG72h2vSd")
+            .first()
+            .let {
+                Log.d("TEST", it.toString())
+            }
+
     }
 
     @Test
