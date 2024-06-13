@@ -22,6 +22,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.lang.NullPointerException
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.floor
@@ -153,6 +154,18 @@ internal class PostDaoImpl @Inject constructor(
                 .addOnFailureListener { throw it }
                 .addOnCanceledListener { throw CancellationException() }
                 .await()
+        }
+    }
+
+    override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
+        return try {
+            firestore.collection(COLLECTION)
+                .document(postEntity.id ?: return Result.Error(NullPointerException()))
+                .set(postEntity)
+                .await()
+            Result.Success(Unit)
+        } catch (e: Exception){
+            Result.Error(e)
         }
     }
 

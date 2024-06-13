@@ -6,16 +6,16 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/include_support_center_app_bar"
-        layout="@layout/fragment_support_center_app_bar" />
+        android:id="@+id/include_my_complaint_app_bar"
+        layout="@layout/fragment_my_complaint_app_bar" />
 
     <WebView
-        android:id="@+id/view_support_center"
+        android:id="@+id/view_my_complaint"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_support_center_app_bar" />
+        app:layout_constraintTop_toBottomOf="@id/include_my_complaint_app_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
