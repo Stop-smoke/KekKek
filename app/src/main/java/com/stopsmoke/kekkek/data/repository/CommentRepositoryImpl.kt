@@ -80,10 +80,26 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            Result.Success(commentDao.updateOrInsertComment(comment.toEntity()))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun deleteCommentItem(commentId: String): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            Result.Success(commentDao.deleteComment(commentId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override fun getCommentCount(postId: String): Result<Flow<Long>> {
+        return try {
+            Result.Success(commentDao.getCommentCount(postId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

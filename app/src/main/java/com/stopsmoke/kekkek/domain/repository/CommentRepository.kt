@@ -17,4 +17,6 @@ interface CommentRepository {
     suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit>
 
    suspend fun deleteCommentItem(commentId: String): Result<Unit>
+
+   fun getCommentCount(postId: String): Result<Flow<Long>>
 }

@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.domain.model
 
+import com.stopsmoke.kekkek.domain.getElapsedDateTime
+
 data class Comment(
     val id: String,
     val text: String,
@@ -9,4 +11,8 @@ data class Comment(
     val reply: List<Reply>,
     val written: Written,
     val postData: CommentPostData
-)
+) {
+
+    val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
+
+}
