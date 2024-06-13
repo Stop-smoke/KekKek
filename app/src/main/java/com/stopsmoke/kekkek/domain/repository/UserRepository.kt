@@ -26,6 +26,10 @@ interface UserRepository {
     suspend fun getUserDataFormatUser(uid: String): User
     suspend fun setUserData(user: User.Registered)
 
+    suspend fun setUserDataForName(user: User.Registered, name: String)
+
+    suspend fun setUserDataForIntroduction(user: User.Registered, introduction: String)
+
     /**
      *  금연을 시작 했을때 서버에 시간을 저장 하는 함수
      */
@@ -64,4 +68,5 @@ interface UserRepository {
     suspend fun withdraw(): Result<Unit>
 
     suspend fun nameDuplicateInspection(name: String): Boolean
+
 }
