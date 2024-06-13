@@ -13,29 +13,43 @@ import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 
 class PopularWritingListAdapter
-    : ListAdapter<PopularWritingListItem, PopularWritingListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<PopularWritingListItem>() {
+    : ListAdapter<CommunityWritingItem, PopularWritingListAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
         override fun areItemsTheSame(
-            oldItem: PopularWritingListItem,
-            newItem: PopularWritingListItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: PopularWritingListItem,
-            newItem: PopularWritingListItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
     }
 ) {
+
+    private var callback: CommunityCallbackListener? = null
+
+    fun registerCallbackListener(callback: CommunityCallbackListener) {
+        this.callback = callback
+    }
+
+    fun unregisterCallbackListener() {
+        callback = null
+    }
+
     class ViewHolder(
-        private val binding: ItemCommunityPostwritingBinding
+        private val binding: ItemCommunityPostwritingBinding,
+        private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PopularWritingListItem) = with(binding) {
+        fun bind(item: CommunityWritingItem) = with(binding) {
             item.postInfo.let {
                 tvItemWritingTitle.text = it.title
                 tvItemWritingViewNum.text = it.view.toString()
@@ -74,6 +88,14 @@ class PopularWritingListAdapter
                 PostCategory.UNKNOWN -> ""
                 PostCategory.ALL -> ""
             }
+
+            binding.circleIvItemWritingProfile.setOnClickListener {
+                callback?.navigateToUserProfile(item.userInfo.uid)
+            }
+
+            binding.root.setOnClickListener {
+                callback?.navigateToPost(item)
+            }
         }
 
         private fun getRelativeTime(pastTime: ElapsedDateTime): String {
@@ -107,7 +129,7 @@ class PopularWritingListAdapter
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), callback
         )
     }
 

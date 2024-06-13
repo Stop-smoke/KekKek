@@ -78,6 +78,10 @@ class BookmarkListAdapter
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
 
+                binding.circleIvItemWritingProfile.setOnClickListener {
+                    callback?.navigateToUserProfile(item.userInfo.uid)
+                }
+
                 binding.root.setOnClickListener {
                     callback?.navigateToPost(item)
                 }

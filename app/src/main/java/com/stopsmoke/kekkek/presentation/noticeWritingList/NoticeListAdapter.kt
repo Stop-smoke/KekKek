@@ -6,39 +6,50 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
-import java.util.Calendar
-import java.util.Date
-import java.util.concurrent.TimeUnit
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 
 class NoticeListAdapter
-    : PagingDataAdapter<NoticeListItem, NoticeListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<NoticeListItem>() {
+    : PagingDataAdapter<CommunityWritingItem, NoticeListAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
         override fun areItemsTheSame(
-            oldItem: NoticeListItem,
-            newItem: NoticeListItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: NoticeListItem,
-            newItem: NoticeListItem
+            oldItem: CommunityWritingItem,
+            newItem: CommunityWritingItem
         ): Boolean {
             return oldItem == newItem
         }
     }
 ) {
+
+    private var callback: CommunityCallbackListener? = null
+
+    fun registerCallbackListener(callback: CommunityCallbackListener) {
+        this.callback = callback
+    }
+
+    fun unregisterCallbackListener() {
+        callback = null
+    }
+
+
     class ViewHolder(
-        private val binding: ItemCommunityPostwritingBinding
+        private val binding: ItemCommunityPostwritingBinding,
+        private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NoticeListItem) = with(binding) {
+        fun bind(item: CommunityWritingItem) = with(binding) {
             item.postInfo.let {
                 tvItemWritingTitle.text = it.title
                 tvItemWritingViewNum.text = it.view.toString()
@@ -63,6 +74,8 @@ class NoticeListAdapter
 
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
+
+
             }
 
             tvItemWritingPostType.text = when (item.postType) {
@@ -76,6 +89,10 @@ class NoticeListAdapter
                 PostCategory.RESOLUTIONS -> "금연 다짐"
                 PostCategory.UNKNOWN -> ""
                 PostCategory.ALL -> ""
+            }
+
+            binding.root.setOnClickListener {
+                callback?.navigateToPost(item)
             }
         }
 
@@ -109,7 +126,7 @@ class NoticeListAdapter
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), callback
         )
     }
 
