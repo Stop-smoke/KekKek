@@ -15,6 +15,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
 import com.stopsmoke.kekkek.presentation.test.TestViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,10 +45,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModel()
         initView()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.visible()
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함

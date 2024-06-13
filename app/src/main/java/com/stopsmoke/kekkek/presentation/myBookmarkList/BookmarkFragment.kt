@@ -67,7 +67,6 @@ class BookmarkFragment : Fragment() {
         initListAdapterCallback()
         rvBookmark.layoutManager = LinearLayoutManager(requireContext())
         rvBookmark.adapter = listAdapter
-
         viewModel.updateUserState()
     }
 
@@ -93,18 +92,10 @@ class BookmarkFragment : Fragment() {
 
     private fun initObserveLiveData() {
         postViewModel.bookmarkPosts.observe(viewLifecycleOwner) {
-//            val bookmarkPosts = it.map { bookmark ->
-//                CommunityWritingItem(
-//                    userInfo = bookmark.userInfo,
-//                    postInfo = bookmark.postInfo,
-//                    postImage = bookmark.postImage,
-//                    post = bookmark.post,
-//                    postTime = bookmark.postTime,
-//                    postType = bookmark.postType
-//                )
-//            }
-//            val paging = PagingData.from(bookmarkPosts)
-//            listAdapter.submitData(paging)
+            val paging = PagingData.from(it)
+            viewLifecycleOwner.lifecycleScope.launch {
+                listAdapter.submitData(paging)
+            }
         }
     }
 
