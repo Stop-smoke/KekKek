@@ -23,6 +23,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
@@ -117,34 +118,37 @@ class PostWriteFragment : Fragment() {
 
         includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
+
             builder.setTitle("게시물 등록")
             builder.setMessage("게시물을 등록하시겠습니까?")
             builder.setIcon(R.drawable.ic_post)
 
-            val listener = DialogInterface.OnClickListener { _, type ->
-                when(type) {
-                    DialogInterface.BUTTON_POSITIVE -> {
-                        val postWrite = PostWrite(
-                            title = etPostWriteTitle.text.toString(),
-                            text = etPostWriteContent.text.toString(),
-                            dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
-                            category = when (includePostWriteAppBar.tvPostWriteType.text) {
-                                "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
-                                "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
-                                "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
-                                else -> throw IllegalStateException()
-                            }
-                        )
-                        viewModel.addPost(postWrite)
-                        findNavController().popBackStack()
-                    }
-                    DialogInterface.BUTTON_NEGATIVE -> {}
+            builder.setPositiveButton("예", null)
+            builder.setNegativeButton("아니요", null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if(etPostWriteTitle.text.isEmpty() || etPostWriteContent.text.isEmpty()) {
+                    Snackbar.make(postWrite,"제목 또는 내용을 입력해주세요!",Snackbar.LENGTH_SHORT).show()
+                } else {
+                    val postWrite = PostWrite(
+                        title = etPostWriteTitle.text.toString(),
+                        text = etPostWriteContent.text.toString(),
+                        dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+                        category = when (includePostWriteAppBar.tvPostWriteType.text) {
+                            "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
+                            "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
+                            "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
+                            else -> throw IllegalStateException()
+                        }
+                    )
+                    viewModel.addPost(postWrite)
+                    dialog.dismiss()
+                    findNavController().popBackStack()
                 }
             }
-
-            builder.setPositiveButton("예",listener)
-            builder.setNegativeButton("아니요",listener)
-            builder.show()
         }
 
         includePostWriteAppBar.tvPostWriteType.setOnClickListener {
@@ -152,27 +156,22 @@ class PostWriteFragment : Fragment() {
         }
     }
 
-    private fun runTextEditor(span: Any?) {
-        val etPostWriteContent = binding.etPostWriteContent
-        val start = etPostWriteContent.selectionStart
-        val end = etPostWriteContent.selectionEnd
-        if (start != end) {
-            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-            spannableString.setSpan(
-                span,
-                start,
-                end,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
-            )
-            etPostWriteContent.text = spannableString
-            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-    }
+//    private fun runTextEditor(span: Any?) {
+//        val etPostWriteContent = binding.etPostWriteContent
+//        val start = etPostWriteContent.selectionStart
+//        val end = etPostWriteContent.selectionEnd
+//        if (start != end) {
+//            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
+//            spannableString.setSpan(
+//                span,
+//                start,
+//                end,
+//                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
+//            )
+//            etPostWriteContent.text = spannableString
+//            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()

@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -92,6 +96,59 @@ class SettingsProfileFragment : Fragment() {
                             circleIvProfile.load((it.profileImage as ProfileImage.Web).url)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun initListener() = with(binding) {
+        ivSettingEditNickname.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("닉네임 편집하기")
+            builder.setIcon(R.drawable.ic_post)
+
+            val customView = layoutInflater.inflate(R.layout.profile_edit_nickname,null)
+            builder.setView(customView)
+
+            builder.setPositiveButton("수정하기", null)
+            builder.setNegativeButton("취소", null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val edit = customView.findViewById<EditText>(R.id.et_edit_nickname)
+                if(edit.text.length > 10) {
+                    Toast.makeText(requireContext(),"10글자를 초과하시면 안됩니다!",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    tvSettingProfileNicknameDetail.text = edit.text
+                    dialog.dismiss()
+                }
+            }
+        }
+
+        ivSettingEditIntroduction.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("소개글 편집하기")
+            builder.setIcon(R.drawable.ic_post)
+
+            val customView = layoutInflater.inflate(R.layout.profile_edit_introduction,null)
+            builder.setView(customView)
+
+            builder.setPositiveButton("수정하기",null)
+            builder.setNegativeButton("취소",null)
+
+            val dialog = builder.create()
+            dialog.show()
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val edit = customView.findViewById<EditText>(R.id.et_edit_introduction)
+                if(edit.text.length > 50) {
+                    Toast.makeText(requireContext(),"글자 수는 50글자 이하로 제한되어 있습니다!",Toast.LENGTH_SHORT).show()
+                } else {
+                    tvSettingProfileIntroductionDetail.text = edit.text
+                    dialog.dismiss()
                 }
             }
         }

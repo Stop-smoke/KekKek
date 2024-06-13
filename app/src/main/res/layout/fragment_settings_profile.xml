@@ -68,6 +68,7 @@
                     android:layout_marginStart="160dp"
                     android:ellipsize="end"
                     android:maxWidth="150dp"
+                    android:maxLines="1"
                     android:textColor="#8B94A1"
                     android:textSize="13sp"
                     android:textStyle="bold"
@@ -92,6 +93,7 @@
                 android:id="@+id/cl_profile_birth"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_profile_nickname">
@@ -137,7 +139,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_profile_introduction"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="120dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_profile_birth">
@@ -171,13 +173,14 @@
                     android:layout_marginStart="160dp"
                     android:maxWidth="150dp"
                     android:ellipsize="end"
+                    android:maxLines="4"
                     android:textColor="#8B94A1"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="사용자 소개글" />
+                    tools:text="가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가가" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -235,7 +238,6 @@
                 android:id="@+id/md_width_three"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:visibility="gone"
                 app:dividerColor="#F4F6F8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

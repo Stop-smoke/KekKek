@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="#5877E4"
+        android:scaleY="3"
+        android:max="8"
         android:backgroundTintMode="src_in"
         android:progressBackgroundTint="#5877E4"
         android:progressBackgroundTintMode="add"
