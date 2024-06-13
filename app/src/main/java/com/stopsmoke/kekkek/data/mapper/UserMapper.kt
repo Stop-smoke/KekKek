@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.data.mapper
 
 import com.google.firebase.Timestamp
+import com.stopsmoke.kekkek.domain.model.History
 import com.stopsmoke.kekkek.domain.model.Location
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -21,14 +22,12 @@ internal fun User.Registered.toEntity(): UserEntity =
             dailyCigarettesSmoked = userConfig.dailyCigarettesSmoked,
             packCigaretteCount = userConfig.packCigaretteCount,
             packPrice = userConfig.packPrice,
-            birthDate = Timestamp(
-                seconds = userConfig.birthDate.toEpochSecond(ZoneOffset.UTC),
-                nanoseconds = userConfig.birthDate.nano
-            )
+            birthDate = userConfig.birthDate.toFirebaseTimestamp()
         ),
         clearAchievementsList = clearAchievementsList,
         commentMy = commentMy,
-        postMy = postMy
+        postMy = postMy,
+        history = history.toEntity()
     )
 
 internal fun UserEntity.toExternalModel(): User.Registered =
@@ -50,11 +49,12 @@ internal fun UserEntity.toExternalModel(): User.Registered =
             dailyCigarettesSmoked = userConfig?.dailyCigarettesSmoked ?: 0,
             packCigaretteCount = userConfig?.packCigaretteCount ?: 0,
             packPrice = userConfig?.packPrice ?: 0,
-            birthDate = userConfig?.birthDate?.toLocalDateTime() ?: LocalDateTime.MIN
+            birthDate = userConfig?.birthDate?.toLocalDateTime() ?: LocalDateTime.now()
         ),
         clearAchievementsList = clearAchievementsList ?: emptyList(),
         commentMy = commentMy ?: emptyList(),
-        postMy = postMy ?: emptyList()
+        postMy = postMy ?: emptyList(),
+        history = history?.asExternalModel() ?: emptyHistory()
     )
 
 internal fun LocationEntity.toExternalModel() = Location(
@@ -64,4 +64,9 @@ internal fun LocationEntity.toExternalModel() = Location(
 )
 
 internal fun Timestamp.toLocalDateTime(): LocalDateTime =
-    LocalDateTime.ofEpochSecond(this.seconds, this.nanoseconds, ZoneOffset.UTC)
+    LocalDateTime.ofEpochSecond(this.seconds, 0 , ZoneOffset.UTC)
+
+fun LocalDateTime.toFirebaseTimestamp(): Timestamp {
+    val milliseconds = this.toInstant(ZoneOffset.UTC).toEpochMilli()
+    return Timestamp(milliseconds / 1000, ((milliseconds % 1000) * 1000000).toInt())
+}

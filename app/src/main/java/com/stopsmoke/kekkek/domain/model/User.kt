@@ -26,5 +26,6 @@ sealed interface User {
         var startTime: LocalDateTime? = null,
         val userConfig: UserConfig,
         var clearAchievementsList: List<String> = emptyList(),
+        var history: History
     ) : User
 }

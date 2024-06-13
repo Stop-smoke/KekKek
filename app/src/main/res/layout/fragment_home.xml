@@ -72,15 +72,15 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_home_timer" />
 
                 <ImageView
-                    android:id="@+id/iv_home_timerArrow"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:id="@+id/iv_home_timerController"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginStart="8dp"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_right_arrow"
+                    android:src="@drawable/ic_home_stop"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_timerNum"
                     app:layout_constraintStart_toEndOf="@id/tv_home_timerNum"
                     app:layout_constraintTop_toTopOf="@+id/tv_home_timerNum" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

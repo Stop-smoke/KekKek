@@ -14,7 +14,6 @@
         android:id="@+id/rv_popularWritingList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/bg_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/include_popular_writing_list_app_bar"
         tools:listitem="@layout/item_community_postwriting" />

@@ -1,28 +1,35 @@
 package com.stopsmoke.kekkek.presentation.post
 
+//import com.google.android.gms.ads.AdRequest
+//import com.google.android.gms.ads.MobileAds
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
-//import com.google.android.gms.ads.AdRequest
-//import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.getRelativeTime
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.community.CommunityListAdapter
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class PostViewFragment : Fragment() {
 
     private var _binding: FragmentPostViewBinding? = null
@@ -30,15 +37,20 @@ class PostViewFragment : Fragment() {
 
     private var post: CommunityWritingItem ?= null
 
+    private val viewModel: PostViewModel by viewModels()
+
+    private lateinit var postCommentAdapter: PostCommentAdapter
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         post = arguments?.getParcelable("item",CommunityWritingItem::class.java)
+        post?.postInfo?.let { viewModel.updatePostId(it.id) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentPostViewBinding.inflate(inflater, container, false)
         return binding.root
@@ -49,6 +61,14 @@ class PostViewFragment : Fragment() {
 //        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setupView()
         setupListener()
+
+        postCommentAdapter = PostCommentAdapter()
+        binding.rvPostComment.adapter = postCommentAdapter
+        binding.rvPostComment.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
+            postCommentAdapter.submitData(it)
+        }
     }
 
     private fun setupView() = with(binding) {
@@ -60,7 +80,7 @@ class PostViewFragment : Fragment() {
                 crossfade(true)
             }
             tvPostPosterNickname.text = it.userInfo.name
-            tvPostPosterRanking.text = "랭킹 ${it.userInfo.rank.toString()}위"
+            tvPostPosterRanking.text = "랭킹 ${it.userInfo.rank}위"
             tvPostHour.text = getRelativeTime(it.postTime)
             tvPostTitle.text = it.postInfo.title
             tvPostDescription.text = it.post
@@ -72,11 +92,26 @@ class PostViewFragment : Fragment() {
 
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            findNavController().popBackStack()
         }
         btnPostAddComment.setOnClickListener {
+            if (post == null) {
+                return@setOnClickListener
+            }
             val comment = etPostAddComment.text.toString()
 
+            viewModel.addComment(
+                commentPostData = CommentPostData(
+                    post!!.postType,
+                    postId = post!!.postInfo.id,
+                    postTitle = post!!.postInfo.title
+                ),
+                text = comment
+            )
+            postCommentAdapter.refresh()
+            binding.etPostAddComment.setText("")
+//            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            inputMethodManager.hideSoftInputFromWindow(edittext.windowToken, 0)
         }
     }
 

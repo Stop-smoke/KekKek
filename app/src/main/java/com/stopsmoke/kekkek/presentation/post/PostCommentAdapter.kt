@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 
-private class PostCommentAdapter :
+class PostCommentAdapter :
     PagingDataAdapter<Comment, PostCommentAdapter.PostCommentViewHolder>(diffUtil) {
 
     class PostCommentViewHolder(val binding: ItemCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(comment: Comment) {
-            //
+        fun bind(comment: Comment) = with(binding) {
+            tvCommentNickname.text = comment.written.name
+            tvCommentDescription.text = comment.text
         }
     }
 

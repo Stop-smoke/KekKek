@@ -1,7 +1,10 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.content.Context
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.flowWithLifecycle
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
@@ -28,5 +31,14 @@ internal fun<T> Flow<T>.collectLatest(
 ): Job {
     return lifecycleScope.launch {
         this@collectLatest.collectLatest(action)
+    }
+}
+
+internal fun<T> Flow<T>.collectLatestWithLifecycle(
+    lifecycle: Lifecycle,
+    action: suspend (value: T) -> Unit
+): Job {
+    return lifecycle.coroutineScope.launch {
+        this@collectLatestWithLifecycle.flowWithLifecycle(lifecycle).collectLatest(action)
     }
 }
