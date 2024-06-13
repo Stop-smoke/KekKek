@@ -250,7 +250,8 @@ internal class PostDaoImpl @Inject constructor(
             e.printStackTrace()
             PostEntity()
         }
-        
+    }
+
     override fun getCommentCount(postId: String): Flow<Long> = callbackFlow {
         firestore.collection(COMMENT_COLLECTION)
             .whereEqualTo("post_data.post_id", postId)
@@ -326,11 +327,12 @@ internal class PostDaoImpl @Inject constructor(
         private const val COMMENT_COLLECTION = "comment"
         private const val PAGE_LIMIT = 30
     }
-}
 
-private fun Query.whereNotNullEqualTo(field: String, value: Any?): Query {
-    if (value == null) {
-        return this
+
+    private fun Query.whereNotNullEqualTo(field: String, value: Any?): Query {
+        if (value == null) {
+            return this
+        }
+        return whereEqualTo(field, value)
     }
-    return whereEqualTo(field, value)
 }
