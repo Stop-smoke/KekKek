@@ -43,7 +43,8 @@ fun PostEntity.asExternalModel(): Post =
             else -> PostCategory.UNKNOWN
         },
         views = views ?: 0,
-        commentUser = commentUser
+        commentUser = commentUser,
+        bookmarkUser = bookmarkUser
     )
 
 internal fun PostWrite.toEntity(written: Written) = PostEntity(

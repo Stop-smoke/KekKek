@@ -10,6 +10,7 @@ import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -21,11 +22,12 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
 ) : ViewModel() {
     val _userState: MutableStateFlow<User> = MutableStateFlow(User.Guest)
     val userState = _userState.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val myBookmarkPosts = userState.flatMapLatest { userData ->
         postRepository.getBookmark(if (userData is User.Registered) userData.postBookmark else emptyList())
             .let {

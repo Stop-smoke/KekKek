@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,7 +19,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
-import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.CommentPostData
@@ -32,6 +31,7 @@ import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getParcelableAndroidVersionSupport
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @AndroidEntryPoint
@@ -109,6 +109,17 @@ class PostViewFragment : Fragment() {
             viewModel.toggleLikeToPost()
         }
 
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            val user = viewModel.user.firstOrNull() as? User.Registered ?: return@collectLatestWithLifecycle
+
+            if (it.firstOrNull()?.bookmarkUser?.contains(user.uid) == true) {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                return@collectLatestWithLifecycle
+            }
+
+            binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+        }
+
     }
 
     private fun setupView() = with(binding) {
@@ -128,8 +139,8 @@ class PostViewFragment : Fragment() {
             tvPostHeartNum.text = it.postInfo.like.toString()
             tvPostCommentNum.text = it.postInfo.comment.toString()
             tvPostViewNum.text = it.postInfo.view.toString()
-            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+//            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+//            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
     }
 
@@ -156,17 +167,19 @@ class PostViewFragment : Fragment() {
             binding.root.hideSoftKeyboard()
         }
         includePostViewAppBar.ivPostBookmark.setOnClickListener {
-            if(post?.bookmark == true) {
-                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-                post?.bookmark = false
-                Snackbar.make(postView,"해당 게시글을 북마크에서 제거했습니다.", Snackbar.LENGTH_SHORT).show()
-                post?.let{ viewModel.deleteBookmarkPost(it)}
-            } else {
-                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                post?.bookmark = true
-                Snackbar.make(postView,"해당 게시글을 북마크에 추가했습니다.", Snackbar.LENGTH_SHORT).show()
-                post?.let { viewModel.addBookmarkPost(it) }
-            }
+            viewModel.toggleBookmark()
+
+//            if(post?.bookmark == true) {
+//                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+//                post?.bookmark = false
+//                Snackbar.make(postView,"해당 게시글을 북마크에서 제거했습니다.", Snackbar.LENGTH_SHORT).show()
+//                post?.let{ viewModel.deleteBookmarkPost(it)}
+//            } else {
+//                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+//                post?.bookmark = true
+//                Snackbar.make(postView,"해당 게시글을 북마크에 추가했습니다.", Snackbar.LENGTH_SHORT).show()
+//                post?.let { viewModel.addBookmarkPost(it) }
+//            }
         }
         includePostViewAppBar.ivPostMore.setOnClickListener {
             showBottomSheetDialog()

@@ -177,4 +177,16 @@ class PostViewModel @Inject constructor(
         }
     }
 
+    fun toggleBookmark() {
+        viewModelScope.launch {
+            val user = user.first() as? User.Registered ?: return@launch
+            val postId = postId.value ?: return@launch
+
+            if (post.value.first().bookmarkUser.contains(user.uid)) {
+                postRepository.deleteBookmark(postId)
+                return@launch
+            }
+            postRepository.addBookmark(postId)
+        }
+    }
 }

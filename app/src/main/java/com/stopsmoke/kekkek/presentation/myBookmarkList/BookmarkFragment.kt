@@ -17,19 +17,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import com.stopsmoke.kekkek.visible
 import com.stopsmoke.kekkek.presentation.post.PostViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BookmarkFragment : Fragment() {
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     private var _binding: FragmentBookmarkBinding? = null
     private val binding get() = _binding!!
@@ -91,14 +96,24 @@ class BookmarkFragment : Fragment() {
         )
     }
 
-    private fun initObserveLiveData() {
-        //
-        val db = FirebaseFirestore.getInstance()
 
-        postViewModel.bookmarkPosts.observe(viewLifecycleOwner) {
-            val paging = PagingData.from(it)
-            viewLifecycleOwner.lifecycleScope.launch {
-                listAdapter.submitData(paging)
+
+    private fun initObserveLiveData() {
+        postViewModel.bookmarkPosts.observe(viewLifecycleOwner) { bookmarkList ->
+            lifecycleScope.launch {
+                val user = userRepository.getUserData().first()
+                when (user) {
+                    is User.Error -> {} // 에러 핸들링
+                    User.Guest -> { } // 에러 핸들링
+                    is User.Registered -> {
+                        val db = FirebaseFirestore.getInstance()
+                        for (i in bookmarkList.indices) {
+                            db.collection("user")
+                                .document(user.uid)
+                                .update("post_bookmark", bookmarkList[i].postInfo.id)
+                        }
+                    }
+                }
             }
         }
     }
@@ -126,6 +141,7 @@ class BookmarkFragment : Fragment() {
         _binding = null
         activity?.visible()
     }
+
     override fun onResume() {
         super.onResume()
         activity?.invisible()
