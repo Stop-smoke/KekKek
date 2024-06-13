@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.CommentPostData
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.getRelativeTime
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -174,14 +175,29 @@ class PostViewFragment : Fragment() {
         val bottomsheetDialogBinding = FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        // 일단
+        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+            when(user){
+                is User.Error -> TODO()
+                User.Guest -> TODO()
+                is User.Registered ->
+                if (post?.userInfo?.uid == user.uid) {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
+                    bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+                        showDeleteConfirmationDialog()
+                        bottomSheetDialog.dismiss()
+                    }
+                } else {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
+                }
+            }
+        }
+
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             bottomSheetDialog.dismiss()
             findNavController().navigate(R.id.action_post_view_to_post_edit)
         }
-        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-            showDeleteConfirmationDialog()
-            bottomSheetDialog.dismiss()
-        }
+
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {
             Toast.makeText(requireContext(), "게시물 신고를 작성해주세요.", Toast.LENGTH_SHORT).show()
             findNavController().navigate("my_complaint")
