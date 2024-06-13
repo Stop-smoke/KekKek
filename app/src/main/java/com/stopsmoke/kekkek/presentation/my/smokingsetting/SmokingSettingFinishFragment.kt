@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingPriceBinding
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingFinishBinding
+import com.stopsmoke.kekkek.invisible
 
 class SmokingSettingFinishFragment : Fragment() {
     private var _binding: FragmentSmokingSettingFinishBinding?= null
@@ -28,8 +29,13 @@ class SmokingSettingFinishFragment : Fragment() {
         initView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
     private fun initView() = with(binding) {
-        btnResetingOnboardingNext.setOnClickListener { 
+        btnResetingOnboardingNext.setOnClickListener {
             findNavController().navigate(R.id.action_resetting_onboarding_smoking_finish_to_my_page)
         }
     }

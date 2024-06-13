@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.databinding.FragmentNotificationBinding
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.notification.recyclerview.adapter.NotificationItemListAdapter
 import com.stopsmoke.kekkek.presentation.notification.recyclerview.decoration.NotificationDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +40,11 @@ class NotificationFragment : Fragment() {
         initAppBar()
         initMainRecyclerview()
         observeRecyclerViewItem()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     private fun initAppBar() = with(binding) {

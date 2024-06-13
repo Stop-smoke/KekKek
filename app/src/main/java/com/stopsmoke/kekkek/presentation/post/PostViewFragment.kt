@@ -175,9 +175,10 @@ class PostViewFragment : Fragment() {
 
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             bottomSheetDialog.dismiss()
+            findNavController().navigate(R.id.action_post_view_to_post_edit)
         }
         bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-            Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "게시글을 삭제하시겠습니까?", Toast.LENGTH_SHORT).show()
             bottomSheetDialog.dismiss()
         }
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {

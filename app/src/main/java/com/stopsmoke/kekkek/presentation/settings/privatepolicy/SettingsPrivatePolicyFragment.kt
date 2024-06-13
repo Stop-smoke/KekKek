@@ -35,7 +35,10 @@ class SettingsPrivatePolicyFragment : Fragment() {
         with(binding.webviewSupport) {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
+            settings.javaScriptCanOpenWindowsAutomatically = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
+            settings.domStorageEnabled = true // 노션 출력시 필요: DOM 스토리지 활성화
+            settings.databaseEnabled = true // 노션 출력시 필요: 데이터베이스 저장소 활성화
             loadUrl("https://stopsmoke.notion.site/1862f151530b46cc8d615c8ef9b636ba")
         }
     }

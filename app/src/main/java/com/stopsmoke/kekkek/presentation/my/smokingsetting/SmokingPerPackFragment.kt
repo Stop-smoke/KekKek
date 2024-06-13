@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingPerDayBinding
 import com.stopsmoke.kekkek.databinding.FragmentSmokingPerPackBinding
+import com.stopsmoke.kekkek.invisible
 
 class SmokingPerPackFragment : Fragment() {
     private var _binding: FragmentSmokingPerPackBinding?= null
@@ -26,6 +27,11 @@ class SmokingPerPackFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     private fun initView() = with(binding) {

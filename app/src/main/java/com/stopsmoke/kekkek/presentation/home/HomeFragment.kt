@@ -13,10 +13,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
+import com.stopsmoke.kekkek.presentation.test.TestViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -43,10 +48,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModel()
         initView()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.visible()
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
@@ -61,20 +69,22 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.user.distinctUntilChanged().collectLatestWithLifecycle(lifecycle) {
-            when(it) {
+            when (it) {
                 is User.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show() }
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                }
+
                 is User.Guest -> {
-                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show() }
+                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show()
+                }
+
                 is User.Registered -> {
-                    requireActivity().runOnUiThread {
-                        if (it.cigaretteAddictionTestResult == null) {
-                            tvHomeTestDegree.text = "테스트 필요"
-                            ivHomeTest.text = "검사하기"
-                        } else {
-                            tvHomeTestDegree.text = it.cigaretteAddictionTestResult
-                            ivHomeTest.text = "다시 검사하기"
-                        }
+                    if (it.cigaretteAddictionTestResult == null) {
+                        tvHomeTestDegree.text = "테스트 필요"
+                        ivHomeTest.text = "검사하기"
+                    } else {
+                        tvHomeTestDegree.text = it.cigaretteAddictionTestResult
+                        ivHomeTest.text = "다시 검사하기"
                     }
                 }
             }
@@ -149,8 +159,8 @@ class HomeFragment : Fragment() {
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
-            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-            tvHomeRankNum.text = "${it.rank} 위"
+//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+//            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTimerNum.text = it.timeString
         }
 
