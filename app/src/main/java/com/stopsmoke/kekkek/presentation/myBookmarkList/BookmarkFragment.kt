@@ -74,7 +74,12 @@ class BookmarkFragment : Fragment() {
     private fun initListAdapterCallback() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToUserProfile(uid: String) {
+                    findNavController().navigate(
+                        resId = R.id.action_myBookmarkList_to_userProfile,
+                        args = bundleOf("uid" to uid)
+                    )
+                }
 
                 override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
                     findNavController().navigate(
