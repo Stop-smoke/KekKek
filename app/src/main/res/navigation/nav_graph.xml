@@ -7,7 +7,6 @@
 
     <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
-    <include app:graph="@navigation/nav_onboarding"/>
 
     <fragment
         android:id="@+id/home"
@@ -144,6 +143,7 @@
         android:id="@+id/resetting_onboarding_smoking_finish"
         android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFinishFragment"
         tools:layout="@layout/fragment_smoking_setting_finish">
+
         <action
             android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
             app:destination="@id/my_page" />
