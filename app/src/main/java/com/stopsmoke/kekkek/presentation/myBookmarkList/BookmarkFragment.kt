@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.invisible
@@ -91,6 +92,9 @@ class BookmarkFragment : Fragment() {
     }
 
     private fun initObserveLiveData() {
+        //
+        val db = FirebaseFirestore.getInstance()
+
         postViewModel.bookmarkPosts.observe(viewLifecycleOwner) {
             val paging = PagingData.from(it)
             viewLifecycleOwner.lifecycleScope.launch {
