@@ -5,6 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
 
+    <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
 
     <fragment
