@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.firestore.dao
 
 import androidx.paging.PagingData
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -21,8 +20,6 @@ interface PostDao {
     fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>>
 
     suspend fun addPost(postEntity: PostEntity)
-
-    suspend fun editPost(postEntity: PostEntity): Result<Unit>
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)
 

@@ -5,19 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.google.android.gms.tasks.Tasks.await
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.toObject
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import java.lang.NullPointerException
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -140,18 +137,6 @@ internal class PostDaoImpl @Inject constructor(
                 .addOnFailureListener { throw it }
                 .addOnCanceledListener { throw CancellationException() }
                 .await()
-        }
-    }
-
-    override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
-        return try {
-            firestore.collection(COLLECTION)
-                .document(postEntity.id ?: return Result.Error(NullPointerException()))
-                .set(postEntity)
-                .await()
-            Result.Success(Unit)
-        } catch (e: Exception){
-            Result.Error(e)
         }
     }
 
