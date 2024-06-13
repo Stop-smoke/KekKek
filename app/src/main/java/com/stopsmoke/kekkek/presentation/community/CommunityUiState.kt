@@ -9,23 +9,9 @@ sealed interface CommunityUiState {
     companion object {
         fun init() = CommunityUiState.CommunityNormalUiState(
             popularItem = CommunityPopularItem(
-                postInfo1 = PostInfo(
-                    title = "",
-                    postType = "",
-                    view = 0,
-                    like = 0,
-                    comment = 0,
-                    id = ""
-                ),
-                postInfo2 = PostInfo(
-                    title = "",
-                    postType = "",
-                    view = 0,
-                    like = 0,
-                    comment = 0,
-                    id = ""
-                ),
-            )
+                postInfo1 = emptyCommunityWritingListItem(),
+                postInfo2 = emptyCommunityWritingListItem()
+            ),
         )
     }
 }
