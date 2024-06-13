@@ -20,4 +20,6 @@ interface CommentDao {
 
     suspend fun deleteComment(commentId: String)
 
+    fun getCommentCount(postId: String): Flow<Long>
+
 }

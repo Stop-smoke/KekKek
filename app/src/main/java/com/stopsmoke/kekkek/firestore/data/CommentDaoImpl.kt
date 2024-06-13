@@ -5,13 +5,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
-import com.stopsmoke.kekkek.firestore.model.PostEntity
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -122,7 +124,23 @@ class CommentDaoImpl @Inject constructor(
                 .await()
         }
 
-        companion object {
+    override fun getCommentCount(postId: String): Flow<Long> = callbackFlow {
+        firestore.collection(COLLECTION)
+            .whereEqualTo("post_data.post_id", postId)
+            .count()
+            .get(AggregateSource.SERVER)
+            .addOnSuccessListener {
+                trySend(it.count)
+            }
+            .addOnFailureListener {
+                trySend(-1)
+            }
+            .await()
+
+        awaitClose()
+    }
+
+    companion object {
             private const val COLLECTION = "comment"
             private const val PAGE_LIMIT = 30
         }
