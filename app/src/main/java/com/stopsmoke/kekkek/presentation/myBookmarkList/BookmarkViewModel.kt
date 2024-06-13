@@ -5,14 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.community.PostInfo
-import com.stopsmoke.kekkek.presentation.community.UserInfo
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,6 +46,25 @@ class BookmarkViewModel @Inject constructor(
     }
 
     fun updateUserState() = viewModelScope.launch {
+
+        val userData = userRepository.getUserData()
+        userData.collect { user ->
+            try {
+                when (user) {
+                    is User.Registered -> {
+                        _userState.value = user
+                    }
+
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    fun updatdeTestUserState() = viewModelScope.launch {
         try {
             val userDataResultFlow = userRepository.getUserData("테스트_계정")
             when (userDataResultFlow) {
