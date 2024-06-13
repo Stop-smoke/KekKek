@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -13,6 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyWritingListBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,6 +54,22 @@ class MyWritingListFragment : Fragment() {
         rvMyWritingList.layoutManager = LinearLayoutManager(requireActivity())
 
         viewModel.updateUserState()
+        initListAdapterCallback()
+    }
+
+    private fun initListAdapterCallback() {
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {}
+
+                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                    findNavController().navigate(
+                        resId = R.id.action_myWritingList_to_postView,
+                        args = bundleOf("item" to communityWritingItem)
+                    )
+                }
+            }
+        )
     }
 
     private fun initAppBar() {
@@ -73,6 +94,13 @@ class MyWritingListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        activity?.visible()
+        listAdapter.unregisterCallbackListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
 }

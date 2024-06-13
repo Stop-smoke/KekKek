@@ -1,92 +1,150 @@
 package com.stopsmoke.kekkek.presentation.attainments
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.model.UserConfig
+import com.stopsmoke.kekkek.domain.model.getStartTimerState
+import com.stopsmoke.kekkek.domain.model.getTotalMinutesTime
+import com.stopsmoke.kekkek.domain.model.getTotalSecondsTime
+import com.stopsmoke.kekkek.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalDateTime
+import javax.inject.Inject
 
-class AttainmentsViewModel : ViewModel() {
+@HiltViewModel
+class AttainmentsViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
+    private val _uiState: MutableStateFlow<AttainmentsItem> =
+        MutableStateFlow(AttainmentsItem.init())
+    val uiState: StateFlow<AttainmentsItem> = _uiState.asStateFlow()
 
-    // 온보딩에서 가져온 하루에 피는 개비 수, 일단 임시값 다 넣어놓음
-    private val cigarettesPerDay = 8
+    private var _currentUserState = MutableStateFlow<User>(User.Guest)
+    val currentUserState = _currentUserState.asStateFlow()
 
-    // 온보딩에서 가져온 한 갑당 담배 개비 수
-    private val cigarettesPerPack = 20
+    private var timeString: String = ""
+    private var savedMoneyPerMinute: Double = 0.0
+    private var savedLifePerMinute: Double = 0.0
+    private var savedCigarettePerMinute: Double = 0.0
+    private var savedDatePerMinute: Double = 0.0
 
-    // 온보딩에서 입력받은 한 갑당 가격
-    private val pricePerPack = 3530
+    fun updateUserData() = viewModelScope.launch {
+        val userData = userRepository.getUserData("테스트_계정")
+        when (userData) {
+            is Result.Success -> {
+                userData.data.collect { user ->
+                    _currentUserState.value = user
 
-    // 피우지 않은 담배 개비 수
-    private val _cigarettesNotSmoked = MutableLiveData<Int>()
-    val cigarettesNotSmoked: LiveData<Int> get() = _cigarettesNotSmoked
-
-    // 절약한 총 금액
-    private val _moneySaved = MutableLiveData<String>()
-    val moneySaved: LiveData<String> get() = _moneySaved
-
-    // 생명 연장 시간
-    private val _lifeExtendedTime = MutableLiveData<String>()
-    val lifeExtendedTime: LiveData<String> get() = _lifeExtendedTime
-
-    // 경과한 날짜
-    private val _elapsedDays = MutableLiveData<Int>()
-    val elapsedDays: LiveData<Int> get() = _elapsedDays
-
-    // 경과한 시간 (시:분:초)
-    private val _elapsedTime = MutableLiveData<String>()
-    val elapsedTime: LiveData<String> get() = _elapsedTime
-
-    init {
-        startTimer()
-    }
-
-    private fun startTimer() {
-        viewModelScope.launch {
-            val startTime = LocalDateTime.now().minusDays(3) // 예시로 3일 전 시작
-            while (true) {
-                updateElapsedTime(startTime)
-                delay(1000) // 1초마다 업데이트
+                    val totalMinutesTime = user.history.getTotalMinutesTime()
+                    val totalSecondsTime = user.history.getTotalSecondsTime()
+                    timeString = formatElapsedTime(totalMinutesTime)
+                    calculateSavedValues(user.userConfig)
+                    _uiState.emit(
+                        AttainmentsItem(
+                            history = user.history,
+                            savedDate = savedDatePerMinute,
+                            savedMoney = savedMoneyPerMinute * totalMinutesTime,
+                            savedLife = savedLifePerMinute * totalMinutesTime,
+                            savedCigarette = savedCigarettePerMinute * totalMinutesTime,
+                            timeString = formatElapsedTime(totalSecondsTime)
+                        )
+                    )
+                    if (user.history.getStartTimerState()) startTimer()
+                }
             }
+
+            else -> {}
         }
     }
 
-    private suspend fun updateElapsedTime(startTime: LocalDateTime) {
-        val currentDateTime = LocalDateTime.now()
-        val period = Duration.between(startTime, currentDateTime)
-        val days = period.toDays().toInt()
-        val hours = period.toHours() % 24
-        val minutes = period.toMinutes() % 60
-        val seconds = period.seconds % 60
+    private fun startTimer() = viewModelScope.launch {
+        var prevMinutes: Long = -1
+        while (true) {
+            timeString =
+                formatElapsedTime(
+                    (currentUserState.value as? User.Registered)?.history?.getTotalSecondsTime()
+                        ?: 0
+                )
+            val currentMinutes =
+                (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime() ?: 0
 
-        _elapsedDays.postValue(days)
-        _elapsedTime.postValue(String.format("%d:%02d:%02d", hours, minutes, seconds))
+            _uiState.update { prev ->
+                prev.copy(
+                    timeString = timeString
+                )
+            }
 
-        updateAttainments(days)
-    }
+            if (prevMinutes != currentMinutes) {
+                _uiState.update { prev ->
+                    prev.copy(
+                        savedDate = savedDatePerMinute,
+                        savedMoney = savedMoneyPerMinute * currentMinutes,
+                        savedLife = savedLifePerMinute * currentMinutes,
+                        savedCigarette = savedCigarettePerMinute * currentMinutes,
+                    )
+                }
 
-    private fun updateAttainments(days: Int) {
-        // 경과한 시간에 따라 성과 계산 업데이트
-        val cigarettesNotSmoked = cigarettesPerDay * days
-        _cigarettesNotSmoked.postValue(cigarettesNotSmoked)
 
-        val moneySaved = (cigarettesNotSmoked / cigarettesPerPack) * pricePerPack
-        _moneySaved.postValue(moneySaved.toString())
-
-        val lifeExtendedTime = calculateLifeExtendedTime(cigarettesNotSmoked)
-        _lifeExtendedTime.postValue(lifeExtendedTime)
-    }
-
-    private fun calculateLifeExtendedTime(cigarettesNotSmoked: Int?): String {
-        if (cigarettesNotSmoked == null) {
-            return "0시간 0분"
+                prevMinutes = currentMinutes
+            }
+            delay(1000) // 1 second
         }
-        val minutes = cigarettesNotSmoked * 5 // 1개비 당 5분씩 생명 연장
-        val hours = minutes / 60
-        val remainingMinutes = minutes % 60
-        return String.format("%d시간 %02d분", hours, remainingMinutes)
+    }
+
+    private fun calculateSavedValues(userConfig: UserConfig) {
+        // 하루에 피는 담배의 총 개수
+        val totalCigarettesPerDay = userConfig.dailyCigarettesSmoked.toDouble()
+
+        // 하루에 소비하는 갑의 개수
+        val packsPerDay = totalCigarettesPerDay / userConfig.packCigaretteCount.toDouble()
+
+        // 하루에 소비하는 갑의 비용
+        val totalPackCostPerDay = packsPerDay * userConfig.packPrice.toDouble()
+
+        // 하루에 소비하는 총 시간 (분 단위)
+        val totalMinutesSmokedPerDay = 24 * 60.0 // 하루 전체 시간
+
+        // 하루에 소비하는 담배 분당 생명 절약량
+        savedLifePerMinute = totalCigarettesPerDay / totalMinutesSmokedPerDay
+
+        // 하루에 소비하는 갑의 분당 비용
+        savedMoneyPerMinute = totalPackCostPerDay / totalMinutesSmokedPerDay
+
+        // 하루에 피는 담배의 분당 개수
+        savedCigarettePerMinute = totalCigarettesPerDay / totalMinutesSmokedPerDay
+
+        savedDatePerMinute = 0.0
+    }
+
+
+    private fun formatElapsedTime(elapsedTimeSeconds: Long): String {
+        val days = elapsedTimeSeconds / (24 * 3600)
+        val hours = (elapsedTimeSeconds % (24 * 3600)) / 3600
+        val minutes = (elapsedTimeSeconds % 3600) / 60
+        val seconds = elapsedTimeSeconds % 60
+
+        return if (days > 0) {
+            "${days}일 ${hours}:${minutes}:${seconds}"
+        } else if (hours > 0) {
+            "${hours}:${minutes}:${seconds}"
+        } else if (minutes > 0) {
+            "${minutes}:${seconds}"
+        } else {
+            "$seconds"
+        }
+    }
+
+    fun timeStringToMinutes(timeString: String): Long {
+        val parts = timeString.split("시간")
+        val hours = if (parts.size > 1) parts[0].trim().toLong() else 0L
+        val minutes = parts.last().replace("분", "").trim().toLong()
+        return hours * 60 + minutes
     }
 }

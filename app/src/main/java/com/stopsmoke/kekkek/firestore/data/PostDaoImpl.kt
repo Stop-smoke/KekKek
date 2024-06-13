@@ -6,17 +6,26 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.AggregateSource
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.lang.NullPointerException
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.floor
 
 internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -131,12 +140,32 @@ internal class PostDaoImpl @Inject constructor(
         }.flow
     }
 
+    override fun getPostItem(postId: String): Flow<List<PostEntity>> {
+        val query = firestore.collection(COLLECTION)
+            .whereEqualTo("id", postId)
+            .limit(1)
+
+        return query.dataObjects<PostEntity>()
+    }
+
     override suspend fun addPost(postEntity: PostEntity) {
         firestore.collection(COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
                 .addOnFailureListener { throw it }
                 .addOnCanceledListener { throw CancellationException() }
                 .await()
+        }
+    }
+
+    override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
+        return try {
+            firestore.collection(COLLECTION)
+                .document(postEntity.id ?: return Result.Error(NullPointerException()))
+                .set(postEntity)
+                .await()
+            Result.Success(Unit)
+        } catch (e: Exception){
+            Result.Error(e)
         }
     }
 
@@ -221,8 +250,93 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPostForPostId(postId: String): PostEntity {
+        return try {
+            val query = firestore.collection(COLLECTION)
+                .whereEqualTo("id", postId)
+                .get()
+                .await()
+
+            val document = query.documents.firstOrNull()
+            document?.toObject<PostEntity>() ?: PostEntity()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            PostEntity()
+        }
+        
+    override fun getCommentCount(postId: String): Flow<Long> = callbackFlow {
+        firestore.collection(COMMENT_COLLECTION)
+            .whereEqualTo("post_data.post_id", postId)
+            .count()
+            .get(AggregateSource.SERVER)
+            .addOnSuccessListener {
+                trySend(it.count)
+            }
+            .addOnFailureListener {
+                trySend(-1)
+            }
+            .await()
+
+        awaitClose()
+    }
+
+    override fun getLikeCount(postId: String): Flow<Long> = callbackFlow {
+        firestore.collection(COLLECTION)
+            .whereEqualTo("post_data.post_id", postId)
+            .count()
+            .get(AggregateSource.SERVER)
+            .addOnSuccessListener {
+                trySend(it.count)
+            }
+            .addOnFailureListener {
+                trySend(-1)
+            }
+            .await()
+
+        awaitClose()
+    }
+
+    override suspend fun addLike(postId: String, uid: String): Result<Unit> {
+        val task = firestore.collection(COLLECTION)
+            .document(postId)
+            .update("like_user", FieldValue.arrayUnion(uid))
+            .also { it.await() }
+
+        if (task.isSuccessful) {
+            return Result.Success(Unit)
+        }
+        return Result.Error(task.exception)
+    }
+
+    override suspend fun deleteLike(postId: String, uid: String): Result<Unit> {
+        val task = firestore.collection(COLLECTION)
+            .document(postId)
+            .update("like_user", FieldValue.arrayRemove(uid))
+            .also { it.await() }
+
+        if (task.isSuccessful) {
+            return Result.Success(Unit)
+        }
+        return Result.Error(task.exception)
+    }
+
+    override suspend fun addViews(postId: String): Result<Unit> {
+        val task = firestore.collection(COLLECTION)
+            .document(postId)
+            .collection("_counter_shards_")
+            .document()
+            .set(mapOf("views" to 1))
+            .also { it.await() }
+
+        if (task.isSuccessful) {
+            return Result.Success(Unit)
+        }
+        return Result.Error(task.exception)
+    }
+
     companion object {
         private const val COLLECTION = "post"
+        private const val COMMENT_COLLECTION = "comment"
         private const val PAGE_LIMIT = 30
     }
 }

@@ -33,6 +33,24 @@ fun History.getTotalMinutesTime(): Long {
     return totalMinutesTime
 }
 
+fun History.getTotalSecondsTime(): Long {
+    var totalSecondsTime = this.totalMinutesTime * 60 // 분을 초로 변환
+
+    if (historyTimeList.isNotEmpty()) {
+        val lastHistoryTime = historyTimeList.last()
+        val lastQuitSmokingStopDateTime = lastHistoryTime.quitSmokingStopDateTime
+
+        if (lastQuitSmokingStopDateTime == null) {
+            totalSecondsTime += Duration.between(
+                lastHistoryTime.quitSmokingStartDateTime,
+                LocalDateTime.now()
+            ).seconds
+        }
+    }
+
+    return totalSecondsTime
+}
+
 
 
 fun History.getStartTimerState(): Boolean {

@@ -62,4 +62,6 @@ interface UserRepository {
      */
 
     suspend fun withdraw(): Result<Unit>
+
+    suspend fun nameDuplicateInspection(name: String): Boolean
 }

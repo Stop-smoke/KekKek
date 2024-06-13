@@ -13,6 +13,7 @@ data class CommunityWritingItem(
     val postInfo: PostInfo,
     val postImage: String,
     val post: String,
+    var bookmark: Boolean = false,
     val postTime: ElapsedDateTime,
     val postType: PostCategory
 ) : Parcelable
@@ -40,6 +41,8 @@ data class UserInfo(
     val rank: Long,
     val profileImage: String
 ) : Parcelable
+
+
 
 fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     userInfo = UserInfo(

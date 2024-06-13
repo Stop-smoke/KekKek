@@ -17,4 +17,6 @@ interface UserDao {
     suspend fun startQuitSmokingTimer(uid: String): Result<Unit>
 
     suspend fun stopQuitSmokingTimer(uid: String): Result<Unit>
+
+    suspend fun nameDuplicateInspection(name: String): Boolean
 }

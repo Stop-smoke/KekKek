@@ -16,6 +16,7 @@ import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -94,7 +95,9 @@ class MyFragment : Fragment() {
         clMyComplaint.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_complaint)
         }
-
+        clMyAntiSmokingSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_resetting_onboarding_smoking_per_day)
+        }
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -106,24 +109,33 @@ class MyFragment : Fragment() {
         }
 
 
-        when (userData) {
-            is Result.Error -> {
-
-            }
-
-            is Result.Loading -> {
-
-            }
-
-            is Result.Success -> {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                        .collectLatest { user ->
-                            viewModel.updateUserData(user)
-                        }
+//        when (userData) {
+//            is Result.Error -> {
+//
+//            }
+//
+//            is Result.Loading -> {
+//
+//            }
+//
+//            is Result.Success -> {
+//                viewLifecycleOwner.lifecycleScope.launch {
+//                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+//                        .collectLatest { user ->
+//                            viewModel.updateUserData(user)
+//                        }
+//                }
+//            }
+//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            userData.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { user ->
+                    if(user is User.Registered) {
+                        viewModel.updateUserData(user)
+                    }
                 }
-            }
         }
+
     }
 
 

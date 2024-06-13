@@ -1,62 +1,73 @@
 package com.stopsmoke.kekkek.presentation.attainments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentAttainmentsBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.visible
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AttainmentsFragment : Fragment() {
 
     private var _binding: FragmentAttainmentsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: AttainmentsViewModel
+    private val viewModel: AttainmentsViewModel by viewModels()
 
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAttainmentsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[AttainmentsViewModel::class.java]
+        return binding.root
+    }
 
-        // 성과 데이터 업데이트
-        viewModel.cigarettesNotSmoked.observe(viewLifecycleOwner) { cigarettes ->
-                binding.tvAttainmentsDescription1.text = "$cigarettes 개비"
-        }
-
-        viewModel.moneySaved.observe(viewLifecycleOwner) { money ->
-            binding.tvAttainmentsDescription2.text = "$money 원"
-        }
-
-        viewModel.lifeExtendedTime.observe(viewLifecycleOwner) { lifeExtenedTime ->
-            binding.tvAttainmentsDescription3.text = lifeExtenedTime
-        }
-
-        viewModel.elapsedDays.observe(viewLifecycleOwner, Observer { days ->
-            binding.tvAttainmentsDay.text = "${days}일"
-        })
-
-        viewModel.elapsedTime.observe(viewLifecycleOwner, Observer { time ->
-            binding.tvAttainmentsTime.text = time
-        })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.updateUserData()
+        initAppbar()
+        initViewModel()
+    }
 
 
-        binding.includeAttainmentsAppBar.ivAttainmentsBack.setOnClickListener {
+    private fun initAppbar() {
+        requireActivity().findViewById<ImageView>(R.id.iv_attainments_back).setOnClickListener {
             findNavController().popBackStack()
         }
 
-        return binding.root
+    }
+
+    private fun initViewModel() = with(viewModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { item ->
+                    onBind(item)
+                }
+        }
+    }
+
+    private fun onBind(item: AttainmentsItem) = with(binding) {
+        tvAttainmentsTimerNum.text = item.timeString
+        tvAttainmentsDescriptionLife.text = formatToOneDecimalPlace(item.savedLife) + "일"
+        tvAttainmentsDescriptionMoney.text =
+            item.savedMoney.toLong().toString().chunked(3).joinToString(",") + "원"
+        tvAttainmentsDescriptionCigarette.text = formatToOneDecimalPlace(item.savedCigarette) + "개비"
+    }
+
+    private fun formatToOneDecimalPlace(value: Double): String {
+        return String.format("%.1f", value)
     }
 
     override fun onResume() {
