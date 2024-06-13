@@ -94,6 +94,9 @@ class MyFragment : Fragment() {
         includeFragmentMyAppBar.icMySettings.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_nav_settings)
         }
+        clMyAntiSmokingSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_resetting_onboarding_smoking_per_day)
+        }
     }
 
     private fun initViewModel() = with(viewModel) {
