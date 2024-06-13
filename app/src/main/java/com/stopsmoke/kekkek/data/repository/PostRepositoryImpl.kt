@@ -114,7 +114,20 @@ internal class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun editPost(post: PostWrite): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            val user = (userRepository.getUserData().first() as User.Registered)
+            val written = Written(
+                uid = user.uid,
+                name = user.name,
+                profileImage = user.profileImage,
+                ranking = user.ranking
+            )
+            postDao.editPost(post.toEntity(written))
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(e)
+        }
     }
 
     override suspend fun getTopPopularItems(): List<Post> =

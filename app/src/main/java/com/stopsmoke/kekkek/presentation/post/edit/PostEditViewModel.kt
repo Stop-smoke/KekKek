@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostWriteViewModel @Inject constructor(
+class PostEditViewModel @Inject constructor(
     private val postRepository: PostRepository
 ): ViewModel() {
 
-    fun addPost(post: PostWrite) {
+    fun editPost(post: PostWrite) {
         viewModelScope.launch {
-            postRepository.addPost(post)
+            postRepository.editPost(post)
         }
     }
 

@@ -140,6 +140,9 @@
         <argument
             android:name="postArgument"
             app:argType="com.stopsmoke.kekkek.presentation.community.CommunityWritingItem" />
+        <action
+            android:id="@+id/action_post_view_to_post_edit"
+            app:destination="@id/post_edit" />
     </fragment>
 
     <fragment
@@ -147,6 +150,17 @@
         android:name="com.stopsmoke.kekkek.presentation.post.PostWriteFragment"
         app:route="post_write"
         tools:layout="@layout/fragment_post_write" />
+
+    <fragment
+        android:id="@+id/post_edit"
+        android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
+        app:route="post_edit"
+        tools:layout="@layout/fragment_post_edit">
+<!--        <argument-->
+<!--            android:name="postInfo"-->
+<!--            app:argType="com.stopsmoke.kekkek.presentation.community.CommunityWritingItem"-->
+<!--            />-->
+    </fragment>
 
     <fragment
         android:id="@+id/attainments"
