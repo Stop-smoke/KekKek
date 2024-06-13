@@ -28,6 +28,7 @@
         android:backgroundTint="@color/gray"
         android:fontFamily="@font/pretendard_medium"
         android:hint="이름을 입력하세요."
+        android:inputType="text"
         android:maxLines="1"
         android:singleLine="true"
         android:textColorHint="@color/gray"
