@@ -48,4 +48,6 @@ interface PostDao {
     suspend fun deleteLike(postId: String, uid: String): Result<Unit>
 
     suspend fun addViews(postId: String): Result<Unit>
+
+    suspend fun setProfileImage(userId: String, imgUrl: String)
 }

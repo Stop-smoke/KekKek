@@ -8,6 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
@@ -83,7 +84,10 @@ class CommunityListAdapter :
                     ivItemWritingPostImage.visibility = View.GONE
                     setMarginEnd(tvItemWritingTitle, 16)
                 }
-
+                it.profileImage.let {imgUrl->
+                    if (imgUrl.isNullOrBlank()) circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
+                    else circleIvItemWritingProfile.load(imgUrl)
+                }
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
             }

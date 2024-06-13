@@ -335,6 +335,31 @@ internal class PostDaoImpl @Inject constructor(
         return Result.Error(task.exception)
     }
 
+    override suspend fun setProfileImage(userId: String, imgUrl: String) {
+        try {
+            val getQuery = firestore.collection(COLLECTION)
+                .whereEqualTo("written.uid", userId)
+                .get()
+                .await()
+
+            val postList = getQuery.documents.mapNotNull { document ->
+                document.toObject<PostEntity>()?.apply {
+                    written?.profileImage = imgUrl
+                }
+            }
+
+            postList.forEach { post ->
+                firestore.collection(COLLECTION)
+                    .document(post.id!!)
+                    .set(post)
+                    .await()
+            }
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     companion object {
         private const val COLLECTION = "post"
         private const val COMMENT_COLLECTION = "comment"
