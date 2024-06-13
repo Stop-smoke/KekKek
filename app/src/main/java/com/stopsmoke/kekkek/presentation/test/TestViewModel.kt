@@ -3,9 +3,19 @@ package com.stopsmoke.kekkek.presentation.test
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TestViewModel: ViewModel() {
+@HiltViewModel
+class TestViewModel @Inject constructor(
+    private val userRepository: UserRepository
+): ViewModel() {
 
     // 데이터를 이쪽에 일단 몰빵...
     private val _testResult: MutableLiveData<Int> = MutableLiveData()
@@ -100,5 +110,13 @@ class TestViewModel: ViewModel() {
             R.drawable.ic_test_bad
         )
     )
+
+    fun updateCigaretteAddictionTestResult(result: String) {
+        viewModelScope.launch {
+            val userRegistered =
+                userRepository.getUserData().firstOrNull() as? User.Registered ?: return@launch
+            userRepository.setUserData(userRegistered.copy(cigaretteAddictionTestResult = result))
+        }
+    }
 
 }

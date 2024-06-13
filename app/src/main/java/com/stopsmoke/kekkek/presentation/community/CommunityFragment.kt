@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,7 +30,6 @@ class CommunityFragment : Fragment() {
     private val binding: FragmentCommunityBinding get() = _binding!!
 
     private val viewModel: CommunityViewModel by viewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -188,7 +186,7 @@ class CommunityFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePost ->
                     binding.tvCommunityNoticeTitle.text = noticePost.title
                 }

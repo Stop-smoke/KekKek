@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.HistoryTime
+import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.UserConfig
 import com.stopsmoke.kekkek.domain.model.getStartTimerState
 import com.stopsmoke.kekkek.domain.model.getTotalMinutesTime
+import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -22,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val postRepository: PostRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -35,6 +38,17 @@ class HomeViewModel @Inject constructor(
     private var _currentUserState = MutableStateFlow<User>(User.Guest)
     val currentUserState = _currentUserState.asStateFlow()
 
+    val user = userRepository.getUserData()
+
+    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
+    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val noticeBannerPost = postRepository.getTopNotice()
+            _noticeBanner.emit(noticeBannerPost)
+        }
+    }
 
     fun updateTestUserData() = viewModelScope.launch {
         val userData = userRepository.getUserData("테스트_계정")
