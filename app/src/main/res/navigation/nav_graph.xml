@@ -79,6 +79,9 @@
         <action
             android:id="@+id/action_myPage_to_myCommentList"
             app:destination="@id/my_comment_list" />
+        <action
+            android:id="@+id/action_my_page_to_my_complaint"
+            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
@@ -86,6 +89,12 @@
         android:name="com.stopsmoke.kekkek.presentation.my.supportcenter.SupportCenterFragment"
         app:route="my_supportcenter"
         tools:layout="@layout/fragment_support_center" />
+
+    <fragment
+        android:id="@+id/my_complaint"
+        android:name="com.stopsmoke.kekkek.presentation.my.complaint.MyComplaintFragment"
+        app:route="my_complaint"
+        tools:layout="@layout/fragment_my_complaint" />
 
     <fragment
         android:id="@+id/test_page"

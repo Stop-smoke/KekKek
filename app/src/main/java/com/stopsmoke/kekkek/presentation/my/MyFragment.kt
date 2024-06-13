@@ -73,6 +73,12 @@ class MyFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
+        includeFragmentMyAppBar.icMyBell.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_notification)
+        }
+        includeFragmentMyAppBar.icMySettings.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_nav_settings)
+        }
         clMyMypost.setOnClickListener {
             findNavController().navigate(R.id.action_myPage_to_myWritingList)
         }
@@ -82,18 +88,13 @@ class MyFragment : Fragment() {
         clMyMybookmarknum.setOnClickListener {
             findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
         }
-
         clMyCustomerService.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
         }
-
-        includeFragmentMyAppBar.icMyBell.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_notification)
+        clMyComplaint.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_my_complaint)
         }
 
-        includeFragmentMyAppBar.icMySettings.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_nav_settings)
-        }
     }
 
     private fun initViewModel() = with(viewModel) {

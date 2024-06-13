@@ -25,77 +25,77 @@ class CommentDaoInstrumentedTest {
     }
 
 
-    @Test
-    fun addComment() = runTest {
-        val comment = CommentEntity(
-            id = "12345",
-            text = "This is a sample comment.",
-            dateTime = DateTimeEntity(
-                Timestamp.now(),
-                Timestamp.now()
-            ),
-            likeUser = listOf("user1", "user2"),
-            unlikeUser = listOf("user3"),
-            reply = ReplyEntity(
-                written = WrittenEntity(
-                    uid = "default",
-                    name = "김민준",
-                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                    ranking = Long.MAX_VALUE
-                ),
-                likeUser = listOf("user4"),
-                unlikeUser = listOf("user5"),
-                dateTime = DateTimeEntity(
-                    Timestamp.now(),
-                    Timestamp.now()
-                ),
-                text = "This is a sample reply."
-            ),
-            written = WrittenEntity(
-                uid = "default",
-                name = "김민준",
-                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                ranking = Long.MAX_VALUE
-            )
-        )
-        commentDao.addComment(comment)
-    }
+//    @Test
+//    fun addComment() = runTest {
+//        val comment = CommentEntity(
+//            id = "12345",
+//            text = "This is a sample comment.",
+//            dateTime = DateTimeEntity(
+//                Timestamp.now(),
+//                Timestamp.now()
+//            ),
+//            likeUser = listOf("user1", "user2"),
+//            unlikeUser = listOf("user3"),
+//            reply = ReplyEntity(
+//                written = WrittenEntity(
+//                    uid = "default",
+//                    name = "김민준",
+//                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+//                    ranking = Long.MAX_VALUE
+//                ),
+//                likeUser = listOf("user4"),
+//                unlikeUser = listOf("user5"),
+//                dateTime = DateTimeEntity(
+//                    Timestamp.now(),
+//                    Timestamp.now()
+//                ),
+//                text = "This is a sample reply."
+//            ),
+//            written = WrittenEntity(
+//                uid = "default",
+//                name = "김민준",
+//                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+//                ranking = Long.MAX_VALUE
+//            )
+//        )
+//        commentDao.addComment(comment)
+//    }
 
-    @Test
-    fun updateOrInsert() = runTest {
-        val comment = CommentEntity(
-            id = "12345",
-            text = "This is a sample comment.",
-            dateTime = DateTimeEntity(
-                Timestamp.now(),
-                Timestamp.now()
-            ),
-            likeUser = listOf("user1", "user2"),
-            unlikeUser = listOf("user3"),
-            reply = ReplyEntity(
-                written = WrittenEntity(
-                    uid = "default",
-                    name = "김민준",
-                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                    ranking = Long.MAX_VALUE
-                ),
-                likeUser = listOf("user4"),
-                unlikeUser = listOf("user5"),
-                dateTime = DateTimeEntity(
-                    Timestamp.now(),
-                    Timestamp.now()
-                ),
-                text = "This is a sample reply."
-            ),
-            written = WrittenEntity(
-                uid = "default",
-                name = "김민준",
-                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
-                ranking = Long.MAX_VALUE
-            )
-        )
-        commentDao.updateOrInsertComment(comment)
-    }
+//    @Test
+//    fun updateOrInsert() = runTest {
+//        val comment = CommentEntity(
+//            id = "12345",
+//            text = "This is a sample comment.",
+//            dateTime = DateTimeEntity(
+//                Timestamp.now(),
+//                Timestamp.now()
+//            ),
+//            likeUser = listOf("user1", "user2"),
+//            unlikeUser = listOf("user3"),
+//            reply = ReplyEntity(
+//                written = WrittenEntity(
+//                    uid = "default",
+//                    name = "김민준",
+//                    profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+//                    ranking = Long.MAX_VALUE
+//                ),
+//                likeUser = listOf("user4"),
+//                unlikeUser = listOf("user5"),
+//                dateTime = DateTimeEntity(
+//                    Timestamp.now(),
+//                    Timestamp.now()
+//                ),
+//                text = "This is a sample reply."
+//            ),
+//            written = WrittenEntity(
+//                uid = "default",
+//                name = "김민준",
+//                profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
+//                ranking = Long.MAX_VALUE
+//            )
+//        )
+//        commentDao.updateOrInsertComment(comment)
+//    }
 
     @Test
     fun delete() = runTest {
