@@ -147,10 +147,9 @@ class HomeFragment : Fragment() {
     private fun onBind(uiState: HomeUiState) = with(binding) {
         uiState.homeItem.let {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
-            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
-            tvHomeRankNum.text = "${it.rank} 위"
+//            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
+//            tvHomeRankNum.text = "${it.rank} 위"
             tvHomeTestDegree.text = it.addictionDegree
-
             tvHomeTimerNum.text = it.timeString
         }
 

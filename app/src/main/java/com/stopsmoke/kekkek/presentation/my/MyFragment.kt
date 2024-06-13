@@ -89,14 +89,14 @@ class MyFragment : Fragment() {
         clMyMybookmarknum.setOnClickListener {
             findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
         }
+        clMyAntiSmokingSetting.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_resetting_onboarding_smoking_per_day)
+        }
         clMyCustomerService.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
         }
         clMyComplaint.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_complaint)
-        }
-        clMyAntiSmokingSetting.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_resetting_onboarding_smoking_per_day)
         }
     }
 

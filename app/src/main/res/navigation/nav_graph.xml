@@ -106,6 +106,9 @@
         <action
             android:id="@+id/action_my_page_to_resetting_onboarding_smoking_per_day"
             app:destination="@id/resetting_onboarding_smoking_per_day" />
+        <action
+            android:id="@+id/action_my_page_to_my_complaint"
+            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
@@ -142,9 +145,6 @@
         <action
             android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
             app:destination="@id/my_page" />
-        <action
-            android:id="@+id/action_my_page_to_my_complaint"
-            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
