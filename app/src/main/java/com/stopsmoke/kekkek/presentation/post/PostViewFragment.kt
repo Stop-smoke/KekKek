@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.post
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.core.os.bundleOf
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +26,7 @@ import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.getRelativeTime
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getParcelableAndroidVersionSupport
 import com.stopsmoke.kekkek.visible
@@ -41,6 +42,7 @@ class PostViewFragment : Fragment() {
     private var post: CommunityWritingItem? = null
 
     private val viewModel: PostViewModel by viewModels()
+    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postCommentAdapter: PostCommentAdapter
 
@@ -198,6 +200,7 @@ class PostViewFragment : Fragment() {
                 post?.postInfo?.id?.let { postId ->
                     viewModel.deletePost(postId)
                     Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    communityViewModel.setPostDeleted(true)
                     findNavController().popBackStack()
                 }
                 dialog.dismiss()

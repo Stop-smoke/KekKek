@@ -48,12 +48,6 @@ class PostViewModel @Inject constructor(
 
     private val currentBookmarkPost = arrayListOf<CommunityWritingItem>()
 
-//    fun deletePost(post: CommunityWritingItem) {
-//        viewModelScope.launch {
-//            postRepository.deletePost(post)
-//        }
-//    }
-
     fun addBookmarkPost(post: CommunityWritingItem) {
         currentBookmarkPost.add(post)
     }
@@ -123,18 +117,6 @@ class PostViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-//    fun deletePost(postId: String) {
-//        viewModelScope.launch {
-//            when (val result = postRepository.deletePost(postId)) {
-//                is Result.Success -> {
-//
-//                }
-//                is Result.Error -> {
-//
-//                }
-//            }
-//        }
-//    }
     fun addComment(commentPostData: CommentPostData, text: String) {
         viewModelScope.launch {
             val user = user.firstOrNull() as? User.Registered ?: return@launch

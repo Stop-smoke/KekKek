@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
-import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +30,7 @@ class CommunityFragment : Fragment() {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 
-    private val viewModel: CommunityViewModel by viewModels()
+    private val viewModel: CommunityViewModel by activityViewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -58,6 +59,7 @@ class CommunityFragment : Fragment() {
         initViewModel()
         initGestureDetector()
 
+
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
@@ -76,11 +78,22 @@ class CommunityFragment : Fragment() {
                 }
             }
         )
+
+        // 삭제될 때 시도
+        viewModel.isPostDeleted.collectLatestWithLifecycle(lifecycle){ isDeleted ->
+            if (isDeleted) {
+                listAdapter.refresh()
+                viewModel.setPostDeleted(false)
+            }
+        }
+
+
     }
 
     override fun onResume() {
         super.onResume()
         activity?.visible()
+
     }
 
     override fun onDestroy() {
