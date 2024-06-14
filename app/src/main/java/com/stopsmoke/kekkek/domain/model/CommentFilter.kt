@@ -7,8 +7,6 @@ package com.stopsmoke.kekkek.domain.model
  */
 sealed interface CommentFilter {
 
-    data object Me : CommentFilter
-
     data class Post(val postId: String) : CommentFilter
 
     data class User(val uid: String) : CommentFilter

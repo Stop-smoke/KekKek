@@ -18,6 +18,8 @@ data class Post(
     val commentUser: List<String>
     // Todo: profileImage 변수 추가 필요
 ) {
+    val createdElapsedDateTime = dateTime.created.getElapsedDateTime()
+
     val modifiedElapsedDateTime = dateTime.modified.getElapsedDateTime()
 
     companion object {

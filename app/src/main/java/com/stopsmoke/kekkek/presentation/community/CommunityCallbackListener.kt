@@ -4,7 +4,7 @@ interface CommunityCallbackListener {
 
     fun navigateToUserProfile(uid: String)
 
-    fun navigateToPost(communityWritingItem: CommunityWritingItem)
+    fun navigateToPost(postId: String)
 
 
 }

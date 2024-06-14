@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommentRepository {
 
-    fun getCommentItems(commentFilter: CommentFilter): Result<Flow<PagingData<Comment>>>
+    fun getCommentItems(commentFilter: CommentFilter): Flow<PagingData<Comment>>
 
     suspend fun addCommentItem(comment: Comment): Result<Unit>
 
