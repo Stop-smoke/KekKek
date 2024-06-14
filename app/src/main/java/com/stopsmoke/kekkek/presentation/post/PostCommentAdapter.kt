@@ -26,7 +26,6 @@ class PostCommentAdapter :
         callback = null
     }
 
-
     inner class PostCommentViewHolder(val binding: ItemCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -36,8 +35,6 @@ class PostCommentAdapter :
                 true
             }
         }
-
-
 
         fun bind(comment: Comment) = with(binding) {
             tvCommentNickname.text = comment.written.name
