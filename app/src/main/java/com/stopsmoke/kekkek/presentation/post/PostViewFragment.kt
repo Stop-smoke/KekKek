@@ -95,7 +95,7 @@ class PostViewFragment : Fragment() {
                     viewModel.user.collectLatest { user ->
                         when (user) {
                             is User.Registered -> {
-                                if(user.uid in likeUser) ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+                                if (user.uid in likeUser) ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
                                 else ivPostHeart.setImageResource(R.drawable.ic_heart)
                             }
 
@@ -164,10 +164,11 @@ class PostViewFragment : Fragment() {
 
         btnPostAddComment.setOnClickListener {
             val comment = etPostAddComment.text.toString()
-            if(comment.isEmpty()) {
+            if (comment.isEmpty()) {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment)
+                viewModel.getNewCommentCount()
                 postCommentAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
@@ -189,14 +190,16 @@ class PostViewFragment : Fragment() {
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         // 일단
-         viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
-            when(user){
+        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+            when (user) {
                 is User.Error -> {
 
                 }
+
                 User.Guest -> {
 
                 }
+
                 is User.Registered ->
                     if (viewModel.post.value?.written?.uid == user.uid) {
                         bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE

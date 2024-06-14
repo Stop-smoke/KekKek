@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -40,6 +41,10 @@ class PostViewModel @Inject constructor(
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
+
+    private val _commentCountGet: MutableStateFlow<Int> =
+        MutableStateFlow(0) // 바뀔 떄마다 commentCount 다시 가져오기
+    val commentCountGet get() = _commentCountGet.asStateFlow()
 
     fun updatePostId(id: String) {
         viewModelScope.launch {
@@ -125,19 +130,21 @@ class PostViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val commentCount = postId.flatMapLatest {
-        if (it == null) {
-            return@flatMapLatest emptyFlow()
-        }
-
-        commentRepository.getCommentCount(it)
-            .let { result ->
-                when (result) {
-                    is Result.Error -> emptyFlow()
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> result.data
-                }
+    val commentCount = post.flatMapLatest { post ->
+        commentCountGet.flatMapLatest {
+            if (post == null) {
+                return@flatMapLatest emptyFlow()
             }
+
+            commentRepository.getCommentCount(post.id)
+                .let { result ->
+                    when (result) {
+                        is Result.Error -> emptyFlow()
+                        is Result.Loading -> emptyFlow()
+                        is Result.Success -> result.data
+                    }
+                }
+        }
     }
 
     fun toggleLikeToPost() {
@@ -165,6 +172,12 @@ class PostViewModel @Inject constructor(
                 return@launch
             }
             postRepository.addBookmark(postId)
+        }
+    }
+
+    fun getNewCommentCount() = viewModelScope.launch {
+        _commentCountGet.update { prev ->
+            prev + 1
         }
     }
 }
