@@ -149,10 +149,14 @@ class PostViewFragment : Fragment() {
 
         btnPostAddComment.setOnClickListener {
             val comment = etPostAddComment.text.toString()
-            viewModel.addComment(text = comment)
-            postCommentAdapter.refresh()
-            binding.etPostAddComment.setText("")
-            binding.root.hideSoftKeyboard()
+            if(comment.isEmpty()) {
+                Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.addComment(text = comment)
+                postCommentAdapter.refresh()
+                binding.etPostAddComment.setText("")
+                binding.root.hideSoftKeyboard()
+            }
         }
 
         includePostViewAppBar.ivPostBookmark.setOnClickListener {

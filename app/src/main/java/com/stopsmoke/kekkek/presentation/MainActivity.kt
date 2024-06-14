@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 //        }
         setupNavigation()
         setupBottomNavigation()
-
+        Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
     // 해시값 찾을 때 사용하세요
     // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         val isFirstRunning = runBlocking {
             userRepository.isOnboardingComplete().first()
         }
+//        setNavGraph(true)
         setNavGraph(isFirstRunning)
     }
 

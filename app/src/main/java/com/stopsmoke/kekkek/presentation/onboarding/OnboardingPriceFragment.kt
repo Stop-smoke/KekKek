@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingPriceBinding
+import com.stopsmoke.kekkek.invisible
 
 
 class OnboardingPriceFragment : Fragment() {
@@ -27,11 +28,17 @@ class OnboardingPriceFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnOnboardingNext.setOnClickListener {
-            findNavController().navigate(R.id.action_onboarding_price_to_onboarding_birth)
+            findNavController().navigate(R.id.action_onboarding_price_to_onboarding_finish)
         }
 
         binding.etOnboardingPrice.addTextChangedListener {

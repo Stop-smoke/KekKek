@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.presentation.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -120,7 +122,22 @@ class HomeFragment : Fragment() {
         binding.ivHomeTimerController.setOnClickListener {
             if (viewModel.uiState.value.startTimerSate
             ) {
-                viewModel.setStopUserHistory()
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("타이머 초기화")
+                builder.setMessage("타이머를 초기화하시겠습니까?")
+                builder.setIcon(R.drawable.ic_timer)
+
+                val listener = DialogInterface.OnClickListener { _, type ->
+                    when (type) {
+                        DialogInterface.BUTTON_POSITIVE -> {
+                            viewModel.setStopUserHistory()
+                        }
+                    }
+                }
+
+                builder.setPositiveButton("예", listener)
+                builder.setNegativeButton("아니요", null)
+                builder.show()
             } else {
                 viewModel.setStartUserHistory()
             }
