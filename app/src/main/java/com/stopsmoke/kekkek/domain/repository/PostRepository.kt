@@ -14,7 +14,7 @@ interface PostRepository {
 
     fun getBookmark(postIdList: List<String>): Result<Flow<PagingData<Post>>>
 
-    fun getPost(uid: String): Result<Flow<PagingData<Post>>>
+    fun getPost(uid: String): Flow<PagingData<Post>>
 
     fun getPostItem(postId: String): Result<Flow<List<Post>>>
 

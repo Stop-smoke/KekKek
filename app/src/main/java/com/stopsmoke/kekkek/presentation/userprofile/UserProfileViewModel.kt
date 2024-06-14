@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -71,21 +72,11 @@ class UserProfileViewModel @Inject constructor(
         }
 
         postRepository.getPost(uid)
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        viewModelScope.launch {
-                            _errorHandler.emit(Unit)
-                        }
-                        emptyFlow()
-                    }
-
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data
-                }
-            }
-            .cachedIn(viewModelScope)
     }
+        .catch {
+            it.printStackTrace()
+        }
+        .cachedIn(viewModelScope)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val myCommentHistory: Flow<PagingData<Comment>> = uid.flatMapLatest { uid ->
