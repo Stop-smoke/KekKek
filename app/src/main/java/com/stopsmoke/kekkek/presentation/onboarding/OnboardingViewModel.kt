@@ -44,6 +44,7 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
+
     private val _dailyCigarettePacks: MutableStateFlow<Int> =
         MutableStateFlow(0) // 하루에 담배를 몇 개비 정도 피우시나요?
     val dailyCigarettePacks = _dailyCigarettePacks.asStateFlow()

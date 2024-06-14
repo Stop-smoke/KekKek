@@ -15,13 +15,14 @@ import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsProfileViewModel  @Inject constructor(
+class SettingsProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
 
     val user: Flow<User> = userRepository.getUserData()
 
-    private val _nameDuplicationInspectionResult = MutableStateFlow<EditNameState>(EditNameState.Empty)
+    private val _nameDuplicationInspectionResult =
+        MutableStateFlow<EditNameState>(EditNameState.Empty)
     val nameDuplicationInspectionResult: StateFlow<EditNameState> get() = _nameDuplicationInspectionResult
 
 
@@ -30,13 +31,13 @@ class SettingsProfileViewModel  @Inject constructor(
         if (name.isNullOrBlank()) _nameDuplicationInspectionResult.emit(EditNameState.Empty)
         else {
             val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
-            _nameDuplicationInspectionResult.emit(if(nameDuplicationInspectionResult) EditNameState.Success else EditNameState.Duplication)
+            _nameDuplicationInspectionResult.emit(if (nameDuplicationInspectionResult) EditNameState.Success else EditNameState.Duplication)
         }
     }
 
-    fun setUserDataForName(name: String, onComplete: ()->Unit) = viewModelScope.launch {
+    fun setUserDataForName(name: String, onComplete: () -> Unit) = viewModelScope.launch {
         user.collect { user ->
-            if(user is User.Registered) userRepository.setUserDataForName(user, name)
+            if (user is User.Registered) userRepository.setUserDataForName(user, name)
             onComplete()
         }
     }
@@ -47,13 +48,21 @@ class SettingsProfileViewModel  @Inject constructor(
 
 
     //introduction
-    fun setUserDataForIntroduction(introduction: String, onComplete: ()->Unit) = viewModelScope.launch {
-        user.collect { user ->
-            if(user is User.Registered) userRepository.setUserDataForIntroduction(user, introduction)
-            onComplete()
-        }
-    }
+    fun setUserDataForIntroduction(introduction: String, onComplete: () -> Unit) =
+        viewModelScope.launch {
+            user.collect { user ->
+                when (user) {
+                    is User.Registered -> {
+                        val newUserData = user.copy(introduction = introduction)
+                        userRepository.setUserData(newUserData)
+                        onComplete()
+                    }
 
+                    is User.Error -> {}
+                    User.Guest -> {}
+                }
+            }
+        }
 
 
     fun settingProfile(inputStream: InputStream) {

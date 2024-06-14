@@ -28,7 +28,8 @@ internal fun User.Registered.toEntity(): UserEntity =
         commentMy = commentMy,
         postMy = postMy,
         history = history.toEntity(),
-        cigaretteAddictionTestResult = cigaretteAddictionTestResult
+        cigaretteAddictionTestResult = cigaretteAddictionTestResult,
+        introduction = introduction
     )
 
 internal fun UserEntity.toExternalModel(): User.Registered =
