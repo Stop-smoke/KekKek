@@ -124,7 +124,7 @@ class HomeFragment : Fragment() {
             ) {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("타이머 초기화")
-                builder.setMessage("타이머를 초기화하시겠습니까?")
+                builder.setMessage("금연을 중단하시겠습니까? \n지금까지 노력하신 시간이 모두 초기화됩니다.")
                 builder.setIcon(R.drawable.ic_timer)
 
                 val listener = DialogInterface.OnClickListener { _, type ->
