@@ -231,6 +231,7 @@
                         android:id="@+id/tv_home_testDegree"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxWidth="130dp"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendard_bold"
                         android:text="100 원"

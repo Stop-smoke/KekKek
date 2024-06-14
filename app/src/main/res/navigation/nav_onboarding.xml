@@ -55,16 +55,7 @@
         android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPriceFragment"
         tools:layout="@layout/fragment_onboarding_price">
         <action
-            android:id="@+id/action_onboarding_price_to_onboarding_birth"
-            app:destination="@id/onboarding_birth" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/onboarding_birth"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingBirthFragment"
-        tools:layout="@layout/fragment_onboarding_birth">
-        <action
-            android:id="@+id/action_onboarding_birth_to_onboarding_finish"
+            android:id="@+id/action_onboarding_price_to_onboarding_finish"
             app:destination="@id/onboarding_finish" />
     </fragment>
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatest
 import com.stopsmoke.kekkek.visible
 
@@ -27,6 +28,12 @@ class OnboardingFinishFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,10 +44,10 @@ class OnboardingFinishFragment : Fragment() {
         viewModel.updateUserData()
     }
 
-    override fun onStop() {
-        super.onStop()
-        activity?.visible()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        activity?.visible()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

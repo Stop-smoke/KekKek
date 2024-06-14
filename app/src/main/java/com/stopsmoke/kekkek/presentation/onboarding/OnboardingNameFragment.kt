@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingNameBinding
+import com.stopsmoke.kekkek.invisible
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,12 @@ class OnboardingNameFragment : Fragment() {
         _binding = FragmentOnboardingNameBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
