@@ -78,10 +78,10 @@ class NoticeListFragment : Fragment() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {}
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_noticeList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }

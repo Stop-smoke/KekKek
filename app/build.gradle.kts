@@ -152,6 +152,10 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
     //Google place
-    implementation ("com.google.android.gms:play-services-location:21.3.0")
-    implementation ("com.google.android.libraries.places:places:3.5.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.libraries.places:places:3.5.0")
+
+    //ExifInterface - 이미지의 EXIF 데이터를 제대로 처리(사진을 찍을 때 기기의 방향 정보를 포함)
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
+
 }

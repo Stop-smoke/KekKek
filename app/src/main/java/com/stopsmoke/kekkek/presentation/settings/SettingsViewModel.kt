@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.settings
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -86,7 +89,4 @@ class SettingsViewModel @Inject constructor(
             }
         }
     }
-
-
-
 }

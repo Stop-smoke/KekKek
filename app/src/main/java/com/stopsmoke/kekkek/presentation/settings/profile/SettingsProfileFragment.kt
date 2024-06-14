@@ -1,6 +1,9 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -29,6 +33,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 @AndroidEntryPoint
 class SettingsProfileFragment : Fragment() {
@@ -43,16 +50,19 @@ class SettingsProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                binding.circleIvProfile.setImageURI(uri)
                 val inputStream = requireContext().contentResolver.openInputStream(uri)
-                // 프로필 이미지를 가져오는 부분도 해야함
                 if (inputStream != null) {
                     viewModel.settingProfile(inputStream)
                 } else {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Error resetting input stream",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error opening input stream", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -135,6 +145,17 @@ class SettingsProfileFragment : Fragment() {
             }
         }
     }
+
+    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
