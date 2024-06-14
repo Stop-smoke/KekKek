@@ -141,6 +141,8 @@ class PostWriteFragment : Fragment() {
                             "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
                             "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
                             "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
+                            "금연 실패 후기" -> PostWriteCategory.FAILURE_STORIES
+                            "금연 다짐" -> PostWriteCategory.QUIT_SMOKING_WILLINGNESS
                             else -> throw IllegalStateException()
                         }
                     )
