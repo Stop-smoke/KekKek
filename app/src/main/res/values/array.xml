@@ -14,5 +14,7 @@
         <item>자유 게시판</item>
         <item>금연 성공 후기</item>
         <item>금연 보조제 후기</item>
+        <item>금연 실패 후기</item>
+        <item>금연 다짐</item>
     </string-array>
 </resources>
