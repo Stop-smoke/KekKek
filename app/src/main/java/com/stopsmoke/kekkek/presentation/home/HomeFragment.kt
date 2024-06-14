@@ -112,8 +112,8 @@ class HomeFragment : Fragment() {
 
 
     private fun initTimerControllerListener() {
-        val startDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_start)
-        val stopDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_stop)
+        val startDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play)
+        val stopDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_stop)
 
         val currentDrawable = binding.ivHomeTimerController.drawable
 
@@ -165,7 +165,7 @@ class HomeFragment : Fragment() {
         }
 
         if (uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_home_stop)
+            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
             viewModel.startTimer()
         } else if (!uiState.startTimerSate) {
             ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
