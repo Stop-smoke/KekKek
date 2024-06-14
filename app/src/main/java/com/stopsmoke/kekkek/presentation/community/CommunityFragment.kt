@@ -138,7 +138,7 @@ class CommunityFragment : Fragment() {
             if (item is CommunityUiState.CommunityNormalUiState) {
                 findNavController().navigate(
                     resId = R.id.action_community_to_post_view,
-                    args = bundleOf("item" to item.popularItem.postInfo1)
+                    args = bundleOf("post_id" to item.popularItem.postInfo1.postInfo.id)
                 )
             }
         }
@@ -147,7 +147,7 @@ class CommunityFragment : Fragment() {
             if (item is CommunityUiState.CommunityNormalUiState) {
                 findNavController().navigate(
                     resId = R.id.action_community_to_post_view,
-                    args = bundleOf("item" to item.popularItem.postInfo2)
+                    args = bundleOf("post_id" to item.popularItem.postInfo2.postInfo.id)
                 )
             }
         }

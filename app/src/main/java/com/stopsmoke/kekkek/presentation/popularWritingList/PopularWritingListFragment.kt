@@ -72,10 +72,10 @@ class PopularWritingListFragment : Fragment() {
                     )
                 }
 
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_popularWritingList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }
