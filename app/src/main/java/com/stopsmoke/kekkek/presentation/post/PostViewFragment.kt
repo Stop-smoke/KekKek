@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
+import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -94,9 +95,22 @@ class PostViewFragment : Fragment() {
 
         postCommentAdapter.registerCallback(
             object : PostCommentCallback {
-                override fun deleteItem(commentId: String) {
-                    viewModel.deleteComment(commentId)
-                    postCommentAdapter.refresh()
+                override fun deleteItem(comment: Comment) {
+                    lifecycleScope.launch {
+                        when(val user = viewModel.user.first()){
+                            is User.Error -> {
+
+                            }
+                            User.Guest -> {
+
+                            }
+                            is User.Registered ->
+                                if (comment.written.uid == user.uid) {
+                                    showCommentDeleteDialog(comment.id)
+                                }
+                        }
+                    }
+
                 }
 
                 override fun navigateToUserProfile(uid: String) {
@@ -123,6 +137,22 @@ class PostViewFragment : Fragment() {
             binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
 
+    }
+
+    private fun showCommentDeleteDialog(postId : String) {
+        AlertDialog.Builder(binding.root.context)
+            .setTitle("댓글 삭제")
+            .setMessage("댓글을 삭제하시겠습니까?")
+            .setPositiveButton("예") { dialog, _ ->
+                viewModel.deleteComment(postId)
+                postCommentAdapter.refresh()
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     private fun setupPostData() = with(binding) {

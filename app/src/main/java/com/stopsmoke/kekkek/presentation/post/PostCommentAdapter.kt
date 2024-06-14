@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.post
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -30,15 +31,13 @@ class PostCommentAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-
             binding.root.setOnLongClickListener {
-
-                getItem(bindingAdapterPosition)?.id?.let { it1 -> callback?.deleteItem(it1) }
-
+                getItem(bindingAdapterPosition)?.let { it1 -> callback?.deleteItem(it1) }
                 true
             }
-
         }
+
+
 
         fun bind(comment: Comment) = with(binding) {
             tvCommentNickname.text = comment.written.name
