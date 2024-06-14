@@ -94,6 +94,9 @@ class MyFragment : Fragment() {
         clMyComplaint.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_complaint)
         }
+        clMyProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_setting_profile)
+        }
 
         viewModel.activities.collectLatestWithLifecycle(lifecycle) {
             when (it) {

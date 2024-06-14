@@ -82,7 +82,7 @@
         tools:layout="@layout/fragment_my">
         <action
             android:id="@+id/action_my_page_to_setting_profile"
-            />
+            app:destination="@id/settings_setting_profile"/>
         <action
             android:id="@+id/action_my_page_to_nav_settings"
             app:destination="@id/nav_settings" />
@@ -113,6 +113,12 @@
         <action
             android:id="@+id/action_my_page_to_my_complaint"
             app:destination="@id/my_complaint" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_setting_profile"
+        android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
+        tools:layout="@layout/fragment_settings_profile">
     </fragment>
 
     <fragment
