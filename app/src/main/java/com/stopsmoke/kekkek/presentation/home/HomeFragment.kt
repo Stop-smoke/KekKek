@@ -165,7 +165,7 @@ class HomeFragment : Fragment() {
         }
 
         if (uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_home_stop)
+            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
             viewModel.startTimer()
         } else if (!uiState.startTimerSate) {
             ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
