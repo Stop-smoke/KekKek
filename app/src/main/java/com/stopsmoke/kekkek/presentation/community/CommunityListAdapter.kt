@@ -110,7 +110,7 @@ class CommunityListAdapter :
             }
 
             binding.root.setOnClickListener {
-                callback?.navigateToPost(item)
+                callback?.navigateToPost(item.postInfo.id)
             }
         }
 

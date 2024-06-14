@@ -3,67 +3,29 @@ package com.stopsmoke.kekkek.presentation.myWritingList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.community.PostInfo
-import com.stopsmoke.kekkek.presentation.community.UserInfo
-import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyWritingLIstViewModel @Inject constructor(
     private val postRepository: PostRepository,
-    private val userRepository: UserRepository
+    userRepository: UserRepository
 ) : ViewModel() {
-    val _userState: MutableStateFlow<User> = MutableStateFlow(User.Guest)
-    val userState = _userState.asStateFlow()
 
-    val myWritingPosts = userState.flatMapLatest { userData ->
-        postRepository.getPostForWrittenUid(if (userData is User.Registered) userData.uid else "")
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        it.exception?.printStackTrace()
-                        emptyFlow()
-                    }
+    val user = userRepository.getUserData()
 
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data.map { pagingData ->
-                        pagingData.map { post ->
-                            post.toCommunityWritingListItem()
-                        }
-                    }
-                }
-            }.cachedIn(viewModelScope)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val post = user.flatMapLatest { user ->
+        postRepository.getPost(uid = (user as User.Registered).uid)
     }
-
-    fun updateUserState() = viewModelScope.launch {
-        try {
-            val userDataResultFlow = userRepository.getUserData("테스트_계정")
-            when (userDataResultFlow) {
-                is Result.Success -> {
-                    userDataResultFlow.data.collect {
-                        _userState.value = it
-                    }
-                }
-
-                else -> {}
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        .catch {
+            it.printStackTrace()
         }
-    }
+        .cachedIn(viewModelScope)
 }

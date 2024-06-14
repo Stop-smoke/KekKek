@@ -8,19 +8,16 @@ import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyWritingListBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MyWritingListFragment : Fragment() {
@@ -45,7 +42,10 @@ class MyWritingListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        initViewModel()
+
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            listAdapter.submitData(it)
+        }
     }
 
     private fun initView() = with(binding) {
@@ -53,19 +53,20 @@ class MyWritingListFragment : Fragment() {
         rvMyWritingList.adapter = listAdapter
         rvMyWritingList.layoutManager = LinearLayoutManager(requireActivity())
 
-        viewModel.updateUserState()
         initListAdapterCallback()
     }
 
     private fun initListAdapterCallback() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToUserProfile(uid: String) {
 
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                }
+
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_myWritingList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }
@@ -78,15 +79,6 @@ class MyWritingListFragment : Fragment() {
 
         ivMyPostBack.setOnClickListener {
             findNavController().popBackStack()
-        }
-    }
-
-    private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            myWritingPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { myWritingPosts ->
-                    listAdapter.submitData(myWritingPosts)
-                }
         }
     }
 

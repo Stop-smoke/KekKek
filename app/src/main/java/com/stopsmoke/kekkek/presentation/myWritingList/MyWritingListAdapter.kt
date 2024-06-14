@@ -8,31 +8,20 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
+import com.stopsmoke.kekkek.presentation.toResourceId
 
 class MyWritingListAdapter
-    : PagingDataAdapter<CommunityWritingItem, MyWritingListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
-        override fun areItemsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
+    : PagingDataAdapter<Post, MyWritingListAdapter.ViewHolder>(diffUtil) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -48,34 +37,52 @@ class MyWritingListAdapter
         private val binding: ItemCommunityPostwritingBinding,
         private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CommunityWritingItem) = with(binding) {
-            item.postInfo.let {
-                tvItemWritingTitle.text = it.title
-                tvItemWritingViewNum.text = it.view.toString()
-                tvItemWritingLikeNum.text = it.like.toString()
-                tvItemWritingCommentNum.text = it.comment.toString()
-            }
 
-            tvItemWritingPost.text = item.post
-            tvItemWritingTimeStamp.text = getRelativeTime(item.postTime)
+        fun bind(item: Post) = with(binding) {
 
-            item.userInfo.let {
-                if (item.postImage != "") {
-                    ivItemWritingPostImage.load(it.profileImage) {
-                        crossfade(true)
-//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
-//                    error(R.drawable.error) 오류시 띄우나?
-                    }
-                } else {
-                    ivItemWritingPostImage.visibility = View.GONE
-                    setMarginEnd(tvItemWritingTitle, 16)
+            tvItemWritingTitle.text = item.title
+            tvItemWritingViewNum.text = item.views.toString()
+            tvItemWritingLikeNum.text = item.likeUser.size.toString()
+            tvItemWritingCommentNum.text = item.commentUser.size.toString()
+
+            tvItemWritingPost.text = item.text
+            tvItemWritingTimeStamp.text = item.createdElapsedDateTime.toResourceId(itemView.context)
+
+            tvItemWritingName.text = item.written.name
+            tvItemWritingRank.text = "랭킹 ${item.written.ranking}위"
+
+            when (item.written.profileImage) {
+                ProfileImage.Default -> {
+                    circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
                 }
-
-                tvItemWritingName.text = it.name
-                tvItemWritingRank.text = "랭킹 ${it.rank}위"
+                is ProfileImage.Web -> {
+                    circleIvItemWritingProfile.load(item.written.profileImage.url) {
+                        crossfade(true)
+                    }
+                }
             }
 
-            tvItemWritingPostType.text = when (item.postType) {
+            binding.root.setOnClickListener {
+                callback?.navigateToPost(item.id)
+            }
+
+//            item.userInfo.let {
+//                if (item.postImage != "") {
+//                    ivItemWritingPostImage.load(it.profileImage) {
+//                        crossfade(true)
+////                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
+////                    error(R.drawable.error) 오류시 띄우나?
+//                    }
+//                } else {
+//                    ivItemWritingPostImage.visibility = View.GONE
+//                    setMarginEnd(tvItemWritingTitle, 16)
+//                }
+//
+//                tvItemWritingName.text = it.name
+//                tvItemWritingRank.text = "랭킹 ${it.rank}위"
+//            }
+
+            tvItemWritingPostType.text = when (item.categories) {
                 PostCategory.NOTICE -> "공지사항"
                 PostCategory.QUIT_SMOKING_SUPPORT -> "금연 지원 프로그램 공지"
                 PostCategory.POPULAR -> "인기글"
@@ -86,10 +93,6 @@ class MyWritingListAdapter
                 PostCategory.RESOLUTIONS -> "금연 다짐"
                 PostCategory.UNKNOWN -> ""
                 PostCategory.ALL -> ""
-            }
-
-            binding.root.setOnClickListener {
-                callback?.navigateToPost(item)
             }
         }
 
@@ -129,5 +132,23 @@ class MyWritingListAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
+    }
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<Post>() {
+            override fun areItemsTheSame(
+                oldItem: Post,
+                newItem: Post
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: Post,
+                newItem: Post
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

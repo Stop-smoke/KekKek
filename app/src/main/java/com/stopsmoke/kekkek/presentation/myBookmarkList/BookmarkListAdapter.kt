@@ -83,7 +83,7 @@ class BookmarkListAdapter
                 }
 
                 binding.root.setOnClickListener {
-                    callback?.navigateToPost(item)
+//                    callback?.navigateToPost(item.id)
                 }
             }
         }
