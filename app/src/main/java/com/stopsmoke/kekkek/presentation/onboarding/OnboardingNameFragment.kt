@@ -52,7 +52,7 @@ class OnboardingNameFragment : Fragment() {
         initDuplicateInspection()
     }
 
-    private fun initDuplicateInspection() = with(binding) {
+    private fun initDuplicateInspection() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.nameDuplicationInspectionResult.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { duplicateInspectionResult ->
@@ -60,6 +60,7 @@ class OnboardingNameFragment : Fragment() {
                         binding.tvOnboardingWarning.visibility = View.VISIBLE
                         binding.tvOnboardingWarning.text = "이미 존재하는 이름이에요!"
                     } else if (duplicateInspectionResult == true) {
+                        viewModel.updateUserName(binding.etOnboardingName.text.toString())
                         findNavController().navigate(R.id.action_onboarding_name_to_onboarding_perday)
                         viewModel.setNameDuplicationInspectionResult(null)
                     } else if (duplicateInspectionResult == null) {
@@ -68,8 +69,7 @@ class OnboardingNameFragment : Fragment() {
                 }
         }
 
-
-        btnOnboardingNext.setOnClickListener {
+        binding.btnOnboardingNext.setOnClickListener {
             viewModel.nameDuplicateInspection(binding.etOnboardingName.text.toString())
         }
     }

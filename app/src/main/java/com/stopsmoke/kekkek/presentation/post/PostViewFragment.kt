@@ -26,6 +26,7 @@ import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -87,8 +88,21 @@ class PostViewFragment : Fragment() {
 
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
             with(binding) {
-                tvPostHeartNum.text = it?.likeUser?.size.toString()
-                tvPostViewNum.text = it?.views.toString()
+                tvPostHeartNum.text = it.firstOrNull()?.likeUser?.size.toString()
+                tvPostViewNum.text = it.firstOrNull()?.views.toString()
+
+                it.firstOrNull()?.likeUser?.let { likeUser ->
+                    viewModel.user.collectLatest { user ->
+                        when (user) {
+                            is User.Registered -> {
+                                if(user.uid in likeUser) ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+                                else ivPostHeart.setImageResource(R.drawable.ic_heart)
+                            }
+
+                            else -> {}
+                        }
+                    }
+                }
             }
         }
 
@@ -113,7 +127,8 @@ class PostViewFragment : Fragment() {
         }
 
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            val user = viewModel.user.firstOrNull() as? User.Registered ?: return@collectLatestWithLifecycle
+            val user = viewModel.user.firstOrNull() as? User.Registered
+                ?: return@collectLatestWithLifecycle
 
             if (it?.bookmarkUser?.contains(user.uid) == true) {
                 binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
@@ -123,6 +138,28 @@ class PostViewFragment : Fragment() {
             binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
 
+    }
+
+    private fun setupView() = with(binding) {
+        MobileAds.initialize(requireContext())
+        val adRequest = AdRequest.Builder().build()
+        adviewPost.loadAd(adRequest)
+        post?.let {
+            it.userInfo.profileImage.let { imgUrl ->
+                if (imgUrl.isNullOrBlank()) ivPostPoster.setImageResource(R.drawable.ic_user_profile_test)
+                else ivPostPoster.load(imgUrl)
+            }
+            tvPostPosterNickname.text = it.userInfo.name
+            tvPostPosterRanking.text = "랭킹 ${it.userInfo.rank}위"
+            tvPostHour.text = getRelativeTime(it.postTime)
+            tvPostTitle.text = it.postInfo.title
+            tvPostDescription.text = it.post
+            tvPostHeartNum.text = it.postInfo.like.toString()
+            tvPostCommentNum.text = it.postInfo.comment.toString()
+            tvPostViewNum.text = it.postInfo.view.toString()
+//            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+//            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+        }
     }
 
     private fun setupPostData() = with(binding) {
@@ -169,12 +206,13 @@ class PostViewFragment : Fragment() {
 
     private fun showBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
-        val bottomsheetDialogBinding = FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
+        val bottomsheetDialogBinding =
+            FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         // 일단
-        lifecycleScope.launch {
-            when(val user = viewModel.user.first()){
+         viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+            when(user){
                 is User.Error -> {
 
                 }

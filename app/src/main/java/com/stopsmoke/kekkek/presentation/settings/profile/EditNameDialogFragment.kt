@@ -98,6 +98,7 @@ class EditNameDialogFragment : DialogFragment() {
     override fun onDestroy() {
         _binding = null
         job?.cancel()
+        job=null
         super.onDestroy()
     }
 }

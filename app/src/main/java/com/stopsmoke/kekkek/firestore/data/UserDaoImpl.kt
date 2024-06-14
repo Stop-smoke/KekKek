@@ -39,10 +39,14 @@ internal class UserDaoImpl @Inject constructor(
     }
 
     override suspend fun setUser(userEntity: UserEntity) {
-        firestore.collection(COLLECTION).document(userEntity.uid!!)
-            .set(userEntity)
-            .addOnFailureListener { throw it }
-            .await()
+        try {
+            firestore.collection(COLLECTION).document(userEntity.uid!!)
+                .set(userEntity)
+                .addOnFailureListener { throw it }
+                .await()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
     override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
