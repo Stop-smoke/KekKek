@@ -31,6 +31,7 @@ import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getParcelableAndroidVersionSupport
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 
 
@@ -93,6 +94,19 @@ class PostViewFragment : Fragment() {
             with(binding) {
                 tvPostHeartNum.text = it.firstOrNull()?.likeUser?.size.toString()
                 tvPostViewNum.text = it.firstOrNull()?.views.toString()
+
+                it.firstOrNull()?.likeUser?.let { likeUser ->
+                    viewModel.user.collectLatest { user ->
+                        when (user) {
+                            is User.Registered -> {
+                                if(user.uid in likeUser) ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+                                else ivPostHeart.setImageResource(R.drawable.ic_heart)
+                            }
+
+                            else -> {}
+                        }
+                    }
+                }
             }
         }
 
@@ -117,7 +131,8 @@ class PostViewFragment : Fragment() {
         }
 
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            val user = viewModel.user.firstOrNull() as? User.Registered ?: return@collectLatestWithLifecycle
+            val user = viewModel.user.firstOrNull() as? User.Registered
+                ?: return@collectLatestWithLifecycle
 
             if (it.firstOrNull()?.bookmarkUser?.contains(user.uid) == true) {
                 binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
@@ -134,8 +149,8 @@ class PostViewFragment : Fragment() {
         val adRequest = AdRequest.Builder().build()
         adviewPost.loadAd(adRequest)
         post?.let {
-            it.userInfo.profileImage.let {imgUrl ->
-                if(imgUrl.isNullOrBlank()) ivPostPoster.setImageResource(R.drawable.ic_user_profile_test)
+            it.userInfo.profileImage.let { imgUrl ->
+                if (imgUrl.isNullOrBlank()) ivPostPoster.setImageResource(R.drawable.ic_user_profile_test)
                 else ivPostPoster.load(imgUrl)
             }
             tvPostPosterNickname.text = it.userInfo.name
@@ -195,24 +210,25 @@ class PostViewFragment : Fragment() {
 
     private fun showBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
-        val bottomsheetDialogBinding = FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
+        val bottomsheetDialogBinding =
+            FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         // 일단
         viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
-            when(user){
+            when (user) {
                 is User.Error -> TODO()
                 User.Guest -> TODO()
                 is User.Registered ->
-                if (post?.userInfo?.uid == user.uid) {
-                    bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
-                    bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-                        showDeleteConfirmationDialog()
-                        bottomSheetDialog.dismiss()
+                    if (post?.userInfo?.uid == user.uid) {
+                        bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
+                        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+                            showDeleteConfirmationDialog()
+                            bottomSheetDialog.dismiss()
+                        }
+                    } else {
+                        bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
                     }
-                } else {
-                    bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
-                }
             }
         }
 
@@ -248,7 +264,8 @@ class PostViewFragment : Fragment() {
                 dialog.dismiss()
             }
             .create()
-            .show()    }
+            .show()
+    }
 
     override fun onResume() {
         super.onResume()
