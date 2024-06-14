@@ -6,36 +6,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import java.util.Calendar
-import java.util.Date
-import java.util.concurrent.TimeUnit
 
-class BookmarkListAdapter
-    : PagingDataAdapter<CommunityWritingItem, BookmarkListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
-        override fun areItemsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
+class BookmarkListAdapter : PagingDataAdapter<CommunityWritingItem, BookmarkListAdapter.ViewHolder>(diffUtil) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -46,7 +26,6 @@ class BookmarkListAdapter
     fun unregisterCallbackListener() {
         callback = null
     }
-
 
     class ViewHolder(
         private val binding: ItemCommunityPostwritingBinding,
@@ -74,7 +53,18 @@ class BookmarkListAdapter
                     ivItemWritingPostImage.visibility = View.GONE
                     setMarginEnd(tvItemWritingTitle, 16)
                 }
-
+                tvItemWritingPostType.text =  when (item.postType) {
+                    PostCategory.NOTICE -> "공지사항"
+                    PostCategory.QUIT_SMOKING_SUPPORT -> "금연 지원 프로그램 공지"
+                    PostCategory.POPULAR -> "인기글"
+                    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
+                    PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
+                    PostCategory.GENERAL_DISCUSSION -> "자유게시판"
+                    PostCategory.FAILURE_STORIES -> "금연 실패 후기"
+                    PostCategory.RESOLUTIONS -> "금연 다짐"
+                    PostCategory.UNKNOWN -> ""
+                    PostCategory.ALL -> ""
+                }
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
 
@@ -83,7 +73,7 @@ class BookmarkListAdapter
                 }
 
                 binding.root.setOnClickListener {
-                    callback?.navigateToPost(item)
+                    callback?.navigateToPost(item.postInfo.id)
                 }
             }
         }
@@ -111,7 +101,7 @@ class BookmarkListAdapter
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): BookmarkListAdapter.ViewHolder {
         return ViewHolder(
             ItemCommunityPostwritingBinding.inflate(
@@ -124,5 +114,24 @@ class BookmarkListAdapter
 
     override fun onBindViewHolder(holder: BookmarkListAdapter.ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
+    }
+
+    companion object {
+        private val diffUtil = object : DiffUtil.ItemCallback<CommunityWritingItem>() {
+            override fun areItemsTheSame(
+                oldItem: CommunityWritingItem,
+                newItem: CommunityWritingItem
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: CommunityWritingItem,
+                newItem: CommunityWritingItem
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
+
     }
 }

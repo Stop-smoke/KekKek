@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.domain.repository
 
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.Activities
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import kotlinx.coroutines.flow.Flow
@@ -69,4 +70,5 @@ interface UserRepository {
 
     suspend fun nameDuplicateInspection(name: String): Boolean
 
+    fun getActivities(): Flow<Activities>
 }

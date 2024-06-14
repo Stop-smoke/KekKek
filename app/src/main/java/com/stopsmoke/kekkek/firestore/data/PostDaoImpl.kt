@@ -10,7 +10,6 @@ import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
@@ -23,10 +22,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import java.lang.NullPointerException
 import java.util.Calendar
 import javax.inject.Inject
-import kotlin.math.floor
 
 internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -408,6 +405,24 @@ internal class PostDaoImpl @Inject constructor(
             return Result.Success(Unit)
         }
         return Result.Error(task.exception)
+    }
+
+    override fun getBookmarkItems(uid: String): Flow<PagingData<PostEntity>> {
+        val query = firestore.collection(COLLECTION)
+            .whereArrayContains("bookmark_user", uid)
+            .limit(30)
+
+        return Pager(
+            config = PagingConfig(PAGE_LIMIT)
+        ) {
+            FireStorePagingSource(
+                query = query,
+                limit = PAGE_LIMIT.toLong(),
+                clazz = PostEntity::class.java
+            )
+
+        }
+            .flow
     }
 
     companion object {

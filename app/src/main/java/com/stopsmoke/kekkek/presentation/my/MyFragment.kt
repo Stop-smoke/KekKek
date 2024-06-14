@@ -7,20 +7,19 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -39,7 +38,7 @@ class MyFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentMyBinding.inflate(inflater, container, false)
         return binding.root
@@ -51,7 +50,6 @@ class MyFragment : Fragment() {
 
         initListener()
         initViewModel()
-        initView()
 
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
@@ -69,11 +67,6 @@ class MyFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    private fun initView() = with(binding) {
-
-
     }
 
     private fun initListener() = with(binding) {
@@ -101,83 +94,59 @@ class MyFragment : Fragment() {
         clMyComplaint.setOnClickListener {
             findNavController().navigate(R.id.action_my_page_to_my_complaint)
         }
-    }
-
-    private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { state ->
-                    onBind(state)
-                }
+        clMyProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_setting_profile)
         }
 
-
-//        when (userData) {
-//            is Result.Error -> {
-//
-//            }
-//
-//            is Result.Loading -> {
-//
-//            }
-//
-//            is Result.Success -> {
-//                viewLifecycleOwner.lifecycleScope.launch {
-//                    userData.data.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-//                        .collectLatest { user ->
-//                            viewModel.updateUserData(user)
-//                        }
-//                }
-//            }
-//        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            userData.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { user ->
-                    if(user is User.Registered) {
-                        viewModel.updateUserData(user)
-                    }
+        viewModel.activities.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is Result.Success -> {
+                    binding.tvMyWritingNum.text = it.data.postCount.toString()
+                    binding.tvMyCommentNum.text = it.data.commentCount.toString()
+                    binding.tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
                 }
-        }
 
-    }
-
-
-    private fun onBind(myUiState: MyUiState) = with(binding) {
-        when (myUiState.myLoginUiState) {
-            is MyLoginStatusState.NeedLoginUiState -> { // 로그인 필요
-                with(binding) {
-                    tvMyName.text = "로그인이 필요합니다."
-
-                    tvMyWritingNum.text = "?"
-                    tvMyCommentNum.text = "?"
-                    tvMyBookmarkNum.text = "?"
-                }
-            }
-
-            is MyLoginStatusState.LoggedUiState.MyIdLoggedUiState -> { //로그인 성공
-                val myItem: MyItem = myUiState.myLoginUiState.myItem
-
-                with(binding) {
-                    ivMyProfile.load(myItem.profileImg) {
-                        crossfade(true)
-//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
-//                    error(R.drawable.error) 오류시 띄우나?
-                    }
-                    tvMyName.text = myItem.name
-                    tvMyRank.text = "랭킹 ${myItem.rank}위"
-
-                    myItem.myWriting.let {
-                        tvMyWritingNum.text = it.writing.toString()
-                        tvMyCommentNum.text = it.comment.toString()
-                        tvMyBookmarkNum.text = it.bookmark.toString()
-                    }
-
-                    tvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                else -> {
+                    binding.tvMyWritingNum.text = "?"
+                    binding.tvMyCommentNum.text = "?"
+                    binding.tvMyBookmarkNum.text = "?"
                 }
             }
         }
     }
 
+    private fun initViewModel() {
+        viewModel.userData.collectLatestWithLifecycle(lifecycle) { user ->
+            when (user) {
+                is User.Error -> {
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                }
+
+                is User.Guest -> {
+                    binding.tvMyName.text = "로그인이 필요합니다."
+                }
+
+                is User.Registered -> {
+
+                    binding.tvMyName.text = user.name
+                    binding.tvMyRank.text = "랭킹 ${user.ranking}위"
+
+                    when (user.profileImage) {
+                        is ProfileImage.Default -> {
+                            binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
+                        }
+
+                        is ProfileImage.Web -> {
+                            binding.ivMyProfile.load((user.profileImage as ProfileImage.Web).url) {
+                                crossfade(true)
+                            }
+                        }
+                    }
+//                    binding.itvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                }
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_my_toolbar, menu)
@@ -191,14 +160,5 @@ class MyFragment : Fragment() {
             R.id.toolbar_my_setting -> {}
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            MyFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
     }
 }

@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.datastore.PreferencesDataSource
+import com.stopsmoke.kekkek.domain.model.Activities
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
@@ -180,6 +181,17 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun nameDuplicateInspection(name: String): Boolean {
         return userDao.nameDuplicateInspection(name)
+    }
+
+    override fun getActivities(): Flow<Activities> {
+        return userDao.getActivities((user.value as User.Registered).uid)
+            .map {
+                Activities(
+                    it.postCount,
+                    it.commentCount,
+                    it.bookmarkCount
+                )
+            }
     }
 
 }

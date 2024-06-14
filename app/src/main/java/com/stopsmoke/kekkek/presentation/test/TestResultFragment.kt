@@ -44,7 +44,7 @@ class TestResultFragment : Fragment() {
                     tvTestResultType.text = viewModel.results[0][0].toString()
                     tvTestResultDescription.text = viewModel.results[0][1].toString()
                     ivTestResultIcon.setImageResource(viewModel.results[0][2] as Int)
-                    viewModel.updateCigaretteAddictionTestResult("담배 비중독 상태🙂")
+                    viewModel.updateCigaretteAddictionTestResult("담배 양호 상태🙂")
                 }
 
                 in 14..19 -> {

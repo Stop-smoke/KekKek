@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingPerpackBinding
+import com.stopsmoke.kekkek.invisible
 
 
 class OnboardingPerpackFragment : Fragment() {
@@ -26,6 +27,12 @@ class OnboardingPerpackFragment : Fragment() {
         _binding = FragmentOnboardingPerpackBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
