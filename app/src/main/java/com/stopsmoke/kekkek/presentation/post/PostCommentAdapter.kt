@@ -5,8 +5,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class PostCommentAdapter :
@@ -26,21 +29,32 @@ class PostCommentAdapter :
     inner class PostCommentViewHolder(val binding: ItemCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            init {
+        init {
 
-                binding.root.setOnLongClickListener {
+            binding.root.setOnLongClickListener {
 
-                    getItem(bindingAdapterPosition)?.id?.let { it1 -> callback?.deleteItem(it1) }
+                getItem(bindingAdapterPosition)?.id?.let { it1 -> callback?.deleteItem(it1) }
 
-                    true
-                }
-
+                true
             }
+
+        }
 
         fun bind(comment: Comment) = with(binding) {
             tvCommentNickname.text = comment.written.name
             tvCommentDescription.text = comment.text
             tvCommentHour.text = comment.elapsedCreatedDateTime.toResourceId(itemView.context)
+
+            comment.written.profileImage.let { profileImage ->
+                when (profileImage) {
+                    is ProfileImage.Web -> ivCommentProfile.load(profileImage.url)
+                    is ProfileImage.Default -> ivCommentProfile.setImageResource(R.drawable.ic_user_profile_test)
+                }
+            }
+
+            ivCommentProfile.setOnClickListener {
+                callback?.navigateToUserProfile(comment.written.uid)
+            }
         }
     }
 

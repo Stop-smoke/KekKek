@@ -102,6 +102,13 @@ class PostViewFragment : Fragment() {
                     viewModel.deleteComment(commentId)
                     postCommentAdapter.refresh()
                 }
+
+                override fun navigateToUserProfile(uid: String) {
+                    findNavController().navigate(
+                        resId = R.id.action_post_view_to_user_profile,
+                        args = bundleOf("uid" to uid)
+                    )
+                }
             }
         )
 
