@@ -88,10 +88,10 @@ class PostViewFragment : Fragment() {
 
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
             with(binding) {
-                tvPostHeartNum.text = it.firstOrNull()?.likeUser?.size.toString()
-                tvPostViewNum.text = it.firstOrNull()?.views.toString()
+                tvPostHeartNum.text = it?.likeUser?.size.toString()
+                tvPostViewNum.text = it?.views.toString()
 
-                it.firstOrNull()?.likeUser?.let { likeUser ->
+                it?.likeUser?.let { likeUser ->
                     viewModel.user.collectLatest { user ->
                         when (user) {
                             is User.Registered -> {
@@ -138,28 +138,6 @@ class PostViewFragment : Fragment() {
             binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
 
-    }
-
-    private fun setupView() = with(binding) {
-        MobileAds.initialize(requireContext())
-        val adRequest = AdRequest.Builder().build()
-        adviewPost.loadAd(adRequest)
-        post?.let {
-            it.userInfo.profileImage.let { imgUrl ->
-                if (imgUrl.isNullOrBlank()) ivPostPoster.setImageResource(R.drawable.ic_user_profile_test)
-                else ivPostPoster.load(imgUrl)
-            }
-            tvPostPosterNickname.text = it.userInfo.name
-            tvPostPosterRanking.text = "랭킹 ${it.userInfo.rank}위"
-            tvPostHour.text = getRelativeTime(it.postTime)
-            tvPostTitle.text = it.postInfo.title
-            tvPostDescription.text = it.post
-            tvPostHeartNum.text = it.postInfo.like.toString()
-            tvPostCommentNum.text = it.postInfo.comment.toString()
-            tvPostViewNum.text = it.postInfo.view.toString()
-//            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-//            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-        }
     }
 
     private fun setupPostData() = with(binding) {
