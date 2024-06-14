@@ -47,11 +47,6 @@ class BookmarkFragment : Fragment() {
         BookmarkListAdapter()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        postViewModel.updateMyBookmark()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -86,10 +81,10 @@ class BookmarkFragment : Fragment() {
                     )
                 }
 
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_myBookmarkList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("item" to postId)
                     )
                 }
             }
@@ -99,23 +94,23 @@ class BookmarkFragment : Fragment() {
 
 
     private fun initObserveLiveData() {
-        postViewModel.bookmarkPosts.observe(viewLifecycleOwner) { bookmarkList ->
-            lifecycleScope.launch {
-                val user = userRepository.getUserData().first()
-                when (user) {
-                    is User.Error -> {} // 에러 핸들링
-                    User.Guest -> { } // 에러 핸들링
-                    is User.Registered -> {
-                        val db = FirebaseFirestore.getInstance()
-                        for (i in bookmarkList.indices) {
-                            db.collection("user")
-                                .document(user.uid)
-                                .update("post_bookmark", bookmarkList[i].postInfo.id)
-                        }
-                    }
-                }
-            }
-        }
+//        postViewModel.bookmarkPosts.observe(viewLifecycleOwner) { bookmarkList ->
+//            lifecycleScope.launch {
+//                val user = userRepository.getUserData().first()
+//                when (user) {
+//                    is User.Error -> {} // 에러 핸들링
+//                    User.Guest -> { } // 에러 핸들링
+//                    is User.Registered -> {
+//                        val db = FirebaseFirestore.getInstance()
+//                        for (i in bookmarkList.indices) {
+//                            db.collection("user")
+//                                .document(user.uid)
+//                                .update("post_bookmark", bookmarkList[i].postInfo.id)
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun initAppBar() = with(binding) {

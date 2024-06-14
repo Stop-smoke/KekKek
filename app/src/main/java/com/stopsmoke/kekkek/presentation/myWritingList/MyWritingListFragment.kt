@@ -59,12 +59,14 @@ class MyWritingListFragment : Fragment() {
     private fun initListAdapterCallback() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToUserProfile(uid: String) {
 
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                }
+
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_myWritingList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }

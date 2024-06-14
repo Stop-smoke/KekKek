@@ -63,7 +63,7 @@ class MyWritingListAdapter
             }
 
             binding.root.setOnClickListener {
-                callback?.navigateToPost(item.toCommunityWritingListItem())
+                callback?.navigateToPost(item.id)
             }
 
 //            item.userInfo.let {

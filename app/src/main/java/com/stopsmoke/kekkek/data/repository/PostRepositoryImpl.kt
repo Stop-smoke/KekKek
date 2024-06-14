@@ -87,18 +87,11 @@ internal class PostRepositoryImpl @Inject constructor(
         Result.Error(e)
     }
 
-    override fun getPostItem(postId: String): Result<Flow<List<Post>>> {
-        return try {
-            postDao.getPostItem(postId)
-                .map {
-                    it.map { it.asExternalModel() }
-                }
-                .let {
-                    Result.Success(it)
-                }
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override fun getPostItem(postId: String): Flow<List<Post>> {
+        return postDao.getPostItem(postId)
+            .map {
+                it.map { it.asExternalModel() }
+            }
     }
 
     override suspend fun addPost(post: PostWrite): Result<Unit> =

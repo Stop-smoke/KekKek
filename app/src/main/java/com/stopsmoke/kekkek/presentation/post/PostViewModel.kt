@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.presentation.post
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -11,23 +9,23 @@ import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -42,23 +40,6 @@ class PostViewModel @Inject constructor(
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
-
-    private val _bookmarkPosts = MutableLiveData<List<CommunityWritingItem>>()
-    val bookmarkPosts : LiveData<List<CommunityWritingItem>> get() = _bookmarkPosts
-
-    private val currentBookmarkPost = arrayListOf<CommunityWritingItem>()
-
-    fun addBookmarkPost(post: CommunityWritingItem) {
-        currentBookmarkPost.add(post)
-    }
-
-    fun deleteBookmarkPost(post: CommunityWritingItem) {
-        currentBookmarkPost.remove(post)
-    }
-
-    fun updateMyBookmark() {
-        _bookmarkPosts.postValue(currentBookmarkPost)
-    }
 
     fun updatePostId(id: String) {
         viewModelScope.launch {
@@ -75,25 +56,25 @@ class PostViewModel @Inject constructor(
     val user = userRepository.getUserData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val post: StateFlow<List<Post>> = postId.flatMapLatest {
+    val post: StateFlow<Post?> = postId.flatMapLatest {
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
 
         postRepository.addViews(it)
         postRepository.getPostItem(it)
-            .let { result ->
-                when (result) {
-                    is Result.Error -> emptyFlow()
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> result.data
-                }
-            }
+
     }
+        .flatMapLatest {
+            flowOf(it.first())
+        }
+        .catch {
+            it.printStackTrace()
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
+            initialValue = null
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -103,22 +84,15 @@ class PostViewModel @Inject constructor(
         }
 
         commentRepository.getCommentItems(CommentFilter.Post(it))
-            .let { result ->
-                when (result) {
-                    is Result.Error -> {
-                        result.exception?.printStackTrace()
-                        emptyFlow()
-                    }
-
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> result.data
-                }
-            }
-            .cachedIn(viewModelScope)
     }
+        .catch {
+            it.printStackTrace()
+        }
+        .cachedIn(viewModelScope)
 
-    fun addComment(commentPostData: CommentPostData, text: String) {
+    fun addComment(text: String) {
         viewModelScope.launch {
+            if (post.value == null) return@launch
             val user = user.firstOrNull() as? User.Registered ?: return@launch
 
             val comment = Comment(
@@ -134,7 +108,11 @@ class PostViewModel @Inject constructor(
                     profileImage = user.profileImage,
                     ranking = user.ranking
                 ),
-                postData = commentPostData
+                postData = CommentPostData(
+                    postType = post.value!!.categories,
+                    postId = post.value!!.id,
+                    postTitle = post.value!!.title
+                )
             )
             commentRepository.addCommentItem(comment)
         }
@@ -166,7 +144,7 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch {
             val user = user.first() as? User.Registered ?: return@launch
             val postId = postId.value ?: return@launch
-            val currentPost = post.value.firstOrNull() ?: return@launch
+            val currentPost = post.value ?: return@launch
 
             if (!currentPost.likeUser.contains(user.uid)) {
                 postRepository.addLikeToPost(postId)
@@ -182,7 +160,7 @@ class PostViewModel @Inject constructor(
             val user = user.first() as? User.Registered ?: return@launch
             val postId = postId.value ?: return@launch
 
-            if (post.value.first().bookmarkUser.contains(user.uid)) {
+            if (post.value?.bookmarkUser?.contains(user.uid) == true) {
                 postRepository.deleteBookmark(postId)
                 return@launch
             }

@@ -16,7 +16,7 @@ interface PostRepository {
 
     fun getPost(uid: String): Flow<PagingData<Post>>
 
-    fun getPostItem(postId: String): Result<Flow<List<Post>>>
+    fun getPostItem(postId: String): Flow<List<Post>>
 
     suspend fun addPost(post: PostWrite): Result<Unit>
 

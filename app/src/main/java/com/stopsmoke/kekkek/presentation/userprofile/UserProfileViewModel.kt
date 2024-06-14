@@ -83,22 +83,11 @@ class UserProfileViewModel @Inject constructor(
         if (uid == null) {
             return@flatMapLatest emptyFlow()
         }
-
         commentRepository.getCommentItems(CommentFilter.User(uid))
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        viewModelScope.launch {
-                            _errorHandler.emit(Unit)
-                        }
-                        emptyFlow()
-                    }
-
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data
-                }
-            }
-            .cachedIn(viewModelScope)
     }
+        .catch {
+            it.printStackTrace()
+        }
+        .cachedIn(viewModelScope)
 
 }
