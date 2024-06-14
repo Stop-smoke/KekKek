@@ -94,7 +94,7 @@ class PopularWritingListAdapter
             }
 
             binding.root.setOnClickListener {
-                callback?.navigateToPost(item)
+//                callback?.navigateToPost(item)
             }
         }
 

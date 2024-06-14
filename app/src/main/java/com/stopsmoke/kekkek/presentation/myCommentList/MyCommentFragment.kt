@@ -8,18 +8,15 @@ import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MyCommentFragment : Fragment() {
@@ -30,9 +27,8 @@ class MyCommentFragment : Fragment() {
     private val viewModel: MyCommentViewModel by viewModels()
 
     private val listAdapter: MyCommentListAdapter by lazy {
-        MyCommentListAdapter(viewModel)
+        MyCommentListAdapter()
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,20 +50,19 @@ class MyCommentFragment : Fragment() {
 
         rvMyComment.adapter = listAdapter
         rvMyComment.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.updateUserState()
         initListAdapterCallback()
     }
 
     private fun initListAdapterCallback() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToUserProfile(uid: String) {
 
-                override fun navigateToPost(communityWritingItem: CommunityWritingItem) {
+                }
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_myCommentList_to_postView,
-                        args = bundleOf("item" to communityWritingItem)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }
@@ -83,13 +78,12 @@ class MyCommentFragment : Fragment() {
         }
     }
 
-    private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            myCommentPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { myComments ->
-                    listAdapter.submitData(myComments)
-                }
+    private fun initViewModel() {
+
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            listAdapter.submitData(it)
         }
+
     }
 
     override fun onResume() {

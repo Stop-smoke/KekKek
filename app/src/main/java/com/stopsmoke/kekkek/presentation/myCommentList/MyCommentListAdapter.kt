@@ -6,27 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
+import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 
-class MyCommentListAdapter(
-    private val viewModel: MyCommentViewModel
-) : PagingDataAdapter<MyCommentItem, MyCommentListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<MyCommentItem>() {
-        override fun areItemsTheSame(
-            oldItem: MyCommentItem,
-            newItem: MyCommentItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: MyCommentItem,
-            newItem: MyCommentItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
+class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.ViewHolder>(diffUtil) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -38,43 +22,60 @@ class MyCommentListAdapter(
         callback = null
     }
 
-
     class ViewHolder(
         private val binding: RecyclerviewMyCommentItemBinding,
         private val callback: CommunityCallbackListener?,
-        private val viewModel: MyCommentViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MyCommentItem) = with(binding) {
-            tvMyCommentContent.text = item.content
-            tvMyCommentDatetime.text = ""
-            tvMyCommentState.text = getCommentStateString(item)
+        fun bind(item: Comment) = with(binding) {
+            tvMyCommentContent.text = item.postData.postTitle
+            tvMyCommentDatetime.text = item.dateTime.created.run {
+                "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
+            }
+            tvMyCommentState.text = getCommentStateString(item.postData)
 
             binding.root.setOnClickListener {
-                viewModel.setCommunityWritingItem(item.postData.postId)
-                viewModel.getCommunityWritingItem()?.let {
-                    callback?.navigateToPost(it)
-                }
+                callback?.navigateToPost(item.postData.postId)
             }
         }
 
-        private fun getCommentStateString(item: MyCommentItem): String =
-            item.postData.let { "${it.postType}에 등록한 ${it.postTitle} 게시글에 댓글을 남겼습니다." }
+        private fun getCommentStateString(item: CommentPostData): String =
+            item.let { "${it.postType}에 등록한 ${it.postTitle} 게시글에 댓글을 남겼습니다." }
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): ViewHolder {
         return ViewHolder(
             RecyclerviewMyCommentItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ), callback, viewModel
+            ), callback
         )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
+    }
+
+    companion object {
+
+        val diffUtil = object : DiffUtil.ItemCallback<Comment>() {
+            override fun areItemsTheSame(
+                oldItem: Comment,
+                newItem: Comment,
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: Comment,
+                newItem: Comment,
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
+
     }
 }

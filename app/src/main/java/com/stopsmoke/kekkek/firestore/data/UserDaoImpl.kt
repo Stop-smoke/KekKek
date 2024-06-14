@@ -1,14 +1,18 @@
 package com.stopsmoke.kekkek.firestore.data
 
 import android.util.Log
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.dao.UserDao
+import com.stopsmoke.kekkek.firestore.model.ActivitiesEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -142,6 +146,35 @@ internal class UserDaoImpl @Inject constructor(
             e.printStackTrace()
             false
         }
+    }
+
+    override fun getActivities(uid: String): Flow<ActivitiesEntity> = callbackFlow {
+        val postQuery = firestore.collection("post")
+            .whereEqualTo("written.uid", uid)
+            .count()
+            .get(AggregateSource.SERVER)
+            .await()
+
+        val commentQuery = firestore.collection("comment")
+            .whereEqualTo("written.uid", uid)
+            .count()
+            .get(AggregateSource.SERVER)
+            .await()
+
+        val bookmarkQuery = firestore.collection("post")
+            .whereArrayContains("bookmark_user", uid)
+            .count()
+            .get(AggregateSource.SERVER)
+            .await()
+
+        send(
+            ActivitiesEntity(
+                postQuery.count,
+                commentQuery.count,
+                bookmarkQuery.count
+            )
+        )
+        awaitClose()
     }
 
 
