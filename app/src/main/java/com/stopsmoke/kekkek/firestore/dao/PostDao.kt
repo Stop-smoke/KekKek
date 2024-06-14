@@ -57,4 +57,6 @@ interface PostDao {
     suspend fun addBookmark(postId: String, uid: String): Result<Unit>
 
     suspend fun deleteBookmark(postId: String, uid: String): Result<Unit>
+
+    fun getBookmarkItems(uid: String): Flow<PagingData<PostEntity>>
 }

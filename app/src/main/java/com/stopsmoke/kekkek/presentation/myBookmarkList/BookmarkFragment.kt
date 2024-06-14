@@ -7,27 +7,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.FirebaseFirestore
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import com.stopsmoke.kekkek.presentation.post.PostViewModel
+import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,8 +32,6 @@ class BookmarkFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: BookmarkViewModel by viewModels()
-
-    private val postViewModel by activityViewModels<PostViewModel>()
 
     private val listAdapter: BookmarkListAdapter by lazy {
         BookmarkListAdapter()
@@ -58,17 +48,15 @@ class BookmarkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initViewModel()
-        initObserveLiveData()
+        initRecyclerView()
+        updateRecyclerViewItem()
     }
 
-    private fun initView() = with(binding) {
+    private fun initRecyclerView() = with(binding) {
         initAppBar()
         initListAdapterCallback()
         rvBookmark.layoutManager = LinearLayoutManager(requireContext())
         rvBookmark.adapter = listAdapter
-        viewModel.updateUserState()
     }
 
     private fun initListAdapterCallback() {
@@ -84,33 +72,11 @@ class BookmarkFragment : Fragment() {
                 override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_myBookmarkList_to_postView,
-                        args = bundleOf("item" to postId)
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }
         )
-    }
-
-
-
-    private fun initObserveLiveData() {
-//        postViewModel.bookmarkPosts.observe(viewLifecycleOwner) { bookmarkList ->
-//            lifecycleScope.launch {
-//                val user = userRepository.getUserData().first()
-//                when (user) {
-//                    is User.Error -> {} // 에러 핸들링
-//                    User.Guest -> { } // 에러 핸들링
-//                    is User.Registered -> {
-//                        val db = FirebaseFirestore.getInstance()
-//                        for (i in bookmarkList.indices) {
-//                            db.collection("user")
-//                                .document(user.uid)
-//                                .update("post_bookmark", bookmarkList[i].postInfo.id)
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     private fun initAppBar() = with(binding) {
@@ -120,12 +86,9 @@ class BookmarkFragment : Fragment() {
         }
     }
 
-    private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            myBookmarkPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { myBookmarkPosts ->
-                    listAdapter.submitData(myBookmarkPosts)
-                }
+    private fun updateRecyclerViewItem() {
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            listAdapter.submitData(it.map { pagingData -> pagingData.toCommunityWritingListItem() })
         }
     }
 
@@ -140,10 +103,5 @@ class BookmarkFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.invisible()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = BookmarkFragment()
     }
 }

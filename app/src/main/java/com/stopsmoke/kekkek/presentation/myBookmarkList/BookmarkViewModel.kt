@@ -2,84 +2,28 @@ package com.stopsmoke.kekkek.presentation.myBookmarkList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
+import com.stopsmoke.kekkek.firestore.dao.BookmarkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val postRepository: PostRepository,
+    userRepository: UserRepository,
+    bookmarkRepository: BookmarkRepository,
 ) : ViewModel() {
-    val _userState: MutableStateFlow<User> = MutableStateFlow(User.Guest)
-    val userState = _userState.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val myBookmarkPosts = userState.flatMapLatest { userData ->
-        postRepository.getBookmark(if (userData is User.Registered) userData.postBookmark else emptyList())
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        it.exception?.printStackTrace()
-                        emptyFlow()
-                    }
+    val user = userRepository.getUserData()
 
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data.map { pagingData ->
-                        pagingData.map { post ->
-                            post.toCommunityWritingListItem()
-                        }
-                    }
-                }
-            }.cachedIn(viewModelScope)
-    }
-
-    fun updateUserState() = viewModelScope.launch {
-
-        val userData = userRepository.getUserData()
-        userData.collect { user ->
-            try {
-                when (user) {
-                    is User.Registered -> {
-                        _userState.value = user
-                    }
-
-                    else -> {}
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+    val post: Flow<PagingData<Post>> = bookmarkRepository.getBookmarkItems()
+        .catch {
+            it.printStackTrace()
         }
-    }
+        .cachedIn(viewModelScope)
 
-
-    fun updatdeTestUserState() = viewModelScope.launch {
-        try {
-            val userDataResultFlow = userRepository.getUserData("테스트_계정")
-            when (userDataResultFlow) {
-                is Result.Success -> {
-                    userDataResultFlow.data.collect {
-                        _userState.value = it
-                    }
-                }
-
-                else -> {}
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 }
