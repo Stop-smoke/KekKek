@@ -27,6 +27,15 @@ class CommunityViewModel @Inject constructor(
         MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
+    private val _isPostDeleted = MutableStateFlow(false)
+    val isPostDeleted: StateFlow<Boolean> get() = _isPostDeleted.asStateFlow()
+
+    fun setPostDeleted(isDeleted: Boolean) {
+        viewModelScope.launch {
+            _isPostDeleted.emit(isDeleted)
+        }
+    }
+
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 

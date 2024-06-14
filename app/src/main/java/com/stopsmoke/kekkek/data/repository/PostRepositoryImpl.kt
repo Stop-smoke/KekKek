@@ -131,7 +131,6 @@ internal class PostRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.Error(e)
         }
-
     }
 
     override suspend fun editPost(post: PostWrite): Result<Unit> {
@@ -186,6 +185,24 @@ internal class PostRepositoryImpl @Inject constructor(
         return try {
             val user = (userRepository.getUserData().first() as User.Registered)
             postDao.deleteLike(postId, user.uid)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun addBookmark(postId: String): Result<Unit> {
+        return try {
+            val user = (userRepository.getUserData().first() as User.Registered)
+            postDao.addBookmark(postId, user.uid)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun deleteBookmark(postId: String): Result<Unit> {
+        return try {
+            val user = (userRepository.getUserData().first() as User.Registered)
+            postDao.deleteBookmark(postId, user.uid)
         } catch (e: Exception) {
             Result.Error(e)
         }

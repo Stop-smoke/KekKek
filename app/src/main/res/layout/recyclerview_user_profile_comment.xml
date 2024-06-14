@@ -36,6 +36,7 @@
         tools:text="회원님의 게시글에 새 댓글이 달렸습니다." />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_user_profile_comment_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

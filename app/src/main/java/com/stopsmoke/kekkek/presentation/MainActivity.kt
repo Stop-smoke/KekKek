@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.presentation
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -9,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
+import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.common.util.Utility.getKeyHash
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
@@ -38,6 +42,11 @@ class MainActivity : AppCompatActivity() {
         }
         setupNavigation()
         setupBottomNavigation()
+
+    // 해시값 찾을 때 사용하세요
+    // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
+
+
     }
 
     private fun setupNavigation() {

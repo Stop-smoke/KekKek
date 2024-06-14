@@ -53,4 +53,8 @@ interface PostDao {
     suspend fun setProfileImage(userId: String, imgUrl: String)
 
     suspend fun setUserDataForName(userEntity: UserEntity, name:String)
+
+    suspend fun addBookmark(postId: String, uid: String): Result<Unit>
+
+    suspend fun deleteBookmark(postId: String, uid: String): Result<Unit>
 }

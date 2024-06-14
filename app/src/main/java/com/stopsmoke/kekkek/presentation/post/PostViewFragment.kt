@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,17 +19,19 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
-import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.CommentPostData
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.getRelativeTime
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getParcelableAndroidVersionSupport
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @AndroidEntryPoint
@@ -39,6 +43,7 @@ class PostViewFragment : Fragment() {
     private var post: CommunityWritingItem? = null
 
     private val viewModel: PostViewModel by viewModels()
+    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postCommentAdapter: PostCommentAdapter
 
@@ -111,6 +116,17 @@ class PostViewFragment : Fragment() {
             viewModel.toggleLikeToPost()
         }
 
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            val user = viewModel.user.firstOrNull() as? User.Registered ?: return@collectLatestWithLifecycle
+
+            if (it.firstOrNull()?.bookmarkUser?.contains(user.uid) == true) {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                return@collectLatestWithLifecycle
+            }
+
+            binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+        }
+
     }
 
     private fun setupView() = with(binding) {
@@ -130,8 +146,8 @@ class PostViewFragment : Fragment() {
             tvPostHeartNum.text = it.postInfo.like.toString()
             tvPostCommentNum.text = it.postInfo.comment.toString()
             tvPostViewNum.text = it.postInfo.view.toString()
-            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+//            if(it.bookmark == true) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+//            else if(it.bookmark == false) includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
         }
     }
 
@@ -158,17 +174,19 @@ class PostViewFragment : Fragment() {
             binding.root.hideSoftKeyboard()
         }
         includePostViewAppBar.ivPostBookmark.setOnClickListener {
-            if(post?.bookmark == true) {
-                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-                post?.bookmark = false
-                Snackbar.make(postView,"해당 게시글을 북마크에서 제거했습니다.", Snackbar.LENGTH_SHORT).show()
-                post?.let{ viewModel.deleteBookmarkPost(it)}
-            } else {
-                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                post?.bookmark = true
-                Snackbar.make(postView,"해당 게시글을 북마크에 추가했습니다.", Snackbar.LENGTH_SHORT).show()
-                post?.let { viewModel.addBookmarkPost(it) }
-            }
+            viewModel.toggleBookmark()
+
+//            if(post?.bookmark == true) {
+//                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+//                post?.bookmark = false
+//                Snackbar.make(postView,"해당 게시글을 북마크에서 제거했습니다.", Snackbar.LENGTH_SHORT).show()
+//                post?.let{ viewModel.deleteBookmarkPost(it)}
+//            } else {
+//                includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+//                post?.bookmark = true
+//                Snackbar.make(postView,"해당 게시글을 북마크에 추가했습니다.", Snackbar.LENGTH_SHORT).show()
+//                post?.let { viewModel.addBookmarkPost(it) }
+//            }
         }
         includePostViewAppBar.ivPostMore.setOnClickListener {
             showBottomSheetDialog()
@@ -180,14 +198,29 @@ class PostViewFragment : Fragment() {
         val bottomsheetDialogBinding = FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        // 일단
+        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+            when(user){
+                is User.Error -> TODO()
+                User.Guest -> TODO()
+                is User.Registered ->
+                if (post?.userInfo?.uid == user.uid) {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
+                    bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+                        showDeleteConfirmationDialog()
+                        bottomSheetDialog.dismiss()
+                    }
+                } else {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
+                }
+            }
+        }
+
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             bottomSheetDialog.dismiss()
             findNavController().navigate(R.id.action_post_view_to_post_edit)
         }
-        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-            Toast.makeText(requireContext(), "게시글을 삭제하시겠습니까?", Toast.LENGTH_SHORT).show()
-            bottomSheetDialog.dismiss()
-        }
+
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {
             Toast.makeText(requireContext(), "게시물 신고를 작성해주세요.", Toast.LENGTH_SHORT).show()
             findNavController().navigate("my_complaint")
@@ -197,6 +230,25 @@ class PostViewFragment : Fragment() {
         bottomSheetDialog.show()
 
     }
+
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("게시글 삭제")
+            .setMessage("게시글을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { dialog, _ ->
+                post?.postInfo?.id?.let { postId ->
+                    viewModel.deletePost(postId)
+                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    communityViewModel.setPostDeleted(true)
+                    findNavController().popBackStack()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()    }
 
     override fun onResume() {
         super.onResume()
