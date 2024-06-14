@@ -108,6 +108,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate("test_page")
         }
 
+        clHomeNotice.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_notice_list)
+        }
+
         viewModel.updateUserData()
         initTimerControllerListener()
     }

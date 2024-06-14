@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_home_to_test_page"
             app:destination="@id/test_page" />
+        <action
+            android:id="@+id/action_home_to_notice_list"
+            app:destination="@id/notice_list" />
     </fragment>
 
     <fragment
