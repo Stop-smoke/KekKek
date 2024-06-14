@@ -9,6 +9,7 @@ import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentPostData
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.getResourceString
 
 class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.ViewHolder>(diffUtil) {
 
@@ -27,7 +28,7 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
         private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Comment) = with(binding) {
-            tvMyCommentContent.text = item.postData.postTitle
+            tvMyCommentContent.text = item.text
             tvMyCommentDatetime.text = item.dateTime.created.run {
                 "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
             }
@@ -39,7 +40,8 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
         }
 
         private fun getCommentStateString(item: CommentPostData): String =
-            item.let { "${it.postType}에 등록한 ${it.postTitle} 게시글에 댓글을 남겼습니다." }
+            "${item.postType.getResourceString(itemView.context)}에 등록한 ${item.postTitle} 게시글에 댓글을 남겼습니다."
+
     }
 
     override fun onCreateViewHolder(

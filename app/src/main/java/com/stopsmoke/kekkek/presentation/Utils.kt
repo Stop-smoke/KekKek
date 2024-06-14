@@ -10,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.domain.model.PostCategory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -51,3 +52,16 @@ internal fun<T> Bundle.getParcelableAndroidVersionSupport(key: String, clazz: Cl
     } else {
         getParcelable(key)
     }
+
+internal fun PostCategory.getResourceString(context: Context) = when(this) {
+    PostCategory.NOTICE -> context.getString(R.string.community_category_notice)
+    PostCategory.QUIT_SMOKING_SUPPORT -> context.getString(R.string.community_category_quit_smoking_support)
+    PostCategory.POPULAR -> context.getString(R.string.community_category_popular)
+    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> context.getString(R.string.community_category_quit_smoking_aids_reviews)
+    PostCategory.SUCCESS_STORIES -> context.getString(R.string.community_category_success_stories)
+    PostCategory.GENERAL_DISCUSSION -> context.getString(R.string.community_category_general_discussion)
+    PostCategory.FAILURE_STORIES -> context.getString(R.string.community_category_failure_stories)
+    PostCategory.RESOLUTIONS -> context.getString(R.string.community_category_resolutions)
+    PostCategory.UNKNOWN -> context.getString(R.string.community_category_unknown)
+    PostCategory.ALL -> context.getString(R.string.community_category_all)
+}
