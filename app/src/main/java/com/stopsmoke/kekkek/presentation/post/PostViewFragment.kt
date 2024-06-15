@@ -15,11 +15,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -88,9 +90,15 @@ class PostViewFragment : Fragment() {
         }
 
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
+            if (it == null) return@collectLatestWithLifecycle
             with(binding) {
                 tvPostHeartNum.text = it?.likeUser?.size.toString()
                 tvPostViewNum.text = it?.views.toString()
+
+                when (it.written.profileImage) {
+                    is ProfileImage.Web -> binding.ivPostPoster.load(it.written.profileImage.url)
+                    is ProfileImage.Default -> binding.ivPostView.setImageResource(R.drawable.ic_user_profile_test)
+                }
 
                 it?.likeUser?.let { likeUser ->
                     viewModel.user.collectLatest { user ->
