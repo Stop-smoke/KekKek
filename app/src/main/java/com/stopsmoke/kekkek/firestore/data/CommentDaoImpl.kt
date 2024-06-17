@@ -41,7 +41,7 @@ class CommentDaoImpl @Inject constructor(
     }
 
     override fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>> {
-        val query = firestore.collection(POST_COLLECTION)
+        val query = firestore.collectionGroup(COMMENT_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .orderBy("date_time.created", Query.Direction.DESCENDING)
 
@@ -53,7 +53,8 @@ class CommentDaoImpl @Inject constructor(
                 limit = PAGE_LIMIT.toLong(),
                 clazz = CommentEntity::class.java
             )
-        }.flow
+        }
+            .flow
     }
 
     override fun getCommentItems(commentIdList: List<String>): Flow<PagingData<CommentEntity>> {
@@ -73,10 +74,10 @@ class CommentDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun addComment(postId: String, commentEntity: CommentEntity) {
+    override suspend fun addComment(commentEntity: CommentEntity) {
         firestore
             .collection(POST_COLLECTION)
-            .document(postId)
+            .document(commentEntity.parent!!.postId!!)
             .collection(COMMENT_COLLECTION)
             .document().let { documentReference ->
                 documentReference.set(

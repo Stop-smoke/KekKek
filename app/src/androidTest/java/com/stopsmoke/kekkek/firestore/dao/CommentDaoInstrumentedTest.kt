@@ -54,7 +54,7 @@ class CommentDaoInstrumentedTest {
                 ranking = Long.MAX_VALUE
             )
         )
-        commentDao.addComment("post_id", comment)
+        commentDao.addComment(comment)
     }
 
     @Test

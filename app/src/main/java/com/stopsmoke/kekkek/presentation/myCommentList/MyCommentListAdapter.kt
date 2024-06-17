@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentPostData
+import com.stopsmoke.kekkek.domain.model.CommentParent
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.getResourceString
 
@@ -32,14 +32,14 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
             tvMyCommentDatetime.text = item.dateTime.created.run {
                 "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
             }
-//            tvMyCommentState.text = getCommentStateString(item.postData)
+            tvMyCommentState.text = getCommentStateString(item.parent)
 
             binding.root.setOnClickListener {
-//                callback?.navigateToPost(item.postData.postId)
+                callback?.navigateToPost(item.parent.postId)
             }
         }
 
-        private fun getCommentStateString(item: CommentPostData): String =
+        private fun getCommentStateString(item: CommentParent): String =
             "${item.postType.getResourceString(itemView.context)}에 등록한 ${item.postTitle} 게시글에 댓글을 남겼습니다."
 
     }

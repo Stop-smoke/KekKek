@@ -54,7 +54,7 @@ class PostDaoInstrumentedTest {
             unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
             category = "popular",
             views = Random.nextLong(1, 500),
-            commentUser = listOf("commentUser1", "commentUser2")
+            commentCount = null
         )
         postDao.addPost(post)
     }

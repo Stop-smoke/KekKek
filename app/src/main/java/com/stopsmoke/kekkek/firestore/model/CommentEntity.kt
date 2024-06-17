@@ -23,4 +23,7 @@ data class CommentEntity(
 
     @get:PropertyName("written") @set:PropertyName("written")
     var written: WrittenEntity? = null,
+
+    @get:PropertyName("parent") @set:PropertyName("parent")
+    var parent: CommentParentEntity? = null,
 )

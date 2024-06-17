@@ -31,7 +31,6 @@ import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -65,7 +64,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPostView()
-//        initView()
         setupListener()
         initCommentRecyclerView()
         observeCommentRecyclerViewItem()

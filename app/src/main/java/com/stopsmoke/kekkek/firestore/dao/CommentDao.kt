@@ -12,7 +12,7 @@ interface CommentDao {
 
     fun getCommentItems(commentIdList: List<String>): Flow<PagingData<CommentEntity>>
 
-    suspend fun addComment(postId: String, commentEntity: CommentEntity)
+    suspend fun addComment(commentEntity: CommentEntity)
 
     suspend fun updateOrInsertComment(commentEntity: CommentEntity)
 
