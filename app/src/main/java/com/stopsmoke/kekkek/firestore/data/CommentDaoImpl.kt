@@ -3,17 +3,18 @@ package com.stopsmoke.kekkek.firestore.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.stopsmoke.kekkek.firestore.COMMENT_COLLECTION
+import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -22,8 +23,9 @@ class CommentDaoImpl @Inject constructor(
 ) : CommentDao {
 
     override fun getComment(postId: String): Flow<PagingData<CommentEntity>> {
-        val query = firestore.collection(COLLECTION)
-            .whereEqualTo("post_data.post_id", postId)
+        val query = firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
             .orderBy("date_time.created", Query.Direction.ASCENDING)
 
         return Pager(
@@ -39,7 +41,7 @@ class CommentDaoImpl @Inject constructor(
     }
 
     override fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>> {
-        val query = firestore.collection(COLLECTION)
+        val query = firestore.collection(POST_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .orderBy("date_time.created", Query.Direction.DESCENDING)
 
@@ -55,44 +57,27 @@ class CommentDaoImpl @Inject constructor(
     }
 
     override fun getCommentItems(commentIdList: List<String>): Flow<PagingData<CommentEntity>> {
-        try {
-            val query = firestore.collection(COLLECTION)
-                .whereIn("id", commentIdList)
-                .orderBy("date_time", Query.Direction.DESCENDING)
+        val query = firestore.collection(COMMENT_COLLECTION)
+            .whereIn("id", commentIdList)
+            .orderBy("date_time", Query.Direction.DESCENDING)
 
-            return Pager(
-                config = PagingConfig(PAGE_LIMIT)
-            ) {
-                FireStorePagingSource(
-                    query = query,
-                    limit = PAGE_LIMIT.toLong(),
-                    clazz = CommentEntity::class.java
-                )
-            }.flow
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Pager(
-                config = PagingConfig(PAGE_LIMIT)
-            ) {
-                object : PagingSource<Int, CommentEntity>() {
-                    override fun getRefreshKey(state: PagingState<Int, CommentEntity>): Int? = null
-
-                    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommentEntity> {
-                        return LoadResult.Page(
-                            data = emptyList(),
-                            prevKey = null,
-                            nextKey = null
-                        )
-                    }
-                }
-            }.flow
+        return Pager(
+            config = PagingConfig(PAGE_LIMIT)
+        ) {
+            FireStorePagingSource(
+                query = query,
+                limit = PAGE_LIMIT.toLong(),
+                clazz = CommentEntity::class.java
+            )
         }
+            .flow
     }
 
-
-    override suspend fun addComment(commentEntity: CommentEntity) {
+    override suspend fun addComment(postId: String, commentEntity: CommentEntity) {
         firestore
-            .collection(COLLECTION)
+            .collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
             .document().let { documentReference ->
                 documentReference.set(
                     commentEntity.copy(id = documentReference.id)
@@ -103,38 +88,35 @@ class CommentDaoImpl @Inject constructor(
 
     override suspend fun updateOrInsertComment(commentEntity: CommentEntity) {
         firestore
-            .collection(COLLECTION)
+            .collection(COMMENT_COLLECTION)
             .document(commentEntity.id!!)
             .set(commentEntity)
             .await()
     }
 
-    override suspend fun deleteComment(commentId: String) {
+    override suspend fun deleteComment(postId: String, commentId: String) {
         firestore
-            .collection(COLLECTION)
+            .collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
             .document(commentId)
             .delete()
             .await()
     }
 
     override fun getCommentCount(postId: String): Flow<Long> = callbackFlow {
-        firestore.collection(COLLECTION)
-            .whereEqualTo("post_data.post_id", postId)
+        firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
             .count()
             .get(AggregateSource.SERVER)
-            .addOnSuccessListener {
-                trySend(it.count)
-            }
-            .addOnFailureListener {
-                trySend(-1)
-            }
-            .await()
+            .addOnSuccessListener { trySend(it.count) }
+            .addOnFailureListener { throw it }
 
         awaitClose()
     }
 
     companion object {
-        private const val COLLECTION = "comment"
         private const val PAGE_LIMIT = 30
     }
 }

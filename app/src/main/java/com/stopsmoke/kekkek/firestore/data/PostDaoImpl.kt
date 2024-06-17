@@ -6,13 +6,17 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.AggregateField
+import com.google.firebase.firestore.AggregateQuerySnapshot
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
+import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
@@ -33,7 +37,6 @@ internal class PostDaoImpl @Inject constructor(
         val query = firestore.collection(COLLECTION)
             .whereNotNullEqualTo("category", category)
             .orderBy("date_time", Query.Direction.DESCENDING)
-
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)

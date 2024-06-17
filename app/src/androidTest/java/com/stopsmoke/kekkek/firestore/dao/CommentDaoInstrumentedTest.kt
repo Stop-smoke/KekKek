@@ -54,7 +54,7 @@ class CommentDaoInstrumentedTest {
                 ranking = Long.MAX_VALUE
             )
         )
-        commentDao.addComment(comment)
+        commentDao.addComment("post_id", comment)
     }
 
     @Test
@@ -86,23 +86,21 @@ class CommentDaoInstrumentedTest {
             )
         )
         commentDao.updateOrInsertComment(comment)
+    }
 
+    @Test
+    fun getCount() = runTest {
 
-        @Test
-        fun getCount() = runTest {
+        commentDao.getCommentCount("zyr92XFIJxHRG72h2vSd")
+            .first()
+            .let {
+                Log.d("TEST", it.toString())
+            }
 
-            commentDao.getCommentCount("zyr92XFIJxHRG72h2vSd")
-                .first()
-                .let {
-                    Log.d("TEST", it.toString())
-                }
+    }
 
-        }
-
-        @Test
-        fun delete() = runTest {
-            commentDao.deleteComment("0N5mD4ZENS88GfmdFBRe")
-        }
-
+    @Test
+    fun delete() = runTest {
+        commentDao.deleteComment("postId", "0N5mD4ZENS88GfmdFBRe")
     }
 }

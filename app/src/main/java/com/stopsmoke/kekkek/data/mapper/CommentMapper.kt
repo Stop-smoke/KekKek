@@ -21,11 +21,6 @@ internal fun CommentEntity.asExternalModel(): Comment =
         unlikeUser = unlikeUser,
         reply = reply.map { it.asExternalModel() },
         written = written.asExternalModel(),
-        postData = postData?.asExternalModel() ?: CommentPostData(
-            PostCategory.UNKNOWN,
-            "null",
-            "null"
-        )
     )
 
 internal fun CommentPostDataEntity.asExternalModel(): CommentPostData =
@@ -67,10 +62,5 @@ internal fun Comment.toEntity(): CommentEntity = CommentEntity(
         name = written.name,
         profileImage = (written.profileImage as? ProfileImage.Web)?.url,
         ranking = written.ranking
-    ),
-    CommentPostDataEntity(
-        postType = postData.postType.toRequestString(),
-        postId = postData.postId,
-        postTitle = postData.postTitle
     )
 )

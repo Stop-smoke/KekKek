@@ -42,10 +42,6 @@ class PostViewModel @Inject constructor(
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
 
-    private val _commentCountGet: MutableStateFlow<Int> =
-        MutableStateFlow(0) // 바뀔 떄마다 commentCount 다시 가져오기
-    val commentCountGet get() = _commentCountGet.asStateFlow()
-
     fun updatePostId(id: String) {
         viewModelScope.launch {
             _postId.emit(id)
@@ -58,7 +54,12 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    val user = userRepository.getUserData()
+    val user: StateFlow<User?> = userRepository.getUserData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val post: StateFlow<Post?> = postId.flatMapLatest {
@@ -112,40 +113,29 @@ class PostViewModel @Inject constructor(
                     name = user.name,
                     profileImage = user.profileImage,
                     ranking = user.ranking
-                ),
-                postData = CommentPostData(
-                    postType = post.value!!.categories,
-                    postId = post.value!!.id,
-                    postTitle = post.value!!.title
                 )
             )
-            commentRepository.addCommentItem(comment)
+            commentRepository.addCommentItem(post.value!!.id, comment)
         }
     }
 
     fun deleteComment(commentId: String) {
         viewModelScope.launch {
-            commentRepository.deleteCommentItem(commentId)
+            postId.value?.let { commentRepository.deleteCommentItem(it, commentId) }
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val commentCount = post.flatMapLatest { post ->
-        commentCountGet.flatMapLatest {
-            if (post == null) {
-                return@flatMapLatest emptyFlow()
-            }
-
-            commentRepository.getCommentCount(post.id)
-                .let { result ->
-                    when (result) {
-                        is Result.Error -> emptyFlow()
-                        is Result.Loading -> emptyFlow()
-                        is Result.Success -> result.data
-                    }
-                }
+    val commentCount = postId.flatMapLatest { id ->
+        if (id.isNullOrBlank()) {
+            return@flatMapLatest emptyFlow()
         }
+
+        commentRepository.getCommentCount(id)
     }
+        .catch {
+            it.printStackTrace()
+        }
 
     fun toggleLikeToPost() {
         viewModelScope.launch {
@@ -172,12 +162,6 @@ class PostViewModel @Inject constructor(
                 return@launch
             }
             postRepository.addBookmark(postId)
-        }
-    }
-
-    fun getNewCommentCount() = viewModelScope.launch {
-        _commentCountGet.update { prev ->
-            prev + 1
         }
     }
 }

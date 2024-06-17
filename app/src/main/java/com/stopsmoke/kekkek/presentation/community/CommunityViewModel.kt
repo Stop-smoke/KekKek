@@ -2,18 +2,20 @@ package com.stopsmoke.kekkek.presentation.community
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -21,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CommunityUiState> =
         MutableStateFlow(CommunityUiState.init())
@@ -39,24 +41,19 @@ class CommunityViewModel @Inject constructor(
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
-    val posts = category.flatMapLatest { postCategory ->
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
         postRepository.getPost(postCategory)
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        it.exception?.printStackTrace()
-                        emptyFlow()
-                    }
-
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data.map { pagingData ->
-                        pagingData.map {
-                            it.toCommunityWritingListItem()
-                        }
-                    }
+            .map { pagingData ->
+                pagingData.map { post ->
+                    post.toCommunityWritingListItem()
                 }
             }
-    }.cachedIn(viewModelScope)
+    }
+        .cachedIn(viewModelScope)
+        .catch {
+            it.printStackTrace()
+        }
 
     init {
         viewModelScope.launch {
@@ -97,7 +94,7 @@ class CommunityViewModel @Inject constructor(
         },
         view = post.views,
         like = post.likeUser.size.toLong(),
-        comment = post.commentUser.size.toLong(),
+        comment = post.commentCount,
         id = post.id
     )
 
@@ -125,7 +122,7 @@ class CommunityViewModel @Inject constructor(
                 },
                 view = post.views,
                 like = post.likeUser.size.toLong(),
-                comment = post.commentUser.size.toLong(),
+                comment = post.commentCount,
                 id = post.id
             ),
             postImage = "",

@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.domain.model.PostWrite
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
-    fun getPost(category: PostCategory = PostCategory.UNKNOWN): Result<Flow<PagingData<Post>>>
+    fun getPost(category: PostCategory = PostCategory.ALL): Flow<PagingData<Post>>
 
     fun getPostForWrittenUid(writtenUid: String): Result<Flow<PagingData<Post>>>
 

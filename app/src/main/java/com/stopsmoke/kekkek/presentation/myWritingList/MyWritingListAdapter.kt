@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.presentation.myWritingList
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
@@ -16,8 +15,6 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class MyWritingListAdapter
@@ -43,7 +40,7 @@ class MyWritingListAdapter
             tvItemWritingTitle.text = item.title
             tvItemWritingViewNum.text = item.views.toString()
             tvItemWritingLikeNum.text = item.likeUser.size.toString()
-            tvItemWritingCommentNum.text = item.commentUser.size.toString()
+            tvItemWritingCommentNum.text = item.commentCount.toString()
 
             tvItemWritingPost.text = item.text
             tvItemWritingTimeStamp.text = item.createdElapsedDateTime.toResourceId(itemView.context)

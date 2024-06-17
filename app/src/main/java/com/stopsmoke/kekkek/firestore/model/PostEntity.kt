@@ -36,6 +36,6 @@ data class PostEntity(
     @get:PropertyName("views") @set:PropertyName("views")
     var views: Long? = null,
 
-    @get:PropertyName("comment_user") @set:PropertyName("comment_user")
-    var commentUser: List<String> = emptyList()
+    @get:PropertyName("comment_count") @set:PropertyName("comment_count")
+    var commentCount: Long? = null
 )

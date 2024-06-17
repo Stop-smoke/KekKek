@@ -32,10 +32,10 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
             tvMyCommentDatetime.text = item.dateTime.created.run {
                 "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
             }
-            tvMyCommentState.text = getCommentStateString(item.postData)
+//            tvMyCommentState.text = getCommentStateString(item.postData)
 
             binding.root.setOnClickListener {
-                callback?.navigateToPost(item.postData.postId)
+//                callback?.navigateToPost(item.postData.postId)
             }
         }
 

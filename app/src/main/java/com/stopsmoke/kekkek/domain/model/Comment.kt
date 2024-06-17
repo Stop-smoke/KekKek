@@ -10,7 +10,6 @@ data class Comment(
     val unlikeUser: List<String>,
     val reply: List<Reply>,
     val written: Written,
-    val postData: CommentPostData
 ) {
 
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()

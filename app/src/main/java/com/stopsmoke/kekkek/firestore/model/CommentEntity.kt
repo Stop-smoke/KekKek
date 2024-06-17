@@ -23,7 +23,4 @@ data class CommentEntity(
 
     @get:PropertyName("written") @set:PropertyName("written")
     var written: WrittenEntity? = null,
-
-    @get:PropertyName("post_data") @set:PropertyName("post_data")
-    var postData: CommentPostDataEntity? = null
 )

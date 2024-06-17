@@ -29,6 +29,7 @@ import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -44,8 +45,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postCommentAdapter: PostCommentAdapter
-
-    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +65,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPostView()
-        initView()
+//        initView()
         setupListener()
         initCommentRecyclerView()
         observeCommentRecyclerViewItem()
@@ -85,6 +84,27 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.clPostViewHeart.setOnClickListener {
             viewModel.toggleLikeToPost()
         }
+
+        lifecycleScope.launch {
+            combine(viewModel.post, viewModel.user) { post, user ->
+                if (user !is User.Registered) return@combine
+                if (post == null) return@combine
+
+                if (user.uid in viewModel.post.value!!.likeUser) {
+                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+                } else {
+                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
+                }
+
+                if (post.bookmarkUser.contains(user.uid)) {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                } else {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+                }
+            }
+                .collect()
+        }
+
         postCommentAdapter.registerCallback(this)
     }
 
@@ -105,36 +125,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostComment.adapter = postCommentAdapter
         binding.rvPostComment.layoutManager = LinearLayoutManager(requireContext())
     }
-
-    private fun initView() = combine(viewModel.post, viewModel.user) { post, user ->
-        if (post == null) return@combine
-
-        this.user = user
-
-        when (user) {
-            is User.Error -> {
-
-            }
-            is User.Guest -> {
-                Toast.makeText(requireContext(), "게스트 모드입니다", Toast.LENGTH_SHORT).show()
-            }
-            is User.Registered -> {
-
-                if (user.uid in post.likeUser) {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
-                } else {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
-                }
-
-                if (post.bookmarkUser.contains(user.uid)) {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                } else {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-                }
-            }
-        }
-    }
-
 
     private fun showCommentDeleteDialog(postId : String) {
         AlertDialog.Builder(requireContext())
@@ -163,7 +153,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             tvPostTitle.text = post.title
             tvPostDescription.text = post.text
             tvPostHeartNum.text = post.likeUser.size.toString()
-            tvPostCommentNum.text = post.commentUser.size.toString()
+            tvPostCommentNum.text = post.commentCount.toString()
             tvPostViewNum.text = post.views.toString()
             initWrittenProfileImage(post.written.profileImage)
         }
@@ -187,7 +177,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment)
-                viewModel.getNewCommentCount()
                 postCommentAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
@@ -209,8 +198,15 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+
+            showDeleteConfirmationDialog()
+            bottomSheetDialog.dismiss()
+        }
+
         // 일단
-        when (user) {
+        when (viewModel.user.value) {
             is User.Error -> {
 
             }
@@ -220,15 +216,15 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             }
 
             is User.Registered ->
-                if (viewModel.post.value?.written?.uid == (user as User.Registered).uid) {
+                if (viewModel.post.value?.written?.uid == (viewModel.user.value as User.Registered).uid) {
                     bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
-                    bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-                        showDeleteConfirmationDialog()
-                        bottomSheetDialog.dismiss()
-                    }
                 } else {
                     bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
                 }
+
+            null -> {
+
+            }
         }
         bottomSheetDialog.show()
     }
@@ -276,19 +272,19 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     }
 
     override fun deleteItem(comment: Comment) {
-        lifecycleScope.launch {
-            when(val user = viewModel.user.first()){
-                is User.Error -> {
+        when(val user = viewModel.user.value){
+            is User.Error -> {
 
-                }
-                User.Guest -> {
-
-                }
-                is User.Registered ->
-                    if (comment.written.uid == user.uid) {
-                        showCommentDeleteDialog(comment.id)
-                    }
             }
+            User.Guest -> {
+
+            }
+            is User.Registered ->
+                if (comment.written.uid == user.uid) {
+                    showCommentDeleteDialog(comment.id)
+                }
+
+            null -> {}
         }
     }
 
