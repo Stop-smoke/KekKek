@@ -127,7 +127,7 @@ internal class PostDaoImpl @Inject constructor(
     override fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(COLLECTION)
             .whereEqualTo("written.uid", uid)
-            .orderBy("comment_user", Query.Direction.DESCENDING)
+            .orderBy("date_time.created", Query.Direction.DESCENDING)
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)
