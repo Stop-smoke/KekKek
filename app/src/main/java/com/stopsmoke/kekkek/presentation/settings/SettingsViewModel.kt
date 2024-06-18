@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.settings
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
@@ -8,15 +7,15 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -49,7 +48,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setUserData(name: String) = viewModelScope.launch {
         user.collect { user ->
-            if(user is User.Registered) userRepository.setUserDataForName(user, name)
+            if (user is User.Registered) userRepository.setUserDataForName(user, name)
         }
     }
 
@@ -72,13 +71,20 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private val _onboardingScreenRequest = MutableSharedFlow<Unit>()
+    val onboardingScreenRequest = _onboardingScreenRequest.asSharedFlow()
+
     fun logout() {
-        userRepository.logout()
+        viewModelScope.launch {
+            userRepository.logout()
+            _onboardingScreenRequest.emit(Unit)
+        }
     }
 
     fun withdraw() {
         viewModelScope.launch {
             userRepository.withdraw()
+            _onboardingScreenRequest.emit(Unit)
         }
     }
 

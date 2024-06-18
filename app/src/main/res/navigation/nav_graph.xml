@@ -3,10 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    app:route="main_graph"
     app:startDestination="@+id/home">
 
     <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
+
+    <fragment
+        android:id="@+id/authentication"
+        app:route="authentication_screen"
+        android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
+        tools:layout="@layout/fragment_authentication" >
+        <action
+            android:id="@+id/action_authentication_to_onboarding_introduce"
+            app:destination="@id/nav_onboarding" />
+        <action
+            android:id="@+id/action_authentication_to_home"
+            app:destination="@id/home" />
+    </fragment>
 
     <fragment
         android:id="@+id/home"
@@ -121,8 +135,12 @@
 
     <fragment
         android:id="@+id/settings_setting_profile"
+        app:route="profile_settings_screen"
         android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
         tools:layout="@layout/fragment_settings_profile">
+        <action
+            android:id="@+id/action_settings_setting_profile_to_authentication"
+            app:destination="@id/authentication"/>
     </fragment>
 
     <fragment
