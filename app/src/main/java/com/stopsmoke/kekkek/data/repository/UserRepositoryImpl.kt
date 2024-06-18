@@ -142,7 +142,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUserData(user: User.Registered) {
-        userDao.updateUser(user.toEntity())
+        // TODO: 아직 코드 미작성
+//        userDao.updateUser(user.toEntity())
     }
 
     override suspend fun startQuitSmokingTimer(): Result<Unit> {
