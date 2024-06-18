@@ -55,31 +55,32 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     private fun observeUserInformation() {
 
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
-            when (it) {
-                is User.Error -> {
-                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
-                        .show()
-                }
+            if (it != null)
+                when (it) {
+                    is User.Error -> {
+                        Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
-                is User.Guest -> {
-                    binding.includeSettingsProfile.tvSettingUsername.text = "로그인이 필요합니다."
-                }
+                    is User.Guest -> {
+                        binding.includeSettingsProfile.tvSettingUsername.text = "로그인이 필요합니다."
+                    }
 
-                is User.Registered -> {
-                    binding.includeSettingsProfile.tvSettingUsername.text = it.name
-                    when (it.profileImage) {
-                        ProfileImage.Default -> {
-                            binding.includeSettingsProfile.circleIvSettingProfile
-                                .setImageResource(R.drawable.ic_user_profile_test)
-                        }
+                    is User.Registered -> {
+                        binding.includeSettingsProfile.tvSettingUsername.text = it.name
+                        when (it.profileImage) {
+                            ProfileImage.Default -> {
+                                binding.includeSettingsProfile.circleIvSettingProfile
+                                    .setImageResource(R.drawable.ic_user_profile_test)
+                            }
 
-                        is ProfileImage.Web -> {
-                            binding.includeSettingsProfile.circleIvSettingProfile
-                                .load((it.profileImage as? ProfileImage.Web)?.url)
+                            is ProfileImage.Web -> {
+                                binding.includeSettingsProfile.circleIvSettingProfile
+                                    .load((it.profileImage as? ProfileImage.Web)?.url)
+                            }
                         }
                     }
                 }
-            }
         }
     }
 

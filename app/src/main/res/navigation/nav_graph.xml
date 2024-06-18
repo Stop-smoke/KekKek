@@ -61,6 +61,7 @@
         android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
         app:route="community"
         tools:layout="@layout/fragment_community">
+
         <action
             android:id="@+id/action_community_to_user_profile_screen"
             app:destination="@id/user_profile" >

@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
                 }
 
                 is User.Guest -> {
-                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show()
                 }
 
                 is User.Registered -> {

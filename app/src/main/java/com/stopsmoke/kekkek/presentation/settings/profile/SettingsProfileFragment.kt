@@ -106,7 +106,7 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditNameDialogListener() = with(binding) {
         ivSettingEditNickname.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditNameDialogFragment()
+            val addDialog = EditNameDialogFragment((viewModel.user.value as? User.Registered)?.name ?: "")
             addDialog.show(fragmentManager, "edit name")
         }
 
@@ -115,7 +115,7 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditIntroductionDialogListener() = with(binding) {
         ivSettingEditIntroduction.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditIntroductionDialogFragment()
+            val addDialog = EditIntroductionDialogFragment((viewModel.user.value as? User.Registered)?.introduction ?:"")
             addDialog.show(fragmentManager, "edit introduction")
         }
 
@@ -129,29 +129,30 @@ class SettingsProfileFragment : Fragment() {
         }
     }
 
-    private fun onBind(user: User) = with(binding) {
-        when (user) {
-            is User.Error -> {
-                Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
-                    .show()
-            }
+    private fun onBind(user: User?) = with(binding) {
+        if (user != null)
+            when (user) {
+                is User.Error -> {
+                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
-            is User.Guest -> {
-                Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
-            }
+                is User.Guest -> {
+                    Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
+                }
 
-            is User.Registered -> {
-                binding.tvSettingProfileNicknameDetail.text = user.name
-                binding.tvSettingProfileIntroductionDetail.text = user.introduction
+                is User.Registered -> {
+                    binding.tvSettingProfileNicknameDetail.text = user.name
+                    binding.tvSettingProfileIntroductionDetail.text = user.introduction
 
-                when (user.profileImage) {
-                    is ProfileImage.Default -> {}
-                    is ProfileImage.Web -> {
-                        circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
+                    when (user.profileImage) {
+                        is ProfileImage.Default -> {}
+                        is ProfileImage.Web -> {
+                            circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
+                        }
                     }
                 }
             }
-        }
     }
 
     private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
