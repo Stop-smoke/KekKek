@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_login" />
+        android:src="@drawable/img_motivation_1" />
 
     <ImageView
         android:id="@+id/iv_login_logo"
@@ -58,7 +58,7 @@
         android:layout_marginBottom="80dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="@string/login_other_btn"
-        android:textColor="@color/gray_linegray"
+        android:textColor="@color/background_light"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
