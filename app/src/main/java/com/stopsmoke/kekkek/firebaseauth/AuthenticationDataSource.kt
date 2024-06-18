@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.firebaseauth
 
 import com.google.firebase.auth.FirebaseAuth
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.exception.GuestModeException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -30,20 +29,8 @@ class AuthenticationDataSource @Inject constructor(
         firebaseAuth.signOut()
     }
 
-    suspend fun withdraw(): Result<Unit> {
-        var result: Result<Unit> = Result.Loading
-
-        val currentUser = firebaseAuth.currentUser ?: return Result.Error(GuestModeException())
-
-        currentUser.delete()
-            .addOnSuccessListener {
-                result = Result.Success(Unit)
-            }
-            .addOnFailureListener {
-                result = Result.Error(it)
-            }
-            .await()
-
-        return result
+    suspend fun withdraw() {
+        val currentUser = firebaseAuth.currentUser ?: throw GuestModeException()
+        currentUser.delete().await()
     }
 }
