@@ -90,15 +90,7 @@ class SettingsViewModel @Inject constructor(
 
     fun settingProfile(inputStream: InputStream) {
         viewModelScope.launch {
-            userRepository.setProfileImage(inputStream).collectLatest {
-                when (it) {
-                    is ProfileImageUploadResult.Error -> {}
-                    is ProfileImageUploadResult.Progress -> {}
-                    is ProfileImageUploadResult.Success -> {
-
-                    }
-                }
-            }
+            userRepository.setProfileImage(inputStream)
         }
     }
 }

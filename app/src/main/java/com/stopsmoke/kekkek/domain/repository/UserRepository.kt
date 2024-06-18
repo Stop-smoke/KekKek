@@ -2,16 +2,13 @@ package com.stopsmoke.kekkek.domain.repository
 
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Activities
-import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import java.io.InputStream
 
 interface UserRepository {
 
-    fun setProfileImage(
-        imageInputStream: InputStream,
-    ): Flow<ProfileImageUploadResult>
+    suspend fun setProfileImage(imageInputStream: InputStream)
 
     /**
      * 다른 유저 정보를 가져옴
