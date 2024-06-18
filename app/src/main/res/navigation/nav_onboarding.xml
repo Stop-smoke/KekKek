@@ -2,17 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/authentication"
+    app:startDestination="@id/onboarding_introduce"
     android:id="@+id/nav_onboarding">
-
-    <fragment
-        android:id="@+id/authentication"
-        android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
-        tools:layout="@layout/fragment_authentication" >
-        <action
-            android:id="@+id/action_authentication_to_onboarding_introduce"
-            app:destination="@id/onboarding_introduce" />
-    </fragment>
 
     <fragment
         android:id="@+id/onboarding_introduce"

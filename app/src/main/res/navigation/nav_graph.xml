@@ -9,6 +9,19 @@
     <include app:graph="@navigation/nav_settings"/>
 
     <fragment
+        android:id="@+id/authentication"
+        app:route="authentication_screen"
+        android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
+        tools:layout="@layout/fragment_authentication" >
+        <action
+            android:id="@+id/action_authentication_to_onboarding_introduce"
+            app:destination="@id/nav_onboarding" />
+        <action
+            android:id="@+id/action_authentication_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
         android:id="@+id/home"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
         app:route="home"
