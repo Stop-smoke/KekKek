@@ -14,6 +14,7 @@ import com.stopsmoke.kekkek.domain.repository.SearchRepository
 import com.stopsmoke.kekkek.firestore.dao.BookmarkRepository
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 
