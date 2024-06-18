@@ -22,6 +22,7 @@ import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListen
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.onboarding.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.visible
 
@@ -67,13 +68,31 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         }
 
         viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
-            if (it == true) {
-                findNavController().navigate("home")
-                return@collectLatestWithLifecycle
-            }
+            when(it) {
+                is AuthenticationUiState.AlreadyUser -> {
+                    findNavController().navigate("home")  {
+                        popUpTo(findNavController().graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
 
-            if (it == false) {
-                findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+                is AuthenticationUiState.Init -> {
+
+                }
+
+                is AuthenticationUiState.NewMember -> {
+                    findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+                }
+
+                is AuthenticationUiState.Error -> {
+                    it.t?.printStackTrace()
+                    Toast.makeText(requireContext(), "에러가 발생하였습니다", Toast.LENGTH_SHORT).show()
+                }
+
+                is AuthenticationUiState.Guest -> {
+                    Toast.makeText(requireContext(), "게스트 모드 진행", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -98,7 +117,6 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 viewModel.updateUserName(
                     authResult.user?.displayName ?: getString(R.string.login_default_nickname)
                 )
-                viewModel.updateRegisteredUser(authResult.user?.uid?: "")
 
                 authResult.user?.displayName?.let {
                     Toast.makeText(requireContext(), "${it}님 환영합니다", Toast.LENGTH_SHORT).show()
@@ -113,7 +131,6 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     override fun onSuccess(user: FirebaseUser) {
         viewModel.updateUid(user.uid)
         viewModel.updateUserName(user.displayName ?: getString(R.string.login_default_nickname))
-        viewModel.updateRegisteredUser(user.uid)
         Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
     }
 

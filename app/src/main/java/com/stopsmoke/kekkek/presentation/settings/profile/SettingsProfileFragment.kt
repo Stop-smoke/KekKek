@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import androidx.exifinterface.media.ExifInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +19,7 @@ import coil.load
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -67,6 +68,26 @@ class SettingsProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
+
+        binding.clProfileLogout.setOnClickListener {
+            viewModel.logout()
+        }
+
+        binding.clProfileServiceOut.setOnClickListener {
+            viewModel.withdraw()
+        }
+
+        viewModel.onboardingScreenRequest.collectLatestWithLifecycle(lifecycle) {
+            navigateToAuthenticationScreen()
+        }
+    }
+
+    private fun navigateToAuthenticationScreen() {
+        findNavController().navigate(route = "authentication_screen") {
+            popUpTo(findNavController().graph.id) {
+                inclusive = true
+            }
+        }
     }
 
     private fun initView() = with(binding) {

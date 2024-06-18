@@ -60,13 +60,13 @@ interface UserRepository {
      */
     fun isFirstRunning(): Flow<Boolean>
 
-    fun logout()
+    suspend fun logout()
 
     /**
      * 회원 탈퇴
      */
 
-    suspend fun withdraw(): Result<Unit>
+    suspend fun withdraw()
 
     suspend fun nameDuplicateInspection(name: String): Boolean
 
