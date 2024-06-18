@@ -9,9 +9,11 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -23,7 +25,11 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val user: Flow<User> = userRepository.getUserData()
+    val user: StateFlow<User?> = userRepository.getUserData().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null
+    )
 
     private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
     val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
