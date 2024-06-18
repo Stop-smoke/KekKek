@@ -3,16 +3,12 @@ package com.stopsmoke.kekkek.presentation
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import com.kakao.sdk.common.util.Utility
-import com.kakao.sdk.common.util.Utility.getKeyHash
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
@@ -54,11 +50,10 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
 
-        val isFirstRunning = runBlocking {
+        val isOnboardingComplete = runBlocking {
             userRepository.isOnboardingComplete().first()
         }
-//        setNavGraph(true)
-        setNavGraph(isFirstRunning)
+        setNavGraph(isOnboardingComplete)
     }
 
     private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {
@@ -90,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         if (isAlreadyLogin) {
             navGraph.setStartDestination(R.id.home)
         } else {
-            navGraph.setStartDestination(R.id.nav_onboarding)
+            navGraph.setStartDestination(R.id.authentication)
         }
         navController.setGraph(navGraph, null)
     }
