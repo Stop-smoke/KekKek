@@ -3,17 +3,13 @@ package com.stopsmoke.kekkek.presentation.post
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
-import com.stopsmoke.kekkek.domain.model.CommentPostData
-import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,13 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,14 +30,11 @@ class PostViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
     userRepository: UserRepository,
+    private val addCommentUseCase: AddCommentUseCase
 ) : ViewModel() {
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
-
-    private val _commentCountGet: MutableStateFlow<Int> =
-        MutableStateFlow(0) // 바뀔 떄마다 commentCount 다시 가져오기
-    val commentCountGet get() = _commentCountGet.asStateFlow()
 
     fun updatePostId(id: String) {
         viewModelScope.launch {
@@ -58,7 +48,12 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    val user = userRepository.getUserData()
+    val user: StateFlow<User?> = userRepository.getUserData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val post: StateFlow<Post?> = postId.flatMapLatest {
@@ -96,56 +91,38 @@ class PostViewModel @Inject constructor(
         .cachedIn(viewModelScope)
 
     fun addComment(text: String) {
-        viewModelScope.launch {
-            if (post.value == null) return@launch
-            val user = user.firstOrNull() as? User.Registered ?: return@launch
-
-            val comment = Comment(
-                id = "",
-                text = text,
-                dateTime = LocalDateTime.now().let { DateTime(it, it) },
-                likeUser = emptyList(),
-                unlikeUser = emptyList(),
-                reply = emptyList(),
-                written = Written(
-                    uid = user.uid,
-                    name = user.name,
-                    profileImage = user.profileImage,
-                    ranking = user.ranking
-                ),
-                postData = CommentPostData(
-                    postType = post.value!!.categories,
+        try {
+            viewModelScope.launch {
+                if (post.value == null) return@launch
+                addCommentUseCase(
                     postId = post.value!!.id,
-                    postTitle = post.value!!.title
+                    postTitle = "",
+                    postType = post.value!!.categories,
+                    text = text
                 )
-            )
-            commentRepository.addCommentItem(comment)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     fun deleteComment(commentId: String) {
         viewModelScope.launch {
-            commentRepository.deleteCommentItem(commentId)
+            postId.value?.let { commentRepository.deleteCommentItem(it, commentId) }
         }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val commentCount = post.flatMapLatest { post ->
-        commentCountGet.flatMapLatest {
-            if (post == null) {
-                return@flatMapLatest emptyFlow()
-            }
-
-            commentRepository.getCommentCount(post.id)
-                .let { result ->
-                    when (result) {
-                        is Result.Error -> emptyFlow()
-                        is Result.Loading -> emptyFlow()
-                        is Result.Success -> result.data
-                    }
-                }
+    val commentCount = postId.flatMapLatest { id ->
+        if (id.isNullOrBlank()) {
+            return@flatMapLatest emptyFlow()
         }
+
+        commentRepository.getCommentCount(id)
     }
+        .catch {
+            it.printStackTrace()
+        }
 
     fun toggleLikeToPost() {
         viewModelScope.launch {
@@ -172,12 +149,6 @@ class PostViewModel @Inject constructor(
                 return@launch
             }
             postRepository.addBookmark(postId)
-        }
-    }
-
-    fun getNewCommentCount() = viewModelScope.launch {
-        _commentCountGet.update { prev ->
-            prev + 1
         }
     }
 }

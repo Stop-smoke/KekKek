@@ -93,11 +93,11 @@ class OnboardingViewModel @Inject constructor(
                 return@launch
             }
 
-            if (userBirthDate.value == null) {
-                Log.e("OnboardingViewModel", "userBirthYear 값이 null 입니다")
-                _onboardingUiState.emit(OnboardingUiState.LoadFail)
-                return@launch
-            }
+//            if (userBirthDate.value == null) {
+//                Log.e("OnboardingViewModel", "userBirthYear 값이 null 입니다")
+//                _onboardingUiState.emit(OnboardingUiState.LoadFail)
+//                return@launch
+//            }
 
             val user = User.Registered(
                 uid = uid.value,
@@ -109,7 +109,7 @@ class OnboardingViewModel @Inject constructor(
                     dailyCigarettesSmoked = dailyCigarettePacks.value,
                     packCigaretteCount = cigarettesPerPack.value,
                     packPrice = cigarettePricePerPack.value,
-                    birthDate = userBirthDate.value!!
+                    birthDate = LocalDateTime.now()
                 ),
                 history = emptyHistory()
             )

@@ -15,11 +15,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -27,14 +29,13 @@ import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class PostViewFragment : Fragment() {
+class PostViewFragment : Fragment(), PostCommentCallback {
 
     private var _binding: FragmentPostViewBinding? = null
     private val binding get() = _binding!!
@@ -55,27 +56,18 @@ class PostViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentPostViewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupPostData()
+        initPostView()
         setupListener()
-
-        postCommentAdapter = PostCommentAdapter()
-        binding.rvPostComment.adapter = postCommentAdapter
-        binding.rvPostComment.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            postCommentAdapter.submitData(it)
-        }
-
-        viewModel.commentCount.collectLatestWithLifecycle(lifecycle) {
-            binding.tvPostCommentNum.text = it.toString()
-        }
+        initCommentRecyclerView()
+        observeCommentRecyclerViewItem()
+        observeCommentCount()
 
         binding.ivPostPoster.setOnClickListener {
             val post = viewModel.post.value ?: return@setOnClickListener
@@ -87,75 +79,53 @@ class PostViewFragment : Fragment() {
             )
         }
 
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            with(binding) {
-                tvPostHeartNum.text = it?.likeUser?.size.toString()
-                tvPostViewNum.text = it?.views.toString()
-
-                it?.likeUser?.let { likeUser ->
-                    viewModel.user.collectLatest { user ->
-                        when (user) {
-                            is User.Registered -> {
-                                if (user.uid in likeUser) ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
-                                else ivPostHeart.setImageResource(R.drawable.ic_heart)
-                            }
-
-                            else -> {}
-                        }
-                    }
-                }
-            }
-        }
-
-        postCommentAdapter.registerCallback(
-            object : PostCommentCallback {
-                override fun deleteItem(comment: Comment) {
-                    lifecycleScope.launch {
-                        when(val user = viewModel.user.first()){
-                            is User.Error -> {
-
-                            }
-                            User.Guest -> {
-
-                            }
-                            is User.Registered ->
-                                if (comment.written.uid == user.uid) {
-                                    showCommentDeleteDialog(comment.id)
-                                }
-                        }
-                    }
-
-                }
-
-                override fun navigateToUserProfile(uid: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_post_view_to_user_profile,
-                        args = bundleOf("uid" to uid)
-                    )
-                }
-            }
-        )
-
         binding.clPostViewHeart.setOnClickListener {
             viewModel.toggleLikeToPost()
         }
 
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            val user = viewModel.user.firstOrNull() as? User.Registered
-                ?: return@collectLatestWithLifecycle
+        lifecycleScope.launch {
+            combine(viewModel.post, viewModel.user) { post, user ->
+                if (user !is User.Registered) return@combine
+                if (post == null) return@combine
 
-            if (it?.bookmarkUser?.contains(user.uid) == true) {
-                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                return@collectLatestWithLifecycle
+                if (user.uid in viewModel.post.value!!.likeUser) {
+                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+                } else {
+                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
+                }
+
+                if (post.bookmarkUser.contains(user.uid)) {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                } else {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+                }
             }
-
-            binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+                .collect()
         }
 
+        postCommentAdapter.registerCallback(this)
+    }
+
+    private fun observeCommentCount() {
+        viewModel.commentCount.collectLatestWithLifecycle(lifecycle) {
+            binding.tvPostCommentNum.text = it.toString()
+        }
+    }
+
+    private fun observeCommentRecyclerViewItem() {
+        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
+            postCommentAdapter.submitData(it)
+        }
+    }
+
+    private fun initCommentRecyclerView() {
+        postCommentAdapter = PostCommentAdapter()
+        binding.rvPostComment.adapter = postCommentAdapter
+        binding.rvPostComment.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun showCommentDeleteDialog(postId : String) {
-        AlertDialog.Builder(binding.root.context)
+        AlertDialog.Builder(requireContext())
             .setTitle("댓글 삭제")
             .setMessage("댓글을 삭제하시겠습니까?")
             .setPositiveButton("예") { dialog, _ ->
@@ -170,9 +140,9 @@ class PostViewFragment : Fragment() {
             .show()
     }
 
-    private fun setupPostData() = with(binding) {
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            val post = it ?: return@collectLatestWithLifecycle
+    private fun initPostView() = with(binding) {
+        viewModel.post.collectLatestWithLifecycle(lifecycle) { post ->
+            if (post == null) return@collectLatestWithLifecycle
 
             tvPostPosterNickname.text = post.written.name
             tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
@@ -181,11 +151,18 @@ class PostViewFragment : Fragment() {
             tvPostTitle.text = post.title
             tvPostDescription.text = post.text
             tvPostHeartNum.text = post.likeUser.size.toString()
-            tvPostCommentNum.text = post.commentUser.size.toString()
+            tvPostCommentNum.text = post.commentCount.toString()
             tvPostViewNum.text = post.views.toString()
+            initWrittenProfileImage(post.written.profileImage)
         }
     }
 
+    private fun initWrittenProfileImage(profileImage: ProfileImage) {
+        when (profileImage) {
+            is ProfileImage.Web -> binding.ivPostPoster.load(profileImage.url)
+            is ProfileImage.Default -> binding.ivPostView.setImageResource(R.drawable.ic_user_profile_test)
+        }
+    }
 
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
@@ -198,7 +175,6 @@ class PostViewFragment : Fragment() {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment)
-                viewModel.getNewCommentCount()
                 postCommentAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
@@ -208,6 +184,7 @@ class PostViewFragment : Fragment() {
         includePostViewAppBar.ivPostBookmark.setOnClickListener {
             viewModel.toggleBookmark()
         }
+
         includePostViewAppBar.ivPostMore.setOnClickListener {
             showBottomSheetDialog()
         }
@@ -219,43 +196,35 @@ class PostViewFragment : Fragment() {
             FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+
+            showDeleteConfirmationDialog()
+            bottomSheetDialog.dismiss()
+        }
+
         // 일단
-        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
-            when (user) {
-                is User.Error -> {
+        when (viewModel.user.value) {
+            is User.Error -> {
 
+            }
+
+            User.Guest -> {
+
+            }
+
+            is User.Registered ->
+                if (viewModel.post.value?.written?.uid == (viewModel.user.value as User.Registered).uid) {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
+                } else {
+                    bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
                 }
 
-                User.Guest -> {
+            null -> {
 
-                }
-
-                is User.Registered ->
-                    if (viewModel.post.value?.written?.uid == user.uid) {
-                        bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
-                        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-                            showDeleteConfirmationDialog()
-                            bottomSheetDialog.dismiss()
-                        }
-                    } else {
-                        bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
-                    }
             }
         }
-
-        bottomsheetDialogBinding.tvEditPost.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            findNavController().navigate(R.id.action_post_view_to_post_edit)
-        }
-
-        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
-            Toast.makeText(requireContext(), "게시물 신고를 작성해주세요.", Toast.LENGTH_SHORT).show()
-            findNavController().navigate("my_complaint")
-            bottomSheetDialog.dismiss()
-        }
-
         bottomSheetDialog.show()
-
     }
 
     private fun showDeleteConfirmationDialog() {
@@ -298,5 +267,29 @@ class PostViewFragment : Fragment() {
     private fun View.hideSoftKeyboard() {
         val inputMethodManager = getSystemService(context, InputMethodManager::class.java)
         inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    override fun deleteItem(comment: Comment) {
+        when(val user = viewModel.user.value){
+            is User.Error -> {
+
+            }
+            User.Guest -> {
+
+            }
+            is User.Registered ->
+                if (comment.written.uid == user.uid) {
+                    showCommentDeleteDialog(comment.id)
+                }
+
+            null -> {}
+        }
+    }
+
+    override fun navigateToUserProfile(uid: String) {
+        findNavController().navigate(
+            resId = R.id.action_post_view_to_user_profile,
+            args = bundleOf("uid" to uid)
+        )
     }
 }

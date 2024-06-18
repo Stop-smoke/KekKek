@@ -1,14 +1,13 @@
 package com.stopsmoke.kekkek.data.mapper
 
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentPostData
+import com.stopsmoke.kekkek.domain.model.CommentParent
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.toPostCategory
 import com.stopsmoke.kekkek.domain.model.toRequestString
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
-import com.stopsmoke.kekkek.firestore.model.CommentPostDataEntity
-import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
+import com.stopsmoke.kekkek.firestore.model.CommentParentEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 
@@ -21,22 +20,22 @@ internal fun CommentEntity.asExternalModel(): Comment =
         unlikeUser = unlikeUser,
         reply = reply.map { it.asExternalModel() },
         written = written.asExternalModel(),
-        postData = postData?.asExternalModel() ?: CommentPostData(
-            PostCategory.UNKNOWN,
-            "null",
-            "null"
+        parent = parent?.asExternalModel() ?: CommentParent(
+            postType = PostCategory.UNKNOWN,
+            postId = "null",
+            postTitle = "null"
         )
     )
 
-internal fun CommentPostDataEntity.asExternalModel(): CommentPostData =
-    CommentPostData(
+internal fun CommentParentEntity.asExternalModel(): CommentParent =
+    CommentParent(
         postId = postId ?: "null",
         postTitle = postTitle ?: "null",
         postType = postType?.toPostCategory() ?: PostCategory.UNKNOWN
     )
 
-internal fun CommentPostData.toEntity(): CommentPostDataEntity =
-    CommentPostDataEntity(
+internal fun CommentParent.toEntity(): CommentParentEntity =
+    CommentParentEntity(
         postId = postId,
         postTitle = postTitle,
         postType = postType.toRequestString()
@@ -68,9 +67,5 @@ internal fun Comment.toEntity(): CommentEntity = CommentEntity(
         profileImage = (written.profileImage as? ProfileImage.Web)?.url,
         ranking = written.ranking
     ),
-    CommentPostDataEntity(
-        postType = postData.postType.toRequestString(),
-        postId = postData.postId,
-        postTitle = postData.postTitle
-    )
+    parent = parent.toEntity()
 )

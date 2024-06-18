@@ -7,6 +7,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.firestore.COMMENT_COLLECTION
+import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.firestore.model.ActivitiesEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
@@ -153,19 +155,19 @@ internal class UserDaoImpl @Inject constructor(
     }
 
     override fun getActivities(uid: String): Flow<ActivitiesEntity> = callbackFlow {
-        val postQuery = firestore.collection("post")
+        val postQuery = firestore.collection(POST_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .count()
             .get(AggregateSource.SERVER)
             .await()
 
-        val commentQuery = firestore.collection("comment")
+        val commentQuery = firestore.collection(COMMENT_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .count()
             .get(AggregateSource.SERVER)
             .await()
 
-        val bookmarkQuery = firestore.collection("post")
+        val bookmarkQuery = firestore.collection(POST_COLLECTION)
             .whereArrayContains("bookmark_user", uid)
             .count()
             .get(AggregateSource.SERVER)

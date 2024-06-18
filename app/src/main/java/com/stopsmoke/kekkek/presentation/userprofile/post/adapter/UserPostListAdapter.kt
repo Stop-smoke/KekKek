@@ -49,7 +49,7 @@ class UserPostListAdapter :
                 post.modifiedElapsedDateTime.toResourceId(itemView.context)
             binding.tvItemWritingViewNum.text = post.views.toString()
             binding.tvItemWritingLikeNum.text = post.likeUser.size.toString()
-            binding.tvItemWritingCommentNum.text = post.commentUser.size.toString()
+            binding.tvItemWritingCommentNum.text = post.commentCount.toString()
         }
     }
 

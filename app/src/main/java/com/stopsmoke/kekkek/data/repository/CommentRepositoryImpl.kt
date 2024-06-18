@@ -69,19 +69,15 @@ class CommentRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteCommentItem(commentId: String): Result<Unit> {
+    override suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit> {
         return try {
-            Result.Success(commentDao.deleteComment(commentId))
+            Result.Success(commentDao.deleteComment(postId, commentId))
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    override fun getCommentCount(postId: String): Result<Flow<Long>> {
-        return try {
-            Result.Success(commentDao.getCommentCount(postId))
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override fun getCommentCount(postId: String): Flow<Long> {
+        return commentDao.getCommentCount(postId)
     }
 }
