@@ -120,8 +120,12 @@
 
     <fragment
         android:id="@+id/settings_setting_profile"
+        app:route="profile_settings_screen"
         android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
         tools:layout="@layout/fragment_settings_profile">
+        <action
+            android:id="@+id/action_settings_setting_profile_to_authentication"
+            app:destination="@id/authentication"/>
     </fragment>
 
     <fragment
