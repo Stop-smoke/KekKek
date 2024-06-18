@@ -160,7 +160,6 @@ class CommunityFragment : Fragment() {
             requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
-
             rvCommunityList.scrollToPosition(0)
         })
         adapter.submitList(adapterList)
