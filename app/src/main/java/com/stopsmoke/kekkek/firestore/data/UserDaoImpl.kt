@@ -161,7 +161,7 @@ internal class UserDaoImpl @Inject constructor(
             .get(AggregateSource.SERVER)
             .await()
 
-        val commentQuery = firestore.collection(COMMENT_COLLECTION)
+        val commentQuery = firestore.collectionGroup(COMMENT_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .count()
             .get(AggregateSource.SERVER)
