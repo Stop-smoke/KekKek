@@ -57,7 +57,7 @@
 
         <action
             android:id="@+id/action_onboarding_finish_to_home"
-            app:destination="@+id/home"/>
+            app:destination="@id/home"/>
     </fragment>
 
 </navigation>
