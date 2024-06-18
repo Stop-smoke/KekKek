@@ -157,5 +157,4 @@ dependencies {
 
     //ExifInterface - 이미지의 EXIF 데이터를 제대로 처리(사진을 찍을 때 기기의 방향 정보를 포함)
     implementation("androidx.exifinterface:exifinterface:1.3.7")
-
 }
