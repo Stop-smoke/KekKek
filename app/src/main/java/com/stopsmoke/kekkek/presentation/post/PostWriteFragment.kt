@@ -1,16 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
-import android.content.DialogInterface
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
-import android.text.style.URLSpan
-import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,19 +9,16 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.community.CommunityFragment
+import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
@@ -43,6 +30,7 @@ class PostWriteFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PostWriteViewModel by viewModels()
+    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -148,6 +136,7 @@ class PostWriteFragment : Fragment() {
                     )
                     viewModel.addPost(postWrite)
                     dialog.dismiss()
+                    communityViewModel.getCurrentPostCategoryList()
                     findNavController().popBackStack()
                 }
             }

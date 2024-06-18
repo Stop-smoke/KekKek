@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -93,7 +94,6 @@ class CommunityFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.visible()
-
     }
 
     override fun onDestroy() {
@@ -160,6 +160,8 @@ class CommunityFragment : Fragment() {
             requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
+
+            rvCommunityList.scrollToPosition(0)
         })
         adapter.submitList(adapterList)
         rvCommunityCategory.adapter = adapter

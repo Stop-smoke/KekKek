@@ -41,7 +41,6 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
 
         private fun getCommentStateString(item: CommentParent): String =
             "${item.postType.getResourceString(itemView.context)}에 등록한 ${item.postTitle} 게시글에 댓글을 남겼습니다."
-
     }
 
     override fun onCreateViewHolder(

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EditIntroductionDialogFragment : DialogFragment() {
+class EditIntroductionDialogFragment(private val introduction: String) : DialogFragment() {
     private var _binding: ProfileEditIntroductionBinding? = null
     private val binding get() = _binding!!
 
@@ -40,6 +40,8 @@ class EditIntroductionDialogFragment : DialogFragment() {
     }
 
     private fun initView() = with(binding) {
+        etEditIntroduction.setText(introduction)
+
         etEditIntroduction.addTextChangedListener {
             tvIntroductionDescription.visibility = View.INVISIBLE
         }

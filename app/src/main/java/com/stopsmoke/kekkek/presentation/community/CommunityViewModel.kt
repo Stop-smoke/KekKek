@@ -1,29 +1,36 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
-    private val postRepository: PostRepository,
+    private val postRepository: PostRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CommunityUiState> =
         MutableStateFlow(CommunityUiState.init())
@@ -43,6 +50,7 @@ class CommunityViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
+        if(postCategory == PostCategory.UNKNOWN) return@flatMapLatest flowOf(PagingData.empty())
         postRepository.getPost(postCategory)
             .map { pagingData ->
                 pagingData.map { post ->
@@ -170,16 +178,16 @@ class CommunityViewModel @Inject constructor(
             }
 
             else -> {
-                val category = _category.value
                 updateCategory(PostCategory.UNKNOWN)
-                updateCategory(category)
             }
         }
     }
 
     private fun updateCategory(postCategory: PostCategory) {
         viewModelScope.launch {
-            _category.emit(postCategory)
+            if (category.value == postCategory) {
+                getCurrentPostCategoryList()
+            } else _category.emit(postCategory)
         }
     }
 
@@ -193,4 +201,10 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    fun getCurrentPostCategoryList() = viewModelScope.launch{
+        val currentCategory = category.value
+        _category.emit(PostCategory.UNKNOWN)
+        delay(100)
+        _category.emit(currentCategory)
+    }
 }
