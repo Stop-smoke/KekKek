@@ -174,7 +174,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             if (comment.isEmpty()) {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.addComment(text = comment)
+                viewModel.addComment(text = comment, postTitle = viewModel.post.value?.title ?: "")
                 postCommentAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()

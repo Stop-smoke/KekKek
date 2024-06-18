@@ -90,13 +90,13 @@ class PostViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    fun addComment(text: String) {
+    fun addComment(text: String, postTitle: String) {
         try {
             viewModelScope.launch {
                 if (post.value == null) return@launch
                 addCommentUseCase(
                     postId = post.value!!.id,
-                    postTitle = "",
+                    postTitle = postTitle,
                     postType = post.value!!.categories,
                     text = text
                 )

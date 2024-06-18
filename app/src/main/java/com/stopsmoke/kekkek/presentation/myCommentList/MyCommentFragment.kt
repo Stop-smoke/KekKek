@@ -79,7 +79,6 @@ class MyCommentFragment : Fragment() {
     }
 
     private fun initViewModel() {
-
         viewModel.post.collectLatestWithLifecycle(lifecycle) {
             listAdapter.submitData(it)
         }
