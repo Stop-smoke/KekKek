@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+<!--    현재 쓰지 않는 파일 -->
     <item
         android:id="@+id/home"
         android:enabled="true"
