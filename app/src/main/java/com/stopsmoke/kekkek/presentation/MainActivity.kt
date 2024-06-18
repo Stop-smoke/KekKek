@@ -46,8 +46,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
     // 해시값 찾을 때 사용하세요
     // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-
-
     }
 
     private fun setupNavigation() {
@@ -109,32 +107,6 @@ class MainActivity : AppCompatActivity() {
         }
         selectNavItem(binding.navHome)
     }
-
-
-//    기존 바텀 네비게이션 사용시 사용했던 코드
-//    private fun setupBottomNavigation() = with(binding.bottomNavigationViewHome) {
-//        setOnItemSelectedListener { item ->
-//            when (item.itemId) {
-//                R.id.home -> {
-//                    navController.popBackStack(route = "home", inclusive = false)
-//                }
-//
-//                R.id.community -> {
-//                    navController.popBackStack(route = "community", inclusive = false)
-//                }
-//
-//                R.id.my_page -> {
-//                    navController.popBackStack(route = "my", inclusive = false)
-//                }
-//            }
-//            item.onNavDestinationSelected(navController)
-//        }
-//
-//        itemIconTintList =
-//            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
-//        itemTextColor =
-//            ContextCompat.getColorStateList(this@MainActivity, R.color.bottom_nav_color)
-//    }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
