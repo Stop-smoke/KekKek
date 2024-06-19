@@ -4,19 +4,18 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.onNavDestinationSelected
 import com.kakao.sdk.common.util.Utility
-import com.kakao.sdk.common.util.Utility.getKeyHash
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.home.center.HomeCenterFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -33,21 +32,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-//            insets
-//        }
+
         setupNavigation()
         setupBottomNavigation()
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-    // 해시값 찾을 때 사용하세요
-    // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentDestinationId = navController.currentDestination?.id
+                if (currentDestinationId == R.id.home || currentDestinationId == R.id.community || currentDestinationId == R.id.my_page){
+                    finish()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private fun setupNavigation() {
@@ -83,24 +85,39 @@ class MainActivity : AppCompatActivity() {
                     imageView.setColorFilter(unselectedColor)
                     textView.setTextColor(unselectedColor)
                 }
-
             }
         }
 
+        var recentPosition = 0
+
         navItems.forEach { (itemLayout, _) ->
             itemLayout.setOnClickListener {
+                val currentDestinationId = navController.currentDestination?.id
+                val navOptions = NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_from_right_fade_in)
+                    .setExitAnim(R.anim.fade_out)
+                    .setPopEnterAnim(R.anim.slide_in_from_left_fade_in)
+                    .setPopExitAnim(R.anim.fade_out)
+                    .build()
+
                 when (itemLayout.id) {
                     R.id.nav_home -> {
-                        navController.navigate(R.id.home)
-
+                        if (currentDestinationId != R.id.home) {
+                            navController.navigate(R.id.home, null, navOptions)
+                        }
+                        recentPosition = 0
                     }
                     R.id.nav_community -> {
-                        navController.navigate(R.id.community)
-
+                        if (currentDestinationId != R.id.community) {
+                            navController.navigate(R.id.community, null, navOptions)
+                        }
+                        recentPosition = 1
                     }
                     R.id.nav_mypage -> {
-                        navController.navigate(R.id.my_page)
-
+                        if (currentDestinationId != R.id.my_page) {
+                            navController.navigate(R.id.my_page, null, navOptions)
+                        }
+                        recentPosition = 2
                     }
                 }
                 selectNavItem(itemLayout)
