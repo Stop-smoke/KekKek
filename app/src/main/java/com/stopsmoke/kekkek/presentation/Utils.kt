@@ -3,10 +3,12 @@ package com.stopsmoke.kekkek.presentation
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
@@ -64,4 +66,8 @@ internal fun PostCategory.getResourceString(context: Context) = when(this) {
     PostCategory.RESOLUTIONS -> context.getString(R.string.community_category_resolutions)
     PostCategory.UNKNOWN -> context.getString(R.string.community_category_unknown)
     PostCategory.ALL -> context.getString(R.string.community_category_all)
+}
+
+internal fun View.snackbarLongShow(message: String) {
+    Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
 }
