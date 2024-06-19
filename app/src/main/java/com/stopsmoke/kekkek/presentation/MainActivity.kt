@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.R
@@ -79,24 +80,39 @@ class MainActivity : AppCompatActivity() {
                     imageView.setColorFilter(unselectedColor)
                     textView.setTextColor(unselectedColor)
                 }
-
             }
         }
 
+        var recentPosition = 0
+
         navItems.forEach { (itemLayout, _) ->
             itemLayout.setOnClickListener {
+                val currentDestinationId = navController.currentDestination?.id
+                val navOptions = NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_from_right_fade_in)
+                    .setExitAnim(R.anim.fade_out)
+                    .setPopEnterAnim(R.anim.slide_in_from_left_fade_in)
+                    .setPopExitAnim(R.anim.fade_out)
+                    .build()
+
                 when (itemLayout.id) {
                     R.id.nav_home -> {
-                        navController.navigate(R.id.home)
-
+                        if (currentDestinationId != R.id.home) {
+                            navController.navigate(R.id.home, null, navOptions)
+                        }
+                        recentPosition = 0
                     }
                     R.id.nav_community -> {
-                        navController.navigate(R.id.community)
-
+                        if (currentDestinationId != R.id.community) {
+                            navController.navigate(R.id.community, null, navOptions)
+                        }
+                        recentPosition = 1
                     }
                     R.id.nav_mypage -> {
-                        navController.navigate(R.id.my_page)
-
+                        if (currentDestinationId != R.id.my_page) {
+                            navController.navigate(R.id.my_page, null, navOptions)
+                        }
+                        recentPosition = 2
                     }
                 }
                 selectNavItem(itemLayout)
