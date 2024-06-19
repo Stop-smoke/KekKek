@@ -11,14 +11,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +39,7 @@ class CommunityFragment : Fragment() {
     private val gestureDetector: GestureDetector by lazy {
         GestureDetector(requireContext(), GestureListener())
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +71,10 @@ class CommunityFragment : Fragment() {
                     )
                 }
 
-                override fun navigateToPost(postId: String) {
+                override fun navigateToPost(postId: String, position: Int) {
                     findNavController().navigate(
                         resId = R.id.action_community_to_post_view,
-                        args = bundleOf("post_id" to postId)
+                        args = bundleOf("postArgument" to PostToPostViewItem(postId = postId, position = position))
                     )
                 }
             }
@@ -93,8 +93,12 @@ class CommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.visible()
+        activity?.let {activity->
+            if (!activity.isVisible()) binding.appbarLayoutCommunity.setExpanded(false)
+            activity.visible()
+        }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -160,6 +164,7 @@ class CommunityFragment : Fragment() {
             requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
+            viewModel.setPosition(0)
             rvCommunityList.scrollToPosition(0)
         })
         adapter.submitList(adapterList)
@@ -195,6 +200,7 @@ class CommunityFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
+                    binding.rvCommunityList.scrollToPosition(getPosition())
                     listAdapter.submitData(posts)
                 }
         }

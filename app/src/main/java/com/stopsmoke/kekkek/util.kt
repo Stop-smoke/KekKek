@@ -17,6 +17,11 @@ fun FragmentActivity.invisible() {
     layout.visibility = View.GONE
 }
 
+fun FragmentActivity.isVisible() : Boolean{
+    val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+    return View.VISIBLE == layout.visibility
+}
+
 fun getRelativeTime(pastTime: ElapsedDateTime): String {
     val timeType = when (pastTime.elapsedDateTime) {
         DateTimeUnit.YEAR -> "년"
