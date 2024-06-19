@@ -43,7 +43,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val viewModel: PostViewModel by viewModels()
     private val communityViewModel: CommunityViewModel by activityViewModels()
 
-    private lateinit var postCommentAdapter: PostCommentAdapter
+    private lateinit var postViewAdapter: PostViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,36 +63,16 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initPostView()
         setupListener()
         initCommentRecyclerView()
         observeCommentRecyclerViewItem()
-        observeCommentCount()
 
-        binding.ivPostPoster.setOnClickListener {
-            val post = viewModel.post.value ?: return@setOnClickListener
 
-            findNavController().navigate(
-                R.id.action_post_view_to_user_profile, bundleOf(
-                    "uid" to (post.written.uid)
-                )
-            )
-        }
-
-        binding.clPostViewHeart.setOnClickListener {
-            viewModel.toggleLikeToPost()
-        }
 
         lifecycleScope.launch {
             combine(viewModel.post, viewModel.user) { post, user ->
                 if (user !is User.Registered) return@combine
                 if (post == null) return@combine
-
-                if (user.uid in viewModel.post.value!!.likeUser) {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
-                } else {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
-                }
 
                 if (post.bookmarkUser.contains(user.uid)) {
                     binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
@@ -103,25 +83,21 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 .collect()
         }
 
-        postCommentAdapter.registerCallback(this)
+        postViewAdapter.registerCallback(this)
     }
 
-    private fun observeCommentCount() {
-        viewModel.commentCount.collectLatestWithLifecycle(lifecycle) {
-            binding.tvPostCommentNum.text = it.toString()
-        }
-    }
+
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            postCommentAdapter.submitData(it)
+            postViewAdapter.submitData(it)
         }
     }
 
     private fun initCommentRecyclerView() {
-        postCommentAdapter = PostCommentAdapter()
-        binding.rvPostComment.adapter = postCommentAdapter
-        binding.rvPostComment.layoutManager = LinearLayoutManager(requireContext())
+        postViewAdapter = PostViewAdapter(viewModel = viewModel, lifecycleOwner = viewLifecycleOwner)
+        binding.rvPostView.adapter = postViewAdapter
+        binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun showCommentDeleteDialog(postId : String) {
@@ -130,7 +106,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             .setMessage("댓글을 삭제하시겠습니까?")
             .setPositiveButton("예") { dialog, _ ->
                 viewModel.deleteComment(postId)
-                postCommentAdapter.refresh()
+                postViewAdapter.refresh()
                 dialog.dismiss()
             }
             .setNegativeButton("취소") { dialog, _ ->
@@ -140,29 +116,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             .show()
     }
 
-    private fun initPostView() = with(binding) {
-        viewModel.post.collectLatestWithLifecycle(lifecycle) { post ->
-            if (post == null) return@collectLatestWithLifecycle
-
-            tvPostPosterNickname.text = post.written.name
-            tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
-            tvPostHour.text = post.createdElapsedDateTime.toResourceId(requireContext())
-
-            tvPostTitle.text = post.title
-            tvPostDescription.text = post.text
-            tvPostHeartNum.text = post.likeUser.size.toString()
-            tvPostCommentNum.text = post.commentCount.toString()
-            tvPostViewNum.text = post.views.toString()
-            initWrittenProfileImage(post.written.profileImage)
-        }
-    }
-
-    private fun initWrittenProfileImage(profileImage: ProfileImage) {
-        when (profileImage) {
-            is ProfileImage.Web -> binding.ivPostPoster.load(profileImage.url)
-            is ProfileImage.Default -> binding.ivPostView.setImageResource(R.drawable.ic_user_profile_test)
-        }
-    }
 
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
@@ -175,7 +128,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment, postTitle = viewModel.post.value?.title ?: "")
-                postCommentAdapter.refresh()
+                postViewAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
             }
@@ -261,7 +214,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun onDestroy() {
         super.onDestroy()
-        postCommentAdapter.unregisterCallback()
+        postViewAdapter.unregisterCallback()
     }
 
     private fun View.hideSoftKeyboard() {
