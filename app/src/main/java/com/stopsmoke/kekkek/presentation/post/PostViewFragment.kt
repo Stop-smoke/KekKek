@@ -155,6 +155,11 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
+            findNavController().navigate(R.id.action_post_view_to_my_complaint)
+            bottomSheetDialog.dismiss()
+        }
+
         bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
 
