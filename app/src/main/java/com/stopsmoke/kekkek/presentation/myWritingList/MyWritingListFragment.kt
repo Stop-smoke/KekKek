@@ -94,7 +94,7 @@ class MyWritingListFragment : Fragment() {
         super.onResume()
         activity?.let { activity ->
             if (activity.isVisible()) {
-                viewModel.getMyPost()
+                listAdapter.refresh()
             }
             activity.invisible()
         }

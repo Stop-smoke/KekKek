@@ -71,20 +71,20 @@ class CommunityFragment : Fragment() {
                     )
                 }
 
-                override fun navigateToPost(postId: String, position: Int) {
+                override fun navigateToPost(postId: String) {
                     findNavController().navigate(
                         resId = R.id.action_community_to_post_view,
-                        args = bundleOf("postArgument" to PostToPostViewItem(postId = postId, position = position))
+                        args = bundleOf("post_id" to postId)
                     )
                 }
             }
         )
 
         // 삭제될 때 시도
-        viewModel.isPostDeleted.collectLatestWithLifecycle(lifecycle){ isDeleted ->
+        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle){ isDeleted ->
             if (isDeleted) {
                 listAdapter.refresh()
-                viewModel.setPostDeleted(false)
+                viewModel.setPostChanged(false)
             }
         }
 
@@ -94,7 +94,9 @@ class CommunityFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.let {activity->
-            if (!activity.isVisible()) binding.appbarLayoutCommunity.setExpanded(false)
+            if (!activity.isVisible()) {
+                binding.appbarLayoutCommunity.setExpanded(false)
+            }
             activity.visible()
         }
     }
@@ -164,7 +166,6 @@ class CommunityFragment : Fragment() {
             requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
             viewModel.setCategory(adapterList[clickPosition])
-            viewModel.setPosition(0)
             rvCommunityList.scrollToPosition(0)
         })
         adapter.submitList(adapterList)
@@ -200,7 +201,6 @@ class CommunityFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
-                    binding.rvCommunityList.scrollToPosition(getPosition())
                     listAdapter.submitData(posts)
                 }
         }
@@ -286,6 +286,6 @@ class CommunityFragment : Fragment() {
     }
 
     private fun onSwipeUp() {
-        viewModel.setCategory("")
+        listAdapter.refresh()
     }
 }

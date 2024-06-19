@@ -29,21 +29,10 @@ class MyWritingLIstViewModel @Inject constructor(
     userRepository: UserRepository
 ) : ViewModel() {
 
-    val currentUser: StateFlow<User?> = userRepository.getUserData().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = null
-    )
-
-    private val _userState = MutableStateFlow<User?>(User.Guest)
-    val userState get() = _userState.asStateFlow()
+    val user = userRepository.getUserData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val post = userState.flatMapLatest { user ->
-        if (user == null) {
-            _userState.emit(currentUser.value)
-            return@flatMapLatest flowOf(PagingData.empty())
-        }
+    val post = user.flatMapLatest { user ->
         postRepository.getPost(uid = (user as? User.Registered)?.uid ?: "")
     }
         .catch {
@@ -52,21 +41,4 @@ class MyWritingLIstViewModel @Inject constructor(
         .cachedIn(viewModelScope)
 
     private var currentUserJob: Job? = null
-
-    init {
-        currentUserJob = viewModelScope.launch {
-            currentUser.collect { user ->
-                    _userState.value = user
-                }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        currentUserJob?.cancel()
-    }
-
-    fun getMyPost() {
-        _userState.value = null
-    }
 }

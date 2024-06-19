@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.visible
@@ -87,7 +88,12 @@ class MyCommentFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.invisible()
+        activity?.let { activity ->
+            if (activity.isVisible()) {
+                listAdapter.refresh()
+            }
+            activity.invisible()
+        }
     }
 
     override fun onDestroy() {

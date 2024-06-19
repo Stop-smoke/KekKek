@@ -50,42 +50,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateTestUserData() = viewModelScope.launch {
-        val userData = userRepository.getUserData("테스트_계정")
-        when (userData) {
-            is Result.Success -> {
-
-                userData.data.collect { user ->
-                    _currentUserState.value = user
-
-                    if (user.history.historyTimeList.isEmpty()) {
-                        setEmptyStartUserHistory()
-                    }
-
-                    val totalMinutesTime = user.history.getTotalMinutesTime()
-                    timeString = formatElapsedTime(totalMinutesTime)
-                    calculateSavedValues(user.userConfig)
-                    _uiState.emit(
-                        HomeUiState(
-                            homeItem = HomeItem(
-                                timeString = timeString,
-                                savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                                savedLife = savedLifePerMinute * totalMinutesTime,
-                                rank = user.ranking,
-                                addictionDegree = "테스트 필요",
-                                history = user.history
-                            ),
-                            startTimerSate = user.history.getStartTimerState()
-                        )
-                    )
-                }
-            }
-
-            else -> {}
-        }
-
-    }
-
     fun updateUserData() = viewModelScope.launch {
         val userData = userRepository.getUserData()
         userData.collect { user ->
@@ -107,7 +71,7 @@ class HomeViewModel @Inject constructor(
                                 savedMoney = savedMoneyPerMinute * totalMinutesTime,
                                 savedLife = savedLifePerMinute * totalMinutesTime,
                                 rank = user.ranking,
-                                addictionDegree = "테스트 필요",
+                                addictionDegree = user.cigaretteAddictionTestResult ?: "테스트 필요",
                                 history = user.history
                             ),
                             startTimerSate = user.history.getStartTimerState()
