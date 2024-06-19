@@ -36,8 +36,11 @@ class HomeTipFragment : Fragment() {
         with(binding.webviewHometip) {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
+            settings.javaScriptCanOpenWindowsAutomatically = true
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            loadUrl("https://www.guro.go.kr/health/contents.do?key=1376")
+            settings.domStorageEnabled = true // 노션 출력시 필요: DOM 스토리지 활성화
+            settings.databaseEnabled = true // 노션 출력시 필요: 데이터베이스 저장소 활성화
+            loadUrl("https://stopsmoke.notion.site/fde158991fe84b5dbf6bf1aff73867bc?pvs=4")
         }
     }
 

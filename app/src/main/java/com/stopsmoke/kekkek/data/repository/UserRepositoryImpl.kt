@@ -118,9 +118,9 @@ internal class UserRepositoryImpl @Inject constructor(
         userDao.setUserDataForIntroduction(user.toEntity(), introduction)
     }
 
-    override suspend fun updateUserData(user: User.Registered) {
-        // TODO: 아직 코드 미작성
-//        userDao.updateUser(user.toEntity())
+    override suspend fun updateUserData(map: Map<String, Any>) {
+        val user = user.value as? User.Registered ?: throw GuestModeException()
+        userDao.updateUser(user.uid, map)
     }
 
     override suspend fun startQuitSmokingTimer(): Result<Unit> {
