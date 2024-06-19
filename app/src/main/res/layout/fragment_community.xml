@@ -8,25 +8,39 @@
     android:background="@color/gray_bggray"
     tools:context=".presentation.community.CommunityFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/sssssss"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end|bottom"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:layout_marginBottom="32dp"-->
+<!--        android:backgroundTint="@color/white"-->
+<!--        android:clickable="true"-->
+<!--        android:contentDescription="@string/floatingActionButton_community"-->
+<!--        android:focusable="true"-->
+<!--        app:shapeAppearanceOverlay="@style/Widget.MaterialComponents.FloatingActionButton"-->
+<!--        android:src="@drawable/ic_community_floating" />-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/floatingActionButton_community"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/white"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/ic_fab_writing"
         android:clickable="true"
-        android:contentDescription="@string/floatingActionButton_community"
         android:focusable="true"
-        android:src="@drawable/ic_community_floating" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="6dp"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayout_community"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
