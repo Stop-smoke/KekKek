@@ -93,7 +93,7 @@ class AchievementViewModel @Inject constructor(
     fun upDateUserAchievementList(achievementId: String) = viewModelScope.launch {
         if (userData is User.Registered) {
             if (achievementId !in userData.clearAchievementsList)
-                userRepository.updateUserData(userData.copy(
+                userRepository.setUserData(userData.copy(
                     clearAchievementsList = userData.clearAchievementsList.toMutableList().apply {
                         add(achievementId)
                     }

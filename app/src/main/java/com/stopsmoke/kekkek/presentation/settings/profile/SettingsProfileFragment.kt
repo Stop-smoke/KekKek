@@ -21,6 +21,7 @@ import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
+import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,6 +34,10 @@ class SettingsProfileFragment : Fragment() {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     private val viewModel: SettingsViewModel by activityViewModels()
+
+    private val progressDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        ProfileImageUploadProgressFragment()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +85,32 @@ class SettingsProfileFragment : Fragment() {
         viewModel.onboardingScreenRequest.collectLatestWithLifecycle(lifecycle) {
             navigateToAuthenticationScreen()
         }
+
+        viewModel.profileImageUploadUiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is ProfileImageUploadUiState.Error -> {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    it.t?.printStackTrace()
+                    viewModel.initProfileImageUploadUiState()
+                }
+
+                is ProfileImageUploadUiState.Init -> {}
+                is ProfileImageUploadUiState.Progress -> {
+                    showProgressDialog()
+                }
+
+                is ProfileImageUploadUiState.Success -> {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), "업로드 완료!", Toast.LENGTH_SHORT).show()
+                    viewModel.initProfileImageUploadUiState()
+                }
+            }
+        }
+    }
+
+    private fun showProgressDialog() {
+        progressDialog.show(childFragmentManager, ProfileImageUploadProgressFragment.TAG)
     }
 
     private fun navigateToAuthenticationScreen() {
@@ -106,7 +137,8 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditNameDialogListener() = with(binding) {
         ivSettingEditNickname.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditNameDialogFragment((viewModel.user.value as? User.Registered)?.name ?: "")
+            val addDialog =
+                EditNameDialogFragment((viewModel.user.value as? User.Registered)?.name ?: "")
             addDialog.show(fragmentManager, "edit name")
         }
 
@@ -115,7 +147,9 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditIntroductionDialogListener() = with(binding) {
         ivSettingEditIntroduction.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditIntroductionDialogFragment((viewModel.user.value as? User.Registered)?.introduction ?:"")
+            val addDialog = EditIntroductionDialogFragment(
+                (viewModel.user.value as? User.Registered)?.introduction ?: ""
+            )
             addDialog.show(fragmentManager, "edit introduction")
         }
 
@@ -168,6 +202,7 @@ class SettingsProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        progressDialog.dismiss()
         _binding = null
     }
 

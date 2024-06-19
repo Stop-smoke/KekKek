@@ -34,7 +34,7 @@ class SmokingSettingViewModel @Inject constructor(
         userData.collect { user ->
             when (user) {
                 is User.Registered -> {
-                    userRepository.updateUserData(
+                    userRepository.setUserData(
                         user.copy(
                             userConfig = user.userConfig.copy(
                                 dailyCigarettesSmoked = smokingSettingItem.dailyCigarettesSmoked,

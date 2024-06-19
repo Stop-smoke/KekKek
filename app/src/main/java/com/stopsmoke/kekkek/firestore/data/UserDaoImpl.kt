@@ -3,7 +3,6 @@ package com.stopsmoke.kekkek.firestore.data
 import android.util.Log
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
@@ -99,10 +98,9 @@ internal class UserDaoImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateUser(userEntity: UserEntity) {
-        firestore.collection(COLLECTION).document(userEntity.uid!!)
-            .set(userEntity, SetOptions.merge())
-            .addOnFailureListener { throw it }
+    override suspend fun updateUser(uid: String, map: Map<String, Any>) {
+        firestore.collection(COLLECTION).document(uid)
+            .update(map)
             .await()
     }
 

@@ -7,13 +7,10 @@ import com.stopsmoke.kekkek.data.mapper.toExternalModel
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.datastore.PreferencesDataSource
 import com.stopsmoke.kekkek.domain.model.Activities
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.ProfileImageUploadResult
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firebaseauth.AuthenticationDataSource
 import com.stopsmoke.kekkek.firestorage.dao.StorageDao
-import com.stopsmoke.kekkek.firestorage.model.StorageUploadResult
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
@@ -63,38 +60,18 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun setProfileImage(
+    override suspend fun setProfileImage(
         imageInputStream: InputStream
-    ): Flow<ProfileImageUploadResult> {
-        if (user.value !is User.Registered) throw GuestModeException()
+    ) {
+        val user = user.value as? User.Registered ?: throw GuestModeException()
 
         val bitmap = BitmapCompressor(imageInputStream)
-
-
-        return storageDao.uploadFile(
+        val uploadUrl = storageDao.uploadFile(
             inputStream = bitmap.getCompressedFile().inputStream(),
-            path = "users/${(user.value as User.Registered).uid}/profile_image.jpeg"
+            path = "users/${user.uid}/profile_image.jpeg"
         )
-            .map {
-                when (it) {
-                    is StorageUploadResult.Success -> {
-                        val user = (user.value as User.Registered)
-                            .copy(profileImage = ProfileImage.Web(it.imageUrl))
-                        userDao.setUser(user.toEntity())
-                        postDao.setProfileImage(user.uid, it.imageUrl)
-
-                        ProfileImageUploadResult.Success
-                    }
-
-                    is StorageUploadResult.Progress -> {
-                        ProfileImageUploadResult.Progress
-                    }
-
-                    is StorageUploadResult.Error -> {
-                        ProfileImageUploadResult.Error(it.exception)
-                    }
-                }
-            }
+        userDao.updateUser(user.uid, mapOf("profile_image_url" to uploadUrl))
+        postDao.setProfileImage(user.uid, uploadUrl)
     }
 
     override fun getUserData(uid: String): Result<Flow<User.Registered>> {
@@ -142,7 +119,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUserData(user: User.Registered) {
-        userDao.updateUser(user.toEntity())
+        // TODO: 아직 코드 미작성
+//        userDao.updateUser(user.toEntity())
     }
 
     override suspend fun startQuitSmokingTimer(): Result<Unit> {
