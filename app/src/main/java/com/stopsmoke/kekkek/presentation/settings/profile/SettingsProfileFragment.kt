@@ -35,7 +35,7 @@ class SettingsProfileFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by activityViewModels()
 
-    private val progressDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+    private val progressDialog = lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         ProfileImageUploadProgressFragment()
     }
 
@@ -89,7 +89,7 @@ class SettingsProfileFragment : Fragment() {
         viewModel.profileImageUploadUiState.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is ProfileImageUploadUiState.Error -> {
-                    progressDialog.dismiss()
+                    progressDialog.value.dismiss()
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     it.t?.printStackTrace()
                     viewModel.initProfileImageUploadUiState()
@@ -101,7 +101,7 @@ class SettingsProfileFragment : Fragment() {
                 }
 
                 is ProfileImageUploadUiState.Success -> {
-                    progressDialog.dismiss()
+                    progressDialog.value.dismiss()
                     Toast.makeText(requireContext(), "업로드 완료!", Toast.LENGTH_SHORT).show()
                     viewModel.initProfileImageUploadUiState()
                 }
@@ -110,7 +110,7 @@ class SettingsProfileFragment : Fragment() {
     }
 
     private fun showProgressDialog() {
-        progressDialog.show(childFragmentManager, ProfileImageUploadProgressFragment.TAG)
+        progressDialog.value.show(childFragmentManager, ProfileImageUploadProgressFragment.TAG)
     }
 
     private fun navigateToAuthenticationScreen() {
@@ -202,7 +202,9 @@ class SettingsProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        progressDialog.dismiss()
+        if (progressDialog.isInitialized()) {
+            progressDialog.value.dismiss()
+        }
         _binding = null
     }
 
