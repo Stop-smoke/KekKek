@@ -54,9 +54,9 @@ class MyFragment : Fragment() {
         binding.clMyAchievement.setOnClickListener {
             findNavController().navigate("achievement")
         }
-//        binding.clMyProfile.setOnClickListener {
-//            findNavController().navigate(R.id.action_my_page_to_setting_profile)
-//        }
+        binding.clMyProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_my_page_to_setting_profile)
+        }
     }
 
     override fun onResume() {
@@ -106,11 +106,7 @@ class MyFragment : Fragment() {
                     binding.tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
                 }
 
-                else -> {
-                    binding.tvMyWritingNum.text = "?"
-                    binding.tvMyCommentNum.text = "?"
-                    binding.tvMyBookmarkNum.text = "?"
-                }
+                else -> {}
             }
         }
     }
@@ -124,6 +120,9 @@ class MyFragment : Fragment() {
 
                 is User.Guest -> {
                     binding.tvMyName.text = "로그인이 필요합니다."
+                    binding.tvMyWritingNum.text = "?"
+                    binding.tvMyCommentNum.text = "?"
+                    binding.tvMyBookmarkNum.text = "?"
                 }
 
                 is User.Registered -> {

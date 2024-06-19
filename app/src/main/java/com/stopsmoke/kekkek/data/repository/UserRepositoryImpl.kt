@@ -66,9 +66,7 @@ internal class UserRepositoryImpl @Inject constructor(
     override fun setProfileImage(
         imageInputStream: InputStream
     ): Flow<ProfileImageUploadResult> {
-        if (user.value !is User.Registered) {
-            throw GuestModeException()
-        }
+        if (user.value !is User.Registered) throw GuestModeException()
 
         val bitmap = BitmapCompressor(imageInputStream)
 
@@ -171,12 +169,16 @@ internal class UserRepositoryImpl @Inject constructor(
                 }
             }
 
-    override fun logout() {
+    override suspend fun logout() {
         authDataSource.logout()
+        user.emit(User.Guest)
+        preferencesDataSource.clearAll()
     }
 
-    override suspend fun withdraw(): Result<Unit> {
-        return authDataSource.withdraw()
+    override suspend fun withdraw() {
+        authDataSource.withdraw()
+        user.emit(User.Guest)
+        preferencesDataSource.clearAll()
     }
 
     override suspend fun nameDuplicateInspection(name: String): Boolean {

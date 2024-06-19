@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatest
-import com.stopsmoke.kekkek.visible
 
 class OnboardingFinishFragment : Fragment() {
 
@@ -38,7 +37,11 @@ class OnboardingFinishFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.onboardingUiState.collectLatest(lifecycleScope) {
-            findNavController().navigate("home")
+            findNavController().navigate("home")  {
+                popUpTo(findNavController().graph.id) {
+                    inclusive = true
+                }
+            }
         }
 
         viewModel.updateUserData()

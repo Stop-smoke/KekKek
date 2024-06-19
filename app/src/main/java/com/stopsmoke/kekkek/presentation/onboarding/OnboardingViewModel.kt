@@ -3,7 +3,6 @@ package com.stopsmoke.kekkek.presentation.onboarding
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.data.mapper.emptyHistory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -11,12 +10,13 @@ import com.stopsmoke.kekkek.domain.model.UserConfig
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -127,31 +127,39 @@ class OnboardingViewModel @Inject constructor(
         _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
     }
 
-    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch{
+    fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch {
         _nameDuplicationInspectionResult.emit(setBool)
     }
 
-    private val _isRegisteredUser = MutableStateFlow<Boolean?>(null)
-    val isRegisteredUser get() = _isRegisteredUser.asStateFlow()
-
-    fun updateRegisteredUser(uid: String) {
-        viewModelScope.launch {
-            when (val result = userRepository.getUserData(uid)) {
-                is Result.Error -> {
-                }
-                is Result.Loading -> {
-
-                }
-                is Result.Success -> {
-                    val user = result.data.firstOrNull()
-                    val isRegistered = !user?.name.isNullOrBlank()
-                    _isRegisteredUser.emit(isRegistered)
-
-                    if (isRegistered) {
-                        userRepository.setOnboardingComplete(true)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isRegisteredUser: Flow<AuthenticationUiState> =
+        userRepository.getUserData().flatMapLatest { user ->
+            when (user) {
+                is User.Error -> AuthenticationUiState.Error(user.t)
+                is User.Guest -> AuthenticationUiState.Guest
+                is User.Registered -> {
+                    if (user.name.isBlank()) {
+                        return@flatMapLatest flowOf(AuthenticationUiState.NewMember)
                     }
+                    userRepository.setOnboardingComplete(true)
+                    AuthenticationUiState.AlreadyUser
                 }
             }
+                .let {
+                    flowOf(it)
+                }
         }
-    }
+}
+
+sealed interface AuthenticationUiState {
+
+    data object AlreadyUser : AuthenticationUiState
+
+    data object NewMember : AuthenticationUiState
+
+    data object Init : AuthenticationUiState
+
+    data class Error(val t: Throwable?) : AuthenticationUiState
+
+    data object Guest : AuthenticationUiState
 }
