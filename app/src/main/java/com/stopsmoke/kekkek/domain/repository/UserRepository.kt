@@ -32,7 +32,7 @@ interface UserRepository {
      *  금연을 시작 했을때 서버에 시간을 저장 하는 함수
      */
 
-    suspend fun updateUserData(user: User.Registered) // user 정보 업데이트
+    suspend fun updateUserData(map: Map<String, Any>) // user 정보 업데이트
 
     suspend fun startQuitSmokingTimer(): Result<Unit>
 
