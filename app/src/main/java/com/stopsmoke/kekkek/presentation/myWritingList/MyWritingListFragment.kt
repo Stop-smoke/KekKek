@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentMyWritingListBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -92,7 +92,12 @@ class MyWritingListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.invisible()
+        activity?.let { activity ->
+            if (activity.isVisible()) {
+                viewModel.getMyPost()
+            }
+            activity.invisible()
+        }
     }
 
 }
