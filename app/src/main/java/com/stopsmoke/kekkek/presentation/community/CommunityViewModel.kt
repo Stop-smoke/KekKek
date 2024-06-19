@@ -48,9 +48,16 @@ class CommunityViewModel @Inject constructor(
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
+    private var currentCategory = PostCategory.ALL
+    private var currentPosition = 0
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        if(postCategory == PostCategory.UNKNOWN) return@flatMapLatest flowOf(PagingData.empty())
+        if(postCategory == PostCategory.UNKNOWN) {
+            _category.emit(currentCategory)
+            return@flatMapLatest flowOf(PagingData.empty())
+        }
+        currentCategory = category.value
         postRepository.getPost(postCategory)
             .map { pagingData ->
                 pagingData.map { post ->
@@ -202,9 +209,18 @@ class CommunityViewModel @Inject constructor(
     }
 
     fun getCurrentPostCategoryList() = viewModelScope.launch{
-        val currentCategory = category.value
+        currentCategory = category.value
         _category.emit(PostCategory.UNKNOWN)
-        delay(100)
-        _category.emit(currentCategory)
+        currentPosition = 0
     }
+
+    fun getCurrentPostCategoryList(setPosition: Int) = viewModelScope.launch{
+        currentCategory = category.value
+        _category.emit(PostCategory.UNKNOWN)
+        currentPosition = setPosition
+    }
+
+    fun getPosition() = currentPosition
+    fun setPosition(position: Int) {currentPosition = position}
+
 }

@@ -15,18 +15,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.community.PostToPostViewItem
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -45,11 +43,19 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private lateinit var postViewAdapter: PostViewAdapter
 
+    private var postArgument: PostToPostViewItem? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.getString("post_id", null)?.let {
             viewModel.updatePostId(it)
+        }
+
+        postArgument = arguments?.getParcelable("postArgument")
+
+        postArgument?.let {
+            viewModel.updatePostId(it.postId)
         }
     }
 
@@ -208,6 +214,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     override fun onDestroyView() {
         super.onDestroyView()
 
+        postArgument?.let{communityViewModel.getCurrentPostCategoryList(it.position)}
         activity?.visible()
         _binding = null
     }

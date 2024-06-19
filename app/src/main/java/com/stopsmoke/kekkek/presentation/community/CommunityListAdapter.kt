@@ -29,6 +29,7 @@ class CommunityListAdapter :
     }
 
 
+
     abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         abstract fun bind(item: CommunityWritingItem)
     }
@@ -110,7 +111,7 @@ class CommunityListAdapter :
             }
 
             binding.root.setOnClickListener {
-                callback?.navigateToPost(item.postInfo.id)
+                callback?.navigateToPost(item.postInfo.id, adapterPosition)
             }
         }
 
