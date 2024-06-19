@@ -7,10 +7,13 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.common.util.Utility.getKeyHash
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
