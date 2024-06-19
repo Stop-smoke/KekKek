@@ -1,41 +1,30 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
-import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
-import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
+import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 
 @AndroidEntryPoint
 class SettingsProfileFragment : Fragment() {
@@ -45,6 +34,10 @@ class SettingsProfileFragment : Fragment() {
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     private val viewModel: SettingsViewModel by activityViewModels()
+
+    private val progressDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        ProfileImageUploadProgressFragment()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +73,52 @@ class SettingsProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
+
+        binding.clProfileLogout.setOnClickListener {
+            viewModel.logout()
+        }
+
+        binding.clProfileServiceOut.setOnClickListener {
+            viewModel.withdraw()
+        }
+
+        viewModel.onboardingScreenRequest.collectLatestWithLifecycle(lifecycle) {
+            navigateToAuthenticationScreen()
+        }
+
+        viewModel.profileImageUploadUiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is ProfileImageUploadUiState.Error -> {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    it.t?.printStackTrace()
+                    viewModel.initProfileImageUploadUiState()
+                }
+
+                is ProfileImageUploadUiState.Init -> {}
+                is ProfileImageUploadUiState.Progress -> {
+                    showProgressDialog()
+                }
+
+                is ProfileImageUploadUiState.Success -> {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), "업로드 완료!", Toast.LENGTH_SHORT).show()
+                    viewModel.initProfileImageUploadUiState()
+                }
+            }
+        }
+    }
+
+    private fun showProgressDialog() {
+        progressDialog.show(childFragmentManager, ProfileImageUploadProgressFragment.TAG)
+    }
+
+    private fun navigateToAuthenticationScreen() {
+        findNavController().navigate(route = "authentication_screen") {
+            popUpTo(findNavController().graph.id) {
+                inclusive = true
+            }
+        }
     }
 
     private fun initView() = with(binding) {
@@ -98,7 +137,8 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditNameDialogListener() = with(binding) {
         ivSettingEditNickname.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditNameDialogFragment()
+            val addDialog =
+                EditNameDialogFragment((viewModel.user.value as? User.Registered)?.name ?: "")
             addDialog.show(fragmentManager, "edit name")
         }
 
@@ -107,7 +147,9 @@ class SettingsProfileFragment : Fragment() {
     private fun initEditIntroductionDialogListener() = with(binding) {
         ivSettingEditIntroduction.setOnClickListener {
             val fragmentManager = parentFragmentManager
-            val addDialog = EditIntroductionDialogFragment()
+            val addDialog = EditIntroductionDialogFragment(
+                (viewModel.user.value as? User.Registered)?.introduction ?: ""
+            )
             addDialog.show(fragmentManager, "edit introduction")
         }
 
@@ -121,29 +163,30 @@ class SettingsProfileFragment : Fragment() {
         }
     }
 
-    private fun onBind(user: User) = with(binding) {
-        when (user) {
-            is User.Error -> {
-                Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
-                    .show()
-            }
+    private fun onBind(user: User?) = with(binding) {
+        if (user != null)
+            when (user) {
+                is User.Error -> {
+                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
-            is User.Guest -> {
-                Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
-            }
+                is User.Guest -> {
+                    Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
+                }
 
-            is User.Registered -> {
-                binding.tvSettingProfileNicknameDetail.text = user.name
-                binding.tvSettingProfileIntroductionDetail.text = user.introduction
+                is User.Registered -> {
+                    binding.tvSettingProfileNicknameDetail.text = user.name
+                    binding.tvSettingProfileIntroductionDetail.text = user.introduction
 
-                when (user.profileImage) {
-                    is ProfileImage.Default -> {}
-                    is ProfileImage.Web -> {
-                        circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
+                    when (user.profileImage) {
+                        is ProfileImage.Default -> {}
+                        is ProfileImage.Web -> {
+                            circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
+                        }
                     }
                 }
             }
-        }
     }
 
     private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
@@ -159,6 +202,7 @@ class SettingsProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        progressDialog.dismiss()
         _binding = null
     }
 

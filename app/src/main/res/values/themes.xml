@@ -3,7 +3,15 @@
     <style name="Base.Theme.KekKek" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@color/background_light</item>
         <item name="android:colorBackground">@color/background_light</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@android:color/transparent</item>
     </style>
 
     <style name="Theme.KekKek" parent="Base.Theme.KekKek" />
+
+    <style name="TransparentBackgroundDialogFragmentStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

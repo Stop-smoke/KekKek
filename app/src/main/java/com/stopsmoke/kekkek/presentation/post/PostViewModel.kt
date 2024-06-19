@@ -2,16 +2,21 @@ package com.stopsmoke.kekkek.presentation.post
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.model.emptyComment
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +26,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -78,25 +84,30 @@ class PostViewModel @Inject constructor(
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val comment = postId.flatMapLatest {
+    val comment: Flow<PagingData<Comment>> = postId.flatMapLatest {
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
 
         commentRepository.getCommentItems(CommentFilter.Post(it))
+    }.map { pagingModel->
+        pagingModel.insertSeparators { before: Comment?, after: Comment? ->
+            if(before == null) return@insertSeparators emptyComment()
+            return@insertSeparators null
+        }
     }
         .catch {
             it.printStackTrace()
         }
         .cachedIn(viewModelScope)
 
-    fun addComment(text: String) {
+    fun addComment(text: String, postTitle: String) {
         try {
             viewModelScope.launch {
                 if (post.value == null) return@launch
                 addCommentUseCase(
                     postId = post.value!!.id,
-                    postTitle = "",
+                    postTitle = postTitle,
                     postType = post.value!!.categories,
                     text = text
                 )

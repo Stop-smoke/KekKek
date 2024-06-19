@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 
 class PreferencesDataSource @Inject constructor(
-    private val preferencesDataStore: DataStore<Preferences>,
+    private val preferencesDataStore: DataStore<Preferences>
 ) {
     fun isOnboardingComplete(): Flow<Boolean> {
         return preferencesDataStore.data
@@ -36,6 +36,12 @@ class PreferencesDataSource @Inject constructor(
             .map { preferences ->
                 preferences[IS_FIRST_RUNNING] ?: true
             }
+
+    suspend fun clearAll() {
+        preferencesDataStore.edit {
+            it.clear()
+        }
+    }
 
     companion object {
         private val ONBOARDING_COMPLETE_KEY = booleanPreferencesKey("onboarding_complete")

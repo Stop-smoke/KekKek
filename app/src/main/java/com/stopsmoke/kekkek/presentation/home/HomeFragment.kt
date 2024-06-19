@@ -15,15 +15,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
-import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.shared.SharedViewModel
-import com.stopsmoke.kekkek.presentation.test.TestViewModel
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -77,7 +73,6 @@ class HomeFragment : Fragment() {
                 }
 
                 is User.Guest -> {
-                    Toast.makeText(requireContext(), "Guest", Toast.LENGTH_SHORT).show()
                 }
 
                 is User.Registered -> {
@@ -89,6 +84,8 @@ class HomeFragment : Fragment() {
                         ivHomeTest.text = "다시 검사하기"
                     }
                 }
+
+                else -> {}
             }
         }
 

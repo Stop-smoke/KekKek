@@ -39,21 +39,21 @@ class PostDaoInstrumentedTest {
             id = "DummyId",
             commentId = "dummyCommentId",
             written = WrittenEntity(
-                uid = "테스트_계정",
-                name = "default",
+                uid = "관리자",
+                name = "관리자",
                 profileImage = "https://file.notion.so/f/f/d2c6a42f-73c9-4a08-a064-629644e1df36/5dd968b8-2ed6-4a11-835d-a3bd71618151/Untitled.png?id=afb9acf4-f456-4b1b-8ab4-8e0bcd14002b&table=block&spaceId=d2c6a42f-73c9-4a08-a064-629644e1df36&expirationTimestamp=1717675200000&signature=WV4mFdY8JbZ45ZOBtMFcR5pMD_VrxqbFY7GlDCL0SU0&downloadName=Untitled.png",
                 ranking = Random.nextLong(1, 500),
             ),
-            title = "Dummy Popular Title",
-            text = "Dummy Text",
+            title = "공지~공지~ 사항~사항~",
+            text = "공! 지! 사! 항!\n주목!!!",
             dateTime = DateTimeEntity(
                 created = Timestamp.now(),
                 modified = Timestamp.now(),
             ),
             likeUser = listOf("likeUser1", "likeUser2"),
             unlikeUser = listOf("unlikeUser1", "unlikeUser2"),
-            category = "popular",
-            views = Random.nextLong(1, 500),
+            category = "notice",
+            views = 0,
             commentCount = null
         )
         postDao.addPost(post)
