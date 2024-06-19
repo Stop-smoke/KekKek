@@ -23,8 +23,9 @@ import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.community.PostToPostViewItem
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
+import com.stopsmoke.kekkek.presentation.community.PostToPostViewItem
+import com.stopsmoke.kekkek.presentation.isNetworkAvailable
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -50,12 +51,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
         arguments?.getString("post_id", null)?.let {
             viewModel.updatePostId(it)
-        }
-
-        postArgument = arguments?.getParcelable("postArgument")
-
-        postArgument?.let {
-            viewModel.updatePostId(it.postId)
         }
     }
 
@@ -96,6 +91,11 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
+            if(!isNetworkAvailable(requireContext())){
+                Toast.makeText(requireContext(), "네트워크 연결 오류", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+                return@collectLatestWithLifecycle
+            }
             postViewAdapter.submitData(it)
         }
     }
@@ -155,6 +155,11 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
+        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
+            findNavController().navigate(R.id.action_post_view_to_my_complaint)
+            bottomSheetDialog.dismiss()
+        }
+
         bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
 
@@ -194,7 +199,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 viewModel.post.value?.id?.let { postId ->
                     viewModel.deletePost(postId)
                     Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    communityViewModel.setPostDeleted(true)
                     findNavController().popBackStack()
                 }
                 dialog.dismiss()
@@ -213,8 +217,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        postArgument?.let{communityViewModel.getCurrentPostCategoryList(it.position)}
+        communityViewModel.setPostChanged(true)
         activity?.visible()
         _binding = null
     }

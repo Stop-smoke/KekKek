@@ -224,6 +224,9 @@
         <action
             android:id="@+id/action_post_view_to_post_edit"
             app:destination="@id/post_edit" />
+        <action
+            android:id="@+id/action_post_view_to_my_complaint"
+            app:destination="@id/my_complaint" />
     </fragment>
 
     <fragment
