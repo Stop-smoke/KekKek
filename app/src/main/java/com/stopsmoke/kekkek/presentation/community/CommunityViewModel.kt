@@ -1,30 +1,23 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,28 +29,21 @@ class CommunityViewModel @Inject constructor(
         MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    private val _isPostDeleted = MutableStateFlow(false)
-    val isPostDeleted: StateFlow<Boolean> get() = _isPostDeleted.asStateFlow()
+    private val _isPostChanged = MutableStateFlow(false)
+    val isPostChanged: StateFlow<Boolean> get() = _isPostChanged.asStateFlow()
 
-    fun setPostDeleted(isDeleted: Boolean) {
+
+    fun setPostChanged(isChanged: Boolean) {
         viewModelScope.launch {
-            _isPostDeleted.emit(isDeleted)
+            _isPostChanged.emit(isChanged)
         }
     }
 
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
-    private var currentCategory = PostCategory.ALL
-    private var currentPosition = 0
-
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        if(postCategory == PostCategory.UNKNOWN) {
-            _category.emit(currentCategory)
-            return@flatMapLatest flowOf(PagingData.empty())
-        }
-        currentCategory = category.value
         postRepository.getPost(postCategory)
             .map { pagingData ->
                 pagingData.map { post ->
@@ -191,11 +177,7 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun updateCategory(postCategory: PostCategory) {
-        viewModelScope.launch {
-            if (category.value == postCategory) {
-                getCurrentPostCategoryList()
-            } else _category.emit(postCategory)
-        }
+          _category.value = postCategory
     }
 
     private val _noticeBanner = MutableStateFlow(Post.emptyPost())
@@ -208,19 +190,5 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
-    fun getCurrentPostCategoryList() = viewModelScope.launch{
-        currentCategory = category.value
-        _category.emit(PostCategory.UNKNOWN)
-        currentPosition = 0
-    }
-
-    fun getCurrentPostCategoryList(setPosition: Int) = viewModelScope.launch{
-        currentCategory = category.value
-        _category.emit(PostCategory.UNKNOWN)
-        currentPosition = setPosition
-    }
-
-    fun getPosition() = currentPosition
-    fun setPosition(position: Int) {currentPosition = position}
 
 }

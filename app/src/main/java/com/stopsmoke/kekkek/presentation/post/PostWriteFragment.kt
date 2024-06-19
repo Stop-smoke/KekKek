@@ -136,7 +136,6 @@ class PostWriteFragment : Fragment() {
                     )
                     viewModel.addPost(postWrite)
                     dialog.dismiss()
-                    communityViewModel.getCurrentPostCategoryList()
                     findNavController().popBackStack()
                 }
             }

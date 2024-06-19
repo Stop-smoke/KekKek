@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.Lifecycle
@@ -64,4 +65,10 @@ internal fun PostCategory.getResourceString(context: Context) = when(this) {
     PostCategory.RESOLUTIONS -> context.getString(R.string.community_category_resolutions)
     PostCategory.UNKNOWN -> context.getString(R.string.community_category_unknown)
     PostCategory.ALL -> context.getString(R.string.community_category_all)
+}
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetworkInfo
+    return networkInfo != null && networkInfo.isConnected
 }
