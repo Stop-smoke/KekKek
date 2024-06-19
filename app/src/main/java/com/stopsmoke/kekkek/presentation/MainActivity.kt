@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -38,18 +40,6 @@ class MainActivity : AppCompatActivity() {
         setupNavigation()
         setupBottomNavigation()
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val currentDestinationId = navController.currentDestination?.id
-                if (currentDestinationId == R.id.home || currentDestinationId == R.id.community || currentDestinationId == R.id.my_page){
-                    finish()
-                } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                }
-            }
-        })
     }
 
     private fun setupNavigation() {
@@ -62,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
         setNavGraph(isOnboardingComplete)
     }
-
 
     private fun setupBottomNavigation() {
 
@@ -88,42 +77,48 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        var recentPosition = 0
-
         navItems.forEach { (itemLayout, _) ->
             itemLayout.setOnClickListener {
                 val currentDestinationId = navController.currentDestination?.id
-                val navOptions = NavOptions.Builder()
-                    .setEnterAnim(R.anim.slide_in_from_right_fade_in)
-                    .setExitAnim(R.anim.fade_out)
-                    .setPopEnterAnim(R.anim.slide_in_from_left_fade_in)
-                    .setPopExitAnim(R.anim.fade_out)
-                    .build()
 
                 when (itemLayout.id) {
                     R.id.nav_home -> {
                         if (currentDestinationId != R.id.home) {
-                            navController.navigate(R.id.home, null, navOptions)
+                            navigateWithAnimation("home")
                         }
-                        recentPosition = 0
                     }
+
                     R.id.nav_community -> {
                         if (currentDestinationId != R.id.community) {
-                            navController.navigate(R.id.community, null, navOptions)
+                            navigateWithAnimation("community")
                         }
-                        recentPosition = 1
                     }
+
                     R.id.nav_mypage -> {
                         if (currentDestinationId != R.id.my_page) {
-                            navController.navigate(R.id.my_page, null, navOptions)
+                            navigateWithAnimation("my")
                         }
-                        recentPosition = 2
                     }
                 }
                 selectNavItem(itemLayout)
             }
         }
         selectNavItem(binding.navHome)
+    }
+
+    private fun navigateWithAnimation(route: String) {
+        navController.navigate(route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            anim {
+                enter = R.anim.slide_in_from_right_fade_in
+                exit = R.anim.fade_out
+                popEnter = R.anim.slide_in_from_left_fade_in
+                popExit = R.anim.fade_out
+            }
+        }
     }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {
