@@ -4,6 +4,8 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -30,21 +32,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-//            insets
-//        }
+
         setupNavigation()
         setupBottomNavigation()
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-    // 해시값 찾을 때 사용하세요
-    // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
 
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentDestinationId = navController.currentDestination?.id
+                if (currentDestinationId == R.id.home || currentDestinationId == R.id.community || currentDestinationId == R.id.my_page){
+                    finish()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private fun setupNavigation() {
