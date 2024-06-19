@@ -12,9 +12,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_kekkek"
+        android:icon="@mipmap/ic_kekkek_colored"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_kekkek_round"
+        android:roundIcon="@mipmap/ic_kekkek_colored_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KekKek"
         tools:targetApi="31">

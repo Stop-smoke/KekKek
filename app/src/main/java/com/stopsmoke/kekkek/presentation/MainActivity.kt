@@ -4,10 +4,14 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
@@ -23,27 +27,19 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     @Inject
     lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-//            insets
-//        }
+
         setupNavigation()
         setupBottomNavigation()
         Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-    // 해시값 찾을 때 사용하세요
-    // Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
-
-
     }
 
     private fun setupNavigation() {
@@ -56,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
         setNavGraph(isOnboardingComplete)
     }
-
 
     private fun setupBottomNavigation() {
 
@@ -79,30 +74,51 @@ class MainActivity : AppCompatActivity() {
                     imageView.setColorFilter(unselectedColor)
                     textView.setTextColor(unselectedColor)
                 }
-
             }
         }
 
         navItems.forEach { (itemLayout, _) ->
             itemLayout.setOnClickListener {
+                val currentDestinationId = navController.currentDestination?.id
+
                 when (itemLayout.id) {
                     R.id.nav_home -> {
-                        navController.navigate(R.id.home)
-
+                        if (currentDestinationId != R.id.home) {
+                            navigateWithAnimation("home")
+                        }
                     }
+
                     R.id.nav_community -> {
-                        navController.navigate(R.id.community)
-
+                        if (currentDestinationId != R.id.community) {
+                            navigateWithAnimation("community")
+                        }
                     }
-                    R.id.nav_mypage -> {
-                        navController.navigate(R.id.my_page)
 
+                    R.id.nav_mypage -> {
+                        if (currentDestinationId != R.id.my_page) {
+                            navigateWithAnimation("my")
+                        }
                     }
                 }
                 selectNavItem(itemLayout)
             }
         }
         selectNavItem(binding.navHome)
+    }
+
+    private fun navigateWithAnimation(route: String) {
+        navController.navigate(route) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            anim {
+                enter = R.anim.slide_in_from_right_fade_in
+                exit = R.anim.fade_out
+                popEnter = R.anim.slide_in_from_left_fade_in
+                popExit = R.anim.fade_out
+            }
+        }
     }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {

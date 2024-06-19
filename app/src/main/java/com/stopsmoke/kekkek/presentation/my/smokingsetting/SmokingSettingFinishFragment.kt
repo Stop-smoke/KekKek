@@ -1,17 +1,17 @@
 package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentSmokingPriceBinding
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingFinishBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +33,22 @@ class SmokingSettingFinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeUiState()
+    }
+
+    private fun observeUiState() {
+        viewModel.resultUserSettings.collectLatestWithLifecycle(lifecycle) {
+            when(it) {
+                is SmokingSettingUiState.Error -> {
+                    view?.snackbarLongShow("error")
+                    findNavController().navigate(R.id.action_resetting_onboarding_smoking_finish_to_my_page)
+                }
+                is SmokingSettingUiState.Loading -> {}
+                is SmokingSettingUiState.Success -> {
+                    findNavController().navigate(R.id.action_resetting_onboarding_smoking_finish_to_my_page)
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -43,7 +59,6 @@ class SmokingSettingFinishFragment : Fragment() {
     private fun initView() = with(binding) {
         btnResetingOnboardingNext.setOnClickListener {
             viewModel.updateUserConfig()
-            findNavController().navigate(R.id.action_resetting_onboarding_smoking_finish_to_my_page)
         }
     }
 

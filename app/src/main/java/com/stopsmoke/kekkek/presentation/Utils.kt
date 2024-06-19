@@ -4,10 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
@@ -68,7 +70,12 @@ internal fun PostCategory.getResourceString(context: Context) = when(this) {
 }
 
 fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val networkInfo = connectivityManager.activeNetworkInfo
     return networkInfo != null && networkInfo.isConnected
+}
+
+internal fun View.snackbarLongShow(message: String) {
+    Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
 }
