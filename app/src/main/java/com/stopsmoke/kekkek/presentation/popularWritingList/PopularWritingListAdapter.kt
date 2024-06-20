@@ -74,6 +74,8 @@ class PopularWritingListAdapter
 
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
+
+                circleIvItemWritingProfile.load(it.profileImage)
             }
 
             tvItemWritingPostType.text = when (item.postType) {
@@ -88,6 +90,7 @@ class PopularWritingListAdapter
                 PostCategory.UNKNOWN -> ""
                 PostCategory.ALL -> ""
             }
+
 
             binding.circleIvItemWritingProfile.setOnClickListener {
                 callback?.navigateToUserProfile(item.userInfo.uid)

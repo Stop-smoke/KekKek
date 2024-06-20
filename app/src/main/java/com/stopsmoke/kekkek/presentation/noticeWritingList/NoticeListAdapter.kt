@@ -75,7 +75,7 @@ class NoticeListAdapter
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
 
-
+                circleIvItemWritingProfile.load(it.profileImage)
             }
 
             tvItemWritingPostType.text = when (item.postType) {

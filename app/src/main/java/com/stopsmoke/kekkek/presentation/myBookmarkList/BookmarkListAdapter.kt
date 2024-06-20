@@ -68,6 +68,8 @@ class BookmarkListAdapter : PagingDataAdapter<CommunityWritingItem, BookmarkList
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
 
+                circleIvItemWritingProfile.load(it.profileImage)
+
                 binding.circleIvItemWritingProfile.setOnClickListener {
                     callback?.navigateToUserProfile(item.userInfo.uid)
                 }

@@ -12,9 +12,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
@@ -25,7 +25,6 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.presentation.community.PostToPostViewItem
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,8 +43,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postViewAdapter: PostViewAdapter
-
-    private var postArgument: PostToPostViewItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,27 +65,24 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         setupListener()
         initCommentRecyclerView()
         observeCommentRecyclerViewItem()
-
-
-
-        lifecycleScope.launch {
-            combine(viewModel.post, viewModel.user) { post, user ->
-                if (user !is User.Registered) return@combine
-                if (post == null) return@combine
-
-                if (post.bookmarkUser.contains(user.uid)) {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                } else {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-                }
-            }
-                .collect()
-        }
-
+        observeBookmarkState()
         postViewAdapter.registerCallback(this)
     }
 
+    private fun observeBookmarkState() = lifecycleScope.launch {
+        combine(viewModel.post, viewModel.user) { post, user ->
+            if (user !is User.Registered) return@combine
+            if (post == null) return@combine
 
+            if (post.bookmarkUser.contains(user.uid)) {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+            } else {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+            }
+        }
+            .flowWithLifecycle(lifecycle)
+            .collect()
+    }
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {

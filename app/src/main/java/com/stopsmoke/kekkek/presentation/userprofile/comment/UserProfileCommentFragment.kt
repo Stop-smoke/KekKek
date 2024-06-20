@@ -38,7 +38,9 @@ class UserProfileCommentFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        commentListAdapter = UserProfileCommentListAdapter()
+        commentListAdapter = UserProfileCommentListAdapter {
+            viewModel.navigatePostDetailScreen(it.parent.postId)
+        }
         binding.rvUserProfileRoot.adapter = commentListAdapter
         binding.root.layoutManager = LinearLayoutManager(requireContext())
     }
