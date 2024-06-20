@@ -9,10 +9,14 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewUserProfileCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 
-class UserProfileCommentListAdapter :
-    PagingDataAdapter<Comment, UserProfileCommentListAdapter.CommentViewHolder>(diffUtil) {
+class UserProfileCommentListAdapter(
+    private val itemClick: (Comment) -> Unit
+) : PagingDataAdapter<Comment, UserProfileCommentListAdapter.CommentViewHolder>(diffUtil) {
 
-    class CommentViewHolder(val binding: RecyclerviewUserProfileCommentBinding) :
+    class CommentViewHolder(
+        private val binding: RecyclerviewUserProfileCommentBinding,
+        private val itemClick: (Comment) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(comment: Comment) {
@@ -23,6 +27,10 @@ class UserProfileCommentListAdapter :
                     "$year.${"%02d".format(monthValue)}.${"%02d".format(dayOfMonth)}"
                 }
             binding.tvUserProfileCommentBody.text = "아직 구현 안됨"
+
+            binding.root.setOnClickListener {
+                itemClick(comment)
+            }
         }
     }
 
@@ -37,7 +45,7 @@ class UserProfileCommentListAdapter :
                 parent,
                 false
             )
-        return CommentViewHolder(view)
+        return CommentViewHolder(view, itemClick)
     }
 
     companion object {

@@ -103,7 +103,7 @@ class UserProfileFragment : Fragment() {
     private fun collectPostViewNavigationListener() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.postItemClick.throttleFirst(300).collectLatest {
+                viewModel.postDetailScreenNavigate.throttleFirst(300).collectLatest {
                     val bundle = bundleOf("post_id" to it)
                     findNavController().navigate(R.id.action_user_profile_to_post_view, bundle)
                 }
