@@ -1,22 +1,18 @@
 package com.stopsmoke.kekkek.presentation
 
-import android.content.ContentValues.TAG
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.common.util.Utility
+import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.home.center.HomeCenterFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -27,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -39,7 +34,13 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
         setupBottomNavigation()
-        Log.d(TAG, "keyhash : ${Utility.getKeyHash(this)}")
+        showHashKey()
+    }
+
+    private fun showHashKey() {
+        if (BuildConfig.DEBUG) {
+            Log.d("MainActivity", "keyhash : ${Utility.getKeyHash(this)}")
+        }
     }
 
     private fun setupNavigation() {
