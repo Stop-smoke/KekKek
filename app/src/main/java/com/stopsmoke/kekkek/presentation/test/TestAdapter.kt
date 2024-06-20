@@ -1,15 +1,12 @@
 package com.stopsmoke.kekkek.presentation.test
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class TestAdapter(
-    fragmentManager: FragmentManager,
-    lifecycle: Lifecycle,
+    fragment: Fragment,
     callback: () -> Unit
-) : FragmentStateAdapter(fragmentManager, lifecycle) {
+) : FragmentStateAdapter(fragment) {
 
     private val fragments: List<Fragment> = (0..9).map {
         if (it == 0) {

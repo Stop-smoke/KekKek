@@ -74,11 +74,8 @@ class TestResultFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.root.requestLayout()
         activity?.invisible()
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onDestroyView() {

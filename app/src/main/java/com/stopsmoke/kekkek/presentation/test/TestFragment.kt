@@ -47,7 +47,7 @@ class TestFragment : Fragment() {
     }
 
     private fun setupView() {
-        testAdapter = TestAdapter(childFragmentManager, lifecycle) {
+        testAdapter = TestAdapter(this) {
             val nextItem = binding.viewpagerTest.currentItem + 1
             binding.viewpagerTest.setCurrentItem(nextItem, true)
         }
