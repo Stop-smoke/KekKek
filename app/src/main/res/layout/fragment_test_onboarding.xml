@@ -5,70 +5,101 @@
     android:id="@+id/test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A2AAD1"
+    android:background="@color/primary_blue"
     tools:context=".presentation.test.TestOnBoardingFragment">
 
+    <ImageView
+        android:id="@+id/ic_plus_1"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toTopOf="@+id/tv_test_description"
+        app:layout_constraintEnd_toStartOf="@+id/tv_test_description"
+        app:tint="@color/white" />
 
     <ImageView
-        android:id="@+id/iv_test_character"
+        android:id="@+id/ic_plus_2"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toTopOf="@+id/tv_test_description"
+        app:layout_constraintStart_toEndOf="@+id/tv_test_description"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/ic_plus_3"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintEnd_toStartOf="@+id/tv_test_description"
+        app:layout_constraintTop_toBottomOf="@+id/tv_test_description"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/ic_plus_4"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintStart_toEndOf="@+id/tv_test_description"
+        app:layout_constraintTop_toBottomOf="@+id/tv_test_description"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_test_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:src="@drawable/ic_character"
+        android:layout_marginTop="140dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="6dp"
+        android:text="니코틴 의존도 설문 도구에 의거한\n담배 중독 검사"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/bg_test"
+        app:layout_constraintBottom_toTopOf="@+id/btn_test_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic_plus_3" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_test_container"
+        android:id="@+id/btn_test_start"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/bg_attainments_box"
+        android:layout_height="68dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/bg_test_button"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/tv_test_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/test_title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/pretendard_medium"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="테스트 시작하기"
+            android:textColor="@color/tv_notice"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_test_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/test_description"
-            android:textAlignment="center"
-            android:fontFamily="@font/pretendard_medium"
-            android:textColor="#AAAAAA"
-            app:layout_constraintEnd_toEndOf="@+id/tv_test_title"
-            app:layout_constraintStart_toStartOf="@+id/tv_test_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_test_title" />
-
-        <Button
-            android:id="@+id/btn_test_start"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/primary_blue"
-            android:text="@string/test_start"
-            android:fontFamily="@font/pretendard_medium"
-            app:layout_constraintEnd_toEndOf="@+id/tv_test_description"
-            app:layout_constraintStart_toStartOf="@+id/tv_test_description"
-            app:layout_constraintTop_toBottomOf="@+id/tv_test_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

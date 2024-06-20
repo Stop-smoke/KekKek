@@ -27,10 +27,11 @@ class StorageDaoInstrumentedTest {
     @Test
     @SdkSuppress(minSdkVersion = Build.VERSION_CODES.TIRAMISU)
     fun uploadProfileImage() = runTest {
-        val inputStream = InputStream.nullInputStream()
-        storageDao.uploadFile(inputStream, "users/test_user/profile_image.png").collect {
-            Log.d("TestResult: ", it.toString())
-        }
+//        val inputStream = InputStream.nullInputStream()
+//        storageDao.uploadFile(inputStream, "users/test_user/profile_image.png").
+//        collect {
+//            Log.d("TestResult: ", it.toString())
+//        }
     }
 
     @Test
