@@ -349,7 +349,7 @@
                         android:layout_width="60dp"
                         android:layout_height="50dp"
                         android:layout_marginBottom="30dp"
-                        android:src="@drawable/ic_tip"
+                        android:src="@drawable/ic_bulb"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
