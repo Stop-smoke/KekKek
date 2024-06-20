@@ -4,19 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.throttleFirst
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.userprofile.adapter.UserProfileViewPagerAdapter
 import com.stopsmoke.kekkek.presentation.utils.wrapTabIndicatorToTitle
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
@@ -46,15 +50,16 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch { viewModel.user.collect(observeUserData()) }
+        observeUserData()
         setupViewpager()
         setupTabLayoutWithViewPager()
         binding.includeUserprofileAppBar.ivUserProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        collectPostViewNavigationListener()
     }
 
-    private fun observeUserData() = FlowCollector<User.Registered> { user ->
+    private fun observeUserData() = viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
         with(binding.includeUserprofileDetail) {
             tvUserProfileName.text = user.name
             tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
@@ -92,6 +97,17 @@ class UserProfileFragment : Fragment() {
                 2 -> tab.text = getString(R.string.user_profile_achievements)
             }
         }.attach()
+    }
+
+    private fun collectPostViewNavigationListener() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postDetailScreenNavigate.throttleFirst(300).collectLatest {
+                    val bundle = bundleOf("post_id" to it)
+                    findNavController().navigate(R.id.action_user_profile_to_post_view, bundle)
+                }
+            }
+        }
     }
 
     override fun onResume() {

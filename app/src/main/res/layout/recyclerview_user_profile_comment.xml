@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="20dp"
-    android:paddingVertical="28dp">
+    android:paddingVertical="20dp">
 
     <ImageView
         android:id="@+id/iv_user_profile_comment_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_notification_bell" />
@@ -27,24 +26,28 @@
 
     <TextView
         android:id="@+id/tv_user_profile_comment_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        tools:text="회원님의 게시글에 새 댓글이 달렸습니다."
         android:fontFamily="@font/pretendard_medium"
         android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/barrier_user_profile_comment_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="회원님의 게시글에 새 댓글이 달렸습니다." />
+        app:layout_constraintStart_toEndOf="@+id/barrier_user_profile_comment_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_user_profile_comment_body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_medium"
         android:textColor="#8B94A1"
         android:textSize="13sp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toEndOf="@+id/barrier_user_profile_comment_icon"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_profile_comment_title"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="진짜 담배 어떻게 끊으셨는지 궁금 궁금 매우 궁금합니다" />
 
     <TextView

@@ -12,7 +12,9 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.toResourceId
 
-class UserPostListAdapter :
+class UserPostListAdapter(
+    private val itemClick: (Post) -> Unit
+) :
     PagingDataAdapter<Post, UserPostListAdapter.UserPostViewHolder>(diffUtil) {
 
     override fun onBindViewHolder(holder: UserPostViewHolder, position: Int) {
@@ -26,11 +28,14 @@ class UserPostListAdapter :
                 parent,
                 false
             )
-        return UserPostViewHolder(view)
+        return UserPostViewHolder(view, itemClick)
     }
 
-    class UserPostViewHolder(val binding: ItemCommunityPostwritingBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class UserPostViewHolder(
+        val binding: ItemCommunityPostwritingBinding,
+        private val itemClick: (Post) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(post: Post) {
             with(post.written.profileImage) {
                 when (this) {
@@ -50,6 +55,10 @@ class UserPostListAdapter :
             binding.tvItemWritingViewNum.text = post.views.toString()
             binding.tvItemWritingLikeNum.text = post.likeUser.size.toString()
             binding.tvItemWritingCommentNum.text = post.commentCount.toString()
+
+            binding.root.setOnClickListener {
+                itemClick(post)
+            }
         }
     }
 
