@@ -90,4 +90,12 @@ class UserProfileViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
+    private val _postItemClick = MutableSharedFlow<String>()
+    val postItemClick = _postItemClick.asSharedFlow()
+
+    fun clickPostItem(postId: String) {
+        viewModelScope.launch {
+            _postItemClick.emit(postId)
+        }
+    }
 }

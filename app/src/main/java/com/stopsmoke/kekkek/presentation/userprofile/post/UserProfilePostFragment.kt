@@ -39,7 +39,9 @@ class UserProfilePostFragment : Fragment() {
     }
 
     private fun setupRecyclerView() = with(binding.root) {
-        userPostListAdapter = UserPostListAdapter()
+        userPostListAdapter = UserPostListAdapter {
+            viewModel.clickPostItem(it.id)
+        }
         adapter = userPostListAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
