@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.userprofile.comment.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewUserProfileCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.CommentParent
+import com.stopsmoke.kekkek.presentation.getResourceString
 
 class UserProfileCommentListAdapter(
     private val itemClick: (Comment) -> Unit
@@ -24,9 +27,9 @@ class UserProfileCommentListAdapter(
             binding.tvUserProfileCommentTitle.text = comment.text
             binding.tvUserProfileCommentDateTime.text =
                 comment.dateTime.modified.run {
-                    "$year.${"%02d".format(monthValue)}.${"%02d".format(dayOfMonth)}"
+                    "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
                 }
-            binding.tvUserProfileCommentBody.text = "아직 구현 안됨"
+            binding.tvUserProfileCommentBody.text = itemView.context.getCommentStateString(comment.parent)
 
             binding.root.setOnClickListener {
                 itemClick(comment)
@@ -60,3 +63,6 @@ class UserProfileCommentListAdapter(
         }
     }
 }
+
+private fun Context.getCommentStateString(item: CommentParent): String =
+    "${item.postType.getResourceString(this)}에 등록한 ${item.postTitle} 게시글에 댓글을 남겼습니다."
