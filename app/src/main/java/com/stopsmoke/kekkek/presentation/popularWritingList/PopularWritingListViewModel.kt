@@ -24,6 +24,9 @@ class PopularWritingListViewModel @Inject constructor(
     val uiState: StateFlow<PopularWritingListUiState> = _uiState.asStateFlow()
 
     val post = uiState.flatMapLatest { popularWritingListUiState ->
+        _uiState.update { prev->
+            prev.copy(isLoading = false)
+        }
         flowOf( postRepository.getPopularPostList().map { it.toCommunityWritingListItem() })
     }
 
