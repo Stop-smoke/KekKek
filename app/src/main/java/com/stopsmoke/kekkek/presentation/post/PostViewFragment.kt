@@ -25,7 +25,6 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.presentation.community.PostToPostViewItem
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,8 +43,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postViewAdapter: PostViewAdapter
-
-    private var postArgument: PostToPostViewItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

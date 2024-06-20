@@ -27,14 +27,14 @@ fun PostCategory.toRequestString(): String? = when (this) {
 }
 
 fun String.toPostCategory(): PostCategory = when (this) {
-    "notice" -> PostCategory.NOTICE
-    "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
-    "popular" -> PostCategory.POPULAR
-    "quit_smoking_aids_reviews" -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
-    "success_stories" -> PostCategory.SUCCESS_STORIES
-    "general_discussion" -> PostCategory.GENERAL_DISCUSSION
-    "failure_stories" -> PostCategory.FAILURE_STORIES
-    "resolutions" -> PostCategory.RESOLUTIONS
-    "all" -> PostCategory.ALL
+    "notice", "공지사항" -> PostCategory.NOTICE
+    "quit_smoking_support", "금연 지원 프로그램 공지" -> PostCategory.QUIT_SMOKING_SUPPORT
+    "popular", "인기글" -> PostCategory.POPULAR
+    "quit_smoking_aids_reviews", "금연 보조제 후기" -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
+    "success_stories", "금연 성공 후기" -> PostCategory.SUCCESS_STORIES
+    "general_discussion", "자유게시판" -> PostCategory.GENERAL_DISCUSSION
+    "failure_stories", "금연 실패 후기" -> PostCategory.FAILURE_STORIES
+    "resolutions", "금연 다짐" -> PostCategory.RESOLUTIONS
+    "all", "커뮤니티 홈" -> PostCategory.ALL
     else -> PostCategory.UNKNOWN
 }

@@ -117,9 +117,9 @@ internal class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTopPopularItems(): List<Post> =
+    override suspend fun getTopPopularItems(): Flow<List<Post>> =
         postDao.getPopularPostItems().map {
-            it.asExternalModel()
+            it.map { it.asExternalModel() }
         }
 
     override suspend fun getTopNotice(): Post =

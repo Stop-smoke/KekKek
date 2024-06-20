@@ -24,7 +24,7 @@ interface PostRepository {
 
     suspend fun editPost(post: PostWrite): Result<Unit>
 
-    suspend fun getTopPopularItems(): List<Post>
+    suspend fun getTopPopularItems(): Flow<List<Post>>
 
     suspend fun getTopNotice(): Post
 

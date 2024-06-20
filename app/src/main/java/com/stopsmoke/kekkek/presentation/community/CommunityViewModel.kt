@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,19 +58,11 @@ class CommunityViewModel @Inject constructor(
             it.printStackTrace()
         }
 
-    init {
-        viewModelScope.launch {
-            val postItems = postRepository.getTopPopularItems()
-            _uiState.emit(
-                CommunityUiState.CommunityNormalUiState(
-                    popularItem = CommunityPopularItem(
-                        postInfo1 = if (postItems.isNotEmpty()) postItems[0].toCommunityWritingListItem() else emptyCommunityWritingListItem(),
-                        postInfo2 = if (postItems.size > 1) postItems[1].toCommunityWritingListItem() else emptyCommunityWritingListItem()
-                    )
-                )
-            )
-        }
+
+    val topPopularPosts = posts.flatMapLatest {
+        postRepository.getTopPopularItems()
     }
+
 
     private fun emptyPostInfo() = PostInfo(
         title = "",
@@ -177,7 +171,7 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun updateCategory(postCategory: PostCategory) {
-          _category.value = postCategory
+        _category.value = postCategory
     }
 
     private val _noticeBanner = MutableStateFlow(Post.emptyPost())
@@ -190,5 +184,15 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    fun bindPopularPosts(popularList: List<Post>) {
+        _uiState.value = (
+                CommunityUiState.CommunityNormalUiState(
+                    popularItem = CommunityPopularItem(
+                        postInfo1 = if (popularList.isNotEmpty()) popularList[0].toCommunityWritingListItem() else emptyCommunityWritingListItem(),
+                        postInfo2 = if (popularList.size > 1) popularList[1].toCommunityWritingListItem() else emptyCommunityWritingListItem()
+                    )
+                )
+                )
+    }
 
 }
