@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,27 +65,24 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         setupListener()
         initCommentRecyclerView()
         observeCommentRecyclerViewItem()
-
-
-
-        lifecycleScope.launch {
-            combine(viewModel.post, viewModel.user) { post, user ->
-                if (user !is User.Registered) return@combine
-                if (post == null) return@combine
-
-                if (post.bookmarkUser.contains(user.uid)) {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-                } else {
-                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-                }
-            }
-                .collect()
-        }
-
+        observeBookmarkState()
         postViewAdapter.registerCallback(this)
     }
 
+    private fun observeBookmarkState() = lifecycleScope.launch {
+        combine(viewModel.post, viewModel.user) { post, user ->
+            if (user !is User.Registered) return@combine
+            if (post == null) return@combine
 
+            if (post.bookmarkUser.contains(user.uid)) {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+            } else {
+                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+            }
+        }
+            .flowWithLifecycle(lifecycle)
+            .collect()
+    }
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {

@@ -90,4 +90,12 @@ class UserProfileViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
+    private val _postDetailScreenNavigate = MutableSharedFlow<String>()
+    val postDetailScreenNavigate = _postDetailScreenNavigate.asSharedFlow()
+
+    fun navigatePostDetailScreen(postId: String) {
+        viewModelScope.launch {
+            _postDetailScreenNavigate.emit(postId)
+        }
+    }
 }
