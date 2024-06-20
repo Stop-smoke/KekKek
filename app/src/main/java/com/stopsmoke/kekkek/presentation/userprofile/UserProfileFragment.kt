@@ -17,10 +17,9 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.throttleFirst
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.userprofile.adapter.UserProfileViewPagerAdapter
 import com.stopsmoke.kekkek.presentation.utils.wrapTabIndicatorToTitle
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -51,7 +50,7 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch { viewModel.user.collect(observeUserData()) }
+        observeUserData()
         setupViewpager()
         setupTabLayoutWithViewPager()
         binding.includeUserprofileAppBar.ivUserProfileBack.setOnClickListener {
@@ -60,7 +59,7 @@ class UserProfileFragment : Fragment() {
         collectPostViewNavigationListener()
     }
 
-    private fun observeUserData() = FlowCollector<User.Registered> { user ->
+    private fun observeUserData() = viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
         with(binding.includeUserprofileDetail) {
             tvUserProfileName.text = user.name
             tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
