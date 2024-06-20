@@ -96,7 +96,7 @@ class TestViewModel @Inject constructor(
     val results = listOf(
         listOf(
             "가장 쉽게 금연할 수 있는 상태",
-            "흡연량과 흡연 시간이 늘어날수록 \\n니코틴에 대한 의존도는 높아집니다. \\n\\n오늘부터 금연 성공을 이어가세요!",
+            "흡연량과 흡연 시간이 늘어날수록 \n니코틴에 대한 의존도는 높아집니다. \n\n오늘부터 금연 성공을 이어가세요!",
             R.drawable.ic_test_good
         ),
         listOf(
