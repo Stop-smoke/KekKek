@@ -3,7 +3,6 @@ package com.stopsmoke.kekkek
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 
