@@ -188,8 +188,7 @@ internal class PostDaoImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun getPopularPostItems(): List<PostEntity> {
-        return try {
+    override suspend fun getPopularPostItems(): Flow<List<PostEntity>> {
             // 현재 시간에서 7일 전 시간 계산
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -7)
@@ -199,16 +198,8 @@ internal class PostDaoImpl @Inject constructor(
                 .whereGreaterThan("date_time.created", sevenDaysAgo)
                 .orderBy("views", Query.Direction.DESCENDING)
                 .limit(2)
-                .get()
-                .await()
 
-            query.documents.mapNotNull { document ->
-                document.toObject<PostEntity>()
-            }
-        } catch (e: Exception) {
-            // 예외 처리
-            emptyList()
-        }
+            return query.dataObjects<PostEntity>()
     }
 
     override suspend fun getTopNotice(): PostEntity {

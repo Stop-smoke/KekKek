@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.domain.model.toPostCategory
 import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
@@ -81,7 +82,7 @@ class CommunityFragment : Fragment() {
         )
 
         // 삭제될 때 시도
-        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle){ isDeleted ->
+        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
             if (isDeleted) {
                 listAdapter.refresh()
                 viewModel.setPostChanged(false)
@@ -93,12 +94,10 @@ class CommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.let {activity->
-            if (!activity.isVisible()) {
-                binding.appbarLayoutCommunity.setExpanded(false)
-            }
+        activity?.let { activity ->
             activity.visible()
         }
+        listAdapter.refresh()
     }
 
 
@@ -165,7 +164,12 @@ class CommunityFragment : Fragment() {
         val adapterList =
             requireContext().resources.getStringArray(R.array.community_category).toList()
         val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
-            viewModel.setCategory(adapterList[clickPosition])
+            if (viewModel.category.value == adapterList[clickPosition].toPostCategory()) {
+                listAdapter.refresh()
+            } else {
+                viewModel.setCategory(adapterList[clickPosition])
+            }
+
             rvCommunityList.scrollToPosition(0)
         })
         adapter.submitList(adapterList)
@@ -206,6 +210,13 @@ class CommunityFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            topPopularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { popularPosts ->
+                    bindPopularPosts(popularPosts)
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePost ->
                     binding.tvCommunityNoticeTitle.text = noticePost.title
@@ -215,7 +226,6 @@ class CommunityFragment : Fragment() {
 
     private fun onBind(communityUiState: CommunityUiState) {
         when (communityUiState) {
-
             is CommunityUiState.CommunityNormalUiState -> {
                 val tvCommunityTitle1 =
                     requireActivity().findViewById<TextView>(R.id.tv_community_title1)
@@ -254,7 +264,6 @@ class CommunityFragment : Fragment() {
                     tvCommunityCommentNum2.text = it.comment.toString()
                     tvCommunityPostType2.text = it.postType
                 }
-
             }
         }
     }
