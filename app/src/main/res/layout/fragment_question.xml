@@ -10,22 +10,22 @@
     <include
         android:id="@+id/include_question_app_bar"
         layout="@layout/fragment_question_app_bar"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressbar_question"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="3dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#5877E4"
-        android:scaleY="3"
-        android:max="8"
+        android:backgroundTint="#D9D9D9"
         android:backgroundTintMode="src_in"
-        android:progressBackgroundTint="#5877E4"
+        android:max="8"
+        android:progressBackgroundTint="@color/primary_blue"
         android:progressBackgroundTintMode="add"
+        android:scaleY="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include_question_app_bar" />
@@ -34,12 +34,15 @@
 
     <TextView
         android:id="@+id/tv_question_main_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="400dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/pretendard_bold"
         android:text="@string/question1_title"
+        android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,50 +54,68 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
         android:text="@string/question_sub_text"
         android:textColor="@color/gray"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/tv_question_main_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_question_main_text" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_text_button"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_test_button"
+        android:backgroundTint="#A2A2A2"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer1"
         android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_2"
-        app:layout_constraintEnd_toEndOf="@+id/btn_question_answer_2"
-        app:layout_constraintStart_toStartOf="@+id/btn_question_answer_2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_text_button"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_test_button"
+        android:backgroundTint="#A2A2A2"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer2"
         android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_3"
-        app:layout_constraintEnd_toEndOf="@+id/btn_question_answer_3"
-        app:layout_constraintStart_toStartOf="@+id/btn_question_answer_3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/bg_text_button"
+        android:layout_marginBottom="40dp"
+
+        android:background="@drawable/bg_test_button"
+        android:backgroundTint="#A2A2A2"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer3"
         android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

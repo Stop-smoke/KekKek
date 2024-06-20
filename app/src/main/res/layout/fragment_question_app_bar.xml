@@ -11,20 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:padding="8dp"
-        app:tint="@color/gray_lightgray2"
         android:src="@drawable/ic_app_bar_left_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <TextView
         android:id="@+id/tv_testquestion_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard_bold"
+        android:fontFamily="@font/pretendard_semi_bold"
         android:text="담배 중독 검사"
-        android:textSize="20sp"
-        android:textColor="@color/gray_lightgray2"
+        android:textSize="15sp"
+        android:textColor="@color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +31,8 @@
 
     <ImageView
         android:id="@+id/iv_test_cancel"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         app:tint="@color/gray_lightgray2"
         android:layout_marginEnd="20dp"
         android:src="@drawable/ic_cancel"
@@ -42,3 +41,5 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
