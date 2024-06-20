@@ -19,11 +19,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun loadSplashScreen() {
-        lifecycleScope.launch {
-            delay(1000)
-            val intent = Intent(this@SplashActivity, MainActivity::class.java)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }
+        }, 1000)
     }
 }
