@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
@@ -107,9 +108,13 @@ class NoticeListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.invisible()
+        activity?.let { activity ->
+            if (activity.isVisible()) {
+                listAdapter.refresh()
+            }
+            activity.invisible()
+        }
     }
-
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

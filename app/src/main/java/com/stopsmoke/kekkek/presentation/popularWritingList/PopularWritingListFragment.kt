@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPopularWritingListBinding
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
@@ -97,9 +98,9 @@ class PopularWritingListFragment : Fragment() {
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { state ->
-                    onBind(state)
+            post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { post ->
+                    listAdapter.submitList(post)
                 }
         }
 
@@ -118,7 +119,12 @@ class PopularWritingListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.invisible()
+        activity?.let { activity ->
+            if (activity.isVisible()) {
+                viewModel.reload()
+            }
+            activity.invisible()
+        }
     }
 
 }
