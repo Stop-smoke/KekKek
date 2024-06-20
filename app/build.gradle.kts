@@ -160,4 +160,8 @@ dependencies {
 
     //Lottie
     implementation ("com.airbnb.android:lottie:6.0.0")
+
+    //splash 아이콘 숨기기
+    implementation ("androidx.core:core-splashscreen:1.0.0-beta01")
+
 }
