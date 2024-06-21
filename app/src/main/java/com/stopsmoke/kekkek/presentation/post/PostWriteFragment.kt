@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,27 +19,41 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
+import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostWriteCategory
+import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class PostWriteFragment : Fragment() {
-
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PostWriteViewModel by viewModels()
     private val communityViewModel: CommunityViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.getString("post_id")?.let {
+            viewModel.updatePostId(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +66,7 @@ class PostWriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
         initListener()
     }
 
@@ -63,19 +79,20 @@ class PostWriteFragment : Fragment() {
         val adapter =
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
         includePostWriteAppBar.spinnerPostWrite.adapter = adapter
-        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                includePostWriteAppBar.tvPostWriteType.text = category[position]
+        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    includePostWriteAppBar.tvPostWriteType.text = category[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-        }
     }
 
     private fun initListener() = with(binding) {
@@ -99,8 +116,8 @@ class PostWriteFragment : Fragment() {
             dialog.show()
 
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if(etPostWriteTitle.text.isEmpty() || etPostWriteContent.text.isEmpty()) {
-                    Snackbar.make(postWrite,"제목 또는 내용을 입력해주세요!",Snackbar.LENGTH_SHORT).show()
+                if (etPostWriteTitle.text.isEmpty() || etPostWriteContent.text.isEmpty()) {
+                    Snackbar.make(postWrite, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
                 } else {
                     val postWrite = PostWrite(
                         title = etPostWriteTitle.text.toString(),
@@ -127,6 +144,22 @@ class PostWriteFragment : Fragment() {
         }
     }
 
+    private fun initViewModel() = with(viewModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest {
+                    it?.let { onBind(it) }
+                }
+        }
+    }
+
+    private fun onBind(post: Post) =with(binding){
+        etPostWriteContent.setText(post.text)
+        etPostWriteTitle.setText(post.title)
+
+        includePostWriteAppBar.tvPostWriteType.text = post.categories.toStringKR()
+    }
+
     private fun runTextEditor(span: Any?) {
         val etPostWriteContent = binding.etPostWriteContent
         val start = etPostWriteContent.selectionStart
@@ -144,7 +177,7 @@ class PostWriteFragment : Fragment() {
         }
     }
 
-    private fun initTextEditor() = with(binding){
+    private fun initTextEditor() = with(binding) {
         ivPostWriteBold.setOnClickListener {
             val span = StyleSpan(Typeface.BOLD)
             runTextEditor(span)
