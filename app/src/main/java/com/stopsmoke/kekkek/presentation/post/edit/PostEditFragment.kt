@@ -124,7 +124,7 @@ class PostEditFragment : Fragment() {
                         else -> throw IllegalStateException()
                     }
                 )
-                viewModel.editPost(postEdit)
+//                viewModel.editPost(postEdit)
                 dialog.dismiss()
                 findNavController().popBackStack()
             }

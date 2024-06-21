@@ -9,7 +9,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +27,13 @@ import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostWrite
-import com.stopsmoke.kekkek.domain.model.PostWriteCategory
+import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -46,6 +44,10 @@ class PostWriteFragment : Fragment() {
 
     private val viewModel: PostWriteViewModel by viewModels()
     private val communityViewModel: CommunityViewModel by activityViewModels()
+
+    private val builder by lazy {
+        AlertDialog.Builder(requireContext())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +97,21 @@ class PostWriteFragment : Fragment() {
             }
     }
 
+    private fun createDialogBuilder() = with(builder) {
+        if (viewModel.post.value == null) {
+            builder.setTitle("게시물 등록")
+            builder.setMessage("게시물을 등록하시겠습니까?")
+            builder.setIcon(R.drawable.ic_post)
+        } else {
+            builder.setTitle("게시물 수정")
+            builder.setMessage("게시물을 수정하시겠습니까??")
+            builder.setIcon(R.drawable.ic_post)
+        }
+
+        builder.setPositiveButton("예", null)
+        builder.setNegativeButton("아니요", null)
+    }
+
     private fun initListener() = with(binding) {
         initTextEditor()
 
@@ -103,36 +120,22 @@ class PostWriteFragment : Fragment() {
         }
 
         includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
-            val builder = AlertDialog.Builder(requireContext())
+            if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
+                Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
+            } else {
+                val dialog = builder.create()
+                dialog.show()
 
-            builder.setTitle("게시물 등록")
-            builder.setMessage("게시물을 등록하시겠습니까?")
-            builder.setIcon(R.drawable.ic_post)
-
-            builder.setPositiveButton("예", null)
-            builder.setNegativeButton("아니요", null)
-
-            val dialog = builder.create()
-            dialog.show()
-
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (etPostWriteTitle.text.isEmpty() || etPostWriteContent.text.isEmpty()) {
-                    Snackbar.make(postWrite, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
-                } else {
-                    val postWrite = PostWrite(
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    val post = PostWrite(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
                         dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
-                        category = when (includePostWriteAppBar.tvPostWriteType.text) {
-                            "자유 게시판" -> PostWriteCategory.GENERAL_DISCUSSION
-                            "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
-                            "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
-                            "금연 실패 후기" -> PostWriteCategory.FAILURE_STORIES
-                            "금연 다짐" -> PostWriteCategory.QUIT_SMOKING_WILLINGNESS
-                            else -> throw IllegalStateException()
-                        }
+                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                            .toPostWriteCategory()
                     )
-                    viewModel.addPost(postWrite)
+                    if (viewModel.post.value == null) viewModel.addPost(post)
+                    else viewModel.editPost(post)
                     dialog.dismiss()
                     findNavController().popBackStack()
                 }
@@ -149,15 +152,18 @@ class PostWriteFragment : Fragment() {
             post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest {
                     it?.let { onBind(it) }
+                    createDialogBuilder()
                 }
         }
     }
 
-    private fun onBind(post: Post) =with(binding){
+    private fun onBind(post: Post) = with(binding) {
         etPostWriteContent.setText(post.text)
         etPostWriteTitle.setText(post.title)
 
         includePostWriteAppBar.tvPostWriteType.text = post.categories.toStringKR()
+
+        includePostWriteAppBar.tvPostWriteRegister.text = "수정"
     }
 
     private fun runTextEditor(span: Any?) {

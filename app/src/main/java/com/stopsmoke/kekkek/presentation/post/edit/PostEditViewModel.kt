@@ -13,10 +13,6 @@ class PostEditViewModel @Inject constructor(
     private val postRepository: PostRepository
 ): ViewModel() {
 
-    fun editPost(post: PostWrite) {
-        viewModelScope.launch {
-            postRepository.editPost(post)
-        }
-    }
+
 
 }

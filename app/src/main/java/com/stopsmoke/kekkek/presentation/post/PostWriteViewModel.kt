@@ -30,6 +30,12 @@ class PostWriteViewModel @Inject constructor(
         }
     }
 
+    fun editPost(post: PostWrite) {
+        viewModelScope.launch {
+            postRepository.editPost(post)
+        }
+    }
+
     fun updatePostId(postId:String) = viewModelScope.launch{
         val post = postRepository.getPostForPostId(postId)
         _post.emit(post)
