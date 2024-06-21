@@ -37,10 +37,6 @@ class CommunityFragment : Fragment() {
         CommunityListAdapter()
     }
 
-    private val gestureDetector: GestureDetector by lazy {
-        GestureDetector(requireContext(), GestureListener())
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,37 +55,7 @@ class CommunityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
-        initGestureDetector()
-
-
-        listAdapter.registerCallbackListener(
-            object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {
-
-                    findNavController().navigate(
-                        resId = R.id.action_community_to_user_profile_screen,
-                        args = bundleOf("uid" to uid)
-                    )
-                }
-
-                override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_community_to_post_view,
-                        args = bundleOf("post_id" to postId)
-                    )
-                }
-            }
-        )
-
-        // 삭제될 때 시도
-        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
-            if (isDeleted) {
-                listAdapter.refresh()
-                viewModel.setPostChanged(false)
-            }
-        }
-
-
+        setClickListener()
     }
 
     override fun onResume() {
@@ -109,31 +75,35 @@ class CommunityFragment : Fragment() {
 
 
     private fun initView() = with(binding) {
-        rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
-        rvCommunityList.adapter = listAdapter
+        initRecyclerView()
+        initCommunityCategory()
+        setToolbarMenu()
 
-        ivCommunityNoticeArrow.setOnClickListener {
-            // 인기글 전체보기 클릭
-        }
+    }
 
+    private fun initRecyclerView(){
+        binding.rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvCommunityList.adapter = listAdapter
+    }
+
+    private fun setClickListener() = with(binding){
         floatingActionButtonCommunity.setOnClickListener {
             findNavController().navigate("post_write")
         }
-
-        initCommunityCategory()
-        setToolbarMenu()
 
         clCommunityNotice.setOnClickListener {
             findNavController().navigate("notice_list")
         }
 
 
+        //인기글 배너 클릭 리스너
         val tvCommunityPopularFullView =
             requireActivity().findViewById<TextView>(R.id.tv_community_popularFullView)
         val clCommunityPostPopular1 =
             requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular1)
         val clCommunityPostPopular2 =
             requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
+
         tvCommunityPopularFullView.setOnClickListener {
             findNavController().navigate(R.id.action_community_to_popularWritingList)
         }
@@ -156,6 +126,26 @@ class CommunityFragment : Fragment() {
                 )
             }
         }
+
+        //게시글 클릭
+        listAdapter.registerCallbackListener(
+            object : CommunityCallbackListener {
+                override fun navigateToUserProfile(uid: String) {
+
+                    findNavController().navigate(
+                        resId = R.id.action_community_to_user_profile_screen,
+                        args = bundleOf("uid" to uid)
+                    )
+                }
+
+                override fun navigateToPost(postId: String) {
+                    findNavController().navigate(
+                        resId = R.id.action_community_to_post_view,
+                        args = bundleOf("post_id" to postId)
+                    )
+                }
+            }
+        )
     }
 
     private fun initCommunityCategory() = with(binding) {
@@ -187,14 +177,10 @@ class CommunityFragment : Fragment() {
         }
     }
 
-    private fun initGestureDetector() {
-        binding.coordinatorLayoutCommunityParent.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-            true
-        }
-    }
+
 
     private fun initViewModel() = with(viewModel) {
+
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
@@ -202,6 +188,7 @@ class CommunityFragment : Fragment() {
                 }
         }
 
+        //게시글
         viewLifecycleOwner.lifecycleScope.launch {
             posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { posts ->
@@ -209,6 +196,8 @@ class CommunityFragment : Fragment() {
                 }
         }
 
+
+        //인기글 배너
         viewLifecycleOwner.lifecycleScope.launch {
             topPopularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { popularPosts ->
@@ -216,11 +205,20 @@ class CommunityFragment : Fragment() {
                 }
         }
 
+        //공지사항 배너
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePost ->
                     binding.tvCommunityNoticeTitle.text = noticePost.title
                 }
+        }
+
+        // 삭제될 때 시도
+        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
+            if (isDeleted) {
+                listAdapter.refresh()
+                viewModel.setPostChanged(false)
+            }
         }
     }
 
@@ -266,35 +264,5 @@ class CommunityFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-
-        private val SWIPE_THRESHOLD = 100
-        private val SWIPE_VELOCITY_THRESHOLD = 100
-
-        override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
-            if (e1 == null || e2 == null) return false
-
-            val diffY = e2.y - e1.y
-            val diffX = e2.x - e1.x
-            if (Math.abs(diffY) > Math.abs(diffX)) {
-                if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY < 0) {
-                        onSwipeUp()
-                    }
-                }
-            }
-            return true
-        }
-    }
-
-    private fun onSwipeUp() {
-        listAdapter.refresh()
     }
 }

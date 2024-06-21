@@ -26,6 +26,19 @@ fun PostCategory.toRequestString(): String? = when (this) {
     PostCategory.ALL -> null
 }
 
+fun PostCategory.toStringKR(): String? = when (this) {
+    PostCategory.NOTICE -> "공지사항"
+    PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
+    PostCategory.POPULAR -> "인기글"
+    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
+    PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
+    PostCategory.GENERAL_DISCUSSION -> "자유게시판"
+    PostCategory.FAILURE_STORIES -> "금연 실패 후기"
+    PostCategory.RESOLUTIONS -> "금연 다짐"
+    PostCategory.UNKNOWN -> null
+    PostCategory.ALL -> null
+}
+
 fun String.toPostCategory(): PostCategory = when (this) {
     "notice", "공지사항" -> PostCategory.NOTICE
     "quit_smoking_support", "금연 지원 프로그램 공지" -> PostCategory.QUIT_SMOKING_SUPPORT
