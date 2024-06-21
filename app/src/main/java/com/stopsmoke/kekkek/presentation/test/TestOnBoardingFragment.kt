@@ -45,5 +45,4 @@ class TestOnBoardingFragment(
         super.onDestroyView()
         _binding = null
     }
-
 }

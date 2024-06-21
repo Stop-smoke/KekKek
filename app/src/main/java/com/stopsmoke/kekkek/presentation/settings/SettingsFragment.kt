@@ -23,7 +23,6 @@ import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
 
-
 class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     private var _binding: FragmentSettingsBinding? = null
@@ -53,7 +52,6 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     }
 
     private fun observeUserInformation() {
-
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
             if (it != null)
                 when (it) {
