@@ -36,7 +36,7 @@ fun PostCategory.toStringKR(): String? = when (this) {
     PostCategory.FAILURE_STORIES -> "금연 실패 후기"
     PostCategory.RESOLUTIONS -> "금연 다짐"
     PostCategory.UNKNOWN -> null
-    PostCategory.ALL -> "커뮤니티 홈"
+    PostCategory.ALL -> null
 }
 
 fun String.toPostCategory(): PostCategory = when (this) {

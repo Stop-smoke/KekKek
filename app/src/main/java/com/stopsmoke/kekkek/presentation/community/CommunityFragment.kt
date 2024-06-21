@@ -37,10 +37,6 @@ class CommunityFragment : Fragment() {
         CommunityListAdapter()
     }
 
-    private val gestureDetector: GestureDetector by lazy {
-        GestureDetector(requireContext(), GestureListener())
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +55,6 @@ class CommunityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
-        initGestureDetector()
         setClickListener()
     }
 
@@ -269,42 +264,5 @@ class CommunityFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun initGestureDetector() {
-        binding.coordinatorLayoutCommunityParent.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-            true
-        }
-    }
-
-    private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-
-        private val SWIPE_THRESHOLD = 100
-        private val SWIPE_VELOCITY_THRESHOLD = 100
-
-        override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
-            if (e1 == null || e2 == null) return false
-
-            val diffY = e2.y - e1.y
-            val diffX = e2.x - e1.x
-            if (Math.abs(diffY) > Math.abs(diffX)) {
-                if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY < 0) {
-                        onSwipeUp()
-                    }
-                }
-            }
-            return true
-        }
-    }
-
-    private fun onSwipeUp() {
-        listAdapter.refresh()
     }
 }
