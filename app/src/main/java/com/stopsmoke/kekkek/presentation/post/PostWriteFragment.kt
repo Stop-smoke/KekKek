@@ -1,6 +1,14 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,34 +79,7 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
-//        ivPostWriteBold.setOnClickListener {
-//            val span = StyleSpan(Typeface.BOLD)
-//            runTextEditor(span)
-//        }
-//        ivPostWriteItalic.setOnClickListener {
-//            val span = StyleSpan(Typeface.ITALIC)
-//            runTextEditor(span)
-//        }
-//        ivPostWriteUnderline.setOnClickListener {
-//            val span = UnderlineSpan()
-//            runTextEditor(span)
-//        }
-//        ivPostWriteLineThrough.setOnClickListener {
-//            val span = StrikethroughSpan()
-//            runTextEditor(span)
-//        }
-//        ivPostWriteTextColor.setOnClickListener {
-//            val span = ForegroundColorSpan(requireContext().getColor(R.color.red))
-//            runTextEditor(span)
-//        }
-//        ivPostWriteBackgroundColor.setOnClickListener {
-//            val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
-//            runTextEditor(span)
-//        }
-//        ivPostWriteLink.setOnClickListener {
-//            val span = URLSpan("https://github.com/Stop-smoke/KekKek")
-//            runTextEditor(span)
-//        }
+        initTextEditor()
 
         includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
             findNavController().popBackStack()
@@ -146,22 +127,49 @@ class PostWriteFragment : Fragment() {
         }
     }
 
-//    private fun runTextEditor(span: Any?) {
-//        val etPostWriteContent = binding.etPostWriteContent
-//        val start = etPostWriteContent.selectionStart
-//        val end = etPostWriteContent.selectionEnd
-//        if (start != end) {
-//            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-//            spannableString.setSpan(
-//                span,
-//                start,
-//                end,
-//                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
-//            )
-//            etPostWriteContent.text = spannableString
-//            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
-//        }
-//    }
+    private fun runTextEditor(span: Any?) {
+        val etPostWriteContent = binding.etPostWriteContent
+        val start = etPostWriteContent.selectionStart
+        val end = etPostWriteContent.selectionEnd
+        if (start != end) {
+            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
+            spannableString.setSpan(
+                span,
+                start,
+                end,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
+            )
+            etPostWriteContent.text = spannableString
+            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
+        }
+    }
+
+    private fun initTextEditor() = with(binding){
+        ivPostWriteBold.setOnClickListener {
+            val span = StyleSpan(Typeface.BOLD)
+            runTextEditor(span)
+        }
+        ivPostWriteItalic.setOnClickListener {
+            val span = StyleSpan(Typeface.ITALIC)
+            runTextEditor(span)
+        }
+        ivPostWriteUnderline.setOnClickListener {
+            val span = UnderlineSpan()
+            runTextEditor(span)
+        }
+        ivPostWriteLineThrough.setOnClickListener {
+            val span = StrikethroughSpan()
+            runTextEditor(span)
+        }
+        ivPostWriteTextColor.setOnClickListener {
+            val span = ForegroundColorSpan(requireContext().getColor(R.color.red))
+            runTextEditor(span)
+        }
+        ivPostWriteBackgroundColor.setOnClickListener {
+            val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
+            runTextEditor(span)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
