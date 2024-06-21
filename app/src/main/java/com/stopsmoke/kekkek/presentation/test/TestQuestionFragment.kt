@@ -111,7 +111,10 @@ class TestQuestionFragment : Fragment() {
                 activity?.onBackPressed()
             }
             includeQuestionAppBar.ivTestCancel.setOnClickListener {
-                ToastDialog()
+//                ToastDialog()
+                TestDialog().show(
+                    parentFragmentManager,"금연 테스트"
+                )
             }
         }
     }
@@ -149,7 +152,7 @@ class TestQuestionFragment : Fragment() {
         fun newInstance(pageNum: Int): TestQuestionFragment {
             val fragment = TestQuestionFragment()
             val argument = Bundle().apply {
-                putInt(PAGE_NUM, pageNum) // 새로운 페이지의 페이지 번호를 전달함
+                putInt(PAGE_NUM, pageNum) // 새로운 페이 지의 페이지 번호를 전달함
             }
             fragment.arguments = argument
             return fragment
