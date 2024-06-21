@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostEdit
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
@@ -18,11 +18,11 @@ interface PostRepository {
 
     fun getPostItem(postId: String): Flow<List<Post>>
 
-    suspend fun addPost(post: PostWrite): Result<Unit>
+    suspend fun addPost(post: PostEdit): Result<Unit>
 
     suspend fun deletePost(postId: String): Result<Unit>
 
-    suspend fun editPost(post: PostWrite): Result<Unit>
+    suspend fun editPost(post: Post): Result<Unit>
 
     suspend fun getTopPopularItems(): Flow<List<Post>>
 

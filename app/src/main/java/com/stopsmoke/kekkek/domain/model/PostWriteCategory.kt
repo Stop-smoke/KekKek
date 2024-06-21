@@ -5,7 +5,7 @@ enum class PostWriteCategory {
     SUCCESS_STORIES,
     QUIT_SMOKING_AIDS_REVIEWS,
     FAILURE_STORIES,
-    QUIT_SMOKING_WILLINGNESS
+    RESOLUTIONS
 }
 
 fun PostWriteCategory.toRequestString(): String = when(this) {
@@ -13,7 +13,7 @@ fun PostWriteCategory.toRequestString(): String = when(this) {
     PostWriteCategory.SUCCESS_STORIES -> "success_stories"
     PostWriteCategory.GENERAL_DISCUSSION -> "general_discussion"
     PostWriteCategory.FAILURE_STORIES -> "failure_stories"
-    PostWriteCategory.QUIT_SMOKING_WILLINGNESS -> "resolutions"
+    PostWriteCategory.RESOLUTIONS -> "resolutions"
 }
 
 fun String.toPostWriteCategory() = when(this){
@@ -21,6 +21,15 @@ fun String.toPostWriteCategory() = when(this){
     "금연 성공 후기" -> PostWriteCategory.SUCCESS_STORIES
     "금연 보조제 후기" -> PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS
     "금연 실패 후기" -> PostWriteCategory.FAILURE_STORIES
-    "금연 다짐" -> PostWriteCategory.QUIT_SMOKING_WILLINGNESS
+    "금연 다짐" -> PostWriteCategory.RESOLUTIONS
     else -> throw IllegalStateException()
+}
+
+fun PostWriteCategory.toPostCategory(): PostCategory = when(this){
+    PostWriteCategory.GENERAL_DISCUSSION -> PostCategory.GENERAL_DISCUSSION
+    PostWriteCategory.SUCCESS_STORIES -> PostCategory.SUCCESS_STORIES
+    PostWriteCategory.QUIT_SMOKING_AIDS_REVIEWS -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
+    PostWriteCategory.FAILURE_STORIES -> PostCategory.FAILURE_STORIES
+    PostWriteCategory.RESOLUTIONS -> PostCategory.RESOLUTIONS
+    else -> PostCategory.UNKNOWN
 }

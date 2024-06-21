@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.model.toRequestString
@@ -75,7 +75,7 @@ internal class PostRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun addPost(post: PostWrite): Result<Unit> =
+    override suspend fun addPost(post: PostEdit): Result<Unit> =
         try {
             val user = (userRepository.getUserData().first() as User.Registered)
             val written = Written(
@@ -100,16 +100,9 @@ internal class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun editPost(post: PostWrite): Result<Unit> {
+    override suspend fun editPost(post: Post): Result<Unit> {
         return try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            val written = Written(
-                uid = user.uid,
-                name = user.name,
-                profileImage = user.profileImage,
-                ranking = user.ranking
-            )
-            postDao.editPost(post.toEntity(written))
+            postDao.editPost(post.toEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
             e.printStackTrace()

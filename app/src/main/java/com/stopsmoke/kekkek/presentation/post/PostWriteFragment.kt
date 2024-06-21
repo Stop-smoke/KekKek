@@ -26,7 +26,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
@@ -127,7 +127,7 @@ class PostWriteFragment : Fragment() {
                 dialog.show()
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    val post = PostWrite(
+                    val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
                         dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
@@ -161,7 +161,7 @@ class PostWriteFragment : Fragment() {
         etPostWriteContent.setText(post.text)
         etPostWriteTitle.setText(post.title)
 
-        includePostWriteAppBar.tvPostWriteType.text = post.categories.toStringKR()
+        includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
 
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
     }

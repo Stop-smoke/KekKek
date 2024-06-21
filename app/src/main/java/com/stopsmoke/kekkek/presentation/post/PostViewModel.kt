@@ -108,7 +108,7 @@ class PostViewModel @Inject constructor(
                 addCommentUseCase(
                     postId = post.value!!.id,
                     postTitle = postTitle,
-                    postType = post.value!!.categories,
+                    postType = post.value!!.category,
                     text = text
                 )
             }
