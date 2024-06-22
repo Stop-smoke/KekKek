@@ -8,6 +8,7 @@
 
     <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings"/>
+    <include app:graph="@navigation/nav_smoking_questionnaire" />
 
     <fragment
         android:id="@+id/authentication"
@@ -36,9 +37,6 @@
         <action
             android:id="@+id/action_home_to_attainments"
             app:destination="@id/attainments" />
-        <action
-            android:id="@+id/action_home_to_test_page"
-            app:destination="@id/test_page" />
         <action
             android:id="@+id/action_home_to_notice_list"
             app:destination="@id/notice_list" />
@@ -191,12 +189,6 @@
         android:name="com.stopsmoke.kekkek.presentation.my.complaint.MyComplaintFragment"
         app:route="my_complaint"
         tools:layout="@layout/fragment_my_complaint" />
-
-    <fragment
-        android:id="@+id/test_page"
-        android:name="com.stopsmoke.kekkek.presentation.test.TestFragment"
-        app:route="test_page"
-        tools:layout="@layout/fragment_test_onboarding" />
 
     <fragment
         android:id="@+id/notification"

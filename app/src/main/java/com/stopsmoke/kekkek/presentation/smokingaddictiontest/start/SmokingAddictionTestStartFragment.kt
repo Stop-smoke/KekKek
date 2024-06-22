@@ -1,25 +1,25 @@
-package com.stopsmoke.kekkek.presentation.test
+package com.stopsmoke.kekkek.presentation.smokingaddictiontest.start
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.stopsmoke.kekkek.databinding.FragmentTestOnboardingBinding
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestStartBinding
 import com.stopsmoke.kekkek.invisible
 
-class TestOnBoardingFragment(
-    private val callback: () -> Unit
-) : Fragment() {
+class SmokingAddictionTestStartFragment : Fragment() {
 
-    private var _binding: FragmentTestOnboardingBinding? = null
+    private var _binding: FragmentSmokingAddictionTestStartBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentTestOnboardingBinding.inflate(inflater,container,false)
+        _binding = FragmentSmokingAddictionTestStartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,10 +34,8 @@ class TestOnBoardingFragment(
     }
 
     private fun setupListener() {
-        binding.run {
-            btnTestStart.setOnClickListener {
-                callback()
-            }
+        binding.btnTestStart.setOnClickListener {
+            findNavController().navigate(R.id.action_smoking_questionnaire_start_screen_to_smoking_questionnaire_question_screen)
         }
     }
 
