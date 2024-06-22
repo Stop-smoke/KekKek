@@ -43,5 +43,4 @@ class SmokingAddictionTestStartFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
