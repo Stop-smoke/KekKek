@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -27,17 +26,8 @@ class SmokingAddictionTestFragment : Fragment() {
 
     private val viewModel by activityViewModels<SmokingAddictionTestViewModel>()
 
-    private val exitDialog: Lazy<AlertDialog> = lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle("금연 테스트")
-            setMessage("진행중인 금연 테스트를 종료하시겠습니까?")
-            setIcon(R.drawable.ic_smoke)
-            setPositiveButton("예") { _, _ ->
-                findNavController().popBackStack("home", false)
-            }
-            setNegativeButton("아니요", null)
-        }
-            .create()
+    private val exitDialog = lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        SmokingAddictionTestExitDialogFragment()
     }
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
@@ -67,7 +57,7 @@ class SmokingAddictionTestFragment : Fragment() {
             backPressedCallback.handleOnBackPressed()
         }
         binding.includeQuestionAppBar.ivTestCancel.setOnClickListener {
-            exitDialog.value.show()
+            exitDialog.value.show(childFragmentManager, "ExitDialog")
         }
 
         lifecycleScope.launch {
@@ -97,11 +87,6 @@ class SmokingAddictionTestFragment : Fragment() {
         super.onDestroyView()
         backPressedCallback.remove()
         _binding = null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        exitDialog.value.dismiss()
     }
 }
 
