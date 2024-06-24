@@ -128,6 +128,7 @@
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>
+    <string name="comment_notification_channel_name">댓글 알림</string>
     <string name="notification_elapsed_year">년 전</string>
     <string name="notification_elapsed_month">개월 전</string>
     <string name="notification_elapsed_week">주 전</string>
