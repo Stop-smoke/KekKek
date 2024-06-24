@@ -5,30 +5,8 @@
     android:id="@+id/test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.test.TestQuestionFragment">
-
-    <include
-        android:id="@+id/include_question_app_bar"
-        layout="@layout/fragment_question_app_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progressbar_question"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="300dp"
-        android:layout_height="3dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#D9D9D9"
-        android:backgroundTintMode="src_in"
-        android:max="8"
-        android:progressBackgroundTint="@color/primary_blue"
-        android:progressBackgroundTintMode="add"
-        android:scaleY="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_question_app_bar" />
+    android:layout_marginTop="28dp"
+    tools:context=".presentation.smokingaddictiontest.assessment.SmokingAddictionTestViewPagerFragment">
 
     <!-- 프로그래스 바 부분 나중에 수정 필요해 보입니다. -->
 
@@ -36,17 +14,16 @@
         android:id="@+id/tv_question_main_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxWidth="400dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintWidth_percent="0.8"
         android:fontFamily="@font/pretendard_bold"
+        android:maxWidth="400dp"
         android:text="@string/question1_title"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressbar_question" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
 
     <TextView
         android:id="@+id/tv_question_sub_text"
@@ -70,7 +47,6 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/bg_test_button"
-        android:backgroundTint="#A2A2A2"
         android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer1"
         android:textColor="@color/white"
@@ -88,7 +64,6 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/bg_test_button"
-        android:backgroundTint="#A2A2A2"
         android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer2"
         android:textColor="@color/white"
@@ -105,9 +80,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="40dp"
-
         android:background="@drawable/bg_test_button"
-        android:backgroundTint="#A2A2A2"
         android:fontFamily="@font/pretendard_semi_bold"
         android:text="@string/question1_answer3"
         android:textColor="@color/white"
