@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.exception.StartWithZeroException
 import com.stopsmoke.kekkek.databinding.FragmentSmokingPerDayBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -54,6 +55,12 @@ class SmokingPerDayFragment : Fragment() {
         viewModel.perDayUiState.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is SmokingSettingUiState.Error -> {
+                    if(it.t is StartWithZeroException) {
+                        binding.tvSmokingPerDayWarning.text = "0으로 시작하면 안됩니다."
+                        binding.tvSmokingPerDayWarning.visibility = View.VISIBLE
+                        return@collectLatestWithLifecycle
+                    }
+                    binding.tvSmokingPerDayWarning.text = "값을 입력해주세요."
                     binding.tvSmokingPerDayWarning.visibility = View.VISIBLE
                     binding.btnResetingOnboardingNext.isEnabled = false
                 }
@@ -67,6 +74,8 @@ class SmokingPerDayFragment : Fragment() {
                     binding.tvSmokingPerDayWarning.visibility = View.GONE
                     binding.btnResetingOnboardingNext.isEnabled = true
                 }
+
+//                SmokingSettingUiState.IsBlank -> TODO()
             }
         }
     }

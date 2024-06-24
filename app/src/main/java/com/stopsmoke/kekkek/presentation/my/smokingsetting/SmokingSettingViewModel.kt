@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.exception.StartWithZeroException
 import com.stopsmoke.kekkek.domain.usecase.UpdateUserSmokingSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,10 +35,8 @@ class SmokingSettingViewModel @Inject constructor(
                 return@mapLatest SmokingSettingUiState.Loading
             }
 
-            val day = it.toInt()
-
-            if (day == 0) {
-                return@mapLatest SmokingSettingUiState.Loading
+            if (it.startsWith("0")) {
+                throw StartWithZeroException()
             }
 
             SmokingSettingUiState.Success
@@ -126,6 +125,8 @@ class SmokingSettingViewModel @Inject constructor(
 sealed interface SmokingSettingUiState {
 
     data object Success : SmokingSettingUiState
+
+//    data object IsBlank: SmokingSettingUiState
 
     data object Loading : SmokingSettingUiState
 
