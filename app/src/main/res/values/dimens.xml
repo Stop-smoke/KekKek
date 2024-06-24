@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sticky_item_margin_top">16dp</dimen>
+    <dimen name="post_image_width">100dp</dimen>
+    <dimen name="post_image_height">100dp</dimen>
 </resources>

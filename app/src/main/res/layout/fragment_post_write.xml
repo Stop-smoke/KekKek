@@ -41,7 +41,7 @@
         android:id="@+id/cl_postWrite_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:padding="15dp"
         app:layout_constraintTop_toBottomOf="@id/grayline">
 
         <ImageView
@@ -161,6 +161,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

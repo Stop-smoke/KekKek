@@ -1,11 +1,16 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
+import android.text.style.ImageSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
@@ -14,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,6 +50,13 @@ class PostWriteFragment : Fragment() {
 
     private val viewModel: PostWriteViewModel by viewModels()
     private val communityViewModel: CommunityViewModel by activityViewModels()
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { url ->
+        url?.let {
+            insertImage(it)
+        }
+    }
 
     private val builder by lazy {
         AlertDialog.Builder(requireContext())
@@ -170,17 +183,45 @@ class PostWriteFragment : Fragment() {
         val etPostWriteContent = binding.etPostWriteContent
         val start = etPostWriteContent.selectionStart
         val end = etPostWriteContent.selectionEnd
-        if (start != end) {
-            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-            spannableString.setSpan(
-                span,
-                start,
-                end,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
-            )
-            etPostWriteContent.text = spannableString
-            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
-        }
+
+        val spannableString = SpannableStringBuilder(etPostWriteContent.text)
+        spannableString.setSpan(
+            span,
+            start,
+            end,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
+        )
+        etPostWriteContent.text = spannableString
+        etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
+    }
+
+    private fun insertImage(url: Uri) {
+        val etPostWriteContent = binding.etPostWriteContent
+        val start = etPostWriteContent.selectionStart
+//        val end = etPostWriteContent.selectionEnd
+
+        val inputStream = requireContext().contentResolver.openInputStream(url)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
+        val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
+        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+
+        val drawable = BitmapDrawable(resources, scaledBitmap)
+        drawable.setBounds(0, 0, width, height)
+
+        val imageSpan = ImageSpan(drawable)
+        val spannableString = SpannableStringBuilder(etPostWriteContent.text)
+        spannableString.insert(start, " ")
+        spannableString.setSpan(
+            imageSpan,
+            start,
+            start + 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        etPostWriteContent.text = spannableString
+        etPostWriteContent.setSelection(start + 1)
     }
 
     private fun initTextEditor() = with(binding) {
@@ -207,6 +248,9 @@ class PostWriteFragment : Fragment() {
         ivPostWriteBackgroundColor.setOnClickListener {
             val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
             runTextEditor(span)
+        }
+        ivPostWriteLink.setOnClickListener {
+            pickImageLauncher.launch("image/*")
         }
     }
 
