@@ -30,4 +30,8 @@ class ReplyRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun getReplyCount(postId: String, commentId: String): Flow<Long> {
+        return replyDao.getReplyCount(postId = postId, commentId = commentId)
+    }
 }

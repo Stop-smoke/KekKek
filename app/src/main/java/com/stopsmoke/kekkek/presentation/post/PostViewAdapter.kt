@@ -161,7 +161,7 @@ class PostViewAdapter(
             }
 
             clCommentRecomment.setOnClickListener {
-
+                callback?.navigateToReply(comment)
             }
         }
     }

@@ -216,6 +216,10 @@
         <action
             android:id="@+id/action_post_view_to_my_complaint"
             app:destination="@id/my_complaint" />
+
+        <action
+            android:id="@+id/action_post_view_to_reply"
+            app:destination="@id/reply" />
     </fragment>
 
     <fragment

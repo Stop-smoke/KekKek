@@ -46,9 +46,9 @@ class CommentDaoImpl @Inject constructor(
     override suspend fun getComment(postId: String, commentId: String): Flow<CommentEntity> {
         return flow {
             try {
-                val documentSnapshot = firestore.collection("posts")
+                val documentSnapshot = firestore.collection(POST_COLLECTION)
                     .document(postId)
-                    .collection("comments")
+                    .collection(COMMENT_COLLECTION)
                     .document(commentId)
                     .get()
                     .await()

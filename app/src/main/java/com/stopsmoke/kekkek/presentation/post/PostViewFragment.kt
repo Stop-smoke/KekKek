@@ -29,6 +29,7 @@ import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -265,6 +266,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         }
     }
 
+
     override fun navigateToUserProfile(uid: String) {
         findNavController().navigate(
             resId = R.id.action_post_view_to_user_profile,
@@ -275,5 +277,12 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     override fun commentLikeClick(comment: Comment) {
         viewModel.commentLikeClick(comment)
         postViewAdapter.refresh()
+    }
+
+    override fun navigateToReply(comment: Comment) {
+        findNavController().navigate(
+            resId = R.id.action_post_view_to_reply,
+            args = bundleOf("replyIdItem" to ReplyIdItem(commentId = comment.id, postId = comment.parent.postId))
+        )
     }
 }

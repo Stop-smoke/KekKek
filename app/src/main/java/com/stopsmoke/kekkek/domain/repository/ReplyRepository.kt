@@ -8,4 +8,6 @@ interface ReplyRepository {
     suspend fun addReply(reply: Reply): Result<Unit>
 
     suspend fun getReply(postId: String, commentId: String): Flow<PagingData<Reply>>
+
+    suspend fun getReplyCount(postId: String, commentId: String): Flow<Long>
 }

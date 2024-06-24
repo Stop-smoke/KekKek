@@ -9,4 +9,7 @@ interface ReplyDao {
     suspend fun addReply(replyEntity: ReplyEntity)
 
     suspend fun getReply(postId: String, commentId: String): Flow<PagingData<ReplyEntity>>
+
+    suspend fun getReplyCount(postId: String, commentId: String): Flow<Long>
+
 }
