@@ -61,7 +61,7 @@ class CommentRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setCommentItem(comment: Comment):Result<Unit> {
+    override suspend fun setCommentItem(comment: Comment): Result<Unit> {
         return try {
             commentDao.setCommentItem(comment.toEntity())
             Result.Success(Unit)
@@ -88,5 +88,11 @@ class CommentRepositoryImpl @Inject constructor(
 
     override fun getCommentCount(postId: String): Flow<Long> {
         return commentDao.getCommentCount(postId)
+    }
+
+    override suspend fun getComment(postId: String, commentId: String): Flow<Comment> {
+        return commentDao.getComment(postId, commentId).map { commentEntity ->
+            commentEntity.asExternalModel()
+        }
     }
 }

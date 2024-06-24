@@ -18,7 +18,17 @@ class ReplyFragment : Fragment() {
     private var _binding: FragmentReplyBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ReplylViewModel by viewModels()
+    private val viewModel: ReplyViewModel by viewModels()
+
+    private lateinit var listAdapter: ReplyListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.getString("replyIdItem", null)?.let {
+
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +45,6 @@ class ReplyFragment : Fragment() {
     private fun initRecyclerView() = with(binding){
 
         rvReply.layoutManager = LinearLayoutManager(requireContext())
-//        rvReply.adapter =
 
         val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
         val height = resources.getDimensionPixelSize(R.dimen.divider_height)

@@ -159,6 +159,10 @@ class PostViewAdapter(
                     likeUser = list
                 ))
             }
+
+            clCommentRecomment.setOnClickListener {
+
+            }
         }
     }
 

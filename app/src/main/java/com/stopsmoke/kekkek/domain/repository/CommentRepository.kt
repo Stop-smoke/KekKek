@@ -21,4 +21,6 @@ interface CommentRepository {
    suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit>
 
    fun getCommentCount(postId: String): Flow<Long>
+
+   suspend fun getComment(postId: String, commentId:String): Flow<Comment>
 }
