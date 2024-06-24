@@ -5,11 +5,13 @@ import com.stopsmoke.kekkek.data.repository.BookmarkRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.CommentRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.NotificationRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.PostRepositoryImpl
+import com.stopsmoke.kekkek.data.repository.ReplyRepositoryImpl
 import com.stopsmoke.kekkek.data.repository.SearchRepositoryImpl
 import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.NotificationRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.SearchRepository
 import com.stopsmoke.kekkek.firestore.dao.BookmarkRepository
 import dagger.Binds
@@ -51,4 +53,9 @@ internal interface DataViewModelModule {
     fun bindBookmarkRepository(
         bookmarkRepository: BookmarkRepositoryImpl
     ): BookmarkRepository
+
+    @Binds
+    fun bindReplyRepository(
+        replyRepositoryImpl: ReplyRepositoryImpl
+    ): ReplyRepository
 }

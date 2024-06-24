@@ -12,14 +12,18 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.emptyComment
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
+import com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
@@ -36,7 +40,8 @@ class PostViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
     userRepository: UserRepository,
-    private val addCommentUseCase: AddCommentUseCase
+    private val addCommentUseCase: AddCommentUseCase,
+    private val replyRepository: ReplyRepository
 ) : ViewModel() {
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)

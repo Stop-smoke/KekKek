@@ -3,6 +3,9 @@ package com.stopsmoke.kekkek.firestore.model
 import com.google.firebase.firestore.PropertyName
 
 data class ReplyEntity(
+    @get:PropertyName("id") @set:PropertyName("id")
+    var id: String? = null,
+
     @get:PropertyName("written") @set:PropertyName("written")
     var written: WrittenEntity? = null,
 
@@ -16,5 +19,11 @@ data class ReplyEntity(
     var dateTime: DateTimeEntity? = null,
 
     @get:PropertyName("text") @set:PropertyName("text")
-    var text: String? = null
+    var text: String? = null,
+
+    @get:PropertyName("comment_parent") @set:PropertyName("comment_parent")
+    var commentParent: CommentParentEntity? = null,
+
+    @get:PropertyName("reply_parent") @set:PropertyName("reply_parent")
+    var replyParent: String? = null,
 )
