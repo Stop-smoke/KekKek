@@ -61,6 +61,15 @@ class CommentRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setCommentItem(comment: Comment):Result<Unit> {
+        return try {
+            commentDao.setCommentItem(comment.toEntity())
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
     override suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit> {
         return try {
             Result.Success(commentDao.updateOrInsertComment(comment.toEntity()))

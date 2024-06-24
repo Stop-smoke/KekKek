@@ -162,4 +162,8 @@ class PostViewModel @Inject constructor(
             postRepository.addBookmark(postId)
         }
     }
+
+    fun commentLikeClick(comment: Comment) = viewModelScope.launch{
+        commentRepository.setCommentItem(comment)
+    }
 }

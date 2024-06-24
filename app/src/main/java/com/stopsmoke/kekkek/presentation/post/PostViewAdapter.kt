@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -116,8 +117,9 @@ class PostViewAdapter(
         }
     }
 
-    inner class PostCommentViewHolder(val binding: ItemCommentBinding) :
-        ViewHolder(binding.root) {
+    inner class PostCommentViewHolder(
+        val binding: ItemCommentBinding
+    ) : ViewHolder(binding.root) {
 
         init {
             binding.root.setOnLongClickListener {
@@ -140,6 +142,22 @@ class PostViewAdapter(
 
             ivCommentProfile.setOnClickListener {
                 callback?.navigateToUserProfile(comment.written.uid)
+            }
+
+
+            tvCommentLikeNum.text = comment.likeUser.size.toString()
+            val userUid = (viewModel.user.value as? User.Registered)?.uid ?: ""
+            val isLikeUser:Boolean = userUid in comment.likeUser
+            if(isLikeUser) ivCommentLike.setColorFilter(ContextCompat.getColor(itemView.context, R.color.primary_blue))
+            else ivCommentLike.setColorFilter(ContextCompat.getColor(itemView.context, R.color.gray_lightgray2))
+
+
+            clCommentLike.setOnClickListener {
+                val list = comment.likeUser.toMutableList()
+                if(isLikeUser) list.remove(userUid) else list.add(userUid)
+                callback?.commentLikeClick(comment.copy(
+                    likeUser = list
+                ))
             }
         }
     }

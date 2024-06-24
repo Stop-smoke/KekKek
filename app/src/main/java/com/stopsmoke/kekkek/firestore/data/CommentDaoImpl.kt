@@ -87,6 +87,15 @@ class CommentDaoImpl @Inject constructor(
             .await()
     }
 
+    override suspend fun setCommentItem(commentEntity: CommentEntity) {
+       firestore
+           .collection(POST_COLLECTION)
+           .document(commentEntity.parent!!.postId!!)
+           .collection(COMMENT_COLLECTION)
+           .document(commentEntity.id!!)
+           .set(commentEntity)
+    }
+
     override suspend fun updateOrInsertComment(commentEntity: CommentEntity) {
         firestore
             .collection(COMMENT_COLLECTION)
