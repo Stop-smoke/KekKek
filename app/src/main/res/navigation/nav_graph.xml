@@ -220,7 +220,7 @@
             app:destination="@id/user_profile"/>
         <action
             android:id="@+id/action_post_view_to_post_edit"
-            app:destination="@id/post_edit" />
+            app:destination="@id/post_write" />
         <action
             android:id="@+id/action_post_view_to_my_complaint"
             app:destination="@id/my_complaint" />
@@ -237,6 +237,7 @@
         android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
         app:route="post_edit"
         tools:layout="@layout/fragment_post_edit" />
+
 
     <fragment
         android:id="@+id/attainments"

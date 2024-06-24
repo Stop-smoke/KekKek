@@ -13,7 +13,7 @@ data class Post(
     val likeUser: List<String>,
     val unlikeUser: List<String>,
     val bookmarkUser: List<String>,
-    val categories: PostCategory,
+    val category: PostCategory,
     val views: Long,
     val commentCount: Long
     // Todo: profileImage 변수 추가 필요
@@ -41,7 +41,7 @@ data class Post(
             likeUser = emptyList(),
             unlikeUser = emptyList(),
             bookmarkUser = emptyList(),
-            categories = PostCategory.UNKNOWN,
+            category = PostCategory.UNKNOWN,
             views = 0,
             commentCount = 0
         )

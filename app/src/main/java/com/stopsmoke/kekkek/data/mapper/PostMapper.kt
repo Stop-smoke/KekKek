@@ -2,8 +2,8 @@ package com.stopsmoke.kekkek.data.mapper
 
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostWrite
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.model.toRequestString
@@ -31,7 +31,7 @@ fun PostEntity.asExternalModel(): Post =
         ),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
-        categories = when (category) {
+        category = when (category) {
             "notice" -> PostCategory.NOTICE
             "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
             "popular" -> PostCategory.POPULAR
@@ -47,7 +47,7 @@ fun PostEntity.asExternalModel(): Post =
         bookmarkUser = bookmarkUser
     )
 
-internal fun PostWrite.toEntity(written: Written) = PostEntity(
+internal fun PostEdit.toEntity(written: Written) = PostEntity(
     written = WrittenEntity(
         uid = written.uid,
         name = written.name,
@@ -61,4 +61,24 @@ internal fun PostWrite.toEntity(written: Written) = PostEntity(
     unlikeUser = emptyList(),
     category = category.toRequestString(),
     views = 0,
+)
+
+internal fun Post.toEntity() = PostEntity(
+    id = id,
+    commentId = commentId,
+    written = WrittenEntity(
+        uid = written.uid,
+        name = written.name,
+        profileImage = (written.profileImage as? ProfileImage.Web)?.url,
+        ranking = written.ranking,
+    ),
+    title = title,
+    text = text,
+    dateTime = dateTime.toEntity(),
+    likeUser = likeUser,
+    unlikeUser = unlikeUser,
+    bookmarkUser = bookmarkUser,
+    category = category.toRequestString(),
+    views = 0,
+    commentCount = commentCount
 )

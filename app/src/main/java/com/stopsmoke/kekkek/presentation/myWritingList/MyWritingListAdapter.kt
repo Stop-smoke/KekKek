@@ -79,7 +79,7 @@ class MyWritingListAdapter
 //                tvItemWritingRank.text = "랭킹 ${it.rank}위"
 //            }
 
-            tvItemWritingPostType.text = when (item.categories) {
+            tvItemWritingPostType.text = when (item.category) {
                 PostCategory.NOTICE -> "공지사항"
                 PostCategory.QUIT_SMOKING_SUPPORT -> "금연 지원 프로그램 공지"
                 PostCategory.POPULAR -> "인기글"

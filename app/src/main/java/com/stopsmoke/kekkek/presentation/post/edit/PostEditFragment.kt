@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.post.edit
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +15,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.PostWrite
+import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.post.PostWriteItem
-import com.stopsmoke.kekkek.presentation.post.PostWriteViewModel
 import com.stopsmoke.kekkek.visible
 import java.time.LocalDateTime
 
@@ -113,7 +111,7 @@ class PostEditFragment : Fragment() {
             dialog.show()
 
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val postEdit = PostWrite(
+                val postEdit = PostEdit(
                     title = binding.etPostEditTitle.text.toString(),
                     text = binding.etPostWriteContent.text.toString(),
                     dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
@@ -124,7 +122,7 @@ class PostEditFragment : Fragment() {
                         else -> throw IllegalStateException()
                     }
                 )
-                viewModel.editPost(postEdit)
+//                viewModel.editPost(postEdit)
                 dialog.dismiss()
                 findNavController().popBackStack()
             }

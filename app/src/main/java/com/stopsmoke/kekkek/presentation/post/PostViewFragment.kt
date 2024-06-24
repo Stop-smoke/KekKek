@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.post
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -162,6 +163,17 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             bottomSheetDialog.dismiss()
         }
 
+        bottomsheetDialogBinding.tvEditPost.setOnClickListener {
+            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+
+            findNavController().navigate(
+                resId = R.id.action_post_view_to_post_edit,
+                args = bundleOf("post_id" to viewModel.postId.value)
+            )
+            bottomSheetDialog.dismiss()
+        }
+
+
         // 일단
         when (viewModel.user.value) {
             is User.Error -> {
@@ -174,8 +186,10 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
             is User.Registered ->
                 if (viewModel.post.value?.written?.uid == (viewModel.user.value as User.Registered).uid) {
+                    bottomsheetDialogBinding.tvEditPost.visibility = View.VISIBLE
                     bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
                 } else {
+                    bottomsheetDialogBinding.tvEditPost.visibility = View.GONE
                     bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
                 }
 

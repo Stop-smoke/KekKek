@@ -77,7 +77,7 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     ),
     postInfo = PostInfo(
         title = title,
-        postType = when (categories) {
+        postType = when (category) {
             PostCategory.NOTICE -> "공지사항"
             PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
             PostCategory.POPULAR -> "인기글"
@@ -97,7 +97,7 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     postImage = "",
     post = text,
     postTime = modifiedElapsedDateTime,
-    postType = categories
+    postType = category
 )
 
 
@@ -110,7 +110,7 @@ fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long) = Communit
     ),
     postInfo = PostInfo(
         title = title,
-        postType = when (categories) {
+        postType = when (category) {
             PostCategory.NOTICE -> "공지사항"
             PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
             PostCategory.POPULAR -> "인기글"
@@ -130,5 +130,5 @@ fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long) = Communit
     postImage = "",
     post = text,
     postTime = modifiedElapsedDateTime,
-    postType = categories
+    postType = category
 )

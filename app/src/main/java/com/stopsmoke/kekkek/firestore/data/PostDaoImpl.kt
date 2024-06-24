@@ -206,6 +206,7 @@ internal class PostDaoImpl @Inject constructor(
         return try {
             val query = firestore.collection(COLLECTION)
                 .whereEqualTo("category", "notice")
+                .orderBy("date_time.created", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
                 .await()
@@ -213,6 +214,7 @@ internal class PostDaoImpl @Inject constructor(
             val document = query.documents.firstOrNull()
             document?.toObject<PostEntity>() ?: PostEntity()
         } catch (e: Exception) {
+            e.printStackTrace()
             PostEntity()
         }
     }
