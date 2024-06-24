@@ -241,6 +241,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
     }
 
+
     override fun deleteItem(comment: Comment) {
         when(val user = viewModel.user.value){
             is User.Error -> {
@@ -263,5 +264,10 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             resId = R.id.action_post_view_to_user_profile,
             args = bundleOf("uid" to uid)
         )
+    }
+
+    override fun commentLikeClick(comment: Comment) {
+        viewModel.commentLikeClick(comment)
+        postViewAdapter.refresh()
     }
 }

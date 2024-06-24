@@ -8,4 +8,5 @@ interface PostCommentCallback {
 
     fun navigateToUserProfile(uid: String)
 
+    fun commentLikeClick(comment: Comment)
 }

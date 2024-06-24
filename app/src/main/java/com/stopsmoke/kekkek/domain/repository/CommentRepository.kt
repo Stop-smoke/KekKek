@@ -14,6 +14,8 @@ interface CommentRepository {
 
     fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>>
 
+    suspend fun setCommentItem(comment: Comment):Result<Unit>
+
     suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit>
 
    suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit>
