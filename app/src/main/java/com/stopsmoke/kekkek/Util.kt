@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek
 
+import android.text.Html
+import android.text.Spannable
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
@@ -32,4 +34,12 @@ fun getRelativeTime(pastTime: ElapsedDateTime): String {
         DateTimeUnit.SECOND -> "초"
     }
     return "${pastTime.number} ${timeType} 전"
+}
+
+fun convertSpannableToHtml(spannable: Spannable): String {
+    return Html.toHtml(spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE)
+}
+
+fun convertHtmlToSpannable(html: String): Spannable {
+    return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT) as Spannable
 }
