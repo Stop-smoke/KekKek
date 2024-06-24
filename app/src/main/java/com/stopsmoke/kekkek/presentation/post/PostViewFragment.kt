@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
@@ -100,6 +102,10 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         postViewAdapter = PostViewAdapter(viewModel = viewModel, lifecycleOwner = viewLifecycleOwner)
         binding.rvPostView.adapter = postViewAdapter
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
+
+        val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
+        val height = resources.getDimensionPixelSize(R.dimen.divider_height)
+        binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
     private fun showCommentDeleteDialog(postId : String) {
