@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     id("kotlin-parcelize")
     id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val properties = Properties().apply {
@@ -39,6 +40,8 @@ android {
 
         addManifestPlaceholdersAndBuildConfig("KAKAO_NATIVE_API_KEY")
         addManifestPlaceholdersAndBuildConfig("FIRBASE_AUTH_SERVCER_CLIENT_KEY")
+        addManifestPlaceholdersAndBuildConfig("ALGOLIA_APPLICATION_ID")
+        addManifestPlaceholdersAndBuildConfig("ALGOLIA_SEARCH_API_KEY")
     }
 
     buildTypes {
@@ -163,4 +166,7 @@ dependencies {
 
     //splash 아이콘 숨기기
     implementation ("androidx.core:core-splashscreen:1.0.0-beta01")
+
+    // algolia 검색 api
+    implementation("com.algolia:instantsearch-android-paging3:3.3.1")
 }
