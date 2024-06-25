@@ -184,5 +184,6 @@
     <string name="community_category_unknown">알 수 없는 에러</string>
     <string name="community_category_all">전체</string>
 
-
+    <string name="search_recommend_keyword">님을 위한 추천 검색어</string>
+    <string name="search_guest_recommend_keyword">당신을 위한 추천 검색어</string>
 </resources>

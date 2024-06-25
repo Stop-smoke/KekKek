@@ -1,23 +1,42 @@
-package com.stopsmoke.kekkek.presentation.search
+package com.stopsmoke.kekkek.presentation.search.keyword
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewSearchRecommendBinding
 import com.stopsmoke.kekkek.domain.model.RecommendedKeyword
 
-class KeywordRecommendedListAdapter :
-    ListAdapter<RecommendedKeyword, KeywordRecommendedViewHolder>(diffUtil) {
+class KeywordRecommendedListAdapter(
+    private val keywordSelectedListener: (String) -> Unit
+) : ListAdapter<RecommendedKeyword, KeywordRecommendedListAdapter.KeywordRecommendedViewHolder>(diffUtil) {
+
+    class KeywordRecommendedViewHolder(
+        private val binding: RecyclerviewSearchRecommendBinding,
+        private val keywordSelectedListener: (String) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(recommendedKeyword: RecommendedKeyword) {
+            binding.tvSearchRecommend.text = recommendedKeyword.keyword
+
+            binding.tvSearchRecommend.setOnClickListener {
+                keywordSelectedListener(recommendedKeyword.keyword)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): KeywordRecommendedViewHolder {
-        val view = RecyclerviewSearchRecommendBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+        val view =
+            RecyclerviewSearchRecommendBinding.inflate(
+                /* inflater = */ LayoutInflater.from(parent.context),
+                /* parent = */ parent,
+                /* attachToParent = */ false
         )
-        return KeywordRecommendedViewHolder(view)
+        return KeywordRecommendedViewHolder(view, keywordSelectedListener)
     }
 
     override fun onBindViewHolder(holder: KeywordRecommendedViewHolder, position: Int) {
