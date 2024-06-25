@@ -20,7 +20,7 @@ class SmokingSettingViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _perDay = MutableStateFlow("") // 하루에 담배 몇개비 피우나요?
-    val perDay = _perDay.asStateFlow()
+    private val perDay = _perDay.asStateFlow()
 
     fun updateSmokingPerDay(perDay: String) {
         viewModelScope.launch {
@@ -125,8 +125,6 @@ class SmokingSettingViewModel @Inject constructor(
 sealed interface SmokingSettingUiState {
 
     data object Success : SmokingSettingUiState
-
-//    data object IsBlank: SmokingSettingUiState
 
     data object Loading : SmokingSettingUiState
 
