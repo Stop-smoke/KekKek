@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,36 +11,37 @@
 
     <TextView
         android:id="@+id/tv_question_main_text"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/pretendard_bold"
-        android:maxWidth="400dp"
         android:text="@string/question1_title"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_question_sub_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:fontFamily="@font/pretendard_bold"
         android:text="@string/question_sub_text"
         android:textColor="@color/gray"
         android:textStyle="bold"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/tv_question_main_text"
         app:layout_constraintTop_toBottomOf="@+id/tv_question_main_text" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_1"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
@@ -53,12 +53,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="500dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_2"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
@@ -70,12 +71,13 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_question_answer_3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="500dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_question_answer_3"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
@@ -87,7 +89,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="500dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

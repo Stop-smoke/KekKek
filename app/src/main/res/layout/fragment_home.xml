@@ -152,7 +152,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_home_notice"
-                app:layout_constraintWidth_max="800dp">
+                >
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home_savedMoney"
