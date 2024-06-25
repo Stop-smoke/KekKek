@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.presentation.smokingaddictiontest.assessment
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestExitDialogBinding
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 
@@ -35,6 +38,7 @@ class SmokingAddictionTestExitDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         binding.btnCancel.setOnClickListener {
             dismiss()
         }
