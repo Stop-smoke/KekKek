@@ -34,7 +34,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="자유게시판" />
+            tools:text="자유 게시판" />
 
         <TextView
             android:id="@+id/tv_itemWriting_name"
