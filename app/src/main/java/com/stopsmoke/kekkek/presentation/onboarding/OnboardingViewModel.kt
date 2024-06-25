@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -73,15 +74,6 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    private val _userBirthDate = MutableStateFlow<LocalDateTime?>(null) // 유저 태어난 년도
-    val userBirthDate = _userBirthDate.asStateFlow()
-
-    fun updateUserBirthDate(date: LocalDateTime) {
-        viewModelScope.launch {
-            _userBirthDate.emit(date)
-        }
-    }
-
     private val _onboardingUiState = MutableStateFlow<OnboardingUiState>(OnboardingUiState.Loading)
     val onboardingUiState get() = _onboardingUiState.asStateFlow()
 
@@ -92,12 +84,6 @@ class OnboardingViewModel @Inject constructor(
                 _onboardingUiState.emit(OnboardingUiState.LoadFail)
                 return@launch
             }
-
-//            if (userBirthDate.value == null) {
-//                Log.e("OnboardingViewModel", "userBirthYear 값이 null 입니다")
-//                _onboardingUiState.emit(OnboardingUiState.LoadFail)
-//                return@launch
-//            }
 
             val user = User.Registered(
                 uid = uid.value,
@@ -115,6 +101,7 @@ class OnboardingViewModel @Inject constructor(
             )
             userRepository.setUserData(user)
             userRepository.setOnboardingComplete(true)
+            delay(1300)
             _onboardingUiState.emit(OnboardingUiState.Success)
         }
     }

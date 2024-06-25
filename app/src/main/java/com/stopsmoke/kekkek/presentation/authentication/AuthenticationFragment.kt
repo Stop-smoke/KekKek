@@ -68,9 +68,9 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         }
 
         viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
-            when(it) {
+            when (it) {
                 is AuthenticationUiState.AlreadyUser -> {
-                    findNavController().navigate("home")  {
+                    findNavController().navigate("home") {
                         popUpTo(findNavController().graph.id) {
                             inclusive = true
                         }
@@ -82,7 +82,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 }
 
                 is AuthenticationUiState.NewMember -> {
-                    findNavController().navigate(R.id.action_authentication_to_onboarding_introduce)
+                    findNavController().navigate("onboarding_graph")
                 }
 
                 is AuthenticationUiState.Error -> {

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/onboarding_introduce"
+    app:route="onboarding_graph"
     android:id="@+id/nav_onboarding">
 
     <fragment
