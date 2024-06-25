@@ -21,7 +21,9 @@
         tools:layout="@layout/fragment_smoking_addiction_test">
         <action
             android:id="@+id/action_smoking_questionnaire_question_screen_to_smoking_questionnaire_result_screen"
-            app:destination="@id/smoking_questionnaire_result_screen" />
+            app:destination="@id/smoking_questionnaire_result_screen"
+            app:popUpTo="@id/smoking_questionnaire_start_screen"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
