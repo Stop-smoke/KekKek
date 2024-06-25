@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sticky_item_margin_top">16dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
 </resources>

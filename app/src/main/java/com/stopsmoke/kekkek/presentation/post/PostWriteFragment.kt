@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,6 @@ class PostWriteFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PostWriteViewModel by viewModels()
-    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private val builder by lazy {
         AlertDialog.Builder(requireContext())
@@ -104,7 +104,7 @@ class PostWriteFragment : Fragment() {
             builder.setIcon(R.drawable.ic_post)
         } else {
             builder.setTitle("게시물 수정")
-            builder.setMessage("게시물을 수정하시겠습니까??")
+            builder.setMessage("게시물을 수정하시겠습니까?")
             builder.setIcon(R.drawable.ic_post)
         }
 
@@ -130,8 +130,8 @@ class PostWriteFragment : Fragment() {
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
-                        dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
-                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                        dateTime = DateTime(created = viewModel.post.value?.dateTime?.created ?: LocalDateTime.now(), modified = LocalDateTime.now()),
+                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString().trim()
                             .toPostWriteCategory()
                     )
                     if (viewModel.post.value == null) viewModel.addPost(post)

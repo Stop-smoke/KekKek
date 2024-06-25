@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
@@ -78,4 +81,30 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 internal fun View.snackbarLongShow(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
+}
+
+
+class CustomItemDecoration(private val color: Int, private val height: Int) : RecyclerView.ItemDecoration() {
+    private val paint = Paint()
+
+    init {
+        paint.color = color
+        paint.strokeWidth = height.toFloat()
+    }
+
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val left = parent.paddingLeft
+        val right = parent.width - parent.paddingRight
+
+        val childCount = parent.childCount
+        for (i in 0 until childCount) {
+            val child = parent.getChildAt(i)
+
+            val params = child.layoutParams as RecyclerView.LayoutParams
+            val top = child.bottom + params.bottomMargin
+            val bottom = top + height
+
+            c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)
+        }
+    }
 }

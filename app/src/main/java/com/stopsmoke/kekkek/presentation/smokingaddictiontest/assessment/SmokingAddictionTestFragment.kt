@@ -62,13 +62,14 @@ class SmokingAddictionTestFragment : Fragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.pageIndex.collectLatest {
-                    binding.progressbarQuestion.setProgress(it, true)
-
-                    if (smokingAddictionTestAdapter.itemCount - 1 == binding.viewpagerTest.currentItem) {
-                        findNavController().navigate(R.id.action_smoking_questionnaire_question_screen_to_smoking_questionnaire_result_screen)
+                viewModel.pageIndex.collectLatest { pageIndex ->
+                    if (smokingAddictionTestAdapter.itemCount == pageIndex) {
+                        findNavController().navigate(R.id.action_smoking_addiction_test_screen_to_smoking_questionnaire_result_screen)
+                        return@collectLatest
                     }
-                    binding.viewpagerTest.setCurrentItem(it, false)
+
+                    binding.progressbarQuestion.setProgress(pageIndex, true)
+                    binding.viewpagerTest.setCurrentItem(pageIndex, false)
                 }
             }
         }

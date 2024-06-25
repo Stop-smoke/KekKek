@@ -6,6 +6,9 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.toObject
+import com.stopsmoke.kekkek.data.mapper.toEntity
+import com.stopsmoke.kekkek.domain.model.emptyComment
 import com.stopsmoke.kekkek.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
@@ -38,6 +41,22 @@ class CommentDaoImpl @Inject constructor(
             )
         }
             .flow
+    }
+
+    override suspend fun getComment(postId: String, commentId: String): CommentEntity {
+        try {
+                val documentSnapshot = firestore.collection(POST_COLLECTION)
+                    .document(postId)
+                    .collection(COMMENT_COLLECTION)
+                    .document(commentId)
+                    .get()
+                    .await()
+                val comment = documentSnapshot.toObject<CommentEntity>()
+                return comment ?: emptyComment().toEntity()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return emptyComment().toEntity()
+            }
     }
 
     override fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>> {
@@ -85,6 +104,15 @@ class CommentDaoImpl @Inject constructor(
                 )
             }
             .await()
+    }
+
+    override suspend fun setCommentItem(commentEntity: CommentEntity) {
+       firestore
+           .collection(POST_COLLECTION)
+           .document(commentEntity.parent!!.postId!!)
+           .collection(COMMENT_COLLECTION)
+           .document(commentEntity.id!!)
+           .set(commentEntity)
     }
 
     override suspend fun updateOrInsertComment(commentEntity: CommentEntity) {

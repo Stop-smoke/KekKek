@@ -61,20 +61,30 @@ class UserProfileFragment : Fragment() {
 
     private fun observeUserData() = viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
         with(binding.includeUserprofileDetail) {
-            tvUserProfileName.text = user.name
-            tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
-            tvUserProfileIntroduce.text = user.introduction
-            tvUserProfileFollowerCount.text = "3"
-            tvUserProfileFollowingCount.text = "4"
+            if(user.uid.isNotEmpty()) {
+                tvUserProfileName.text = user.name
+                tvUserProfileRanking.text = "랭킹 ${user.ranking}위"
+                tvUserProfileIntroduce.text = user.introduction
+                tvUserProfileFollowerCount.text = "3"
+                tvUserProfileFollowingCount.text = "4"
 
-            when (user.profileImage) {
-                is ProfileImage.Default -> {
-                    ivUserProfileProfileImage.setImageResource(R.drawable.ic_user_profile_test)
-                }
+                when (user.profileImage) {
+                    is ProfileImage.Default -> {
+                        ivUserProfileProfileImage.setImageResource(R.drawable.ic_user_profile_test)
+                    }
 
-                is ProfileImage.Web -> {
-                    ivUserProfileProfileImage.load((user.profileImage as ProfileImage.Web).url)
+                    is ProfileImage.Web -> {
+                        ivUserProfileProfileImage.load((user.profileImage as ProfileImage.Web).url)
+                    }
                 }
+            } else if(user.uid.isNullOrBlank()){
+                tvUserProfileName.text = "탈퇴한 유저입니다."
+                tvUserProfileRanking.text = ""
+                tvUserProfileIntroduce.text ="탈퇴한 유저입니다."
+                tvUserProfileFollowerCount.text = "0"
+                tvUserProfileFollowingCount.text = "0"
+
+                ivUserProfileProfileImage.load(R.drawable.ic_user_profile_test)
             }
         }
     }

@@ -7,14 +7,14 @@
     app:startDestination="@+id/home">
 
     <include app:graph="@navigation/nav_onboarding" />
-    <include app:graph="@navigation/nav_settings"/>
-    <include app:graph="@navigation/nav_smoking_questionnaire" />
+    <include app:graph="@navigation/nav_settings" />
+    <include app:graph="@navigation/nav_smoking_addiction_test" />
 
     <fragment
         android:id="@+id/authentication"
-        app:route="authentication_screen"
         android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
-        tools:layout="@layout/fragment_authentication" >
+        app:route="authentication_screen"
+        tools:layout="@layout/fragment_authentication">
         <action
             android:id="@+id/action_authentication_to_onboarding_introduce"
             app:destination="@id/nav_onboarding" />
@@ -27,7 +27,7 @@
         android:id="@+id/home"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
         app:route="home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_home_center"
             app:destination="@id/home_center" />
@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_home_to_notice_list"
             app:destination="@id/notice_list" />
+        <action
+            android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
+            app:destination="@id/nav_smoking_addiction_test" />
     </fragment>
 
     <fragment
@@ -62,7 +65,7 @@
 
         <action
             android:id="@+id/action_community_to_user_profile_screen"
-            app:destination="@id/user_profile" >
+            app:destination="@id/user_profile">
             <argument
                 android:name="uid"
                 app:argType="string" />
@@ -98,7 +101,7 @@
         tools:layout="@layout/fragment_my">
         <action
             android:id="@+id/action_my_page_to_setting_profile"
-            app:destination="@id/settings_setting_profile"/>
+            app:destination="@id/settings_setting_profile" />
         <action
             android:id="@+id/action_my_page_to_nav_settings"
             app:destination="@id/nav_settings" />
@@ -133,12 +136,12 @@
 
     <fragment
         android:id="@+id/settings_setting_profile"
-        app:route="profile_settings_screen"
         android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
+        app:route="profile_settings_screen"
         tools:layout="@layout/fragment_settings_profile">
         <action
             android:id="@+id/action_settings_setting_profile_to_authentication"
-            app:destination="@id/authentication"/>
+            app:destination="@id/authentication" />
     </fragment>
 
     <fragment
@@ -210,16 +213,20 @@
         android:id="@+id/post_view"
         android:name="com.stopsmoke.kekkek.presentation.post.PostViewFragment"
         app:route="post_view"
-        tools:layout="@layout/fragment_post_view" >
+        tools:layout="@layout/fragment_post_view">
         <action
             android:id="@+id/action_post_view_to_user_profile"
-            app:destination="@id/user_profile"/>
+            app:destination="@id/user_profile" />
         <action
             android:id="@+id/action_post_view_to_post_edit"
             app:destination="@id/post_write" />
         <action
             android:id="@+id/action_post_view_to_my_complaint"
             app:destination="@id/my_complaint" />
+
+        <action
+            android:id="@+id/action_post_view_to_reply"
+            app:destination="@id/reply" />
     </fragment>
 
     <fragment
@@ -245,7 +252,7 @@
         android:id="@+id/my_bookmark_list"
         android:name="com.stopsmoke.kekkek.presentation.myBookmarkList.BookmarkFragment"
         app:route="my_bookmark_list"
-        tools:layout="@layout/fragment_bookmark" >
+        tools:layout="@layout/fragment_bookmark">
 
         <action
             android:id="@+id/action_myBookmarkList_to_postView"
@@ -260,7 +267,7 @@
         android:id="@+id/my_writing_list"
         android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
         app:route="my_writing_list"
-        tools:layout="@layout/fragment_my_writing_list" >
+        tools:layout="@layout/fragment_my_writing_list">
 
         <action
             android:id="@+id/action_myWritingList_to_postView"
@@ -271,7 +278,7 @@
         android:id="@+id/popular_writing_list"
         android:name="com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListFragment"
         app:route="popular_writing_list"
-        tools:layout="@layout/fragment_popular_writing_list" >
+        tools:layout="@layout/fragment_popular_writing_list">
 
         <action
             android:id="@+id/action_popularWritingList_to_postView"
@@ -286,7 +293,7 @@
         android:id="@+id/my_comment_list"
         android:name="com.stopsmoke.kekkek.presentation.myCommentList.MyCommentFragment"
         app:route="my_comment_list"
-        tools:layout="@layout/fragment_my_comment" >
+        tools:layout="@layout/fragment_my_comment">
 
         <action
             android:id="@+id/action_myCommentList_to_postView"
@@ -331,10 +338,26 @@
         android:id="@+id/notice_list"
         android:name="com.stopsmoke.kekkek.presentation.noticeWritingList.NoticeListFragment"
         app:route="notice_list"
-        tools:layout="@layout/fragment_notice_list" >
+        tools:layout="@layout/fragment_notice_list">
 
-        <action android:id="@+id/action_noticeList_to_postView"
-            app:destination="@id/post_view"/>
+        <action
+            android:id="@+id/action_noticeList_to_postView"
+            app:destination="@id/post_view" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reply"
+        android:name="com.stopsmoke.kekkek.presentation.post.reply.ReplyFragment"
+        app:route="reply"
+        tools:layout="@layout/fragment_reply">
+
+        <argument
+            android:name="replyIdItem"
+            app:argType="com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem"/>
+
+        <action
+            android:id="@+id/action_reply_to_userProfile"
+            app:destination="@id/user_profile" />
     </fragment>
 
 </navigation>

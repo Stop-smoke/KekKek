@@ -1,13 +1,13 @@
 package com.stopsmoke.kekkek.presentation.post
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -24,9 +24,11 @@ import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -100,6 +102,10 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         postViewAdapter = PostViewAdapter(viewModel = viewModel, lifecycleOwner = viewLifecycleOwner)
         binding.rvPostView.adapter = postViewAdapter
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
+
+        val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
+        val height = resources.getDimensionPixelSize(R.dimen.divider_height)
+        binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
     private fun showCommentDeleteDialog(postId : String) {
@@ -226,7 +232,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        communityViewModel.setPostChanged(true)
         activity?.visible()
         _binding = null
     }
@@ -241,6 +246,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
     }
 
+
     override fun deleteItem(comment: Comment) {
         when(val user = viewModel.user.value){
             is User.Error -> {
@@ -253,7 +259,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 if (comment.written.uid == user.uid) {
                     showCommentDeleteDialog(comment.id)
                 }
-
             null -> {}
         }
     }
@@ -262,6 +267,18 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         findNavController().navigate(
             resId = R.id.action_post_view_to_user_profile,
             args = bundleOf("uid" to uid)
+        )
+    }
+
+    override fun commentLikeClick(comment: Comment) {
+        viewModel.commentLikeClick(comment)
+        postViewAdapter.refresh()
+    }
+
+    override fun navigateToReply(comment: Comment) {
+        findNavController().navigate(
+            resId = R.id.action_post_view_to_reply,
+            args = bundleOf("replyIdItem" to ReplyIdItem(commentId = comment.id, postId = comment.parent.postId))
         )
     }
 }

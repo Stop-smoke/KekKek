@@ -13,9 +13,7 @@ data class Comment(
     val written: Written,
     val parent: CommentParent
 ) {
-
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
-
 }
 
 fun emptyComment() = Comment(
