@@ -261,7 +261,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 if (comment.written.uid == user.uid) {
                     showCommentDeleteDialog(comment.id)
                 }
-
             null -> {}
         }
     }

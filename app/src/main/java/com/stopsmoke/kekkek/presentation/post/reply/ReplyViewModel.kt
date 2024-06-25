@@ -1,17 +1,12 @@
 package com.stopsmoke.kekkek.presentation.post.reply
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
-import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
@@ -30,7 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -112,6 +106,16 @@ class ReplyViewModel @Inject constructor(
         }
     }
 
-    fun getReplyCount(){}
+    fun deleteReply(reply: Reply) = viewModelScope.launch {
+        replyRepository.deleteReply(reply)
+    }
+
+    fun commentLikeClick(comment: Comment) = viewModelScope.launch{
+        commentRepository.setCommentItem(comment)
+    }
+
+    fun updateReply(reply: Reply) = viewModelScope.launch{
+        replyRepository.updateReply(reply)
+    }
 }
 

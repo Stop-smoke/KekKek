@@ -23,13 +23,13 @@ import com.stopsmoke.kekkek.presentation.toResourceId
 
 class ReplyAdapter(
     private val viewModel: ReplyViewModel,
-    private val viewLifecycleOwner: LifecycleOwner
+    private val viewLifecycleOwner: LifecycleOwner,
 ) : PagingDataAdapter<Reply, ReplyAdapter.ViewHolder>(diffCallback) {
 
-    private var callback: PostCommentCallback? = null
+    private var callback: ReplyCallback? = null
 
-    fun registerCallback(postCommentCallback: PostCommentCallback) {
-        callback = postCommentCallback
+    fun registerCallback(replyCallback: ReplyCallback) {
+        callback = replyCallback
     }
 
     fun unregisterCallback() {
@@ -139,11 +139,16 @@ class ReplyAdapter(
             clCommentLike.setOnClickListener {
                 val list = reply.likeUser.toMutableList()
                 if (isLikeUser) list.remove(userUid) else list.add(userUid)
-                callback?.commentLikeClick(
+                callback?.updateReply(
                     reply.copy(
                         likeUser = list
                     )
                 )
+            }
+
+            itemView.setOnLongClickListener {
+                callback?.deleteItem(reply)
+                true
             }
         }
 
