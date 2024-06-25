@@ -37,6 +37,12 @@ class ReplyAdapter(
         callback = null
     }
 
+
+    fun updateComment() {
+        notifyDataSetChanged()
+    }
+
+
     abstract class ViewHolder(
         root: View
     ) : RecyclerView.ViewHolder(root) {
@@ -65,7 +71,7 @@ class ReplyAdapter(
 
             tvCommentLikeNum.text = comment.likeUser.size.toString()
             val userUid = (viewModel.user.value as? User.Registered)?.uid ?: ""
-            var isLikeUser: Boolean = userUid in comment.likeUser
+            var isLikeUser: Boolean = userUid in viewModel.comment.value.likeUser
 
             if (isLikeUser) ivCommentLike.setColorFilter(
                 ContextCompat.getColor(
@@ -90,23 +96,6 @@ class ReplyAdapter(
                 callback?.commentLikeClick(
                     comment.copy(
                         likeUser = list
-                    )
-                )
-            }
-
-            viewModel.comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle){
-                isLikeUser = userUid in viewModel.comment.value.likeUser
-                tvCommentLikeNum.text = viewModel.comment.value.likeUser.size.toString()
-                if (isLikeUser) ivCommentLike.setColorFilter(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.primary_blue
-                    )
-                )
-                else ivCommentLike.setColorFilter(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.gray_lightgray2
                     )
                 )
             }

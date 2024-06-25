@@ -80,7 +80,9 @@ class ReplyFragment : Fragment(), ReplyCallback {
             viewModel.updateComment()
         }
 
-
+        comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {
+            replyAdapter.updateComment()
+        }
     }
 
     private fun initEditTextListener() = with(binding) {
