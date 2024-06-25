@@ -11,10 +11,12 @@ import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.REPLY_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.ReplyDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
+import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -36,39 +38,50 @@ class ReplyDaoImpl @Inject constructor(
 
     }
     override suspend fun getReply(postId: String, commentId: String): Flow<PagingData<ReplyEntity>> {
-        val query = firestore.collection(POST_COLLECTION)
-            .document(postId)
-            .collection(COMMENT_COLLECTION)
-            .document(commentId)
-            .collection(REPLY_COLLECTION)
-            .orderBy("date_time.created", Query.Direction.ASCENDING)
+        try {
 
-        return Pager(
-            config = PagingConfig(PAGE_LIMIT)
-        ) {
-            FireStorePagingSource(
-                query = query,
-                limit = PAGE_LIMIT.toLong(),
-                clazz = ReplyEntity::class.java
-            )
+            val query = firestore.collection(POST_COLLECTION)
+                .document(postId)
+                .collection(COMMENT_COLLECTION)
+                .document(commentId)
+                .collection(REPLY_COLLECTION)
+                .orderBy("date_time.created", Query.Direction.ASCENDING)
+
+            return Pager(
+                config = PagingConfig(PAGE_LIMIT)
+            ) {
+                FireStorePagingSource(
+                    query = query,
+                    limit = PAGE_LIMIT.toLong(),
+                    clazz = ReplyEntity::class.java
+                )
+            }
+                .flow
+        }catch (e:Exception){
+            e.printStackTrace()
+            return emptyFlow()
         }
-            .flow
     }
 
-    override suspend fun getReplyCount(postId: String, commentId: String): Flow<Long> = callbackFlow {
+    override suspend fun deleteReply(replyEntity: ReplyEntity) {
         firestore.collection(POST_COLLECTION)
-            .document(postId)
+            .document(replyEntity.commentParent!!.postId!!)
             .collection(COMMENT_COLLECTION)
-            .document(commentId)
+            .document(replyEntity.replyParent!!)
             .collection(REPLY_COLLECTION)
-            .count()
-            .get(AggregateSource.SERVER)
-            .addOnSuccessListener { trySend(it.count) }
-            .addOnFailureListener { throw it }
-
-        awaitClose()
+            .document(replyEntity.id!!)
+            .delete()
     }
 
+    override suspend fun updateReply(replyEntity: ReplyEntity) {
+        firestore.collection(POST_COLLECTION)
+            .document(replyEntity.commentParent!!.postId!!)
+            .collection(COMMENT_COLLECTION)
+            .document(replyEntity.replyParent!!)
+            .collection(REPLY_COLLECTION)
+            .document(replyEntity.id!!)
+            .update(mapOf("like_user" to replyEntity.likeUser))
+    }
 
     companion object {
         private const val PAGE_LIMIT = 30

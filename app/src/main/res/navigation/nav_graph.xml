@@ -350,6 +350,10 @@
         <argument
             android:name="replyIdItem"
             app:argType="com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem"/>
+
+        <action
+            android:id="@+id/action_reply_to_userProfile"
+            app:destination="@id/user_profile" />
     </fragment>
 
 </navigation>

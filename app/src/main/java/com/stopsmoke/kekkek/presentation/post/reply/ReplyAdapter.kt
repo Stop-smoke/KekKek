@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post.reply
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +24,13 @@ import com.stopsmoke.kekkek.presentation.toResourceId
 
 class ReplyAdapter(
     private val viewModel: ReplyViewModel,
-    private val viewLifecycleOwner: LifecycleOwner
+    private val viewLifecycleOwner: LifecycleOwner,
 ) : PagingDataAdapter<Reply, ReplyAdapter.ViewHolder>(diffCallback) {
 
-    private var callback: PostCommentCallback? = null
+    private var callback: ReplyCallback? = null
 
-    fun registerCallback(postCommentCallback: PostCommentCallback) {
-        callback = postCommentCallback
+    fun registerCallback(replyCallback: ReplyCallback) {
+        callback = replyCallback
     }
 
     fun unregisterCallback() {
@@ -49,12 +50,7 @@ class ReplyAdapter(
     inner class CommentViewHolder(
         private val binding: ItemCommentBinding
     ) : ViewHolder(binding.root) {
-        override fun bind(reply: Reply) {
-            viewModel.comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle){
-                onBind(it)
-            }
-        }
-        private fun onBind(comment: Comment) = with(binding) {
+        override fun bind(reply: Reply):Unit = with(binding) {
             val comment = viewModel.comment.value
             tvCommentNickname.text = comment.written.name
             tvCommentDescription.text = comment.text
@@ -69,7 +65,8 @@ class ReplyAdapter(
 
             tvCommentLikeNum.text = comment.likeUser.size.toString()
             val userUid = (viewModel.user.value as? User.Registered)?.uid ?: ""
-            val isLikeUser: Boolean = userUid in comment.likeUser
+            var isLikeUser: Boolean = userUid in comment.likeUser
+
             if (isLikeUser) ivCommentLike.setColorFilter(
                 ContextCompat.getColor(
                     itemView.context,
@@ -87,7 +84,6 @@ class ReplyAdapter(
                 callback?.navigateToUserProfile(comment.written.uid)
             }
 
-
             clCommentLike.setOnClickListener {
                 val list = comment.likeUser.toMutableList()
                 if (isLikeUser) list.remove(userUid) else list.add(userUid)
@@ -97,13 +93,30 @@ class ReplyAdapter(
                     )
                 )
             }
+
+            viewModel.comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle){
+                isLikeUser = userUid in viewModel.comment.value.likeUser
+                tvCommentLikeNum.text = viewModel.comment.value.likeUser.size.toString()
+                if (isLikeUser) ivCommentLike.setColorFilter(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.primary_blue
+                    )
+                )
+                else ivCommentLike.setColorFilter(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.gray_lightgray2
+                    )
+                )
+            }
         }
     }
 
     inner class ReplyViewHolder(
         private val binding: ItemReplyBinding
     ) : ViewHolder(binding.root) {
-        override fun bind(reply: Reply) = with(binding){
+        override fun bind(reply: Reply) = with(binding) {
             tvCommentNickname.text = reply.written.name
             tvCommentDescription.text = reply.text
             tvCommentHour.text = reply.elapsedCreatedDateTime.toResourceId(itemView.context)
@@ -139,11 +152,16 @@ class ReplyAdapter(
             clCommentLike.setOnClickListener {
                 val list = reply.likeUser.toMutableList()
                 if (isLikeUser) list.remove(userUid) else list.add(userUid)
-                callback?.commentLikeClick(
+                callback?.updateReply(
                     reply.copy(
                         likeUser = list
                     )
                 )
+            }
+
+            itemView.setOnLongClickListener {
+                callback?.deleteItem(reply)
+                true
             }
         }
 

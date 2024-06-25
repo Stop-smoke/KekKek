@@ -112,7 +112,7 @@ class NoticeListFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity.invisible()
+            activity?.invisible()
         }
     }
     companion object {

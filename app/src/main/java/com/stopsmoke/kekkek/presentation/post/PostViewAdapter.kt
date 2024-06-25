@@ -120,7 +120,6 @@ class PostViewAdapter(
     inner class PostCommentViewHolder(
         val binding: ItemCommentBinding
     ) : ViewHolder(binding.root) {
-
         init {
             binding.root.setOnLongClickListener {
                 getItem(bindingAdapterPosition)?.let { it1 -> callback?.deleteItem(it1) }

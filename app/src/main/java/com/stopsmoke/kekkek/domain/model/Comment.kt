@@ -1,8 +1,6 @@
 package com.stopsmoke.kekkek.domain.model
 
-import android.os.Parcelable
 import com.stopsmoke.kekkek.domain.getElapsedDateTime
-import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 data class Comment(

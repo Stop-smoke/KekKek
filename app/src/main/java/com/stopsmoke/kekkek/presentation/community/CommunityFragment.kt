@@ -61,7 +61,7 @@ class CommunityFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.let { activity ->
-            activity.visible()
+            activity?.visible()
         }
     }
 

@@ -123,7 +123,7 @@ class PopularWritingListFragment : Fragment() {
             if (activity.isVisible()) {
                 viewModel.reload()
             }
-            activity.invisible()
+            activity?.invisible()
         }
     }
 
