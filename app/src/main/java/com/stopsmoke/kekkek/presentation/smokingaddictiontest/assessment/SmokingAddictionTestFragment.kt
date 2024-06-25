@@ -64,7 +64,7 @@ class SmokingAddictionTestFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.pageIndex.collectLatest { pageIndex ->
                     if (smokingAddictionTestAdapter.itemCount == pageIndex) {
-                        findNavController().navigate(R.id.action_smoking_questionnaire_question_screen_to_smoking_questionnaire_result_screen)
+                        findNavController().navigate(R.id.action_smoking_addiction_test_screen_to_smoking_questionnaire_result_screen)
                         return@collectLatest
                     }
 

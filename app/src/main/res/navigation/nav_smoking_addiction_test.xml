@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_smoking_addiction_test"
+    app:startDestination="@id/smoking_addiction_test_start_screen">
+
+    <fragment
+        android:id="@+id/smoking_addiction_test_start_screen"
+        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.start.SmokingAddictionTestStartFragment"
+        tools:layout="@layout/fragment_smoking_addiction_test_start">
+        <action
+            android:id="@+id/action_smoking_addiction_test_start_screen_to_smoking_addiction_test_screen"
+            app:destination="@id/smoking_addiction_test_screen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/smoking_addiction_test_screen"
+        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.assessment.SmokingAddictionTestFragment"
+        tools:layout="@layout/fragment_smoking_addiction_test">
+        <action
+            android:id="@+id/action_smoking_addiction_test_screen_to_smoking_questionnaire_result_screen"
+            app:destination="@id/smoking_addiction_test_result_screen"
+            app:popUpTo="@id/smoking_addiction_test_start_screen"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/smoking_addiction_test_result_screen"
+        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.result.SmokingAddictionTestResultFragment"
+        tools:layout="@layout/fragment_smoking_addiction_test_result" />
+
+</navigation>

@@ -35,7 +35,7 @@ class SmokingAddictionTestStartFragment : Fragment() {
 
     private fun setupListener() {
         binding.btnTestStart.setOnClickListener {
-            findNavController().navigate(R.id.action_smoking_questionnaire_start_screen_to_smoking_questionnaire_question_screen)
+            findNavController().navigate(R.id.action_smoking_addiction_test_start_screen_to_smoking_addiction_test_screen)
         }
     }
 
