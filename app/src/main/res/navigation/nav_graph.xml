@@ -8,7 +8,7 @@
 
     <include app:graph="@navigation/nav_onboarding" />
     <include app:graph="@navigation/nav_settings" />
-    <include app:graph="@navigation/nav_smoking_questionnaire" />
+    <include app:graph="@navigation/nav_smoking_addiction_test" />
 
     <fragment
         android:id="@+id/authentication"
@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_home_to_notice_list"
             app:destination="@id/notice_list" />
+        <action
+            android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
+            app:destination="@id/nav_smoking_addiction_test" />
     </fragment>
 
     <fragment
