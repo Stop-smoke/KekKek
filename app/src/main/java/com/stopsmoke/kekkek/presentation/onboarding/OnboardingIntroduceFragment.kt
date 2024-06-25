@@ -41,6 +41,8 @@ class OnboardingIntroduceFragment : Fragment() {
         binding.btnOnboardingNext.setOnClickListener {
             findNavController().navigate(R.id.action_onboarding_introduce_to_onboarding_name)
         }
+        binding.lottieAnimationView.setAnimation(R.raw.lottie_kekkek_smile_2x)
+        binding.lottieAnimationView.playAnimation()
     }
 
     override fun onDestroyView() {
