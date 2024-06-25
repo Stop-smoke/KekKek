@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/include_question_app_bar"
-        layout="@layout/fragment_question_app_bar"
+        layout="@layout/fragment_smoking_addiction_test_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
