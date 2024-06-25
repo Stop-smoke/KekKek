@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestBinding
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -67,6 +68,7 @@ class SmokingAddictionTestFragment : Fragment() {
 
                     if (smokingAddictionTestAdapter.itemCount - 1 == binding.viewpagerTest.currentItem) {
                         findNavController().navigate(R.id.action_smoking_questionnaire_question_screen_to_smoking_questionnaire_result_screen)
+                        this@launch.cancel()
                     }
                     binding.viewpagerTest.setCurrentItem(it, false)
                 }
