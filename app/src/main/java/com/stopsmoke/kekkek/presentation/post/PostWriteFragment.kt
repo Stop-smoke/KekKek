@@ -144,7 +144,7 @@ class PostWriteFragment : Fragment() {
         }
 
         includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
-            if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
+            if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty() || viewModel.post.value == null) {
                 Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
             } else {
                 val dialog = builder.create()
@@ -154,7 +154,7 @@ class PostWriteFragment : Fragment() {
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
-                        dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+                        dateTime = DateTime(created = viewModel.post.value!!.dateTime.created, modified = LocalDateTime.now()),
                         category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
                             .toPostWriteCategory()
                     )

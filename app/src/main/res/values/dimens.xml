@@ -3,4 +3,5 @@
     <dimen name="sticky_item_margin_top">16dp</dimen>
     <dimen name="post_image_width">100dp</dimen>
     <dimen name="post_image_height">100dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
 </resources>

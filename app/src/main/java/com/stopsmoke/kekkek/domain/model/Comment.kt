@@ -1,6 +1,8 @@
 package com.stopsmoke.kekkek.domain.model
 
+import android.os.Parcelable
 import com.stopsmoke.kekkek.domain.getElapsedDateTime
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 
 data class Comment(
@@ -13,9 +15,7 @@ data class Comment(
     val written: Written,
     val parent: CommentParent
 ) {
-
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
-
 }
 
 fun emptyComment() = Comment(

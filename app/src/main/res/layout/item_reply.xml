@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:paddingStart="40dp">
+
+
+    <TextView
+        android:id="@+id/tv_comment_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/gray_lightgray1"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_comment_nickname"
+        app:layout_constraintStart_toEndOf="@+id/tv_comment_nickname"
+        app:layout_constraintTop_toTopOf="@+id/tv_comment_nickname"
+        tools:text="댓글 작성자 랭킹" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_comment_profile"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/img_defaultprofile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_comment_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_comment_profile"
+        app:layout_constraintStart_toEndOf="@+id/iv_comment_profile"
+        app:layout_constraintTop_toTopOf="@+id/iv_comment_profile"
+        tools:text="댓글 작성자 닉네임" />
+
+    <TextView
+        android:id="@+id/tv_comment_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/iv_comment_profile"
+        app:layout_constraintTop_toBottomOf="@+id/iv_comment_profile"
+        tools:text="댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다. 댓글 내용을 확인하기 위함입니다." />
+
+    <TextView
+        android:id="@+id/tv_comment_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="5시간 전"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_description" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_comment_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_comment_hour"
+        app:layout_constraintStart_toEndOf="@+id/tv_comment_hour"
+        app:layout_constraintTop_toTopOf="@+id/tv_comment_hour">
+
+        <ImageView
+            android:id="@+id/iv_comment_like"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_thumb_up"
+            app:tint="@color/gray_lightgray2" />
+
+        <TextView
+            android:id="@+id/tv_comment_likeNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/comment_like"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_comment_like"
+            app:layout_constraintStart_toEndOf="@+id/iv_comment_like"
+            app:layout_constraintTop_toTopOf="@+id/iv_comment_like" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_comment_recomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_comment_like"
+        app:layout_constraintStart_toEndOf="@+id/cl_comment_like"
+        app:layout_constraintTop_toTopOf="@+id/cl_comment_like">
+
+
+        <ImageView
+            android:id="@+id/iv_comment_recomment"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_re_comment"
+            app:tint="@color/gray_lightgray2" />
+
+        <TextView
+            android:id="@+id/tv_comment_recomment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/comment_recomment"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_comment_recomment"
+            app:layout_constraintStart_toEndOf="@+id/iv_comment_recomment"
+            app:layout_constraintTop_toTopOf="@+id/iv_comment_recomment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_comment_more"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_show_more"
+        app:tint="@color/gray_lightgray2" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
