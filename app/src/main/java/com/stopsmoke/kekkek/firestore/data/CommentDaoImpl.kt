@@ -43,9 +43,8 @@ class CommentDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun getComment(postId: String, commentId: String): Flow<CommentEntity> {
-        return flow {
-            try {
+    override suspend fun getComment(postId: String, commentId: String): CommentEntity {
+        try {
                 val documentSnapshot = firestore.collection(POST_COLLECTION)
                     .document(postId)
                     .collection(COMMENT_COLLECTION)
@@ -53,12 +52,11 @@ class CommentDaoImpl @Inject constructor(
                     .get()
                     .await()
                 val comment = documentSnapshot.toObject<CommentEntity>()
-                emit(comment ?: emptyComment().toEntity())
+                return comment ?: emptyComment().toEntity()
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(emptyComment().toEntity())
+                return emptyComment().toEntity()
             }
-        }
     }
 
     override fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>> {

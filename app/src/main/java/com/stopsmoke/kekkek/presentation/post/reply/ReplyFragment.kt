@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
@@ -23,6 +24,7 @@ import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReplyFragment : Fragment(), ReplyCallback {
@@ -57,6 +59,7 @@ class ReplyFragment : Fragment(), ReplyCallback {
         initRecyclerView()
         initViewModel()
         initEditTextListener()
+        setBackBtn()
     }
 
     private fun initRecyclerView() = with(binding) {
@@ -73,9 +76,11 @@ class ReplyFragment : Fragment(), ReplyCallback {
             replyAdapter.submitData(it)
         }
 
-        comment.collectLatestWithLifecycle(lifecycle){
-            replyAdapter.refresh()
+        replyId.collectLatestWithLifecycle(lifecycle){
+            viewModel.updateComment()
         }
+
+
     }
 
     private fun initEditTextListener() = with(binding) {
@@ -102,6 +107,11 @@ class ReplyFragment : Fragment(), ReplyCallback {
         }
     }
 
+    private fun setBackBtn(){
+        binding.includeFragmentReplyAppBar.ivPostCommentBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
 
     private fun View.hideSoftKeyboard() {
         val inputMethodManager =
@@ -143,7 +153,6 @@ class ReplyFragment : Fragment(), ReplyCallback {
 
     override fun commentLikeClick(comment: Comment) {
         viewModel.commentLikeClick(comment)
-        replyAdapter.refresh()
     }
 
 

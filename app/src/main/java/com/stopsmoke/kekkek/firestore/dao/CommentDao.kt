@@ -23,5 +23,5 @@ interface CommentDao {
 
     fun getCommentCount(postId: String): Flow<Long>
 
-    suspend fun getComment(postId: String, commentId: String): Flow<CommentEntity>
+    suspend fun getComment(postId: String, commentId: String): CommentEntity
 }

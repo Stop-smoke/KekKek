@@ -49,19 +49,15 @@ class ReplyViewModel @Inject constructor(
     private val _replyId = MutableStateFlow<ReplyIdItem>(ReplyIdItem.init())
     val replyId = _replyId.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val comment: StateFlow<Comment> = replyId.flatMapLatest { replyIdItem ->
-        if (replyIdItem.postId.isEmpty() || replyIdItem.commentId.isEmpty()) {
-            return@flatMapLatest emptyFlow()
-        }
-        commentRepository.getComment(commentId = replyIdItem.commentId, postId = replyIdItem.postId)
-    }.catch {
-        it.printStackTrace()
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptyComment()
-    )
+    private val _comment = MutableStateFlow<Comment>(emptyComment())
+    val comment: StateFlow<Comment> = _comment.asStateFlow()
+
+    suspend fun updateComment() = viewModelScope.launch{
+        _comment.value = commentRepository.getComment(
+            commentId = replyId.value.commentId,
+            postId = replyId.value.postId
+        )
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reply: Flow<PagingData<Reply>> = replyId.flatMapLatest { replyIdItem ->
@@ -110,8 +106,9 @@ class ReplyViewModel @Inject constructor(
         replyRepository.deleteReply(reply)
     }
 
-    fun commentLikeClick(comment: Comment) = viewModelScope.launch{
-        commentRepository.setCommentItem(comment)
+    fun commentLikeClick(updateComment: Comment) = viewModelScope.launch{
+        commentRepository.setCommentItem(updateComment)
+        updateComment()
     }
 
     fun updateReply(reply: Reply) = viewModelScope.launch{
