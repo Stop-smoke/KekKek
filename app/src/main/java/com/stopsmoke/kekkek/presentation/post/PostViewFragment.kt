@@ -233,7 +233,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        communityViewModel.setPostChanged(true)
         activity?.visible()
         _binding = null
     }
