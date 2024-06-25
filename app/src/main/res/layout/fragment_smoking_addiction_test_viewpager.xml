@@ -15,15 +15,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_bold"
-        android:maxWidth="400dp"
         android:text="@string/question1_title"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tv_question_sub_text"
