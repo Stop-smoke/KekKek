@@ -6,8 +6,10 @@ import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
@@ -19,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -45,6 +48,7 @@ import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class PostWriteFragment : Fragment() {
+
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
@@ -61,6 +65,13 @@ class PostWriteFragment : Fragment() {
     private val builder by lazy {
         AlertDialog.Builder(requireContext())
     }
+
+    private var isBold = false
+    private var isItalic = false
+    private var isUnderline = false
+    private var isStrikethrough = false
+    private var currentTextColor: Int? = null
+    private var currentBackgroundColor: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,26 +190,9 @@ class PostWriteFragment : Fragment() {
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
     }
 
-    private fun runTextEditor(span: Any?) {
-        val etPostWriteContent = binding.etPostWriteContent
-        val start = etPostWriteContent.selectionStart
-        val end = etPostWriteContent.selectionEnd
-
-        val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-        spannableString.setSpan(
-            span,
-            start,
-            end,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
-        )
-        etPostWriteContent.text = spannableString
-        etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
-    }
-
     private fun insertImage(url: Uri) {
         val etPostWriteContent = binding.etPostWriteContent
         val start = etPostWriteContent.selectionStart
-//        val end = etPostWriteContent.selectionEnd
 
         val inputStream = requireContext().contentResolver.openInputStream(url)
         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -225,32 +219,70 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun initTextEditor() = with(binding) {
+
+        etPostWriteContent.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editText: Editable?) {
+                editText?.let {
+                    applyActiveStyles(it, it.length-1, it.length)
+                }
+            }
+        })
+
         ivPostWriteBold.setOnClickListener {
-            val span = StyleSpan(Typeface.BOLD)
-            runTextEditor(span)
+            isBold = !isBold
+            ivPostWriteBold.isSelected = isBold
         }
         ivPostWriteItalic.setOnClickListener {
-            val span = StyleSpan(Typeface.ITALIC)
-            runTextEditor(span)
+            isItalic = !isItalic
+            ivPostWriteItalic.isSelected = isItalic
         }
         ivPostWriteUnderline.setOnClickListener {
-            val span = UnderlineSpan()
-            runTextEditor(span)
+            isUnderline = !isUnderline
+            ivPostWriteUnderline.isSelected = isUnderline
         }
         ivPostWriteLineThrough.setOnClickListener {
-            val span = StrikethroughSpan()
-            runTextEditor(span)
+            isStrikethrough = !isStrikethrough
+            ivPostWriteLineThrough.isSelected = isStrikethrough
         }
         ivPostWriteTextColor.setOnClickListener {
-            val span = ForegroundColorSpan(requireContext().getColor(R.color.red))
-            runTextEditor(span)
+            currentTextColor = if(currentTextColor == null) {
+                requireContext().getColor(R.color.red)
+            } else null
+            ivPostWriteTextColor.isSelected = currentTextColor != null
         }
         ivPostWriteBackgroundColor.setOnClickListener {
-            val span = BackgroundColorSpan(requireContext().getColor(R.color.yellow))
-            runTextEditor(span)
+            currentBackgroundColor = if(currentBackgroundColor == null) {
+                requireContext().getColor(R.color.yellow)
+            } else null
+            ivPostWriteBackgroundColor.isSelected = currentBackgroundColor != null
         }
         ivPostWriteLink.setOnClickListener {
             pickImageLauncher.launch("image/*")
+        }
+    }
+
+    private fun applyActiveStyles(spannableString: Editable, start: Int, end: Int) {
+        if(isBold) {
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if(isItalic) {
+            spannableString.setSpan(StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if(isUnderline) {
+            spannableString.setSpan(UnderlineSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if(isStrikethrough) {
+            spannableString.setSpan(StrikethroughSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        currentTextColor?.let {
+            spannableString.setSpan(ForegroundColorSpan(it), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        currentBackgroundColor?.let {
+            spannableString.setSpan(BackgroundColorSpan(it), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 
