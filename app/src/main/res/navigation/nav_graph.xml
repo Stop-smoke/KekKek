@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_home_to_notice_list"
             app:destination="@id/notice_list" />
+        <action
+            android:id="@+id/action_home_to_nav_smoking_questionnaire"
+            app:destination="@id/nav_smoking_questionnaire" />
     </fragment>
 
     <fragment
