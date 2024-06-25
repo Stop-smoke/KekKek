@@ -33,20 +33,48 @@
         app:layout_constraintStart_toStartOf="@+id/tv_onboarding_perpack1"
         app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_perpack1" />
 
-    <EditText
-        android:id="@+id/et_onboarding_perpack"
-        android:layout_width="230dp"
+<!--    <EditText-->
+<!--        android:id="@+id/et_onboarding_perpack"-->
+<!--        android:layout_width="230dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="80dp"-->
+<!--        android:backgroundTint="@color/gray"-->
+<!--        android:fontFamily="@font/pretendard_medium"-->
+<!--        android:hint="숫자를 입력하세요."-->
+<!--        android:textColorHint="@color/gray"-->
+<!--        android:inputType="number"-->
+<!--        android:textSize="26sp"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/tv_onboarding_perpack2"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/tv_onboarding_perpack2"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_perpack2" />-->
+
+
+    <SeekBar
+        android:id="@+id/slider_onboarding_perpack"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:backgroundTint="@color/gray"
-        android:fontFamily="@font/pretendard_medium"
-        android:hint="숫자를 입력하세요."
-        android:textColorHint="@color/gray"
-        android:inputType="number"
-        android:textSize="26sp"
+        android:progressDrawable="@drawable/seekbar_track"
+        android:thumb="@drawable/seekbar_thumb"
+        android:valueFrom="0"
+        android:valueTo="50"
+        android:stepSize="1"
         app:layout_constraintEnd_toEndOf="@+id/tv_onboarding_perpack2"
         app:layout_constraintStart_toStartOf="@+id/tv_onboarding_perpack2"
         app:layout_constraintTop_toBottomOf="@+id/tv_onboarding_perpack2" />
+
+    <TextView
+        android:id="@+id/tv_slider_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="0개비"
+        android:textColor="@color/gray"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/slider_onboarding_perpack"
+        app:layout_constraintStart_toStartOf="@+id/slider_onboarding_perpack"
+        app:layout_constraintTop_toBottomOf="@+id/slider_onboarding_perpack" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_onboarding_next"

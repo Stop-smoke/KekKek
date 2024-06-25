@@ -9,22 +9,21 @@
 
     <include
         android:id="@+id/include_question_app_bar"
-        layout="@layout/fragment_question_app_bar"
+        layout="@layout/fragment_smoking_addiction_test_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressbar_question"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:backgroundTintMode="src_in"
         android:max="8"
         app:indicatorColor="#3182F6"
         app:trackColor="#EFF1F9"
-        app:trackCornerRadius="8dp"
         app:trackThickness="6dp"
         tools:progress="4" />
 

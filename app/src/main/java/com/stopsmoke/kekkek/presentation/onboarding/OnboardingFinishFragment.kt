@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatest
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class OnboardingFinishFragment : Fragment() {
 
@@ -36,16 +38,20 @@ class OnboardingFinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.onboardingUiState.collectLatest(lifecycleScope) {
-            findNavController().navigate("home")  {
-                popUpTo(findNavController().graph.id) {
-                    inclusive = true
+        lifecycleScope.launch {
+            delay(1500)
+            viewModel.onboardingUiState.collectLatest(lifecycleScope) {
+                findNavController().navigate("home")  {
+                    popUpTo(findNavController().graph.id) {
+                        inclusive = true
+                    }
                 }
             }
+
+            viewModel.updateUserData()
+        }
         }
 
-        viewModel.updateUserData()
-    }
 
 //    override fun onStop() {
 //        super.onStop()
