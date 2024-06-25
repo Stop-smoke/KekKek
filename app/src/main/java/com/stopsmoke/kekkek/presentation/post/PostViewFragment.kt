@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -264,7 +265,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             null -> {}
         }
     }
-
 
     override fun navigateToUserProfile(uid: String) {
         findNavController().navigate(

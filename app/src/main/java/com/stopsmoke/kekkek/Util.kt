@@ -7,18 +7,23 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.presentation.MainActivity
 
 fun FragmentActivity.visible() {
-    val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
-    layout.visibility = View.VISIBLE
+    (this as? MainActivity)?.let {
+        val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+        layout.visibility = View.VISIBLE
+    }
 }
 
 fun FragmentActivity.invisible() {
-    val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
-    layout.visibility = View.GONE
+    (this as? MainActivity)?.let {
+        val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+        layout.visibility = View.GONE
+    }
 }
 
-fun FragmentActivity.isVisible() : Boolean{
+fun FragmentActivity.isVisible(): Boolean {
     val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
     return View.VISIBLE == layout.visibility
 }
