@@ -44,7 +44,6 @@ class PostWriteFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PostWriteViewModel by viewModels()
-    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private val builder by lazy {
         AlertDialog.Builder(requireContext())
@@ -105,7 +104,7 @@ class PostWriteFragment : Fragment() {
             builder.setIcon(R.drawable.ic_post)
         } else {
             builder.setTitle("게시물 수정")
-            builder.setMessage("게시물을 수정하시겠습니까??")
+            builder.setMessage("게시물을 수정하시겠습니까?")
             builder.setIcon(R.drawable.ic_post)
         }
 
