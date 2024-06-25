@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_smoking_addication_test_exit_dialog"
-    android:padding="20dp"
-    android:layout_height="wrap_content">
+    android:padding="20dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="테스트를 종료하시겠습니까?"
@@ -17,41 +17,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tv_dialog_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textColor="@color/gray_gray1"
-        android:textStyle="bold"
         android:text="종료하기를 누르면 테스트를 종료할게요.\n진행중인 내용은 저장되지 않아요."
+        android:textColor="@color/gray_gray1"
         android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_dialog_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cancel"
+        android:id="@+id/btn_dialog_cancel"
         android:layout_width="125dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
-        android:text="취소"
+        android:background="@drawable/bg_test_dialog"
         android:minHeight="10dp"
+        android:text="취소"
         android:textColor="@color/tv_notice"
         android:textStyle="bold"
-        android:background="@drawable/bg_test_dialog"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="@+id/tv_dialog_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_content" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_finish"
+        android:id="@+id/btn_dialog_finish"
         android:layout_width="125dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:text="종료하기"
-        android:textStyle="bold"
-        android:minHeight="10dp"
-        android:textColor="@color/white"
         android:background="@drawable/bg_text_button"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_cancel"
-        app:layout_constraintStart_toEndOf="@+id/btn_cancel"
-        app:layout_constraintTop_toTopOf="@+id/btn_cancel" />
+        android:minHeight="10dp"
+        android:text="종료하기"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_dialog_cancel"
+        app:layout_constraintStart_toEndOf="@+id/btn_dialog_cancel"
+        app:layout_constraintTop_toTopOf="@+id/btn_dialog_cancel" />
 </androidx.constraintlayout.widget.ConstraintLayout>
