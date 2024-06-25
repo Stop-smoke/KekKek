@@ -84,7 +84,7 @@ class NoticeListAdapter
                 PostCategory.POPULAR -> "인기글"
                 PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
                 PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
-                PostCategory.GENERAL_DISCUSSION -> "자유게시판"
+                PostCategory.GENERAL_DISCUSSION -> "자유 게시판"
                 PostCategory.FAILURE_STORIES -> "금연 실패 후기"
                 PostCategory.RESOLUTIONS -> "금연 다짐"
                 PostCategory.UNKNOWN -> ""

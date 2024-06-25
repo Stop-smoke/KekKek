@@ -47,8 +47,8 @@
 
         <ImageView
             android:id="@+id/iv_post_write_bold"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:padding="4dp"
@@ -61,8 +61,8 @@
 
         <ImageView
             android:id="@+id/iv_post_write_italic"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:background="@drawable/bg_text_editor"
             android:clickable="true"
@@ -75,8 +75,8 @@
 
         <ImageView
             android:id="@+id/iv_post_write_underline"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:background="@drawable/bg_text_editor"
             android:clickable="true"
@@ -89,10 +89,9 @@
 
         <ImageView
             android:id="@+id/iv_post_write_line_through"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:src="@drawable/ic_linethrough"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_underline"
@@ -103,8 +102,8 @@
 
         <ImageView
             android:id="@+id/iv_post_write_text_color"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:background="@drawable/bg_text_editor"
             android:clickable="true"
@@ -131,8 +130,8 @@
 
         <ImageView
             android:id="@+id/iv_post_write_link"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:background="@drawable/bg_text_editor"
             android:clickable="true"
