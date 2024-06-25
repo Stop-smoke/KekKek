@@ -54,7 +54,7 @@ class RankingMapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Places.initialize(requireContext(), "AIzaSyCKDdKcbgUyEPwozZHTDpUMk-WUeIe0Y_c")
+        Places.initialize(requireContext(), null)
         placesClient = Places.createClient(requireContext())
     }
 
