@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.ivHomeTest.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_nav_smoking_questionnaire)
+            findNavController().navigate(R.id.action_home_to_nav_smoking_addiction_test_graph)
         }
 
         clHomeNotice.setOnClickListener {

@@ -41,7 +41,7 @@
             android:id="@+id/action_home_to_notice_list"
             app:destination="@id/notice_list" />
         <action
-            android:id="@+id/action_home_to_nav_smoking_questionnaire"
+            android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
             app:destination="@id/nav_smoking_addiction_test" />
     </fragment>
 
