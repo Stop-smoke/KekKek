@@ -23,6 +23,7 @@ class SmokingAddictionTestExitDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             isCancelable = true
         }
     }

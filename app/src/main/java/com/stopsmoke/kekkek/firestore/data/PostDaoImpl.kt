@@ -160,9 +160,14 @@ internal class PostDaoImpl @Inject constructor(
 
     override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
         return try {
+            val updateMap = mapOf(
+                "category" to postEntity.category,
+                "title" to postEntity.title,
+                "text" to postEntity.text,
+                "date_time" to postEntity.dateTime)
             firestore.collection(COLLECTION)
                 .document(postEntity.id ?: return Result.Error(NullPointerException()))
-                .set(postEntity)
+                .update(updateMap)
                 .await()
             Result.Success(Unit)
         } catch (e: Exception){

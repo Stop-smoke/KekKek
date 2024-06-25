@@ -92,7 +92,7 @@ class PostViewAdapter(
 
                 tvPostPosterNickname.text = post.written.name
                 tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
-                tvPostHour.text = post.createdElapsedDateTime.toResourceId(context)
+                tvPostHour.text = post.modifiedElapsedDateTime.toResourceId(context)
 
                 tvPostTitle.text = post.title
                 tvPostDescription.text = post.text

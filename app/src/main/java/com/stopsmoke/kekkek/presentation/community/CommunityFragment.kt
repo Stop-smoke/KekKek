@@ -63,7 +63,6 @@ class CommunityFragment : Fragment() {
         activity?.let { activity ->
             activity.visible()
         }
-        listAdapter.refresh()
     }
 
 

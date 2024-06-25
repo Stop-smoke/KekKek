@@ -129,7 +129,7 @@ class PostWriteFragment : Fragment() {
             builder.setIcon(R.drawable.ic_post)
         } else {
             builder.setTitle("게시물 수정")
-            builder.setMessage("게시물을 수정하시겠습니까??")
+            builder.setMessage("게시물을 수정하시겠습니까?")
             builder.setIcon(R.drawable.ic_post)
         }
 
