@@ -20,16 +20,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circleIv_profile"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginTop="30dp"
-                android:clickable="true"
-                android:src="@drawable/img_default_pleaseset"
+            <FrameLayout
+                android:id="@+id/fl_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleIv_profile"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="30dp"
+                    android:clickable="true"
+                    android:src="@drawable/img_default_pleaseset"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/bg_settings_profile_edit"/>
+
+
+
+
+            </FrameLayout>
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/md_width_one"
@@ -39,7 +55,7 @@
                 app:dividerColor="#F4F6F8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/circleIv_profile" />
+                app:layout_constraintTop_toBottomOf="@+id/fl_profile" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_profile_nickname"
