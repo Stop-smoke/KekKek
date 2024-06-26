@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingList
+package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -7,11 +7,8 @@ import com.stopsmoke.kekkek.presentation.userprofile.comment.UserProfileCommentF
 import com.stopsmoke.kekkek.presentation.userprofile.post.UserProfilePostFragment
 
 class RankingListViewpagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-
     private val fragments = listOf(
-        RegionalTopRankFragment.newInstance(""),
-        RegionalTopRankFragment.newInstance(""),
-        RegionalTopRankFragment.newInstance("")
+        RegionalTopRankFragment.newInstance("전국"),
     )
 
     override fun getItemCount(): Int = fragments.size

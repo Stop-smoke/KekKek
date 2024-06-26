@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingList
+package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewRankinglistRankstateItemBinding
-import com.stopsmoke.kekkek.domain.model.DateTime
+import com.stopsmoke.kekkek.domain.model.HistoryTime
+import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.domain.model.Ranking
+import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -30,28 +34,42 @@ class RankingListAdapter
         }
     }
 ) {
+    private var callback: RankingListCallback? = null
 
-    class ViewHolder(
+    fun registerCallbackListener(callback: RankingListCallback) {
+        this.callback = callback
+    }
+
+    fun unregisterCallbackListener() {
+        callback = null
+    }
+
+    inner class ViewHolder(
         private val binding: RecyclerviewRankinglistRankstateItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: RankingListItem) = with(binding) {
             tvRankStateItem.text = item.name
             tvRankStateItemUserName.text = item.name
-            tvRankStateItemRankNum.text = item.rank.toString()
+            tvRankStateItemRankNum.text = (absoluteAdapterPosition + 1).toString()
 
-            circleIvRankStateItemProfile.load(item.profile) {
-//                    placeholder(R.drawable.placeholder_image)
-//                    error(R.drawable.error_image)
-                crossfade(true) // 이미지 로딩 시 페이드 인/아웃 효과 사용
-                transformations(CircleCropTransformation()) // 원형 이미지로 잘라내기
+            if (item.profileImage.isNullOrEmpty()) {
+                circleIvRankStateItemProfile.setImageResource(
+                    R.drawable.img_defaultprofile
+                )
+            } else {
+                circleIvRankStateItemProfile.load(item.profileImage)
             }
 
-            tvRankingListTime.text = getRankingTime(item.time)
+            tvRankingListTime.text = getRankingTime(item.startTime!!)
+
+            circleIvRankStateItemProfile.setOnClickListener {
+                callback?.navigationToUserProfile(item.userID)
+            }
         }
 
-        private fun getRankingTime(pastTime: LocalDateTime): String { //-일 -시간
+        private fun getRankingTime(startTime: LocalDateTime): String { //-일 -시간
             val currentTime = LocalDateTime.now()
-            val duration = Duration.between(pastTime, currentTime)
+            val duration = Duration.between(startTime, currentTime)
 
             val days = duration.toDays()
             val hours = duration.toHours() % 24
@@ -64,7 +82,7 @@ class RankingListAdapter
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RankingListAdapter.ViewHolder {
+    ): ViewHolder {
         return ViewHolder(
             RecyclerviewRankinglistRankstateItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -72,7 +90,7 @@ class RankingListAdapter
         )
     }
 
-    override fun onBindViewHolder(holder: RankingListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }
