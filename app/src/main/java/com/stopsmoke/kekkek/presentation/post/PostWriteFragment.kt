@@ -233,7 +233,9 @@ class PostWriteFragment : Fragment() {
 
             override fun afterTextChanged(editText: Editable?) {
                 editText?.let {
-                    applyActiveStyles(it, it.length - 1, it.length)
+                    Log.d("editText length", it.length.toString())
+                    Log.d("edittext", editText.toString())
+                    applyActiveStyles(it, 0, it.length)
                 }
             }
         })
@@ -279,8 +281,11 @@ class PostWriteFragment : Fragment() {
 
     private fun applyCurrentStylesToSelection() {
         val editable = binding.etPostWriteContent.text
+        Log.d("editable", editable.toString())
         val start = binding.etPostWriteContent.selectionStart
+        Log.d("start", start.toString())
         val end = binding.etPostWriteContent.selectionEnd
+        Log.d("end",end.toString())
         applyActiveStyles(editable, start, end)
     }
 
@@ -293,11 +298,8 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } else {
-            val spans = spannableString.getSpans(start, end, StyleSpan::class.java)
-            for (span in spans) {
-                if (span.style == Typeface.BOLD) {
-                    spannableString.removeSpan(span)
-                }
+            spannableString.getSpans(start, end, StyleSpan::class.java).forEach {
+                if(it.style == Typeface.BOLD) spannableString.removeSpan(it)
             }
         }
         if (isItalic) {
@@ -308,19 +310,15 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } else {
-            val spans = spannableString.getSpans(start, end, StyleSpan::class.java)
-            for (span in spans) {
-                if(span.style == Typeface.ITALIC) {
-                    spannableString.removeSpan(span)
-                }
+            spannableString.getSpans(start, end, StyleSpan::class.java).forEach {
+                if(it.style == Typeface.ITALIC) spannableString.removeSpan(it)
             }
         }
         if (isUnderline) {
             spannableString.setSpan(UnderlineSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         } else {
-            val spans = spannableString.getSpans(start, end, UnderlineSpan::class.java)
-            for(span in spans) {
-                spannableString.removeSpan(span)
+            spannableString.getSpans(start, end, UnderlineSpan::class.java).forEach {
+                spannableString.removeSpan(it)
             }
         }
         if (isStrikethrough) {
@@ -331,9 +329,8 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } else {
-            val spans = spannableString.getSpans(start, end, StrikethroughSpan::class.java)
-            for(span in spans) {
-                spannableString.removeSpan(span)
+            spannableString.getSpans(start, end, StrikethroughSpan::class.java).forEach {
+                spannableString.removeSpan(it)
             }
         }
         currentTextColor?.let {
@@ -344,9 +341,8 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } ?: run {
-            val spans = spannableString.getSpans(start, end, ForegroundColorSpan::class.java)
-            for(span in spans) {
-                spannableString.removeSpan(span)
+            spannableString.getSpans(start, end, ForegroundColorSpan::class.java).forEach {
+                spannableString.removeSpan(it)
             }
         }
         currentBackgroundColor?.let {
@@ -357,9 +353,8 @@ class PostWriteFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } ?: run {
-            val spans = spannableString.getSpans(start, end, BackgroundColorSpan::class.java)
-            for(span in spans) {
-                spannableString.removeSpan(span)
+            spannableString.getSpans(start, end, BackgroundColorSpan::class.java).forEach {
+                spannableString.removeSpan(it)
             }
         }
     }
