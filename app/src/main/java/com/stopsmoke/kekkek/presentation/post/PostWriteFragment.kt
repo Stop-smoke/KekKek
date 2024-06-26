@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.getSpans
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -155,8 +156,12 @@ class PostWriteFragment : Fragment() {
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
-                        dateTime = DateTime(created = viewModel.post.value?.dateTime?.created ?: LocalDateTime.now(), modified = LocalDateTime.now()),
-                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString().trim()
+                        dateTime = DateTime(
+                            created = viewModel.post.value?.dateTime?.created
+                                ?: LocalDateTime.now(), modified = LocalDateTime.now()
+                        ),
+                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                            .trim()
                             .toPostWriteCategory()
                     )
                     if (viewModel.post.value == null) viewModel.addPost(post)
@@ -222,13 +227,13 @@ class PostWriteFragment : Fragment() {
     private fun initTextEditor() = with(binding) {
 
         etPostWriteContent.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(editText: Editable?) {
                 editText?.let {
-                    applyActiveStyles(it, it.length-1, it.length)
+                    applyActiveStyles(it, it.length - 1, it.length)
                 }
             }
         })
@@ -236,54 +241,126 @@ class PostWriteFragment : Fragment() {
         ivPostWriteBold.setOnClickListener {
             isBold = !isBold
             ivPostWriteBold.isSelected = isBold
+            applyCurrentStylesToSelection()
         }
         ivPostWriteItalic.setOnClickListener {
             isItalic = !isItalic
             ivPostWriteItalic.isSelected = isItalic
+            applyCurrentStylesToSelection()
         }
         ivPostWriteUnderline.setOnClickListener {
             isUnderline = !isUnderline
             ivPostWriteUnderline.isSelected = isUnderline
+            applyCurrentStylesToSelection()
         }
         ivPostWriteLineThrough.setOnClickListener {
             isStrikethrough = !isStrikethrough
             ivPostWriteLineThrough.isSelected = isStrikethrough
+            applyCurrentStylesToSelection()
         }
         ivPostWriteTextColor.setOnClickListener {
-            currentTextColor = if(currentTextColor == null) {
+            currentTextColor = if (currentTextColor == null) {
                 requireContext().getColor(R.color.red)
             } else null
             ivPostWriteTextColor.isSelected = currentTextColor != null
+            applyCurrentStylesToSelection()
         }
         ivPostWriteBackgroundColor.setOnClickListener {
-            currentBackgroundColor = if(currentBackgroundColor == null) {
+            currentBackgroundColor = if (currentBackgroundColor == null) {
                 requireContext().getColor(R.color.yellow)
             } else null
             ivPostWriteBackgroundColor.isSelected = currentBackgroundColor != null
+            applyCurrentStylesToSelection()
         }
         ivPostWriteLink.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
     }
 
+    private fun applyCurrentStylesToSelection() {
+        val editable = binding.etPostWriteContent.text
+        val start = binding.etPostWriteContent.selectionStart
+        val end = binding.etPostWriteContent.selectionEnd
+        applyActiveStyles(editable, start, end)
+    }
+
     private fun applyActiveStyles(spannableString: Editable, start: Int, end: Int) {
-        if(isBold) {
-            spannableString.setSpan(StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (isBold) {
+            spannableString.setSpan(
+                StyleSpan(Typeface.BOLD),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        } else {
+            val spans = spannableString.getSpans(start, end, StyleSpan::class.java)
+            for (span in spans) {
+                if (span.style == Typeface.BOLD) {
+                    spannableString.removeSpan(span)
+                }
+            }
         }
-        if(isItalic) {
-            spannableString.setSpan(StyleSpan(Typeface.ITALIC), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (isItalic) {
+            spannableString.setSpan(
+                StyleSpan(Typeface.ITALIC),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        } else {
+            val spans = spannableString.getSpans(start, end, StyleSpan::class.java)
+            for (span in spans) {
+                if(span.style == Typeface.ITALIC) {
+                    spannableString.removeSpan(span)
+                }
+            }
         }
-        if(isUnderline) {
+        if (isUnderline) {
             spannableString.setSpan(UnderlineSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        } else {
+            val spans = spannableString.getSpans(start, end, UnderlineSpan::class.java)
+            for(span in spans) {
+                spannableString.removeSpan(span)
+            }
         }
-        if(isStrikethrough) {
-            spannableString.setSpan(StrikethroughSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (isStrikethrough) {
+            spannableString.setSpan(
+                StrikethroughSpan(),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        } else {
+            val spans = spannableString.getSpans(start, end, StrikethroughSpan::class.java)
+            for(span in spans) {
+                spannableString.removeSpan(span)
+            }
         }
         currentTextColor?.let {
-            spannableString.setSpan(ForegroundColorSpan(it), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(
+                ForegroundColorSpan(it),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        } ?: run {
+            val spans = spannableString.getSpans(start, end, ForegroundColorSpan::class.java)
+            for(span in spans) {
+                spannableString.removeSpan(span)
+            }
         }
         currentBackgroundColor?.let {
-            spannableString.setSpan(BackgroundColorSpan(it), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(
+                BackgroundColorSpan(it),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        } ?: run {
+            val spans = spannableString.getSpans(start, end, BackgroundColorSpan::class.java)
+            for(span in spans) {
+                spannableString.removeSpan(span)
+            }
         }
     }
 
