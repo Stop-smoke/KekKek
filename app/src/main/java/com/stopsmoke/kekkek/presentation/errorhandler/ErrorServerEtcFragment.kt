@@ -28,6 +28,14 @@ class ErrorServerEtcFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.ivServerEtcError.setOnClickListener {
+            activity?.finishAffinity()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         activity?.visible()

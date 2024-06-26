@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentErrorMissingBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.visible
@@ -26,6 +27,14 @@ class ErrorMissingFragment : Fragment() {
     ): View? {
         _binding = FragmentErrorMissingBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.ivMissingError.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
