@@ -68,10 +68,10 @@
         android:id="@+id/cl_comment_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="52dp"
         android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_comment_hour"
-        app:layout_constraintStart_toEndOf="@+id/tv_comment_hour"
+        app:layout_constraintStart_toStartOf="@id/tv_comment_description"
         app:layout_constraintTop_toTopOf="@+id/tv_comment_hour">
 
         <ImageView
@@ -98,39 +98,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_comment_recomment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_comment_like"
-        app:layout_constraintStart_toEndOf="@+id/cl_comment_like"
-        app:layout_constraintTop_toTopOf="@+id/cl_comment_like">
-
-
-        <ImageView
-            android:id="@+id/iv_comment_recomment"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_re_comment"
-            app:tint="@color/gray_lightgray2" />
-
-        <TextView
-            android:id="@+id/tv_comment_recomment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/comment_recomment"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_comment_recomment"
-            app:layout_constraintStart_toEndOf="@+id/iv_comment_recomment"
-            app:layout_constraintTop_toTopOf="@+id/iv_comment_recomment" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/iv_comment_more"

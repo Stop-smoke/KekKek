@@ -1,17 +1,12 @@
 package com.stopsmoke.kekkek.presentation.post.reply
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
-import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
@@ -30,7 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -55,19 +49,15 @@ class ReplyViewModel @Inject constructor(
     private val _replyId = MutableStateFlow<ReplyIdItem>(ReplyIdItem.init())
     val replyId = _replyId.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val comment: StateFlow<Comment> = replyId.flatMapLatest { replyIdItem ->
-        if (replyIdItem.postId.isEmpty() || replyIdItem.commentId.isEmpty()) {
-            return@flatMapLatest emptyFlow()
-        }
-        commentRepository.getComment(commentId = replyIdItem.commentId, postId = replyIdItem.postId)
-    }.catch {
-        it.printStackTrace()
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptyComment()
-    )
+    private val _comment = MutableStateFlow<Comment>(emptyComment())
+    val comment: StateFlow<Comment> = _comment.asStateFlow()
+
+    suspend fun updateComment() = viewModelScope.launch{
+        _comment.value = commentRepository.getComment(
+            commentId = replyId.value.commentId,
+            postId = replyId.value.postId
+        )
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reply: Flow<PagingData<Reply>> = replyId.flatMapLatest { replyIdItem ->
@@ -112,6 +102,17 @@ class ReplyViewModel @Inject constructor(
         }
     }
 
-    fun getReplyCount(){}
+    fun deleteReply(reply: Reply) = viewModelScope.launch {
+        replyRepository.deleteReply(reply)
+    }
+
+    fun commentLikeClick(updateComment: Comment) = viewModelScope.launch{
+        commentRepository.setCommentItem(updateComment)
+        updateComment()
+    }
+
+    fun updateReply(reply: Reply) = viewModelScope.launch{
+        replyRepository.updateReply(reply)
+    }
 }
 

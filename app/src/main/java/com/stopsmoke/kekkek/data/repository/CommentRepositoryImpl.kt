@@ -90,9 +90,7 @@ class CommentRepositoryImpl @Inject constructor(
         return commentDao.getCommentCount(postId)
     }
 
-    override suspend fun getComment(postId: String, commentId: String): Flow<Comment> {
-        return commentDao.getComment(postId, commentId).map { commentEntity ->
-            commentEntity.asExternalModel()
-        }
+    override suspend fun getComment(postId: String, commentId: String): Comment {
+        return commentDao.getComment(postId, commentId).asExternalModel()
     }
 }
