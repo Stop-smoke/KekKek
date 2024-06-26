@@ -81,7 +81,7 @@ class AchievementFragment : Fragment() {
 internal fun AchievementEntity.asExternalModel() = Achievement(
     id = id ?: "null",
     name = name ?: "null",
-    content = content ?: "null",
+    description = description ?: "null",
     image = image ?: "null",
     category = when (category) {
         "comment" -> DatabaseCategory.COMMENT
@@ -93,13 +93,15 @@ internal fun AchievementEntity.asExternalModel() = Achievement(
         else -> DatabaseCategory.ALL
     },
     maxProgress = maxProgress ?: 0,
+    requestCode = requestCode ?: "null"
 )
 
 internal fun Achievement.getItem() = AchievementItem(
     id = id,
     name = name,
-    content = content,
+    description = description,
     image = image,
     category = category,
     maxProgress = maxProgress,
+    requestCode = requestCode
 )

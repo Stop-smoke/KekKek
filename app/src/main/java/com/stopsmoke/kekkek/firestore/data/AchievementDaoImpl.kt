@@ -38,7 +38,7 @@ class AchievementDaoImpl @Inject constructor(
         val collection = firestore.collection(COLLECTION)
         collection.document().let { documentReference ->
             documentReference.set(
-                achievementEntity
+                achievementEntity.copy(id = documentReference.id)
             )
         }
             .addOnFailureListener { throw it }

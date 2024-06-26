@@ -5,10 +5,11 @@ import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 data class AchievementItem (
     val id: String,
     val name: String,
-    val content: String,
+    val description: String,
     val image: String,
     val category: DatabaseCategory,
-    val maxProgress: Int
+    val maxProgress: Int,
+    val requestCode: String
 )
 
 data class CurrentProgress(
