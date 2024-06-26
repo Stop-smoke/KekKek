@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +30,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +57,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {//클릭 시 이동 이벤트 처리 추가해야함
+        viewModel.getAllUserData()
         initToolbar()
 
         binding.clHomeSavedMoney.setOnClickListener {
@@ -66,7 +68,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate("test_page")
         }
 
-        viewModel.user.distinctUntilChanged().collectLatestWithLifecycle(lifecycle) {
+        viewModel.user.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is User.Error -> {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
@@ -76,12 +78,14 @@ class HomeFragment : Fragment() {
                 }
 
                 is User.Registered -> {
+                    viewModel.getMyRank()
                     if (it.cigaretteAddictionTestResult == null) {
                         tvHomeTestDegree.text = "테스트 필요"
                         ivHomeTest.text = "검사하기"
                     } else {
                         tvHomeTestDegree.text = it.cigaretteAddictionTestResult
                         ivHomeTest.text = "다시 검사하기"
+
                     }
                 }
 
@@ -95,6 +99,10 @@ class HomeFragment : Fragment() {
 
         binding.clHomeCenter.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_home_center)
+        }
+
+        binding.clHomeRanking.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_rankingList)
         }
 
         binding.clHomeSavedMoney.setOnClickListener {
@@ -171,6 +179,14 @@ class HomeFragment : Fragment() {
                 .collectLatest { noticePost ->
                     binding.tvHomeNoticeTitle.text = noticePost.title
                 }
+        }
+
+        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle){
+            viewModel.getMyRank()
+        }
+
+        viewModel.myRank.collectLatestWithLifecycle(lifecycle){
+            binding.tvHomeRankNum.text = "${viewModel.myRank.value}위"
         }
     }
 

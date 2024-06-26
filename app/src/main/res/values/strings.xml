@@ -186,4 +186,11 @@
 
     <string name="search_recommend_keyword">님을 위한 추천 검색어</string>
     <string name="search_guest_recommend_keyword">당신을 위한 추천 검색어</string>
+
+    <!-- error handler -->
+    <string name="error_server_etc_title">앗, 문제가 생겼어요!</string>
+    <string name="error_server_etc_description">켁켁이를 이용하는 도중 문제가 발생했습니다.\n 잠시 후 다시 시도해주세요.</string>
+    <string name="error_missing_title">앗, 페이지가 존재하지 않아요!</string>
+    <string name="error_missing_description">존재하지 않는 페이지로 접근했어요.\n 뒤로가기를 클릭해주세요.</string>
+
 </resources>
