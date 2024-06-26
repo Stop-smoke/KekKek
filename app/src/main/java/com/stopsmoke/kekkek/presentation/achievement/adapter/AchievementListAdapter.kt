@@ -40,7 +40,7 @@ class AchievementListAdapter(
             binding.tvAchievementTitle.text = achievement.name
             binding.liAchievementProgress.progress = currentProgress.toInt()
             binding.liAchievementProgress.max = achievement.maxProgress
-            binding.tvAchievementDescription.text = achievement.content
+            binding.tvAchievementDescription.text = achievement.description
             if (currentProgress < achievement.maxProgress) {
                 binding.tvAchievementProgressNumber.text =
                     "${currentProgress}/${achievement.maxProgress}"

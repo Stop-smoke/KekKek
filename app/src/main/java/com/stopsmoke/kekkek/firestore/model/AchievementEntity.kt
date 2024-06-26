@@ -9,8 +9,8 @@ data class AchievementEntity(
     @get:PropertyName("name") @set:PropertyName("name")
     var name: String? = null,
 
-    @get:PropertyName("content") @set:PropertyName("content")
-    var content: String? = null,
+    @get:PropertyName("description") @set:PropertyName("description")
+    var description: String? = null,
 
     @get:PropertyName("image") @set:PropertyName("image")
     var image: String? = null,
@@ -20,4 +20,7 @@ data class AchievementEntity(
 
     @get:PropertyName("max_progress") @set:PropertyName("max_progress")
     var maxProgress: Int? = null,
-)
+
+    @get:PropertyName("request_code") @set:PropertyName("request_code")
+    var requestCode: String? = null,
+    )

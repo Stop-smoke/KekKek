@@ -59,10 +59,11 @@ class AchievementViewModel @Inject constructor(
     private fun Achievement.getItem() = AchievementItem(
         id = id,
         name = name,
-        content = content,
+        description = description,
         image = image,
         category = category,
         maxProgress = maxProgress,
+        requestCode = requestCode
     )
 
     private fun getCurrentProgress(): CurrentProgress {
