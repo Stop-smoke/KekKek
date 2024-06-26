@@ -12,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 
 class SmokingSettingFragment : Fragment() {
 
@@ -42,17 +41,19 @@ class SmokingSettingFragment : Fragment() {
         binding.btnSmokingsettingPerday.setOnClickListener {
             showEditDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
                 viewModel.updateSmokingPerDay(newValue)
-
+                viewModel.updateUserConfig()
             }
         }
         binding.btnSmokingsettingPerpack.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 담배 개비 수", viewModel.perPack.value) { newValue ->
                 viewModel.updateSmokingPerPack(newValue)
+                viewModel.updateUserConfig()
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 가격", viewModel.packPrice.value) { newValue ->
                 viewModel.updateSmokingPackPrice(newValue)
+                viewModel.updateUserConfig()
             }
         }
     }

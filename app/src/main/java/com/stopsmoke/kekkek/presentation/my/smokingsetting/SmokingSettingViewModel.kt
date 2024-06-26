@@ -1,7 +1,9 @@
 package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.UpdateUserSmokingSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SmokingSettingViewModel @Inject constructor(
     private val updateUserSmokingSettingsUseCase: UpdateUserSmokingSettingsUseCase,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _perDay = MutableStateFlow("") // 하루에 담배 몇개비 피우나요?
@@ -106,14 +109,31 @@ class SmokingSettingViewModel @Inject constructor(
         MutableStateFlow<SmokingSettingUiState>(SmokingSettingUiState.Loading)
     val resultUserSettings = _resultUserSettings.asStateFlow()
 
+
+//    fun updateSmokingPerDayDialog(value: String) {
+//        _perDay.value = value
+//
+//    }
+//
+//    fun updateSmokingPerPackDialog(value: String){
+//        _perPack.value = value
+//        updateUserConfig(mapOf("pack_cigarette_count" to value.toInt()))
+//    }
+//
+//    fun updateSmokingPackPriceDialog(value: String){
+//        _packPrice.value = value
+//        updateUserConfig(mapOf("pack_price" to value.toInt()))
+//    }
+
     fun updateUserConfig() {
         viewModelScope.launch {
             try {
-                updateUserSmokingSettingsUseCase(
-                    perDay.value.toInt(),
-                    perPack.value.toInt(),
-                    packPrice.value.toInt(),
-                )
+                userRepository.updateUserData(mapOf(
+                    "user_config.daily_cigarettes_smoked" to perDay.value.toInt(),
+                    "user_config.pack_cigarette_count" to perPack.value.toInt(),
+                    "user_config.pack_price" to packPrice.value.toInt()
+                ))
+                Log.d("값찾기",perDay.value.toInt().toString())
                 _resultUserSettings.emit(SmokingSettingUiState.Success)
             } catch (e: Exception) {
                 e.printStackTrace()
