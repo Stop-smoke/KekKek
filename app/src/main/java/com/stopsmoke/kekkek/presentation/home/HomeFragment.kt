@@ -95,6 +95,7 @@ class HomeFragment : Fragment() {
 
         binding.clHomeCenter.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_home_center)
+//            findNavController().navigate(R.id.action_home_to_rankingList)
         }
 
         binding.clHomeSavedMoney.setOnClickListener {

@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
             app:destination="@id/nav_smoking_addiction_test" />
+        <action
+            android:id="@+id/action_home_to_rankingList"
+            app:destination="@id/ranking_list"/>
     </fragment>
 
     <fragment
@@ -326,7 +329,11 @@
         android:id="@+id/ranking_list"
         android:name="com.stopsmoke.kekkek.presentation.rankingList.RankingListFragment"
         app:route="ranking_list"
-        tools:layout="@layout/fragment_ranking_list" />
+        tools:layout="@layout/fragment_ranking_list" >
+        <action
+            android:id="@+id/action_rankingList_to_userProfile"
+            app:destination="@id/user_profile"/>
+    </fragment>
 
     <fragment
         android:id="@+id/ranking_map"
