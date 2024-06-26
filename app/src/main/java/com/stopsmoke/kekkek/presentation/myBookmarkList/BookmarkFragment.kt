@@ -107,7 +107,7 @@ class BookmarkFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity.invisible()
+            activity?.invisible()
         }
     }
 }

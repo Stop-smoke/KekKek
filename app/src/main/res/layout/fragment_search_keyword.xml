@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".presentation.search.keyword.SearchKeywordFragment">
+
+    <TextView
+        android:id="@+id/tv_search_recommend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="74dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="#040608"
+        android:textSize="15sp"
+        tools:text="희진님을 위한 추천검색어" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_recommended"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/recyclerview_search_recommend"
+        tools:orientation="horizontal" />
+
+</LinearLayout>

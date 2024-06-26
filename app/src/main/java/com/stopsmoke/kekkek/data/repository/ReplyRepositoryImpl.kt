@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.data.mapper.toEntity
+import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.firestore.dao.ReplyDao
@@ -31,7 +32,12 @@ class ReplyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getReplyCount(postId: String, commentId: String): Flow<Long> {
-        return replyDao.getReplyCount(postId = postId, commentId = commentId)
+    override suspend fun deleteReply(reply: Reply) {
+        replyDao.deleteReply(reply.toEntity())
     }
+
+    override suspend fun updateReply(reply: Reply) {
+        replyDao.updateReply(reply.toEntity())
+    }
+
 }

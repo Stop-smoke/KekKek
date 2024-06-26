@@ -18,7 +18,6 @@ class ErrorMissingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.invisible()
-
     }
 
     override fun onCreateView(
