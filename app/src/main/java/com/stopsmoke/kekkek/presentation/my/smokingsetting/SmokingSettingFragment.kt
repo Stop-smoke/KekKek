@@ -5,56 +5,88 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SmokingSettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SmokingSettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentSmokingSettingBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: SmokingSettingViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_smoking_setting, container, false)
+        _binding = FragmentSmokingSettingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SmokingSettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SmokingSettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initButtons()
+//        observeUiState()
+    }
+
+    private fun initButtons() {
+        binding.includeSmokingSettingAppBar.ivSmokingSettingBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.btnSmokingsettingPerday.setOnClickListener {
+            showEditDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
+                viewModel.updateSmokingPerDay(newValue)
+
             }
+        }
+        binding.btnSmokingsettingPerpack.setOnClickListener {
+            showEditDialog("설정하기 : 한 팩 당 담배 개비 수", viewModel.perPack.value) { newValue ->
+                viewModel.updateSmokingPerPack(newValue)
+            }
+        }
+        binding.btnSmokingsettingPerprice.setOnClickListener {
+            showEditDialog("설정하기 : 한 팩 당 가격", viewModel.packPrice.value) { newValue ->
+                viewModel.updateSmokingPackPrice(newValue)
+            }
+        }
+    }
+
+    private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text, null)
+        val editText = dialogView.findViewById<EditText>(R.id.editText_dialog)
+        editText.setText(currentValue)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setView(dialogView)
+            .setPositiveButton("Save") { _, _ ->
+                onSave(editText.text.toString())
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+//    private fun observeUiState() {
+//        viewModel.perDayUiState.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {
+//            handleUiState()
+//
+//        }
+//    }
+
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
