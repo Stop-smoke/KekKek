@@ -20,13 +20,14 @@
 
     <ImageView
         android:id="@+id/ic_community_search"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="22dp"
+        android:layout_height="21dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ic_community_bell"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_search" />
+        app:srcCompat="@drawable/ic_search"
+        app:tint="@color/background_dark"/>
 
     <ImageView
         android:id="@+id/ic_community_settings"
@@ -36,7 +37,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_setting" />
+        app:srcCompat="@drawable/ic_setting"
+        app:tint="@color/background_dark"/>
 
     <ImageView
         android:id="@+id/ic_community_bell"
@@ -46,7 +48,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/ic_community_settings"
         app:layout_constraintEnd_toStartOf="@+id/ic_community_settings"
         app:layout_constraintTop_toTopOf="@+id/ic_community_settings"
-        app:srcCompat="@drawable/ic_notification_bell" />
+        app:srcCompat="@drawable/ic_notification_bell"
+        app:tint="@color/background_dark" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
