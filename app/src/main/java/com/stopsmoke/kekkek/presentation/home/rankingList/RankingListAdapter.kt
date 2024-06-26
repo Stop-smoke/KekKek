@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingList
+package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

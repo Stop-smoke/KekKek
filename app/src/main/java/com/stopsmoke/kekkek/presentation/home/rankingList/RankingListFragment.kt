@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingList
+package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +9,13 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +23,7 @@ class RankingListFragment : Fragment() {
     private var _binding: FragmentRankingListBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RankingListViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
     private val listAdapter: RankingListAdapter by lazy {
         RankingListAdapter()
@@ -97,8 +96,8 @@ class RankingListFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel) {
-        topUserList.collectLatestWithLifecycle(lifecycle) {
-            listAdapter.submitList(it)
+        userRankingList.collectLatestWithLifecycle(lifecycle) {
+            listAdapter.submitList(it.take(30))
         }
     }
 

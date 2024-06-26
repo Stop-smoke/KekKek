@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingList
+package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.stopsmoke.kekkek.databinding.FragmentRankingListRegionalTopRankBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -18,7 +19,7 @@ class RegionalTopRankFragment: Fragment() {
     private var regionData: String? = null
     private var rankingData: List<RankingListItem>? = null
 
-    private val viewModel: RankingListViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,7 @@ class RegionalTopRankFragment: Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.topUserList.collectLatestWithLifecycle(lifecycle){
+        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle){
             bind(it)
         }
     }

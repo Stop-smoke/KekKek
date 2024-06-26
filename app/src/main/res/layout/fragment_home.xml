@@ -265,6 +265,58 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="6dp"
                     android:layout_marginEnd="6dp"
+                    android:visibility="gone"
+                    android:background="@drawable/bg_home_widget_ninepatch"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toStartOf="@+id/cl_home_tip"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_home_savedMoney">
+
+                    <TextView
+                        android:id="@+id/tv_home_centerTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="보건복지부 산하"
+                        android:textColor="@color/gray_lightgray2"
+                        android:textSize="13sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_home_centerNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:text="금연 길라잡이"
+                        android:textSize="19sp"
+                        app:layout_constraintStart_toStartOf="@id/tv_home_centerTitle"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_centerTitle" />
+
+                    <ImageView
+                        android:id="@+id/iv_home_center"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="28dp"
+                        android:src="@drawable/ic_center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_home_ranking"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:visibility="visible"
                     android:background="@drawable/bg_home_widget_ninepatch"
                     app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toStartOf="@+id/cl_home_tip"
@@ -280,7 +332,7 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/pretendard_medium"
-                        android:text="보건복지부 산하"
+                        android:text="랭킹"
                         android:textColor="@color/gray_lightgray2"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -292,7 +344,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:text="금연 길라잡이"
+                        android:text="확인하러가기"
                         android:textSize="19sp"
                         app:layout_constraintStart_toStartOf="@id/tv_home_rankTitle"
                         app:layout_constraintTop_toBottomOf="@id/tv_home_rankTitle" />
@@ -302,7 +354,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginBottom="28dp"
-                        android:src="@drawable/ic_center"
+                        android:src="@drawable/ic_ranking"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -317,8 +369,8 @@
                     app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/cl_home_center"
-                    app:layout_constraintTop_toTopOf="@id/cl_home_center">
+                    app:layout_constraintStart_toEndOf="@+id/cl_home_ranking"
+                    app:layout_constraintTop_toTopOf="@id/cl_home_ranking">
 
                     <TextView
                         android:id="@+id/tv_home_savedLifeTitle"
