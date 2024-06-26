@@ -12,7 +12,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal object AlgoliaModule {
-
     @Provides
     fun provideClientSearch(): ClientSearch = ClientSearch(
         applicationID = ApplicationID(BuildConfig.ALGOLIA_APPLICATION_ID),
