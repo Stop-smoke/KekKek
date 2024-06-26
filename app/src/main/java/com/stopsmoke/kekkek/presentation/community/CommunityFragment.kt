@@ -1,9 +1,7 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.domain.model.toPostCategory
-import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,8 +42,8 @@ class CommunityFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentCommunityBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,12 +77,12 @@ class CommunityFragment : Fragment() {
 
     }
 
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         binding.rvCommunityList.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCommunityList.adapter = listAdapter
     }
 
-    private fun setClickListener() = with(binding){
+    private fun setClickListener() = with(binding) {
         floatingActionButtonCommunity.setOnClickListener {
             findNavController().navigate("post_write")
         }
@@ -173,10 +170,11 @@ class CommunityFragment : Fragment() {
             icCommunitySettings.setOnClickListener {
                 findNavController().navigate(R.id.action_community_page_to_nav_settings)
             }
+            icCommunitySearch.setOnClickListener {
+                findNavController().navigate("search")
+            }
         }
     }
-
-
 
     private fun initViewModel() = with(viewModel) {
 

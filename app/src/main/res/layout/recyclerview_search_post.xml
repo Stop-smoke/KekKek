@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_light"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleIv_search_post_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_user_profile_test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_community_postwriting_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleIv_search_post_profile"
+        app:layout_constraintStart_toEndOf="@+id/circleIv_search_post_profile"
+        app:layout_constraintTop_toTopOf="@+id/circleIv_search_post_profile">
+
+        <TextView
+            android:id="@+id/tv_search_post_postType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:textColor="#777777"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="자유게시판" />
+
+        <TextView
+            android:id="@+id/tv_search_post_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="단짠단짠"
+            android:maxLines="1"
+            android:maxWidth="200dp"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_search_post_postType" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_search_post_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:inputType="number"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_search_post_name"
+            app:layout_constraintStart_toEndOf="@id/tv_search_post_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_search_post_name"
+            tools:text="랭킹 111위" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_search_post_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="example Title"
+        app:layout_constraintStart_toStartOf="@id/circleIv_search_post_profile"
+        app:layout_constraintTop_toBottomOf="@id/circleIv_search_post_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="110dp"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/tv_search_post_post"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textSize="13sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="sample text sample text sample textsample textsample textsample textsample textsample textsample textsample textsample text"
+        app:layout_constraintEnd_toEndOf="@id/tv_search_post_title"
+        app:layout_constraintStart_toStartOf="@id/circleIv_search_post_profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_post_title"/>
+
+    <ImageView
+        android:id="@+id/iv_search_post_postImage"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_post"
+        android:src="@drawable/bg_home"
+        android:clipToOutline="true"
+        android:visibility="gone"
+        android:background="@drawable/bg_post_image"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="20dp"/>
+
+    <View
+        android:id="@+id/view_search_post_div"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/bg_thin_gray"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_post_post"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/tv_search_post_timeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6시간 전"
+        android:textColor="@color/gray"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toBottomOf="@id/view_search_post_div"
+        app:layout_constraintStart_toStartOf="@id/circleIv_search_post_profile"
+        android:layout_marginTop="12dp"/>
+
+    <ImageView
+        android:id="@+id/iv_search_post_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_view"
+        app:layout_constraintEnd_toStartOf="@id/tv_search_post_viewNum"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        android:layout_marginEnd="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_search_post_viewNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="40dp"
+        tools:text = "22222"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toStartOf="@id/iv_search_post_like"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        android:layout_marginEnd="10dp"/>
+
+    <ImageView
+        android:id="@+id/iv_search_post_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_heart_none"
+        app:layout_constraintEnd_toStartOf="@id/tv_search_post_likeNum"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        android:layout_marginEnd="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_search_post_likeNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="40dp"
+        tools:text = "22222"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toStartOf="@id/iv_search_post_comment"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        android:layout_marginEnd="10dp"/>
+
+    <ImageView
+        android:id="@+id/iv_search_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_chat"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintEnd_toStartOf="@id/tv_search_post_commentNum"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp" />
+
+    <TextView
+        android:id="@+id/tv_search_post_commentNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="40dp"
+        tools:text = "22222"
+        android:textSize="11dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_search_post_timeStamp"
+        android:layout_marginEnd="20dp"/>
+
+    <View
+        android:id="@+id/view_search_post_bottomView"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="@color/bg_gray"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_post_timeStamp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="12dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -203,7 +203,11 @@
         android:id="@+id/search"
         android:name="com.stopsmoke.kekkek.presentation.search.SearchFragment"
         app:route="search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_post_view"
+            app:destination="@id/post_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/post_view"
