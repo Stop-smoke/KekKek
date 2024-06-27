@@ -13,19 +13,31 @@
         android:id="@+id/cl_achievement_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:minHeight="120dp"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="20dp"
-        android:background="@color/white">
+        android:paddingVertical="20dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_achievement_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <FrameLayout
+            android:id="@+id/fl_achievement_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_user_profile_test" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_achievement_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                tools:src="@drawable/ic_user_profile_test" />
+
+            <ImageView
+                android:id="@+id/iv_achievement_item_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bg_achievement_item_checked" />
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_achievement_image"
@@ -33,7 +45,7 @@
             android:layout_height="wrap_content"
             app:barrierDirection="end"
             app:barrierMargin="16dp"
-            app:constraint_referenced_ids="civ_achievement_image" />
+            app:constraint_referenced_ids="fl_achievement_image" />
 
         <TextView
             android:id="@+id/tv_achievement_title"
@@ -49,16 +61,16 @@
             android:id="@+id/tv_achievement_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:ellipsize="end"
             android:fontFamily="@font/pretendard_semi_bold"
+            android:minLines="3"
             android:textColor="#BBBBBB"
             android:textSize="13sp"
-            app:layout_constraintStart_toEndOf="@+id/barrier_achievement_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_achievement_title"
             app:layout_constraintBottom_toTopOf="@id/li_achievement_progress"
-            android:ellipsize="end"
-            android:minLines="3"
-            android:layout_marginVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/barrier_achievement_image"
+            app:layout_constraintTop_toBottomOf="@+id/tv_achievement_title"
             tools:text="50개비를 금연하세요." />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -84,8 +96,8 @@
             android:textColor="#757575"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/li_achievement_progress"
-            app:layout_constraintTop_toTopOf="@id/li_achievement_progress"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/li_achievement_progress"
             tools:text="32/50" />
 
         <View
