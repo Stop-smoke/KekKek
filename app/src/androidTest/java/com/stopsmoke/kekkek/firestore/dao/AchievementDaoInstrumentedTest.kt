@@ -251,7 +251,7 @@ class AchievementDaoInstrumentedTest {
             ),
             AchievementEntity(
                 requestCode = "time10",
-                name = "금연하지마. 동작그만! 손모가지 날라가붕게",
+                name = "동작그만! 손모가지 날라가붕게",
                 description = "담배핀건 아니시죠?\n금연 10일을 달성했습니다.",
                 image = "",
                 category = category,
