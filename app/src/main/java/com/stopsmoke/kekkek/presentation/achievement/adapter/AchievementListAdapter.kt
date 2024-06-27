@@ -20,8 +20,8 @@ class AchievementListAdapter(
         val binding: RecyclerviewAchievementItemBinding,
         private val viewModel: AchievementViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
-        val clearList = when (viewModel.userData) {
-            is User.Registered -> viewModel.userData.clearAchievementsList
+        val clearList = when (viewModel.user.value) {
+            is User.Registered -> (viewModel.user.value as User.Registered).clearAchievementsList
             else -> emptyList()
         }
 
@@ -31,7 +31,7 @@ class AchievementListAdapter(
             val currentProgress: Long = when (achievement.category) {
                 DatabaseCategory.COMMENT -> currentProgressItem.comment
                 DatabaseCategory.POST -> currentProgressItem.post
-                DatabaseCategory.USER -> currentProgressItem.time
+                DatabaseCategory.USER -> currentProgressItem.user
                 DatabaseCategory.ACHIEVEMENT -> currentProgressItem.achievement
                 DatabaseCategory.RANK -> currentProgressItem.rank
                 DatabaseCategory.ALL -> 0

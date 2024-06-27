@@ -11,13 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
-import com.stopsmoke.kekkek.domain.model.Achievement
-import com.stopsmoke.kekkek.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.User
 
 @AndroidEntryPoint
 class AchievementFragment : Fragment() {
@@ -43,14 +43,14 @@ class AchievementFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initViewModel()
-        binding.icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = viewModel.getCurrentItem().time.toString()
     }
 
 
-    private fun initView() = with(binding){
+    private fun initView() = with(binding) {
         setupAppBar()
         setupRecyclerView()
     }
+
     private fun setupRecyclerView() = with(binding.rvAchievementItem) {
         adapter = achievementListAdapter
         layoutManager = LinearLayoutManager(requireContext())
@@ -70,6 +70,31 @@ class AchievementFragment : Fragment() {
                 }
         }
 
+        activities.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is Result.Success -> {
+                    val activities = it.data
+                    viewModel.getCurrentProgress(activities)
+                }
+
+                else -> {}
+            }
+        }
+
+        achievements.collectLatestWithLifecycle(lifecycle) {
+            achievementListAdapter.submitData(it)
+            bindTopProgress()
+        }
+    }
+
+    private suspend fun bindTopProgress() = with(binding) {
+        val progress = viewModel.getCurrentItem()
+        val user = viewModel.user.value as User.Registered
+        val maxProgressCount = viewModel.getAchievementCount()
+        icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = "${progress.user} 일"
+        icludeAchievementTop.tvAchievementQuitSmokingCount.text =
+            "${user.clearAchievementsList.size} / ${maxProgressCount}"
+
     }
 
     override fun onDestroyView() {
@@ -78,30 +103,3 @@ class AchievementFragment : Fragment() {
     }
 }
 
-internal fun AchievementEntity.asExternalModel() = Achievement(
-    id = id ?: "null",
-    name = name ?: "null",
-    description = description ?: "null",
-    image = image ?: "null",
-    category = when (category) {
-        "comment" -> DatabaseCategory.COMMENT
-        "post" -> DatabaseCategory.POST
-        "user" -> DatabaseCategory.USER
-        "achievement" -> DatabaseCategory.ACHIEVEMENT
-        "rank" -> DatabaseCategory.RANK
-        "all" -> DatabaseCategory.ALL
-        else -> DatabaseCategory.ALL
-    },
-    maxProgress = maxProgress ?: 0,
-    requestCode = requestCode ?: "null"
-)
-
-internal fun Achievement.getItem() = AchievementItem(
-    id = id,
-    name = name,
-    description = description,
-    image = image,
-    category = category,
-    maxProgress = maxProgress,
-    requestCode = requestCode
-)

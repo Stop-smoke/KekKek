@@ -10,4 +10,6 @@ interface AchievementDao {
     fun getAchievementItems(category: String? = null): Flow<PagingData<AchievementEntity>>
 
     suspend fun addAchievementItem(achievementEntity: AchievementEntity)
+
+    suspend fun getAchievementCount(category: String?):Long
 }
