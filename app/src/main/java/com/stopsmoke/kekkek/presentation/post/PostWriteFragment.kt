@@ -268,10 +268,10 @@ class PostWriteFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(editText: Editable?) {
-                editText?.let {
-                    Log.d("editText length", it.length.toString())
-                    Log.d("edittext", editText.toString())
-                    applyActiveStyles(it, 0, it.length)
+                if(editText?.length != 0) {
+                    editText?.let {
+                        applyActiveStyles(it, it.length-1, it.length)
+                    }
                 }
             }
         })
@@ -326,6 +326,7 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun applyActiveStyles(spannableString: Editable, start: Int, end: Int) {
+        // spannableString: 가가 start : 1 end : 2
         if (isBold) {
             spannableString.setSpan(
                 StyleSpan(Typeface.BOLD),
