@@ -1,11 +1,14 @@
 package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,7 +34,6 @@ class SmokingSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initButtons()
-//        observeUiState()
     }
 
     private fun initButtons() {
@@ -42,44 +44,51 @@ class SmokingSettingFragment : Fragment() {
             showEditDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
                 viewModel.updateSmokingPerDay(newValue)
                 viewModel.updateUserConfig()
+                Log.d("담배설정", newValue.toString())
             }
         }
         binding.btnSmokingsettingPerpack.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 담배 개비 수", viewModel.perPack.value) { newValue ->
                 viewModel.updateSmokingPerPack(newValue)
                 viewModel.updateUserConfig()
+                Log.d("담배설정", newValue.toString())
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 가격", viewModel.packPrice.value) { newValue ->
                 viewModel.updateSmokingPackPrice(newValue)
                 viewModel.updateUserConfig()
+                Log.d("담배설정", newValue.toString())
             }
         }
     }
 
     private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editText_dialog)
+        val dialogView =
+            LayoutInflater.from(context).inflate(R.layout.fragment_common_et_dialog, null)
+        val editText = dialogView.findViewById<EditText>(R.id.et_dialog_content)
+        val dialogTitle = dialogView.findViewById<TextView>(R.id.tv_dialog_title)
+        val cancelButton = dialogView.findViewById<AppCompatButton>(R.id.btn_dialog_cancel)
+        val finishButton = dialogView.findViewById<AppCompatButton>(R.id.btn_dialog_finish)
+
+        dialogTitle.text = title
         editText.setText(currentValue)
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                onSave(editText.text.toString())
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+            .create()
+
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        finishButton.setOnClickListener {
+            val newValue = editText.text.toString()
+            onSave(newValue)
+            dialog.dismiss()
+        }
+        dialog.show()
     }
-
-//    private fun observeUiState() {
-//        viewModel.perDayUiState.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {
-//            handleUiState()
-//
-//        }
-//    }
-
 
     override fun onResume() {
         super.onResume()
