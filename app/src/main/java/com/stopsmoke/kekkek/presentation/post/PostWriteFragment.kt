@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
@@ -204,14 +205,40 @@ class PostWriteFragment : Fragment() {
         val bitmap = BitmapFactory.decodeStream(inputStream)
         inputStream?.close()
 
+        val orientation = getOrientation(url)
+        val rotatedBitmap = rotateBitmap(bitmap, orientation)
+
         val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
         val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
-        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+        val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, width, height, true)
 
         val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
 
         binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
         binding.ivPostWriteImage.visibility = View.VISIBLE
+    }
+
+    private fun getOrientation(uri: Uri):Int {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        inputStream?.use { stream ->
+            val exifInterface = ExifInterface(stream)
+            return exifInterface.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+        }
+        return ExifInterface.ORIENTATION_UNDEFINED
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
+        val matrix = Matrix()
+        when(orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            else -> return bitmap
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
