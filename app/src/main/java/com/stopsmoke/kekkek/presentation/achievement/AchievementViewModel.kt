@@ -50,7 +50,7 @@ class AchievementViewModel @Inject constructor(
 
 
     private val _currentProgressItem = MutableStateFlow<CurrentProgress>(emptyCurrentProgress())
-    private val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
+    val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
 
 
     val achievements = currentProgressItem.flatMapLatest { progress ->
@@ -113,6 +113,7 @@ class AchievementViewModel @Inject constructor(
             else -> _currentProgressItem.value = emptyCurrentProgress()
         }
     }
+
 
     fun getCurrentItem() = currentProgressItem.value
 

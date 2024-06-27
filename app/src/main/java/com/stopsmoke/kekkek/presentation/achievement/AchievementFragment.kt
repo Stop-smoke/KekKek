@@ -79,7 +79,7 @@ class AchievementFragment : Fragment() {
             achievementListAdapter.submitList(sortedAchievement(it))
         }
 
-        user.collectLatestWithLifecycle(lifecycle){
+        currentProgressItem.collectLatestWithLifecycle(lifecycle){
             bindTopProgress()
         }
     }
