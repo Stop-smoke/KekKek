@@ -3,12 +3,15 @@ package com.stopsmoke.kekkek.firestore.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -19,7 +22,7 @@ class AchievementDaoImpl @Inject constructor(
     override fun getAchievementItems(category: String?): Flow<PagingData<AchievementEntity>> {
         val query = firestore.collection(COLLECTION)
             .whereNotNullEqualTo("category", category)
-//            .orderBy("max_progress") //orderBy 지정 시 오류 발생..
+            .orderBy("max_progress", Query.Direction.ASCENDING) //orderBy 지정 시 오류 발생..
 
 
         return Pager(
@@ -44,6 +47,20 @@ class AchievementDaoImpl @Inject constructor(
             .addOnFailureListener { throw it }
             .addOnCanceledListener { throw CancellationException() }
             .await()
+    }
+
+    override suspend fun getAchievementCount(category: String?): Long {
+        return try {
+            firestore.collection(COLLECTION)
+                .whereNotNullEqualTo("category", category)
+                .count()
+                .get(AggregateSource.SERVER)
+                .await()
+                .count
+        } catch (e: Exception) {
+            throw e
+        }
+
     }
 
 

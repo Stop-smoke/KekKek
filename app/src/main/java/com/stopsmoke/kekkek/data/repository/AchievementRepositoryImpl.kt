@@ -17,14 +17,7 @@ class AchievementRepositoryImpl @Inject constructor(
 ) : AchievementRepository {
     override fun getAchievementItems(category: DatabaseCategory): Result<Flow<PagingData<Achievement>>> =
         try {
-            val categoryString = when (category) {
-                DatabaseCategory.COMMENT -> "comment"
-                DatabaseCategory.POST -> "post"
-                DatabaseCategory.USER -> "user"
-                DatabaseCategory.ACHIEVEMENT -> "achievement"
-                DatabaseCategory.RANK -> "rank"
-                DatabaseCategory.ALL -> null
-            }
+            val categoryString = category.toRequestString()
 
             achievementDao.getAchievementItems(category = categoryString).map { pagingData ->
                 pagingData.map {
@@ -40,5 +33,18 @@ class AchievementRepositoryImpl @Inject constructor(
             Result.Error(e)
         }
 
+    override suspend fun getAchievementCount(category: DatabaseCategory): Long {
+        return achievementDao.getAchievementCount(category.toRequestString())
+    }
 
+
+
+    private fun DatabaseCategory.toRequestString():String? = when(this){
+        DatabaseCategory.COMMENT -> "comment"
+        DatabaseCategory.POST -> "post"
+        DatabaseCategory.USER -> "user"
+        DatabaseCategory.ACHIEVEMENT -> "achievement"
+        DatabaseCategory.RANK -> "rank"
+        DatabaseCategory.ALL -> null
+    }
 }

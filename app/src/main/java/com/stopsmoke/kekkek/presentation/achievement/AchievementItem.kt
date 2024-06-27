@@ -9,13 +9,22 @@ data class AchievementItem (
     val image: String,
     val category: DatabaseCategory,
     val maxProgress: Int,
+    val currentProgress: Int = 0,
     val requestCode: String
 )
 
 data class CurrentProgress(
-    val time: Long,
+    val user: Long,
     val comment: Long,
     val post: Long,
     val rank: Long,
     val achievement: Long
+)
+
+fun emptyCurrentProgress() = CurrentProgress (
+    user = 0,
+    comment = 0,
+    post = 0,
+    rank = 10000,
+    achievement = 0
 )

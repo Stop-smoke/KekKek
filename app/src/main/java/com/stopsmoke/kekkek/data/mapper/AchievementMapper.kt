@@ -4,7 +4,7 @@ import com.stopsmoke.kekkek.domain.model.Achievement
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 
-internal fun AchievementEntity.asExternalModel() = Achievement(
+fun AchievementEntity.asExternalModel() = Achievement(
     id = id ?: "null",
     name = name ?: "null",
     description = description ?: "null",

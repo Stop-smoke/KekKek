@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AchievementRepository {
     fun getAchievementItems(category: DatabaseCategory = DatabaseCategory.ALL): Result<Flow<PagingData<Achievement>>>
+
+    suspend fun getAchievementCount(category: DatabaseCategory = DatabaseCategory.ALL): Long
 }
