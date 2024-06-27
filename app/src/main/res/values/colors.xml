@@ -28,4 +28,5 @@
     <color name="gray_gray1">#777777</color>
     <color name="gray_linegray">#E7E7E7</color>
 
+    <color name="gray_achievement_clear">#DFDFDF</color>
 </resources>

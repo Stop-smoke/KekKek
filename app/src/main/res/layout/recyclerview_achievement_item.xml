@@ -100,6 +100,14 @@
             app:layout_constraintTop_toTopOf="@id/li_achievement_progress"
             tools:text="32/50" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/li_achievement_progress"
+            app:layout_constraintStart_toStartOf="@id/li_achievement_progress"
+            app:layout_constraintEnd_toEndOf="@id/li_achievement_progress"
+            android:background="@drawable/bg_progress_gray"
+            android:elevation="-1dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
