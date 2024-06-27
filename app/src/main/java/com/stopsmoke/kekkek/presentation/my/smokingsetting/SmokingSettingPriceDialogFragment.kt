@@ -8,7 +8,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.R
 
-class SmokingSettingDialogFragment : DialogFragment() {
+class SmokingSettingPriceDialogFragment : DialogFragment() {
 
     interface OnSaveListener {
         fun onSave(newValue: String)
@@ -55,7 +55,7 @@ class SmokingSettingDialogFragment : DialogFragment() {
                 dismiss()
             } else {
                 errorText.visibility = View.VISIBLE
-                errorText.text = "100 이하의 숫자를 입력하세요"
+                errorText.text = "100,000원 이하의 숫자를 입력하세요"
             }
         }
     }
@@ -63,7 +63,7 @@ class SmokingSettingDialogFragment : DialogFragment() {
     private fun isValidInput(input: String): Boolean {
         return try {
             val intValue = input.toInt()
-            intValue in 1..100 // 1부터 100 사이의 숫자만 허용
+            intValue in 1..100000
         } catch (e: NumberFormatException) {
             false
         }
@@ -82,14 +82,14 @@ class SmokingSettingDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "SmokingSettingDialogFragment"
+        const val TAG = "SmokingSettingPriceDialogFragment"
 
         fun newInstance(
             title: String,
             currentValue: String,
             onSaveListener: OnSaveListener
-        ): SmokingSettingDialogFragment {
-            val fragment = SmokingSettingDialogFragment()
+        ): SmokingSettingPriceDialogFragment {
+            val fragment = SmokingSettingPriceDialogFragment()
             fragment.setTitle(title)
             fragment.setCurrentValue(currentValue)
             fragment.setOnSaveListener(onSaveListener)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="330dp"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_smoking_addication_test_exit_dialog"
@@ -21,11 +22,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/bg_thin_gray"
-        android:inputType="numberDecimal"
         android:fontFamily="@font/pretendard_medium"
+        android:textColor="@color/gray_gray1"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_title" />
+
+    <TextView
+        android:id="@+id/tv_common_et_dialog_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="100 이하의 숫자를 입력하세요."
+        android:textColor="@color/primary_blue"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/et_dialog_content"
+        app:layout_constraintTop_toBottomOf="@+id/et_dialog_content" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_cancel"
@@ -42,7 +56,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_dialog_content" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_common_et_dialog_description" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_finish"

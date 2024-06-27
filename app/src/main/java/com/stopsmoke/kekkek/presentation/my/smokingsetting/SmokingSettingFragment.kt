@@ -51,17 +51,6 @@ class SmokingSettingFragment : Fragment() {
                 binding.tvSmokingsettingValuePerprice.text = perPrice + " 원"
             }
         }
-
-//        일단 나중에
-//        viewModel.perDay.collectLatestWithLifecycle(lifecycle){ perDay ->
-//            binding.tvSmokingsettingValuePerday.text = perDay + "개비"
-//        }
-//        viewModel.perPack.collectLatestWithLifecycle(lifecycle){ perPack ->
-//            binding.tvSmokingsettingValuePerpack.text = perPack + "개비"
-//        }
-//        viewModel.packPrice.collectLatestWithLifecycle(lifecycle){ packPrice ->
-//            binding.tvSmokingsettingValuePerprice.text = packPrice + "원"
-//        }
     }
 
     private fun initButtons() {
@@ -83,7 +72,7 @@ class SmokingSettingFragment : Fragment() {
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
-            showSmokingSettingDialog("설정하기 : 한 갑당 가격", viewModel.packPrice.value) { newValue ->
+            showSmokingSettingPriceDialog("설정하기 : 한 갑당 가격", viewModel.packPrice.value) { newValue ->
                 viewModel.updateSmokingPackPrice(newValue)
                 viewModel.updateUserConfig()
                 Log.d("담배설정", newValue)
@@ -105,6 +94,22 @@ class SmokingSettingFragment : Fragment() {
                 }
             })
         dialogFragment.show(childFragmentManager, SmokingSettingDialogFragment.TAG)
+    }
+
+    private fun showSmokingSettingPriceDialog(
+        title: String,
+        currentValue: String,
+        onSave: (String) -> Unit
+    ) {
+        val dialogFragment = SmokingSettingPriceDialogFragment.newInstance(
+            title,
+            currentValue,
+            object : SmokingSettingPriceDialogFragment.OnSaveListener {
+                override fun onSave(newValue: String) {
+                    onSave(newValue)
+                }
+            })
+        dialogFragment.show(childFragmentManager, SmokingSettingPriceDialogFragment.TAG)
     }
 
     override fun onResume() {

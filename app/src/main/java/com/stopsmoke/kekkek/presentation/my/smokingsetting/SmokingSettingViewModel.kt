@@ -25,8 +25,6 @@ class SmokingSettingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             userRepository.getUserData().collect { user ->
-
-                Log.d("ㅇㅇㅇㅇㅇ", user.toString())
                 when (user) {
                     is User.Registered -> {
                         _perDay.emit(user.userConfig.dailyCigarettesSmoked.toString())
