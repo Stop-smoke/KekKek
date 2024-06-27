@@ -18,9 +18,10 @@
 
     <EditText
         android:id="@+id/et_dialog_content"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/bg_thin_gray"
+        android:inputType="numberDecimal"
         android:fontFamily="@font/pretendard_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

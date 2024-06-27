@@ -6,14 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
 import com.stopsmoke.kekkek.invisible
 import kotlinx.coroutines.flow.collectLatest
@@ -74,21 +69,21 @@ class SmokingSettingFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.btnSmokingsettingPerday.setOnClickListener {
-            showEditDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
+            showSmokingSettingDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
                 viewModel.updateSmokingPerDay(newValue)
                 viewModel.updateUserConfig()
                 Log.d("담배설정", newValue)
             }
         }
         binding.btnSmokingsettingPerpack.setOnClickListener {
-            showEditDialog("설정하기 : 한 팩 당 담배 개비 수", viewModel.perPack.value) { newValue ->
+            showSmokingSettingDialog("설정하기 : 한 갑에 든 담배 개비 수", viewModel.perPack.value) { newValue ->
                 viewModel.updateSmokingPerPack(newValue)
                 viewModel.updateUserConfig()
                 Log.d("담배설정", newValue)
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
-            showEditDialog("설정하기 : 한 팩 당 가격", viewModel.packPrice.value) { newValue ->
+            showSmokingSettingDialog("설정하기 : 한 갑당 가격", viewModel.packPrice.value) { newValue ->
                 viewModel.updateSmokingPackPrice(newValue)
                 viewModel.updateUserConfig()
                 Log.d("담배설정", newValue)
@@ -96,31 +91,20 @@ class SmokingSettingFragment : Fragment() {
         }
     }
 
-    private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
-        val dialogView =
-            LayoutInflater.from(context).inflate(R.layout.fragment_common_et_dialog, null)
-        val editText = dialogView.findViewById<EditText>(R.id.et_dialog_content)
-        val dialogTitle = dialogView.findViewById<TextView>(R.id.tv_dialog_title)
-        val cancelButton = dialogView.findViewById<AppCompatButton>(R.id.btn_dialog_cancel)
-        val finishButton = dialogView.findViewById<AppCompatButton>(R.id.btn_dialog_finish)
-
-        dialogTitle.text = title
-        editText.setText(currentValue)
-
-        val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setView(dialogView)
-            .create()
-
-        cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        finishButton.setOnClickListener {
-            val newValue = editText.text.toString()
-            onSave(newValue)
-            dialog.dismiss()
-        }
-        dialog.show()
+    private fun showSmokingSettingDialog(
+        title: String,
+        currentValue: String,
+        onSave: (String) -> Unit
+    ) {
+        val dialogFragment = SmokingSettingDialogFragment.newInstance(
+            title,
+            currentValue,
+            object : SmokingSettingDialogFragment.OnSaveListener {
+                override fun onSave(newValue: String) {
+                    onSave(newValue)
+                }
+            })
+        dialogFragment.show(childFragmentManager, SmokingSettingDialogFragment.TAG)
     }
 
     override fun onResume() {
