@@ -6,12 +6,14 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -19,22 +21,12 @@ import javax.inject.Inject
 class AchievementDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : AchievementDao {
-    override fun getAchievementItems(category: String?): Flow<PagingData<AchievementEntity>> {
-        val query = firestore.collection(COLLECTION)
+    override fun getAchievementItems(category: String?): Flow<List<AchievementEntity>> {
+        return firestore.collection(COLLECTION)
             .whereNotNullEqualTo("category", category)
             .orderBy("max_progress", Query.Direction.ASCENDING) //orderBy 지정 시 오류 발생..
-
-
-        return Pager(
-            config = PagingConfig(PAGE_LIMIT)
-        ) {
-            FireStorePagingSource(
-                query = query,
-                limit = PAGE_LIMIT.toLong(),
-                clazz = AchievementEntity::class.java
-            )
-
-        }.flow
+            .dataObjects<AchievementEntity>()
+            .mapNotNull { it }
     }
 
     override suspend fun addAchievementItem(achievementEntity: AchievementEntity) {

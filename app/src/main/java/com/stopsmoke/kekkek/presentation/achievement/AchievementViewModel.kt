@@ -12,6 +12,7 @@ import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.getTotalDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -65,20 +66,22 @@ class AchievementViewModel @Inject constructor(
                     is Result.Success -> it.data.map { pagingData ->
                         pagingData.map {
                             it.getItem().copy(
-                                currentProgress = when(it.category){
+                                currentProgress = when (it.category) {
                                     DatabaseCategory.COMMENT -> progress.comment.toInt()
                                     DatabaseCategory.POST -> progress.post.toInt()
                                     DatabaseCategory.USER -> progress.user.toInt()
                                     DatabaseCategory.ACHIEVEMENT -> progress.achievement.toInt()
                                     DatabaseCategory.RANK -> progress.rank.toInt()
-                                    else -> { 0 }
+                                    else -> {
+                                        0
+                                    }
                                 }
                             )
                         }
                     }
                 }
             }
-    }.cachedIn(viewModelScope)
+    }
 
     suspend fun getAchievementCount(): Long {
         return achievementRepository.getAchievementCount()
@@ -98,17 +101,14 @@ class AchievementViewModel @Inject constructor(
         val userData = user.value
         when (userData) {
             is User.Registered -> {
-                    _currentProgressItem.value = CurrentProgress(
-                        user = ChronoUnit.DAYS.between(
-                            userData.startTime ?: LocalDateTime.now(),
-                            LocalDateTime.now()
-                        ),
-                        comment = activities.commentCount,
-                        post = activities.postCount,
-                        rank = userData.ranking,
-                        achievement = userData.clearAchievementsList.size.toLong()
-                    )
-                }
+                _currentProgressItem.value = CurrentProgress(
+                    user = userData.getTotalDay(),
+                    comment = activities.commentCount,
+                    post = activities.postCount,
+                    rank = userData.ranking,
+                    achievement = userData.clearAchievementsList.size.toLong()
+                )
+            }
 
             else -> _currentProgressItem.value = emptyCurrentProgress()
         }
@@ -117,15 +117,13 @@ class AchievementViewModel @Inject constructor(
     fun getCurrentItem() = currentProgressItem.value
 
 
-    fun upDateUserAchievementList(achievementId: String) = viewModelScope.launch {
+    fun upDateUserAchievementList(achievementIdList: List<String>) = viewModelScope.launch {
         val userData = user.value
         if (userData is User.Registered) {
-            if (achievementId !in userData.clearAchievementsList)
-                userRepository.setUserData(userData.copy(
-                    clearAchievementsList = userData.clearAchievementsList.toMutableList().apply {
-                        add(achievementId)
-                    }
-                ))
+            val updateList = (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
+            userRepository.setUserData(userData.copy(
+                clearAchievementsList = updateList
+            ))
         }
     }
 }

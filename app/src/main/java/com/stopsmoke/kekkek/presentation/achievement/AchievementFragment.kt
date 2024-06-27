@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
 
 @AndroidEntryPoint
@@ -26,7 +27,7 @@ class AchievementFragment : Fragment() {
     private val binding: FragmentAchievementBinding get() = _binding!!
 
     private val achievementListAdapter: AchievementListAdapter by lazy {
-        AchievementListAdapter(viewModel)
+        AchievementListAdapter()
     }
 
     private val viewModel: AchievementViewModel by viewModels()
@@ -63,13 +64,6 @@ class AchievementFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            achievements.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { achievements ->
-                    achievementListAdapter.submitData(achievements)
-                }
-        }
-
         activities.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is Result.Success -> {
@@ -82,7 +76,10 @@ class AchievementFragment : Fragment() {
         }
 
         achievements.collectLatestWithLifecycle(lifecycle) {
-            achievementListAdapter.submitData(it)
+            achievementListAdapter.submitList(sortedAchievement(it))
+        }
+
+        user.collectLatestWithLifecycle(lifecycle){
             bindTopProgress()
         }
     }
@@ -94,7 +91,16 @@ class AchievementFragment : Fragment() {
         icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = "${progress.user} 일"
         icludeAchievementTop.tvAchievementQuitSmokingCount.text =
             "${user.clearAchievementsList.size} / ${maxProgressCount}"
+    }
 
+    private fun sortedAchievement(list: List<AchievementItem>): List<AchievementItem>{
+        val clearList = list.filter { it.progress >= 1.0.toBigDecimal() }
+        val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
+
+        val insertClearList = clearList.filter { it.id !in (viewModel.user.value as User.Registered).clearAchievementsList }
+        viewModel.upDateUserAchievementList(insertClearList.map { it.id })
+
+        return nonClearList + clearList
     }
 
     override fun onDestroyView() {

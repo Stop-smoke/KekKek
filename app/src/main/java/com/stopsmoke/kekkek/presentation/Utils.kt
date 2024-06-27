@@ -17,10 +17,13 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.User
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 internal fun ElapsedDateTime.toResourceId(context: Context): String =
     when (elapsedDateTime) {
@@ -107,4 +110,16 @@ class CustomItemDecoration(private val color: Int, private val height: Int) : Re
             c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)
         }
     }
+}
+
+
+fun (User.Registered).getTotalDay(): Long{
+    var totalDay:Long = 0
+    this.history.historyTimeList.forEach {
+        if(it.quitSmokingStartDateTime !=null){
+            if(it.quitSmokingStopDateTime != null)  totalDay += ChronoUnit.DAYS.between(it.quitSmokingStartDateTime, it.quitSmokingStopDateTime)
+            else if(it.quitSmokingStopDateTime == null) totalDay += ChronoUnit.DAYS.between(it.quitSmokingStartDateTime, LocalDateTime.now())
+        }
+    }
+    return totalDay
 }
