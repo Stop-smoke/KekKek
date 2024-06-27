@@ -2,17 +2,21 @@ package com.stopsmoke.kekkek.presentation.post
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.ImageSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
@@ -22,10 +26,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.text.getSpans
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -47,6 +49,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import android.media.ExifInterface
 
 @AndroidEntryPoint
 class PostWriteFragment : Fragment() {
@@ -197,9 +200,6 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun insertImage(url: Uri) {
-        val etPostWriteContent = binding.etPostWriteContent
-        val start = etPostWriteContent.selectionStart
-
         val inputStream = requireContext().contentResolver.openInputStream(url)
         val bitmap = BitmapFactory.decodeStream(inputStream)
         inputStream?.close()
@@ -208,20 +208,29 @@ class PostWriteFragment : Fragment() {
         val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
 
-        val drawable = BitmapDrawable(resources, scaledBitmap)
-        drawable.setBounds(0, 0, width, height)
+        val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
 
-        val imageSpan = ImageSpan(drawable)
-        val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-        spannableString.insert(start, " ")
-        spannableString.setSpan(
-            imageSpan,
-            start,
-            start + 1,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        etPostWriteContent.text = spannableString
-        etPostWriteContent.setSelection(start + 1)
+        binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
+        binding.ivPostWriteImage.visibility = View.VISIBLE
+    }
+
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+
+        paint.isAntiAlias = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = Color.BLACK
+        canvas.drawRoundRect(rectF, radius, radius, paint)
+
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
     }
 
     private fun initTextEditor() = with(binding) {
