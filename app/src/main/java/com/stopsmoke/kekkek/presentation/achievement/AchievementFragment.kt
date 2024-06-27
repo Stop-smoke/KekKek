@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -99,9 +101,14 @@ class AchievementFragment : Fragment() {
         return nonClearList + clearList
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        activity?.visible()
     }
 }
 
