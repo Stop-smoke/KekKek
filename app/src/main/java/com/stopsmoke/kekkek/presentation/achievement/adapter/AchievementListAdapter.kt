@@ -2,13 +2,17 @@ package com.stopsmoke.kekkek.presentation.achievement.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
@@ -22,12 +26,12 @@ class AchievementListAdapter(
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(achievement: AchievementItem) {
+        fun bind(achievement: AchievementItem) = with(binding){
 
-            binding.tvAchievementTitle.text = achievement.name
+            tvAchievementTitle.text = achievement.name
 
             val progressPercentage = (achievement.progress.toDouble() * 100).toInt()
-            binding.liAchievementProgress.apply {
+            liAchievementProgress.apply {
                 setProgress(0, false)
 
                 post {
@@ -36,38 +40,25 @@ class AchievementListAdapter(
                 }
             }
 
-            binding.tvAchievementDescription.text = achievement.description
+            tvAchievementDescription.text = achievement.description
 
             var textCurrentProgress = 0
             if(achievement.currentProgress >= achievement.maxProgress
                 && achievement.category != DatabaseCategory.RANK) {
                 textCurrentProgress = achievement.maxProgress
-                setRainbow(binding.clAchievementRoot)
+                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                ivAchievementItemChecked.visibility = View.VISIBLE
             }
             else {
                 textCurrentProgress = achievement.currentProgress
-                binding.clAchievementRoot.setBackgroundColor(Color.WHITE)
+                clAchievementRoot.setBackgroundColor(Color.WHITE)
+                ivAchievementItemChecked.visibility = View.GONE
             }
-            binding.tvAchievementProgressNumber.text = "${textCurrentProgress} / ${achievement.maxProgress}"
+            tvAchievementProgressNumber.text = "${textCurrentProgress} / ${achievement.maxProgress}"
 
-            binding.civAchievementImage.load(achievement.image)
-        }
-
-        private fun setRainbow(cl: ConstraintLayout){
-            val colors = intArrayOf(
-                Color.RED,
-                Color.YELLOW,
-                Color.GREEN,
-                Color.CYAN,
-                Color.BLUE,
-                Color.MAGENTA
-            )
-
-            val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
-            gradientDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-            gradientDrawable.cornerRadius = 0f
-
-            cl.background = gradientDrawable
+            if(achievement.image.isNotEmpty()) {
+                civAchievementImage.load(achievement.image)
+            }
         }
     }
 
