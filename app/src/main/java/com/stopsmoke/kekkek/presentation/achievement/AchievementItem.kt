@@ -1,8 +1,10 @@
 package com.stopsmoke.kekkek.presentation.achievement
 
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
+import java.math.BigDecimal
+import java.math.MathContext
 
-data class AchievementItem (
+data class AchievementItem(
     val id: String,
     val name: String,
     val description: String,
@@ -11,7 +13,20 @@ data class AchievementItem (
     val maxProgress: Int,
     val currentProgress: Int = 0,
     val requestCode: String
-)
+) {
+    val progress: BigDecimal =when {
+        currentProgress == 0 -> BigDecimal.ZERO
+        category != DatabaseCategory.RANK -> {
+            currentProgress.toBigDecimal()
+                .divide(maxProgress.toBigDecimal(), MathContext.DECIMAL128)
+        }
+
+        else -> {
+            maxProgress.toBigDecimal()
+                .divide(currentProgress.toBigDecimal(), MathContext.DECIMAL128)
+        }
+    }
+}
 
 data class CurrentProgress(
     val user: Long,
@@ -21,7 +36,7 @@ data class CurrentProgress(
     val achievement: Long
 )
 
-fun emptyCurrentProgress() = CurrentProgress (
+fun emptyCurrentProgress() = CurrentProgress(
     user = 0,
     comment = 0,
     post = 0,

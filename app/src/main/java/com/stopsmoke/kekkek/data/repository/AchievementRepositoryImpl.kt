@@ -15,16 +15,15 @@ import javax.inject.Inject
 class AchievementRepositoryImpl @Inject constructor(
     private val achievementDao: AchievementDao
 ) : AchievementRepository {
-    override fun getAchievementItems(category: DatabaseCategory): Result<Flow<PagingData<Achievement>>> =
+    override fun getAchievementItems(category: DatabaseCategory): Result<Flow<List<Achievement>>> =
         try {
             val categoryString = category.toRequestString()
 
-            achievementDao.getAchievementItems(category = categoryString).map { pagingData ->
-                pagingData.map {
+            achievementDao.getAchievementItems(category = categoryString).map { data ->
+                data.map {
                     it.asExternalModel()
                 }
-            }
-                .let {
+            }.let {
                     Result.Success(it)
                 }
 

@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.firestore.model.NotificationEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AchievementDao {
-    fun getAchievementItems(category: String? = null): Flow<PagingData<AchievementEntity>>
+    fun getAchievementItems(category: String? = null): Flow<List<AchievementEntity>>
 
     suspend fun addAchievementItem(achievementEntity: AchievementEntity)
 
