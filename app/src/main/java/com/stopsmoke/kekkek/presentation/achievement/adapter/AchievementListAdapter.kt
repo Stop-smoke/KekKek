@@ -56,9 +56,8 @@ class AchievementListAdapter(
             }
             tvAchievementProgressNumber.text = "${textCurrentProgress} / ${achievement.maxProgress}"
 
-            if(achievement.image.isNotEmpty()) {
-                civAchievementImage.load(achievement.image)
-            }
+            civAchievementImage.load(achievement.image)
+
         }
     }
 
@@ -88,7 +87,7 @@ class AchievementListAdapter(
                 oldItem: AchievementItem,
                 newItem: AchievementItem
             ): Boolean {
-                return oldItem==newItem
+                return oldItem.id == newItem.id
             }
 
         }
