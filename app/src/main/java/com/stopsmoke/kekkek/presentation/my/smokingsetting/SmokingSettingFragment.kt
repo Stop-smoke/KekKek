@@ -10,11 +10,14 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
 import com.stopsmoke.kekkek.invisible
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SmokingSettingFragment : Fragment() {
 
@@ -34,6 +37,36 @@ class SmokingSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initButtons()
+        observeValue()
+    }
+
+    private fun observeValue() {
+        lifecycleScope.launch {
+            viewModel.perDay.collectLatest { perDay ->
+                binding.tvSmokingsettingValuePerday.text = perDay + " 개비"
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.perPack.collectLatest { perPack ->
+                binding.tvSmokingsettingValuePerpack.text = perPack + " 개비"
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.packPrice.collectLatest { perPrice ->
+                binding.tvSmokingsettingValuePerprice.text = perPrice + " 원"
+            }
+        }
+
+//        일단 나중에
+//        viewModel.perDay.collectLatestWithLifecycle(lifecycle){ perDay ->
+//            binding.tvSmokingsettingValuePerday.text = perDay + "개비"
+//        }
+//        viewModel.perPack.collectLatestWithLifecycle(lifecycle){ perPack ->
+//            binding.tvSmokingsettingValuePerpack.text = perPack + "개비"
+//        }
+//        viewModel.packPrice.collectLatestWithLifecycle(lifecycle){ packPrice ->
+//            binding.tvSmokingsettingValuePerprice.text = packPrice + "원"
+//        }
     }
 
     private fun initButtons() {
@@ -44,21 +77,21 @@ class SmokingSettingFragment : Fragment() {
             showEditDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
                 viewModel.updateSmokingPerDay(newValue)
                 viewModel.updateUserConfig()
-                Log.d("담배설정", newValue.toString())
+                Log.d("담배설정", newValue)
             }
         }
         binding.btnSmokingsettingPerpack.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 담배 개비 수", viewModel.perPack.value) { newValue ->
                 viewModel.updateSmokingPerPack(newValue)
                 viewModel.updateUserConfig()
-                Log.d("담배설정", newValue.toString())
+                Log.d("담배설정", newValue)
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
             showEditDialog("설정하기 : 한 팩 당 가격", viewModel.packPrice.value) { newValue ->
                 viewModel.updateSmokingPackPrice(newValue)
                 viewModel.updateUserConfig()
-                Log.d("담배설정", newValue.toString())
+                Log.d("담배설정", newValue)
             }
         }
     }
