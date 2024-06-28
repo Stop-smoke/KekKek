@@ -186,4 +186,6 @@
 
     <string name="search_recommend_keyword">님을 위한 추천 검색어</string>
     <string name="search_guest_recommend_keyword">당신을 위한 추천 검색어</string>
+    
+    <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 </resources>
