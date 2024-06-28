@@ -31,7 +31,7 @@ class AddCommentUseCase @Inject constructor(
             dateTime = LocalDateTime.now().let { DateTime(it, it) },
             likeUser = emptyList(),
             unlikeUser = emptyList(),
-            reply = emptyList(),
+            earliestReply = emptyList(),
             written = Written(
                 uid = user.uid,
                 name = user.name,
@@ -41,7 +41,8 @@ class AddCommentUseCase @Inject constructor(
                 ),
             parent = CommentParent(
                 postType = postType, postId = postId, postTitle = postTitle
-            )
+            ),
+            replyCount = 0
         )
         commentRepository.addCommentItem(comment)
     }

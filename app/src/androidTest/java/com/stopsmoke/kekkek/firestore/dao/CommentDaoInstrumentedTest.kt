@@ -37,7 +37,7 @@ class CommentDaoInstrumentedTest {
             ),
             likeUser = listOf("user1", "user2"),
             unlikeUser = listOf("user3"),
-            reply = listOf(
+            earliestReply = listOf(
                 ReplyEntity(
                     written = WrittenEntity(
                         uid = "default",
@@ -68,7 +68,7 @@ class CommentDaoInstrumentedTest {
             ),
             likeUser = listOf("user1", "user2"),
             unlikeUser = listOf("user3"),
-            reply = listOf(
+            earliestReply = listOf(
                 ReplyEntity(
                     written = WrittenEntity(
                         uid = "default",
