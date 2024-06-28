@@ -5,3 +5,5 @@ data class Activities(
     val commentCount: Long,
     val bookmarkCount: Long,
 )
+
+fun emptyActivities() = Activities(0, 0, 0)

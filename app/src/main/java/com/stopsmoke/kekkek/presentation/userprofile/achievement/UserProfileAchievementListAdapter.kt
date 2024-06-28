@@ -1,12 +1,9 @@
-package com.stopsmoke.kekkek.presentation.achievement.adapter
+package com.stopsmoke.kekkek.presentation.userprofile.achievement
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,13 +12,11 @@ import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.achievement.AchievementViewModel
+import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
 
-class AchievementListAdapter(
-) :
-    ListAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
+class UserProfileAchievementListAdapter(
+) :  ListAdapter<AchievementItem, UserProfileAchievementListAdapter.AchievementViewHolder>(diffUtil) {
 
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
