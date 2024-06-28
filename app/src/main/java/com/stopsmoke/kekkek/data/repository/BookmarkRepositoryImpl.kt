@@ -6,7 +6,7 @@ import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.firestore.dao.BookmarkRepository
+import com.stopsmoke.kekkek.domain.repository.BookmarkRepository
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

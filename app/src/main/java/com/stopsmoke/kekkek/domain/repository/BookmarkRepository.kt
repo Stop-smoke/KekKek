@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.firestore.dao
+package com.stopsmoke.kekkek.domain.repository
 
 import androidx.paging.PagingData
 import com.stopsmoke.kekkek.domain.model.Post
