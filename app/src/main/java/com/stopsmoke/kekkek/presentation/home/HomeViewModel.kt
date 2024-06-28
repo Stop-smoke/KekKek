@@ -222,7 +222,7 @@ class HomeViewModel @Inject constructor(
     val userRankingList get() = _userRankingList.asStateFlow()
 
     private val _myRank = MutableStateFlow<Int?>(null)
-    val myRank get() = _myRank
+    val myRank get() = _myRank.asStateFlow()
 
     fun getAllUserData() = viewModelScope.launch {
         val list = userRepository.getAllUserData().map{user->
@@ -234,7 +234,7 @@ class HomeViewModel @Inject constructor(
         }
 
         (user as? User.Registered)?.let{
-            myRank.value = list.indexOf(it.toRankingListItem())
+            _myRank.value = list.indexOf(it.toRankingListItem())
         }
 
         _userRankingList.emit(list)
@@ -242,7 +242,7 @@ class HomeViewModel @Inject constructor(
 
     fun getMyRank(){
         (user.value as? User.Registered)?.let{
-            myRank.value = userRankingList.value.indexOf(it.toRankingListItem())+1
+            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem())+1
         }
     }
 }

@@ -70,5 +70,7 @@ interface UserRepository {
 
     fun getActivities(): Flow<Activities>
 
+    fun getActivities(userID: String): Flow<Activities>
+
     suspend fun getAllUserData(): List<User>
 }
