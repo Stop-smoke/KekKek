@@ -7,43 +7,66 @@ import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
+import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CommentRepositoryImpl @Inject constructor(
-    private val commentDao: CommentDao
+    private val commentDao: CommentDao,
+    private val userRepository: UserRepository
 ) : CommentRepository {
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCommentItems(commentFilter: CommentFilter): Flow<PagingData<Comment>> {
         return when (commentFilter) {
             is CommentFilter.Post -> {
-                commentDao.getComment(commentFilter.postId).map { pagingData ->
-                    pagingData.map {
-                        it.asExternalModel()
+                userRepository.getUserData().flatMapLatest { user ->
+                    commentDao.getComment(commentFilter.postId).map { pagingData ->
+                        pagingData.map {
+                            val earliest = it.earliestReply.map { reply ->
+                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                            }
+                            it.asExternalModel(earliest)
+                        }
                     }
                 }
             }
 
             is CommentFilter.User -> {
-                commentDao.getMyCommentItems(commentFilter.uid).map { pagingData ->
-                    pagingData.map {
-                        it.asExternalModel()
+                userRepository.getUserData().flatMapLatest { user ->
+                    commentDao.getMyCommentItems(commentFilter.uid).map { pagingData ->
+                        pagingData.map {
+                            val earliest = it.earliestReply.map { reply ->
+                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                            }
+                            it.asExternalModel(earliest)
+                        }
                     }
                 }
             }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>> =
         try {
-            commentDao.getCommentItems(commentIdList)
-                .map { pagingData ->
-                    pagingData.map {
-                        it.asExternalModel()
+            userRepository.getUserData().flatMapLatest { user ->
+                commentDao.getCommentItems(commentIdList)
+                    .map { pagingData ->
+                        pagingData.map {
+                            val earliest = it.earliestReply.map { reply ->
+                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                            }
+                            it.asExternalModel(earliest)
+                        }
                     }
-                }.let {
+            }
+                .let {
                     Result.Success(it)
                 }
         } catch (e: Exception) {
@@ -90,7 +113,15 @@ class CommentRepositoryImpl @Inject constructor(
         return commentDao.getCommentCount(postId)
     }
 
-    override suspend fun getComment(postId: String, commentId: String): Comment {
-        return commentDao.getComment(postId, commentId).asExternalModel()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getComment(postId: String, commentId: String): Flow<Comment> {
+        return userRepository.getUserData().flatMapLatest { user ->
+            commentDao.getComment(postId, commentId).map {
+                val earliest = it.earliestReply.map { reply ->
+                    reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                }
+                it.asExternalModel(earliest)
+            }
+        }
     }
 }
