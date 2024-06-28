@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.firestore.dao
 
 import androidx.paging.PagingData
+import com.stopsmoke.kekkek.domain.model.Achievement
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.NotificationEntity
@@ -12,4 +13,6 @@ interface AchievementDao {
     suspend fun addAchievementItem(achievementEntity: AchievementEntity)
 
     suspend fun getAchievementCount(category: String?):Long
+
+    suspend fun getAchievementListItem(achievementIdList: List<String>): Flow<List<AchievementEntity>>
 }

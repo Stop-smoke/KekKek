@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileAchievementBinding
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint

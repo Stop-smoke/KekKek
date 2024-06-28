@@ -12,8 +12,8 @@ import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
 
 class UserProfileAchievementListAdapter(
 ) :  ListAdapter<AchievementItem, UserProfileAchievementListAdapter.AchievementViewHolder>(diffUtil) {

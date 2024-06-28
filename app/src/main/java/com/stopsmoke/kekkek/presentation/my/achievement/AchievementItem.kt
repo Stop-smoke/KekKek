@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.achievement
+package com.stopsmoke.kekkek.presentation.my.achievement
 
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import java.math.BigDecimal

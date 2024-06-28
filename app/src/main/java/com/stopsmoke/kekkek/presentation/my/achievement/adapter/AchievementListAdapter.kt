@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.achievement.adapter
+package com.stopsmoke.kekkek.presentation.my.achievement.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -16,8 +16,8 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.achievement.AchievementViewModel
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementViewModel
 
 class AchievementListAdapter(
 ) :
