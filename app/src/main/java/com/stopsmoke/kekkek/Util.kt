@@ -48,3 +48,14 @@ fun convertSpannableToHtml(spannable: Spannable): String {
 fun convertHtmlToSpannable(html: String): Spannable {
     return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT) as Spannable
 }
+
+fun<T> List<T>.addOrRemove(value: T): List<T> {
+    if (contains(value)) {
+        return this.toMutableList().apply {
+            remove(value)
+        }
+    }
+    return this.toMutableList().apply {
+        add(value)
+    }
+}
