@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,19 +21,18 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
-import com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class PostViewFragment : Fragment(), PostCommentCallback {
@@ -43,7 +41,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val binding get() = _binding!!
 
     private val viewModel: PostViewModel by viewModels()
-    private val communityViewModel: CommunityViewModel by activityViewModels()
 
     private lateinit var postViewAdapter: PostViewAdapter
 
@@ -70,6 +67,22 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         observeCommentRecyclerViewItem()
         observeBookmarkState()
         postViewAdapter.registerCallback(this)
+
+        lifecycleScope.launch {
+            combine(
+                viewModel.user,
+                viewModel.post,
+                viewModel.commentCount
+            ) { user: User?, post: Post?, l: Long? ->
+                val headerItem = PostHeaderItem(user, post, l ?: 0)
+                postViewAdapter.updatePostHeader(headerItem)
+            }
+                .collectLatestWithLifecycle(lifecycle) { }
+        }
+
+        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
+            postViewAdapter.submitData(it)
+        }
     }
 
     private fun observeBookmarkState() = lifecycleScope.launch {
@@ -89,7 +102,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            if(!isNetworkAvailable(requireContext())){
+            if (!isNetworkAvailable(requireContext())) {
                 Toast.makeText(requireContext(), "네트워크 연결 오류", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
                 return@collectLatestWithLifecycle
@@ -99,7 +112,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     }
 
     private fun initCommentRecyclerView() {
-        postViewAdapter = PostViewAdapter(viewModel = viewModel, lifecycleOwner = viewLifecycleOwner)
+        postViewAdapter = PostViewAdapter()
         binding.rvPostView.adapter = postViewAdapter
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -108,7 +121,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
-    private fun showCommentDeleteDialog(postId : String) {
+    private fun showCommentDeleteDialog(postId: String) {
         AlertDialog.Builder(requireContext())
             .setTitle("댓글 삭제")
             .setMessage("댓글을 삭제하시겠습니까?")
@@ -252,13 +265,16 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             is User.Error -> {
 
             }
+
             User.Guest -> {
 
             }
+
             is User.Registered ->
                 if (comment.written.uid == user.uid) {
                     showCommentDeleteDialog(comment.id)
                 }
+
             null -> {}
         }
     }
@@ -275,10 +291,21 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         postViewAdapter.refresh()
     }
 
+    override fun clickPostLike(post: Post) {
+        viewModel.toggleLikeToPost()
+    }
+
+    override fun clickReplyLike(reply: Reply) {
+        viewModel.toggleReplyLike(reply)
+    }
+
     override fun navigateToReply(comment: Comment) {
         findNavController().navigate(
             resId = R.id.action_post_view_to_reply,
-            args = bundleOf("replyIdItem" to ReplyIdItem(commentId = comment.id, postId = comment.parent.postId))
+            args = bundleOf(
+                "post_id" to comment.parent.postId,
+                "comment_id" to comment.id
+            )
         )
     }
 }
