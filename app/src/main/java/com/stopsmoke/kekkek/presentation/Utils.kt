@@ -7,16 +7,19 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.domain.model.ProfileImage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -81,6 +84,13 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 internal fun View.snackbarLongShow(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
+}
+
+internal fun ImageView.setDefaultProfileImage(profileImage: ProfileImage) {
+    when(profileImage) {
+        ProfileImage.Default -> setImageResource(R.drawable.ic_user_profile_test)
+        is ProfileImage.Web -> load(profileImage.url)
+    }
 }
 
 
