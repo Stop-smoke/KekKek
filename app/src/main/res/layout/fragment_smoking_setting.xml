@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F3F7"
+    tools:context=".presentation.my.smokingsetting.SmokingSettingFragment">
+
+    <include
+        android:id="@+id/include_smoking_setting_app_bar"
+        layout="@layout/fragment_smoking_setting_app_bar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_smokingsetting_perday"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_rounded_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include_smoking_setting_app_bar">
+
+        <ImageView
+            android:id="@+id/iv_smokingsetting_perday"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_earth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_title_perday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="하루에 피는 담배 개비 수"
+            android:textSize="17sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_smokingsetting_perday"
+            app:layout_constraintTop_toTopOf="@+id/iv_smokingsetting_perday" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_value_perday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="10개비"
+            android:textColor="@color/gray_lightgray2"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_smokingsetting_perday"
+            app:layout_constraintStart_toStartOf="@+id/tv_smokingsetting_title_perday"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_title_perday" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_smokingsetting_perday"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_rounded_8dp"
+            android:backgroundTint="#F6FAFF"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_value_perday">
+
+            <TextView
+                android:id="@+id/tv_perday_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="수정하기"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_perday_arrow"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_perday_arrow"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_perday_edit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_perday_edit"
+                app:layout_constraintTop_toTopOf="@+id/tv_perday_edit"
+                app:tint="@color/primary_blue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_smokingsetting_perpack"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_rounded_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_smokingsetting_perday">
+
+        <ImageView
+            android:id="@+id/iv_smokingsetting_perpack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_earth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_title_perpack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="한 갑에 든 담배 개비 수"
+            android:textSize="17sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_smokingsetting_perpack"
+            app:layout_constraintTop_toTopOf="@+id/iv_smokingsetting_perpack" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_value_perpack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="20개비"
+            android:textColor="@color/gray_lightgray2"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_smokingsetting_perpack"
+            app:layout_constraintStart_toStartOf="@+id/tv_smokingsetting_title_perpack"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_title_perpack" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_smokingsetting_perpack"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_rounded_8dp"
+            android:backgroundTint="#F6FAFF"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_value_perpack">
+
+            <TextView
+                android:id="@+id/tv_perpack_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="수정하기"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_perpack_arrow"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_perpack_arrow"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_perpack_edit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_perpack_edit"
+                app:layout_constraintTop_toTopOf="@+id/tv_perpack_edit"
+                app:tint="@color/primary_blue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_smokingsetting_perprice"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_rounded_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_smokingsetting_perpack">
+
+        <ImageView
+            android:id="@+id/iv_smokingsetting_perprice"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_earth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_title_perprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="한 갑당 가격"
+            android:textSize="17sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_smokingsetting_perprice"
+            app:layout_constraintTop_toTopOf="@+id/iv_smokingsetting_perprice" />
+
+        <TextView
+            android:id="@+id/tv_smokingsetting_value_perprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="3,500원"
+            android:textColor="@color/gray_lightgray2"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_smokingsetting_perprice"
+            app:layout_constraintStart_toStartOf="@+id/tv_smokingsetting_title_perprice"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_title_perprice" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_smokingsetting_perprice"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_rounded_8dp"
+            android:backgroundTint="#F6FAFF"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_smokingsetting_value_perprice">
+
+            <TextView
+                android:id="@+id/tv_perprice_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="수정하기"
+                android:textColor="@color/primary_blue"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_perprice_arrow"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_perprice_arrow"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_perprice_edit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_perprice_edit"
+                app:layout_constraintTop_toTopOf="@+id/tv_perprice_edit"
+                app:tint="@color/primary_blue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

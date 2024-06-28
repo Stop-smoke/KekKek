@@ -41,16 +41,18 @@
         android:id="@+id/cl_postWrite_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:visibility="gone"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/grayline">
 
         <ImageView
             android:id="@+id/iv_post_write_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
-            android:padding="4dp"
+            android:padding="5dp"
             android:src="@drawable/ic_editor_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_post_write_italic"
@@ -60,9 +62,10 @@
 
         <ImageView
             android:id="@+id/iv_post_write_italic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:src="@drawable/ic_editor_2"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_bold"
@@ -73,9 +76,13 @@
 
         <ImageView
             android:id="@+id/iv_post_write_underline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:paddingLeft="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:src="@drawable/ic_editor_3"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_italic"
@@ -86,10 +93,11 @@
 
         <ImageView
             android:id="@+id/iv_post_write_line_through"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
             android:clickable="true"
+            android:background="@drawable/bg_text_editor"
             android:src="@drawable/ic_editor_4"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_underline"
             app:layout_constraintEnd_toStartOf="@+id/iv_post_write_text_color"
@@ -99,9 +107,10 @@
 
         <ImageView
             android:id="@+id/iv_post_write_text_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:src="@drawable/ic_editor_5"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_line_through"
@@ -112,9 +121,11 @@
 
         <ImageView
             android:id="@+id/iv_post_write_background_color"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="32dp"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:padding="4dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
             android:src="@drawable/ic_editor_6"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_text_color"
@@ -125,11 +136,13 @@
 
         <ImageView
             android:id="@+id/iv_post_write_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/bg_text_editor"
             android:clickable="true"
-            android:src="@drawable/ic_editor_7"
+            android:src="@drawable/ic_editor_8"
             app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -162,6 +175,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_post_write_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

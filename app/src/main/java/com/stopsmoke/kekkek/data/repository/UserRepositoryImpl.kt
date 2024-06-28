@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.data.repository
 
+import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.data.mapper.toEntity
@@ -174,4 +175,20 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getActivities(userID: String): Flow<Activities> {
+        return userDao.getActivities(userID)
+            .map {
+                Activities(
+                    it.postCount,
+                    it.commentCount,
+                    it.bookmarkCount
+                )
+            }
+    }
+
+    override suspend fun getAllUserData(): List<User> {
+        return userDao.getAllUserData().map {
+            it.toExternalModel()
+        }
+    }
 }

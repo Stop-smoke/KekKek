@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.HistoryTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
@@ -11,12 +10,16 @@ import com.stopsmoke.kekkek.domain.model.getStartTimerState
 import com.stopsmoke.kekkek.domain.model.getTotalMinutesTime
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
+import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -38,7 +41,11 @@ class HomeViewModel @Inject constructor(
     private var _currentUserState = MutableStateFlow<User>(User.Guest)
     val currentUserState = _currentUserState.asStateFlow()
 
-    val user = userRepository.getUserData()
+    val user = userRepository.getUserData().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
 
     private val _noticeBanner = MutableStateFlow(Post.emptyPost())
     val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
@@ -208,5 +215,34 @@ class HomeViewModel @Inject constructor(
 
         // 하루에 소비하는 갑의 시간당 비용
         savedMoneyPerMinute = totalPackCostPerDay / totalMinutesSmokedPerDay
+    }
+
+
+    private val _userRankingList = MutableStateFlow<List<RankingListItem>>(emptyList())
+    val userRankingList get() = _userRankingList.asStateFlow()
+
+    private val _myRank = MutableStateFlow<Int?>(null)
+    val myRank get() = _myRank.asStateFlow()
+
+    fun getAllUserData() = viewModelScope.launch {
+        val list = userRepository.getAllUserData().map{user->
+            (user as User.Registered).toRankingListItem()
+        }.filter { item->
+            item.startTime != null
+        }.sortedBy {item ->
+            item.startTime!!
+        }
+
+        (user as? User.Registered)?.let{
+            _myRank.value = list.indexOf(it.toRankingListItem())
+        }
+
+        _userRankingList.emit(list)
+    }
+
+    fun getMyRank(){
+        (user.value as? User.Registered)?.let{
+            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem())+1
+        }
     }
 }

@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
             app:destination="@id/nav_smoking_addiction_test" />
+        <action
+            android:id="@+id/action_home_to_rankingList"
+            app:destination="@id/ranking_list"/>
     </fragment>
 
     <fragment
@@ -127,8 +130,8 @@
             android:id="@+id/action_my_page_to_onboarding_perday"
             app:destination="@id/onboarding_perday" />
         <action
-            android:id="@+id/action_my_page_to_resetting_onboarding_smoking_per_day"
-            app:destination="@id/resetting_onboarding_smoking_per_day" />
+            android:id="@+id/action_my_page_to_settings_smoking_setting"
+            app:destination="@id/settings_smoking_setting" />
         <action
             android:id="@+id/action_my_page_to_my_complaint"
             app:destination="@id/my_complaint" />
@@ -145,41 +148,48 @@
     </fragment>
 
     <fragment
-        android:id="@+id/resetting_onboarding_smoking_per_day"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerDayFragment"
-        tools:layout="@layout/fragment_smoking_per_day">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_per_day_to_resetting_onboarding_smoking_per_pack"
-            app:destination="@id/resetting_onboarding_smoking_per_pack" />
+        android:id="@+id/settings_smoking_setting"
+        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFragment"
+        app:route="settings_smoking_setting"
+        tools:layout="@layout/fragment_smoking_setting">
     </fragment>
 
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_per_pack"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerPackFragment"
-        tools:layout="@layout/fragment_smoking_per_pack">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_per_pack_to_resetting_onboarding_smoking_price"
-            app:destination="@id/resetting_onboarding_smoking_price" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/resetting_onboarding_smoking_per_day"-->
+<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerDayFragment"-->
+<!--        tools:layout="@layout/fragment_smoking_per_day">-->
+<!--        <action-->
+<!--            android:id="@+id/action_resetting_onboarding_smoking_per_day_to_resetting_onboarding_smoking_per_pack"-->
+<!--            app:destination="@id/resetting_onboarding_smoking_per_pack" />-->
+<!--    </fragment>-->
 
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_price"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPriceFragment"
-        tools:layout="@layout/fragment_smoking_price">
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_price_to_resetting_onboarding_smoking_finish"
-            app:destination="@id/resetting_onboarding_smoking_finish" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/resetting_onboarding_smoking_per_pack"-->
+<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerPackFragment"-->
+<!--        tools:layout="@layout/fragment_smoking_per_pack">-->
+<!--        <action-->
+<!--            android:id="@+id/action_resetting_onboarding_smoking_per_pack_to_resetting_onboarding_smoking_price"-->
+<!--            app:destination="@id/resetting_onboarding_smoking_price" />-->
+<!--    </fragment>-->
 
-    <fragment
-        android:id="@+id/resetting_onboarding_smoking_finish"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFinishFragment"
-        tools:layout="@layout/fragment_smoking_setting_finish">
+<!--    <fragment-->
+<!--        android:id="@+id/resetting_onboarding_smoking_price"-->
+<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPriceFragment"-->
+<!--        tools:layout="@layout/fragment_smoking_price">-->
+<!--        <action-->
+<!--            android:id="@+id/action_resetting_onboarding_smoking_price_to_resetting_onboarding_smoking_finish"-->
+<!--            app:destination="@id/resetting_onboarding_smoking_finish" />-->
+<!--    </fragment>-->
 
-        <action
-            android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"
-            app:destination="@id/my_page" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/resetting_onboarding_smoking_finish"-->
+<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFinishFragment"-->
+<!--        tools:layout="@layout/fragment_smoking_setting_finish">-->
+
+<!--        <action-->
+<!--            android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"-->
+<!--            app:destination="@id/my_page" />-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/my_supportcenter"
@@ -324,9 +334,13 @@
 
     <fragment
         android:id="@+id/ranking_list"
-        android:name="com.stopsmoke.kekkek.presentation.rankingList.RankingListFragment"
+        android:name="com.stopsmoke.kekkek.presentation.home.rankingList.RankingListFragment"
         app:route="ranking_list"
-        tools:layout="@layout/fragment_ranking_list" />
+        tools:layout="@layout/fragment_ranking_list" >
+        <action
+            android:id="@+id/action_rankingList_to_userProfile"
+            app:destination="@id/user_profile"/>
+    </fragment>
 
     <fragment
         android:id="@+id/ranking_map"

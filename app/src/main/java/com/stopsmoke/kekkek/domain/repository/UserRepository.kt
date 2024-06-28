@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.domain.repository
 
+import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.Activities
 import com.stopsmoke.kekkek.domain.model.User
@@ -68,4 +69,8 @@ interface UserRepository {
     suspend fun nameDuplicateInspection(name: String): Boolean
 
     fun getActivities(): Flow<Activities>
+
+    fun getActivities(userID: String): Flow<Activities>
+
+    suspend fun getAllUserData(): List<User>
 }

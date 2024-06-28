@@ -10,12 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestExitDialogBinding
+import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 
 class SmokingAddictionTestExitDialogFragment : DialogFragment() {
 
-    private var _binding: FragmentSmokingAddictionTestExitDialogBinding? = null
+    private var _binding: FragmentCommonDialogBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by activityViewModels<SmokingAddictionTestViewModel>()
@@ -32,16 +32,17 @@ class SmokingAddictionTestExitDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSmokingAddictionTestExitDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentCommonDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnCancel.setOnClickListener {
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        binding.btnDialogCancel.setOnClickListener {
             dismiss()
         }
-        binding.btnFinish.setOnClickListener {
+        binding.btnDialogFinish.setOnClickListener {
             findNavController().popBackStack("home", false)
             viewModel.clear()
         }

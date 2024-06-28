@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.firestore.dao
 
+import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.firestore.model.ActivitiesEntity
@@ -26,4 +27,6 @@ interface UserDao {
     suspend fun nameDuplicateInspection(name: String): Boolean
 
     fun getActivities(uid: String): Flow<ActivitiesEntity>
+
+    suspend fun getAllUserData(): List<UserEntity>
 }

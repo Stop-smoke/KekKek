@@ -4,10 +4,10 @@ import com.stopsmoke.kekkek.domain.model.Achievement
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 
-internal fun AchievementEntity.asExternalModel() = Achievement(
+fun AchievementEntity.asExternalModel() = Achievement(
     id = id ?: "null",
     name = name ?: "null",
-    content = content ?: "null",
+    description = description ?: "null",
     image = image ?: "null",
     category = when (category) {
         "comment" -> DatabaseCategory.COMMENT
@@ -19,4 +19,23 @@ internal fun AchievementEntity.asExternalModel() = Achievement(
         else -> DatabaseCategory.ALL
     },
     maxProgress = maxProgress ?: 0,
+    requestCode = requestCode ?: "null"
+)
+
+fun Achievement.toEntity() = AchievementEntity(
+    id = id,
+    name = name,
+    description = description,
+    image = image,
+    category = when (category) {
+        DatabaseCategory.COMMENT ->"comment"
+        DatabaseCategory.POST -> "post"
+        DatabaseCategory.USER -> "user"
+        DatabaseCategory.ACHIEVEMENT -> "achievement"
+        DatabaseCategory.RANK -> "rank"
+        DatabaseCategory.ALL -> "exception"
+        else -> "exception"
+    },
+    maxProgress = maxProgress,
+    requestCode = requestCode
 )

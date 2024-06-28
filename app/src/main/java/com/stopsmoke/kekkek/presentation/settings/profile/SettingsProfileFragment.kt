@@ -79,7 +79,8 @@ class SettingsProfileFragment : Fragment() {
         }
 
         binding.clProfileServiceOut.setOnClickListener {
-            viewModel.withdraw()
+            val dialog = SettingServiceOutDialogFragment()
+            dialog.show(requireActivity().supportFragmentManager, "ServiceOutDialogFragment")
         }
 
         viewModel.onboardingScreenRequest.collectLatestWithLifecycle(lifecycle) {

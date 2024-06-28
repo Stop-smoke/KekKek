@@ -1,7 +1,10 @@
 package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.UpdateUserSmokingSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,9 +19,31 @@ import javax.inject.Inject
 @HiltViewModel
 class SmokingSettingViewModel @Inject constructor(
     private val updateUserSmokingSettingsUseCase: UpdateUserSmokingSettingsUseCase,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _perDay = MutableStateFlow("") // 하루에 담배 몇개비 피우나요?
+    init {
+        viewModelScope.launch {
+            userRepository.getUserData().collect { user ->
+                when (user) {
+                    is User.Registered -> {
+                        _perDay.emit(user.userConfig.dailyCigarettesSmoked.toString())
+                        _perPack.emit(user.userConfig.packCigaretteCount.toString())
+                        _packPrice.emit(user.userConfig.packPrice.toString())
+                        _resultUserSettings.emit(SmokingSettingUiState.Success)
+                    }
+
+                    else -> {
+                        _resultUserSettings.emit(SmokingSettingUiState.Error(Throwable("유저가 등록되지 않음")))
+                    }
+                }
+            }
+        }
+    }
+
+    val user = userRepository.getUserData()
+
+    private val _perDay : MutableStateFlow<String> = MutableStateFlow("") // 하루에 담배 몇개비 피우나요?
     val perDay = _perDay.asStateFlow()
 
     fun updateSmokingPerDay(perDay: String) {
@@ -109,10 +134,12 @@ class SmokingSettingViewModel @Inject constructor(
     fun updateUserConfig() {
         viewModelScope.launch {
             try {
-                updateUserSmokingSettingsUseCase(
-                    perDay.value.toInt(),
-                    perPack.value.toInt(),
-                    packPrice.value.toInt(),
+                userRepository.updateUserData(
+                    mapOf(
+                        "user_config.daily_cigarettes_smoked" to perDay.value.toInt(),
+                        "user_config.pack_cigarette_count" to perPack.value.toInt(),
+                        "user_config.pack_price" to packPrice.value.toInt()
+                    )
                 )
                 _resultUserSettings.emit(SmokingSettingUiState.Success)
             } catch (e: Exception) {

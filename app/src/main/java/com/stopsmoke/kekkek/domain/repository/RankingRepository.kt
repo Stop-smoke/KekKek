@@ -19,4 +19,5 @@ interface RankingRepository {
      */
 
     fun getMyRankingInfo()
+
 }

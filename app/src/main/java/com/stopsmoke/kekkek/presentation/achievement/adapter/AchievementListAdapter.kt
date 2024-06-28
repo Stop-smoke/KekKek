@@ -1,10 +1,18 @@
 package com.stopsmoke.kekkek.presentation.achievement.adapter
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
@@ -12,46 +20,59 @@ import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.achievement.AchievementViewModel
 
 class AchievementListAdapter(
-    private val viewModel: AchievementViewModel
 ) :
-    PagingDataAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
+    ListAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
 
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
-        private val viewModel: AchievementViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
-        val clearList = when (viewModel.userData) {
-            is User.Registered -> viewModel.userData.clearAchievementsList
-            else -> emptyList()
-        }
+        fun bind(achievement: AchievementItem) = with(binding){
 
-        fun bind(achievement: AchievementItem) {
-            val currentProgressItem = viewModel.getCurrentItem()
+            tvAchievementTitle.text = achievement.name
 
-            val currentProgress: Long = when (achievement.category) {
-                DatabaseCategory.COMMENT -> currentProgressItem.comment
-                DatabaseCategory.POST -> currentProgressItem.post
-                DatabaseCategory.USER -> currentProgressItem.time
-                DatabaseCategory.ACHIEVEMENT -> currentProgressItem.achievement
-                DatabaseCategory.RANK -> currentProgressItem.rank
-                DatabaseCategory.ALL -> 0
-            }
+            val progressPercentage = (achievement.progress.toDouble() * 100).toInt()
+            liAchievementProgress.apply {
+                setProgress(0, false)
 
-            binding.tvAchievementTitle.text = achievement.name
-            binding.liAchievementProgress.progress = currentProgress.toInt()
-            binding.liAchievementProgress.max = achievement.maxProgress
-            binding.tvAchievementDescription.text = achievement.content
-            if (currentProgress < achievement.maxProgress) {
-                binding.tvAchievementProgressNumber.text =
-                    "${currentProgress}/${achievement.maxProgress}"
-            } else {
-                binding.tvAchievementProgressNumber.text =
-                    "${achievement.maxProgress}/${achievement.maxProgress}"
-
-                if (achievement.id !in clearList) {
-                    viewModel.upDateUserAchievementList(achievement.id)
+                post {
+                    val targetProgress = if (progressPercentage > 100) 100 else progressPercentage
+                    setProgress(targetProgress, true)
                 }
             }
+
+            tvAchievementDescription.text = achievement.description
+
+            var textCurrentProgress = 0
+
+            if(achievement.currentProgress >= achievement.maxProgress
+                && achievement.category != DatabaseCategory.RANK) { // 랭킹 이외 업적 클리어
+                textCurrentProgress = achievement.maxProgress
+                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                ivAchievementItemChecked.visibility = View.VISIBLE
+            }
+            else if(achievement.currentProgress < achievement.maxProgress // 랭킹 이외 업적 논 클리어
+                && achievement.category != DatabaseCategory.RANK){
+                textCurrentProgress = achievement.currentProgress
+                clAchievementRoot.setBackgroundColor(Color.WHITE)
+                ivAchievementItemChecked.visibility = View.GONE
+            }
+            else if(achievement.currentProgress <= achievement.maxProgress // 랭킹 업적 클리어
+                && achievement.category == DatabaseCategory.RANK){
+                textCurrentProgress = achievement.maxProgress
+                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                ivAchievementItemChecked.visibility = View.VISIBLE
+            }
+            else if(achievement.currentProgress > achievement.maxProgress // 랭킹 업적 논 클리어
+                && achievement.category == DatabaseCategory.RANK){
+                textCurrentProgress = achievement.currentProgress
+                clAchievementRoot.setBackgroundColor(Color.WHITE)
+                ivAchievementItemChecked.visibility = View.GONE
+            }
+
+            tvAchievementProgressNumber.text = "${textCurrentProgress} / ${achievement.maxProgress}"
+
+            civAchievementImage.load(achievement.image)
+
         }
     }
 
@@ -61,7 +82,7 @@ class AchievementListAdapter(
             parent,
             false
         )
-        return AchievementViewHolder(view, viewModel)
+        return AchievementViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
@@ -74,14 +95,14 @@ class AchievementListAdapter(
                 oldItem: AchievementItem,
                 newItem: AchievementItem
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem == newItem
             }
 
             override fun areContentsTheSame(
                 oldItem: AchievementItem,
                 newItem: AchievementItem
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
 
         }

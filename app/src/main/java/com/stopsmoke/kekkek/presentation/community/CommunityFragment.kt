@@ -127,7 +127,6 @@ class CommunityFragment : Fragment() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
-
                     findNavController().navigate(
                         resId = R.id.action_community_to_user_profile_screen,
                         args = bundleOf("uid" to uid)
