@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.domain.model.Post
@@ -19,6 +21,13 @@ class PostWriteViewModel @Inject constructor(
 
     private val _post = MutableStateFlow<Post?>(null)
     val post get() = _post.asStateFlow()
+
+    private val _myText = MutableLiveData<String>()
+    val myText: LiveData<String> = _myText
+
+    fun setString(text: String) {
+        _myText.value = text
+    }
 
     fun addPost(post: PostEdit) {
         viewModelScope.launch {

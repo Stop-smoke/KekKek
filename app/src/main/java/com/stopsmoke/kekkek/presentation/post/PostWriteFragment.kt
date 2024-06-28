@@ -51,6 +51,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import android.media.ExifInterface
+import android.text.Html
+import android.text.SpannedString
+import androidx.core.text.HtmlCompat
+import androidx.core.text.set
 
 @AndroidEntryPoint
 class PostWriteFragment : Fragment() {
@@ -189,6 +193,13 @@ class PostWriteFragment : Fragment() {
                     createDialogBuilder()
                 }
         }
+        myText.observe(viewLifecycleOwner) {
+            binding.etPostWriteContent.removeTextChangedListener(textWatcher)
+            binding.etPostWriteContent.setSelection(it.length)
+            binding.etPostWriteContent.setText(Html.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY))
+            Log.d("it",it.toString())
+            binding.etPostWriteContent.addTextChangedListener(textWatcher)
+        }
     }
 
     private fun onBind(post: Post) = with(binding) {
@@ -218,7 +229,7 @@ class PostWriteFragment : Fragment() {
         binding.ivPostWriteImage.visibility = View.VISIBLE
     }
 
-    private fun getOrientation(uri: Uri):Int {
+    private fun getOrientation(uri: Uri): Int {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         inputStream?.use { stream ->
             val exifInterface = ExifInterface(stream)
@@ -232,7 +243,7 @@ class PostWriteFragment : Fragment() {
 
     private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
         val matrix = Matrix()
-        when(orientation) {
+        when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
             ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
             ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
@@ -260,26 +271,45 @@ class PostWriteFragment : Fragment() {
         return output
     }
 
+    private var boldIndex = 0
+    private var normalIndex = 0
+
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(editText: Editable) {
+            viewModel.setString(editText.toString())
+        }
+    }
+
     private fun initTextEditor() = with(binding) {
 
-        etPostWriteContent.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//        etPostWriteContent.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//
+//            override fun afterTextChanged(editText: Editable?) {
+//                if (editText != null) {
+//                    applyActiveStyles(editText, editText.length - 1, editText.length)
+//                }
+//            }
+//        })
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(editText: Editable?) {
-                if(editText?.length != 0) {
-                    editText?.let {
-                        applyActiveStyles(it, it.length-1, it.length)
-                    }
-                }
-            }
-        })
+        etPostWriteContent.addTextChangedListener(textWatcher)
 
         ivPostWriteBold.setOnClickListener {
             isBold = !isBold
+            if(isBold) {
+                binding.etPostWriteContent.append("<b>")
+                boldIndex = etPostWriteContent.text.length
+            } else {
+                binding.etPostWriteContent.append("</b>")
+                normalIndex = etPostWriteContent.text.length
+            }
             ivPostWriteBold.isSelected = isBold
-            applyCurrentStylesToSelection()
         }
         ivPostWriteItalic.setOnClickListener {
             isItalic = !isItalic
@@ -321,55 +351,59 @@ class PostWriteFragment : Fragment() {
         val start = binding.etPostWriteContent.selectionStart
         Log.d("start", start.toString())
         val end = binding.etPostWriteContent.selectionEnd
-        Log.d("end",end.toString())
+        Log.d("end", end.toString())
         applyActiveStyles(editable, start, end)
     }
 
     private fun applyActiveStyles(spannableString: Editable, start: Int, end: Int) {
-        // spannableString: 가가 start : 1 end : 2
+        Log.d("bold", "${isBold} $boldIndex $normalIndex $end")
+        val spanString = SpannedString(spannableString.toString())
         if (isBold) {
             spannableString.setSpan(
                 StyleSpan(Typeface.BOLD),
-                start,
+                boldIndex,
                 end,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         } else {
-            spannableString.getSpans(start, end, StyleSpan::class.java).forEach {
-                if(it.style == Typeface.BOLD) spannableString.removeSpan(it)
-            }
-        }
-        if (isItalic) {
             spannableString.setSpan(
-                StyleSpan(Typeface.ITALIC),
-                start,
+                StyleSpan(Typeface.NORMAL),
+                normalIndex,
                 end,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-        } else {
-            spannableString.getSpans(start, end, StyleSpan::class.java).forEach {
-                if(it.style == Typeface.ITALIC) spannableString.removeSpan(it)
-            }
         }
-        if (isUnderline) {
-            spannableString.setSpan(UnderlineSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        } else {
-            spannableString.getSpans(start, end, UnderlineSpan::class.java).forEach {
-                spannableString.removeSpan(it)
-            }
-        }
-        if (isStrikethrough) {
-            spannableString.setSpan(
-                StrikethroughSpan(),
-                start,
-                end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        } else {
-            spannableString.getSpans(start, end, StrikethroughSpan::class.java).forEach {
-                spannableString.removeSpan(it)
-            }
-        }
+//        if (isItalic) {
+//            spannableString.setSpan(
+//                StyleSpan(Typeface.ITALIC),
+//                start,
+//                end,
+//                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+//            )
+//        } else {
+//            spannableString.getSpans(start, end, StyleSpan::class.java).forEach {
+//                if (it.style == Typeface.ITALIC) spannableString.removeSpan(it)
+//            }
+//        }
+//        if (isUnderline) {
+//            spannableString.setSpan(UnderlineSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+//        } else {
+//            spannableString.getSpans(start, end, UnderlineSpan::class.java).forEach {
+//                spannableString.removeSpan(it)
+//            }
+//        }
+//        if (isStrikethrough) {
+//            spannableString.setSpan(
+//                StrikethroughSpan(),
+//                start,
+//                end,
+//                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+//            )
+//        } else {
+//            spannableString.getSpans(start, end, StrikethroughSpan::class.java).forEach {
+//                spannableString.removeSpan(it)
+//            }
+//        }
         currentTextColor?.let {
             spannableString.setSpan(
                 ForegroundColorSpan(it),
