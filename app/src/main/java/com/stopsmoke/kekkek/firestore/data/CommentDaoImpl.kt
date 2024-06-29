@@ -3,7 +3,9 @@ package com.stopsmoke.kekkek.firestore.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.AggregateSource
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
@@ -12,6 +14,7 @@ import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
+import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -91,8 +94,12 @@ class CommentDaoImpl @Inject constructor(
             .collection(COMMENT_COLLECTION)
             .document().let { documentReference ->
                 documentReference.set(
-                    commentEntity.copy(id = documentReference.id)
+                    commentEntity.copy(
+                        id = documentReference.id
+                    )
                 )
+                documentReference.update("date_time.created", FieldValue.serverTimestamp())
+                documentReference.update("date_time.modified", FieldValue.serverTimestamp())
             }
             .await()
     }
