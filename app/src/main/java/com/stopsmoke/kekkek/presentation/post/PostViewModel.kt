@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.post
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
@@ -19,7 +18,6 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -88,10 +86,21 @@ class PostViewModel @Inject constructor(
             initialValue = null
         )
 
+    private val _previewCommentItem: MutableStateFlow<List<Comment>> = MutableStateFlow(emptyList())
+    val previewCommentItem get() = _previewCommentItem.asStateFlow()
+
+    fun updatePreviewCommentItem(comment: Comment) {
+        viewModelScope.launch {
+            val newComment = previewCommentItem.value.toMutableList()
+            newComment.add(comment)
+            _previewCommentItem.emit(newComment)
+        }
+    }
+
     private val replyTransferLike: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val comment: Flow<PagingData<CommentUiState>> = postId.flatMapLatest {
+    val comment = postId.flatMapLatest {
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
@@ -140,15 +149,19 @@ class PostViewModel @Inject constructor(
             it.printStackTrace()
         }
 
-    fun addComment(text: String, postTitle: String) {
+    fun addComment(text: String) {
         try {
             viewModelScope.launch {
                 if (post.value == null) return@launch
-                addCommentUseCase(
+                val newCommentDocId = addCommentUseCase(
                     postId = post.value!!.id,
-                    postTitle = postTitle,
+                    postTitle = post.value!!.title,
                     postType = post.value!!.category,
                     text = text
+                )
+
+                updatePreviewCommentItem(
+                    commentRepository.getComment(postId.value!!, newCommentDocId).first()
                 )
             }
         } catch (e: Exception) {

@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
@@ -43,6 +44,8 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     private val viewModel: PostViewModel by viewModels()
 
     private lateinit var postViewAdapter: PostViewAdapter
+
+    private lateinit var previewCommentAdapter: PreviewCommentAdapter
 
     private val postDeleteDialog = lazy {
         AlertDialog.Builder(requireContext())
@@ -110,7 +113,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             .setMessage("댓글을 삭제하시겠습니까?")
             .setPositiveButton("예") { dialog, _ ->
                 viewModel.deleteComment(selectCommentId)
-                postViewAdapter.refresh()
+//                postViewAdapter.refresh()
                 dialog.dismiss()
             }
             .setNegativeButton("취소") { dialog, _ ->
@@ -158,6 +161,10 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
             postViewAdapter.submitData(it)
         }
+
+        viewModel.previewCommentItem.collectLatestWithLifecycle(lifecycle) {
+            previewCommentAdapter.submitList(it)
+        }
     }
 
     private fun observeBookmarkState() = lifecycleScope.launch {
@@ -188,7 +195,8 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private fun initCommentRecyclerView() {
         postViewAdapter = PostViewAdapter()
-        binding.rvPostView.adapter = postViewAdapter
+        previewCommentAdapter = PreviewCommentAdapter()
+        binding.rvPostView.adapter = ConcatAdapter(postViewAdapter, previewCommentAdapter)
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
 
         val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
@@ -281,7 +289,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     override fun commentLikeClick(comment: Comment) {
         viewModel.commentLikeClick(comment)
-        postViewAdapter.refresh()
+//        postViewAdapter.refresh()
     }
 
     override fun clickPostLike(post: Post) {
