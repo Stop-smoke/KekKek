@@ -44,6 +44,81 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private lateinit var postViewAdapter: PostViewAdapter
 
+    private val postDeleteDialog = lazy {
+        AlertDialog.Builder(requireContext())
+            .setTitle("게시글 삭제")
+            .setMessage("게시글을 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { dialog, _ ->
+                viewModel.post.value?.id?.let { postId ->
+                    viewModel.deletePost(postId)
+                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+    }
+
+    private val postActionDialog = lazy {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomsheetDialogBinding =
+            FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
+
+        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
+            findNavController().navigate(R.id.action_post_view_to_my_complaint)
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
+            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+
+            postDeleteDialog.value.show()
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomsheetDialogBinding.tvEditPost.setOnClickListener {
+            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+
+            findNavController().navigate(
+                resId = R.id.action_post_view_to_post_edit,
+                args = bundleOf("post_id" to viewModel.postId.value)
+            )
+            bottomSheetDialog.dismiss()
+        }
+
+        (viewModel.user.value as? User.Registered)?.let { user ->
+            if (viewModel.post.value?.written?.uid == user.uid) {
+                bottomsheetDialogBinding.tvEditPost.visibility = View.VISIBLE
+                bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
+            } else {
+                bottomsheetDialogBinding.tvEditPost.visibility = View.GONE
+                bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
+            }
+        }
+        bottomSheetDialog
+    }
+
+    private lateinit var selectCommentId: String
+
+    private val commentDeleteDialog = lazy {
+        AlertDialog.Builder(requireContext())
+            .setTitle("댓글 삭제")
+            .setMessage("댓글을 삭제하시겠습니까?")
+            .setPositiveButton("예") { dialog, _ ->
+                viewModel.deleteComment(selectCommentId)
+                postViewAdapter.refresh()
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -121,23 +196,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
-    private fun showCommentDeleteDialog(postId: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("댓글 삭제")
-            .setMessage("댓글을 삭제하시겠습니까?")
-            .setPositiveButton("예") { dialog, _ ->
-                viewModel.deleteComment(postId)
-                postViewAdapter.refresh()
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
-    }
-
-
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
             findNavController().popBackStack()
@@ -148,8 +206,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
             if (comment.isEmpty()) {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.addComment(text = comment, postTitle = viewModel.post.value?.title ?: "")
-                postViewAdapter.refresh()
+                viewModel.addComment(text = comment)
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
             }
@@ -160,82 +217,8 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         }
 
         includePostViewAppBar.ivPostMore.setOnClickListener {
-            showBottomSheetDialog()
+            postActionDialog.value.show()
         }
-    }
-
-    private fun showBottomSheetDialog() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        val bottomsheetDialogBinding =
-            FragmentPostViewBottomsheetDialogBinding.inflate(layoutInflater)
-        bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
-
-        bottomsheetDialogBinding.tvReportPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_view_to_my_complaint)
-            bottomSheetDialog.dismiss()
-        }
-
-        bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-            if (viewModel.user.value !is User.Registered) return@setOnClickListener
-
-            showDeleteConfirmationDialog()
-            bottomSheetDialog.dismiss()
-        }
-
-        bottomsheetDialogBinding.tvEditPost.setOnClickListener {
-            if (viewModel.user.value !is User.Registered) return@setOnClickListener
-
-            findNavController().navigate(
-                resId = R.id.action_post_view_to_post_edit,
-                args = bundleOf("post_id" to viewModel.postId.value)
-            )
-            bottomSheetDialog.dismiss()
-        }
-
-
-        // 일단
-        when (viewModel.user.value) {
-            is User.Error -> {
-
-            }
-
-            User.Guest -> {
-
-            }
-
-            is User.Registered ->
-                if (viewModel.post.value?.written?.uid == (viewModel.user.value as User.Registered).uid) {
-                    bottomsheetDialogBinding.tvEditPost.visibility = View.VISIBLE
-                    bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
-                } else {
-                    bottomsheetDialogBinding.tvEditPost.visibility = View.GONE
-                    bottomsheetDialogBinding.tvDeletePost.visibility = View.GONE
-                }
-
-            null -> {
-
-            }
-        }
-        bottomSheetDialog.show()
-    }
-
-    private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시글 삭제")
-            .setMessage("게시글을 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { dialog, _ ->
-                viewModel.post.value?.id?.let { postId ->
-                    viewModel.deletePost(postId)
-                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
     }
 
     override fun onResume() {
@@ -247,6 +230,27 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         super.onDestroyView()
         activity?.visible()
         _binding = null
+        dismissPostDeleteDialog()
+        dismissCommentDeleteDialog()
+        dismissPostActionDialog()
+    }
+
+    private fun dismissPostDeleteDialog() {
+        if (postDeleteDialog.isInitialized()) {
+            postDeleteDialog.value.dismiss()
+        }
+    }
+
+    private fun dismissCommentDeleteDialog() {
+        if (commentDeleteDialog.isInitialized()) {
+            commentDeleteDialog.value.dismiss()
+        }
+    }
+
+    private fun dismissPostActionDialog() {
+        if (postActionDialog.isInitialized()) {
+            postActionDialog.value.dismiss()
+        }
     }
 
     override fun onDestroy() {
@@ -259,23 +263,12 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
     }
 
-
     override fun deleteItem(comment: Comment) {
-        when(val user = viewModel.user.value){
-            is User.Error -> {
+        val user = viewModel.user.value as? User.Registered ?: return
 
-            }
-
-            User.Guest -> {
-
-            }
-
-            is User.Registered ->
-                if (comment.written.uid == user.uid) {
-                    showCommentDeleteDialog(comment.id)
-                }
-
-            null -> {}
+        if (comment.written.uid == user.uid) {
+            selectCommentId = comment.id
+            commentDeleteDialog.value.show()
         }
     }
 
