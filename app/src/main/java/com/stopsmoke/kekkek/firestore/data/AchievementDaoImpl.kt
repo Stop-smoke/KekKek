@@ -1,18 +1,12 @@
 package com.stopsmoke.kekkek.firestore.data
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.firestore.dao.AchievementDao
-import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
@@ -53,6 +47,12 @@ class AchievementDaoImpl @Inject constructor(
             throw e
         }
 
+    }
+
+    override suspend fun getAchievementListItem(achievementIdList: List<String>): Flow<List<AchievementEntity>> {
+        return firestore.collection(COLLECTION)
+            .whereIn("id", achievementIdList)
+            .dataObjects<AchievementEntity>()
     }
 
 

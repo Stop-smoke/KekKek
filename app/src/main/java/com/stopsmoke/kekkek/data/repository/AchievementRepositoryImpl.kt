@@ -36,6 +36,13 @@ class AchievementRepositoryImpl @Inject constructor(
         return achievementDao.getAchievementCount(category.toRequestString())
     }
 
+    override suspend fun getAchievementListItem(achievementIdList: List<String>): Flow<List<Achievement>> {
+        return achievementDao.getAchievementListItem(achievementIdList).map{
+            it.map {
+                it.asExternalModel()
+            }
+        }
+    }
 
 
     private fun DatabaseCategory.toRequestString():String? = when(this){

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.achievement
+package com.stopsmoke.kekkek.presentation.my.achievement
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

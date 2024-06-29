@@ -17,9 +17,9 @@ import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.achievement.CurrentProgress
-import com.stopsmoke.kekkek.presentation.achievement.emptyCurrentProgress
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
+import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
 import com.stopsmoke.kekkek.presentation.getTotalDay
 import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
 import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
