@@ -87,12 +87,14 @@ class CommentDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun addComment(commentEntity: CommentEntity) {
-        firestore
-            .collection(POST_COLLECTION)
+    override suspend fun addComment(commentEntity: CommentEntity): String {
+        val documentId: String
+
+        firestore.collection(POST_COLLECTION)
             .document(commentEntity.parent!!.postId!!)
             .collection(COMMENT_COLLECTION)
             .document().let { documentReference ->
+                documentId = documentReference.id
                 documentReference.set(
                     commentEntity.copy(
                         id = documentReference.id
@@ -102,6 +104,8 @@ class CommentDaoImpl @Inject constructor(
                 documentReference.update("date_time.modified", FieldValue.serverTimestamp())
             }
             .await()
+
+        return documentId
     }
 
     override suspend fun setCommentItem(commentEntity: CommentEntity) {

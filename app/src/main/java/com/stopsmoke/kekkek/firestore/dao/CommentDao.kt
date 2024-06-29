@@ -12,7 +12,10 @@ interface CommentDao {
 
     fun getCommentItems(commentIdList: List<String>): Flow<PagingData<CommentEntity>>
 
-    suspend fun addComment(commentEntity: CommentEntity)
+    /**
+     * firestore document ID 값을 리턴합니다
+     */
+    suspend fun addComment(commentEntity: CommentEntity): String
 
     suspend fun setCommentItem(commentEntity: CommentEntity)
 

@@ -75,8 +75,8 @@ class CommentRepositoryImpl @Inject constructor(
         }
 
 
-    override suspend fun addCommentItem(comment: Comment) {
-        commentDao.addComment(comment.toEntity())
+    override suspend fun addCommentItem(comment: Comment): String {
+        return commentDao.addComment(comment.toEntity())
     }
 
     override suspend fun setCommentItem(comment: Comment): Result<Unit> {
