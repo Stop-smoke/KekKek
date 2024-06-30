@@ -1,7 +1,9 @@
 package com.stopsmoke.kekkek.presentation.settings
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemSettingsListBinding
@@ -36,6 +38,17 @@ class SettingsAdapter(private val settingsOnClickListener: SettingsOnClickListen
         RecyclerView.ViewHolder(binding.root) {
         fun bind(setting: SettingsItem, settingsOnClickListener: SettingsOnClickListener) = with(binding) {
             tvSettingListName.text = setting.settingTitle
+            if(setting.settingTitle == "알림") {
+                ivSettingListShowMore.visibility = View.GONE
+                tvSettingNotification.visibility = View.VISIBLE
+                val isNotificationActive =
+                    NotificationManagerCompat.from(root.context).areNotificationsEnabled()
+                if(isNotificationActive) {
+                    tvSettingNotification.text = "켜짐"
+                } else {
+                    tvSettingNotification.text = "꺼짐"
+                }
+            }
             root.setOnClickListener {
                 settingsOnClickListener.onClickSettingList(setting)
             }

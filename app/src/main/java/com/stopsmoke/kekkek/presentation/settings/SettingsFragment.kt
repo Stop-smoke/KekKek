@@ -1,11 +1,17 @@
 package com.stopsmoke.kekkek.presentation.settings
 
+import android.app.NotificationManager
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -96,12 +102,12 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 //                version = null,
 //                cardViewType = SettingsMultiViewEnum.MY_PAGE
 //            ),
-//            SettingsItem(
-//                settingTitle = "알림",
-//                cardViewType = SettingsMultiViewEnum.LIST,
-//                profileInfo = null,
-//                version = null
-//            ),
+            SettingsItem(
+                settingTitle = "알림",
+                cardViewType = SettingsMultiViewEnum.LIST,
+                profileInfo = null,
+                version = null
+            ),
 //            SettingsItem(
 //                settingTitle = "언어",
 //                cardViewType = SettingsMultiViewEnum.LIST,
@@ -154,7 +160,6 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
             findNavController().popBackStack()
         }
         includeSettingsProfile.root.setOnClickListener {
-            // settingItem 에 정보를 담은 채로 보내야함
             findNavController().navigate(R.id.action_setting_to_setting_profile)
         }
     }
@@ -172,7 +177,32 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     override fun onClickSettingList(settingItem: SettingsItem) {
         when (settingItem.settingTitle) {
             "알림" -> {
-                findNavController().navigate(R.id.action_setting_to_setting_notification)
+                val intent = when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+                        Intent().apply {
+                            action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                            putExtra(Settings.EXTRA_APP_PACKAGE, activity?.packageName)
+                        }
+                    }
+
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+                        Intent().apply {
+                            action = "android.settings.APP_NOTIFICAITON_SETTINGS"
+                            putExtra("app_package", activity?.packageName)
+                            putExtra("app_uid", activity?.applicationInfo?.uid)
+                        }
+                    }
+
+                    else -> {
+                        Intent().apply {
+                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            addCategory(Intent.CATEGORY_DEFAULT)
+                            data = Uri.parse("package:${activity?.packageName}")
+                        }
+                    }
+                }
+                startActivity(intent)
+//                findNavController().navigate(R.id.action_setting_to_setting_notification)
             }
 
             "언어" -> {

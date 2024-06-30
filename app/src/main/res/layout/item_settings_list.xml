@@ -25,8 +25,24 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:padding="4dp"
+        android:visibility="visible"
         android:src="@drawable/ic_right_arrow"
         android:clickable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_setting_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:padding="4dp"
+        tools:text="알림 상태"
+        android:visibility="invisible"
+        android:textSize="12sp"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
