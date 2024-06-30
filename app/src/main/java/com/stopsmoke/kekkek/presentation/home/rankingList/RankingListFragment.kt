@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
+import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -105,7 +107,11 @@ class RankingListFragment : Fragment() {
         super.onDestroy()
         _binding = null
         listAdapter.unregisterCallbackListener()
+        activity?.visible()
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
 }

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.achievement
+package com.stopsmoke.kekkek.presentation.my.achievement
 
 import android.os.Bundle
 import android.util.Log
@@ -6,14 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.achievement.adapter.AchievementListAdapter
+import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.my.MyViewModel
+import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +30,7 @@ class AchievementFragment : Fragment() {
         AchievementListAdapter()
     }
 
-    private val viewModel: AchievementViewModel by viewModels()
+    private val viewModel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -63,10 +67,8 @@ class AchievementFragment : Fragment() {
         activities.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is Result.Success -> {
-                    val activities = it.data
-                    viewModel.getCurrentProgress(activities)
+                    viewModel.getCurrentProgress()
                 }
-
                 else -> {}
             }
         }
@@ -75,7 +77,7 @@ class AchievementFragment : Fragment() {
             achievementListAdapter.submitList(sortedAchievement(it))
         }
 
-        currentProgressItem.collectLatestWithLifecycle(lifecycle){
+        user.collectLatestWithLifecycle(lifecycle){
             bindTopProgress()
         }
     }
@@ -94,14 +96,20 @@ class AchievementFragment : Fragment() {
         val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
 
         val insertClearList = clearList.filter { it.id !in (viewModel.user.value as User.Registered).clearAchievementsList }
-        viewModel.upDateUserAchievementList(insertClearList.map { it.id })
-
+        if(insertClearList.isNotEmpty()) {
+            viewModel.upDateUserAchievementList(insertClearList.map { it.id })
+        }
         return nonClearList + clearList
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        activity?.visible()
     }
 }
 

@@ -175,6 +175,17 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getActivities(userID: String): Flow<Activities> {
+        return userDao.getActivities(userID)
+            .map {
+                Activities(
+                    it.postCount,
+                    it.commentCount,
+                    it.bookmarkCount
+                )
+            }
+    }
+
     override suspend fun getAllUserData(): List<User> {
         return userDao.getAllUserData().map {
             it.toExternalModel()

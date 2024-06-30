@@ -5,30 +5,47 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.domain.model.Achievement
+import com.stopsmoke.kekkek.domain.model.Activities
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
+import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.domain.model.emptyActivities
+import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
+import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
+import com.stopsmoke.kekkek.presentation.getTotalDay
+import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
+import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    userRepository: UserRepository,
+    private val userRepository: UserRepository,
     postRepository: PostRepository,
     commentRepository: CommentRepository,
+    private val achievementRepository: AchievementRepository
 ) : ViewModel() {
 
     private val _uid = MutableStateFlow<String?>(null)
@@ -44,7 +61,7 @@ class UserProfileViewModel @Inject constructor(
     val errorHandler get() = _errorHandler.asSharedFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val user: Flow<User.Registered> = uid.flatMapLatest { userId ->
+    val user: StateFlow<User.Registered?> = uid.flatMapLatest { userId ->
         if (userId == null) {
             return@flatMapLatest emptyFlow()
         }
@@ -63,7 +80,12 @@ class UserProfileViewModel @Inject constructor(
                     is Result.Success -> it.data
                 }
             }
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<Post>> = uid.flatMapLatest { uid ->
@@ -96,6 +118,92 @@ class UserProfileViewModel @Inject constructor(
     fun navigatePostDetailScreen(postId: String) {
         viewModelScope.launch {
             _postDetailScreenNavigate.emit(postId)
+        }
+    }
+
+
+    //achievement
+    private val _currentProgressItem = MutableStateFlow<CurrentProgress>(emptyCurrentProgress())
+    val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
+
+    val achievements = currentProgressItem.flatMapLatest { progress ->
+        achievementRepository.getAchievementItems()
+            .let {
+                when (it) {
+                    is Result.Error -> {
+                        it.exception?.printStackTrace()
+                        emptyFlow()
+                    }
+
+                    is Result.Loading -> emptyFlow()
+                    is Result.Success -> it.data.map { pagingData ->
+                        pagingData.map {
+                            it.getItem().copy(
+                                currentProgress = when (it.category) {
+                                    DatabaseCategory.COMMENT -> progress.comment.toInt()
+                                    DatabaseCategory.POST -> progress.post.toInt()
+                                    DatabaseCategory.USER -> progress.user.toInt()
+                                    DatabaseCategory.ACHIEVEMENT -> progress.achievement.toInt()
+                                    DatabaseCategory.RANK -> progress.rank.toInt()
+                                    else -> {
+                                        0
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+    }
+
+    private fun Achievement.getItem() = AchievementItem(
+        id = id,
+        name = name,
+        description = description,
+        image = image,
+        category = category,
+        maxProgress = maxProgress,
+        requestCode = requestCode
+    )
+
+    val activities: StateFlow<Activities> = uid.flatMapLatest { uid ->
+        try {
+            userRepository.getActivities(uid!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyFlow()
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyActivities()
+    )
+
+    suspend fun getCurrentProgress(activities: Activities) {
+        val userData = user.value
+        when (userData) {
+            is User.Registered -> {
+                val list = userRepository.getAllUserData().map{user->
+                    (user as User.Registered).toRankingListItem()
+                }.filter { item->
+                    item.startTime != null
+                }.sortedBy {item ->
+                    item.startTime!!
+                }.map {
+                    it.userID
+                }
+                val userRank = list.indexOf(userData.uid)+1
+
+                _currentProgressItem.value = CurrentProgress(
+                    user = userData.getTotalDay(),
+                    comment = activities.commentCount,
+                    post = activities.postCount,
+                    rank = userRank.toLong(),
+                    achievement = userData.clearAchievementsList.size.toLong()
+                )
+            }
+
+            else -> _currentProgressItem.value = emptyCurrentProgress()
         }
     }
 }

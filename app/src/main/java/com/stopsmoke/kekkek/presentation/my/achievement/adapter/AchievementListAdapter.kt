@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.achievement.adapter
+package com.stopsmoke.kekkek.presentation.my.achievement.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -16,8 +16,8 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.achievement.AchievementViewModel
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementViewModel
 
 class AchievementListAdapter(
 ) :
@@ -43,17 +43,32 @@ class AchievementListAdapter(
             tvAchievementDescription.text = achievement.description
 
             var textCurrentProgress = 0
+
             if(achievement.currentProgress >= achievement.maxProgress
-                && achievement.category != DatabaseCategory.RANK) {
+                && achievement.category != DatabaseCategory.RANK) { // 랭킹 이외 업적 클리어
                 textCurrentProgress = achievement.maxProgress
                 clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
                 ivAchievementItemChecked.visibility = View.VISIBLE
             }
-            else {
+            else if(achievement.currentProgress < achievement.maxProgress // 랭킹 이외 업적 논 클리어
+                && achievement.category != DatabaseCategory.RANK){
                 textCurrentProgress = achievement.currentProgress
                 clAchievementRoot.setBackgroundColor(Color.WHITE)
                 ivAchievementItemChecked.visibility = View.GONE
             }
+            else if(achievement.currentProgress <= achievement.maxProgress // 랭킹 업적 클리어
+                && achievement.category == DatabaseCategory.RANK){
+                textCurrentProgress = achievement.maxProgress
+                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                ivAchievementItemChecked.visibility = View.VISIBLE
+            }
+            else if(achievement.currentProgress > achievement.maxProgress // 랭킹 업적 논 클리어
+                && achievement.category == DatabaseCategory.RANK){
+                textCurrentProgress = achievement.currentProgress
+                clAchievementRoot.setBackgroundColor(Color.WHITE)
+                ivAchievementItemChecked.visibility = View.GONE
+            }
+
             tvAchievementProgressNumber.text = "${textCurrentProgress} / ${achievement.maxProgress}"
 
             civAchievementImage.load(achievement.image)
