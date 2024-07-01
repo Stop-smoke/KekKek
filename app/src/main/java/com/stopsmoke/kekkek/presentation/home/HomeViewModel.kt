@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init())
+    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.NormalUiState.init())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var timerJob: Job? = null
@@ -72,7 +72,7 @@ class HomeViewModel @Inject constructor(
                     timeString = formatElapsedTime(totalMinutesTime)
                     calculateSavedValues(user.userConfig)
                     _uiState.emit(
-                        HomeUiState(
+                        HomeUiState.NormalUiState(
                             homeItem = HomeItem(
                                 timeString = timeString,
                                 savedMoney = savedMoneyPerMinute * totalMinutesTime,
@@ -94,21 +94,23 @@ class HomeViewModel @Inject constructor(
 
     fun startTimer() {
         timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (true) {
-                timeString =
-                    formatElapsedTime(
-                        (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime()
-                            ?: 0
-                    )
-                _uiState.update { prev ->
-                    prev.copy(
-                        homeItem = prev.homeItem.copy(
-                            timeString = timeString
+        (uiState.value as? HomeUiState.NormalUiState).let{
+            timerJob = viewModelScope.launch {
+                while (true) {
+                    timeString =
+                        formatElapsedTime(
+                            (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime()
+                                ?: 0
                         )
-                    )
+                    _uiState.update { prev ->
+                        (prev as HomeUiState.NormalUiState).copy(
+                            homeItem = prev.homeItem.copy(
+                                timeString = timeString
+                            )
+                        )
+                    }
+                    delay(1000) // 1 second
                 }
-                delay(1000) // 1 second
             }
         }
     }
@@ -132,7 +134,7 @@ class HomeViewModel @Inject constructor(
             val updatedUserHistory =
                 user.history.copy(
                     historyTimeList = updatedHistoryTimeList,
-                    totalMinutesTime = timeStringToMinutes(uiState.value.homeItem.timeString)
+                    totalMinutesTime = timeStringToMinutes((uiState.value as HomeUiState.NormalUiState).homeItem.timeString)
                 )
             userRepository.setUserData(user.copy(history = updatedUserHistory))
 

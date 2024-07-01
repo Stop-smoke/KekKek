@@ -18,6 +18,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -25,7 +26,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -122,25 +123,8 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.updateUserData()
-        initTimerControllerListener()
     }
 
-
-    private fun initTimerControllerListener() {
-        val startDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play)
-        val stopDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_stop)
-
-        val currentDrawable = binding.ivHomeTimerController.drawable
-
-        binding.ivHomeTimerController.setOnClickListener {
-            if (viewModel.uiState.value.startTimerSate
-            ) {
-                timerStopDialog.show(childFragmentManager, "timerStopDialog")
-            } else {
-                viewModel.setStartUserHistory()
-            }
-        }
-    }
 
 
     private fun initToolbar() {
@@ -159,7 +143,12 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    onBind(state)
+                    when(state) {
+                        is HomeUiState.NormalUiState -> onBind(state)
+                        is HomeUiState.ErrorExit -> {
+                            errorExit(findNavController())
+                        }
+                    }
                 }
         }
 
@@ -179,7 +168,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun onBind(uiState: HomeUiState) = with(binding) {
+    private fun onBind(uiState: HomeUiState.NormalUiState) = with(binding) {
         uiState.homeItem.let {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
 //            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
@@ -193,6 +182,19 @@ class HomeFragment : Fragment() {
         } else if (!uiState.startTimerSate) {
             ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
             viewModel.stopTimer()
+        }
+
+        initTimerControllerListener()
+    }
+
+    private fun initTimerControllerListener() {
+        binding.ivHomeTimerController.setOnClickListener {
+            if ((viewModel.uiState.value as HomeUiState.NormalUiState).startTimerSate
+            ) {
+                timerStopDialog.show(childFragmentManager, "timerStopDialog")
+            } else {
+                viewModel.setStartUserHistory()
+            }
         }
     }
 
