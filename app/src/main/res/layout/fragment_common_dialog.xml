@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_smoking_addication_test_exit_dialog"
     android:padding="20dp">
 
@@ -13,8 +14,19 @@
         android:text="테스트를 종료하시겠습니까?"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/iv_dialog_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="4dp"/>
+
+    <ImageView
+        android:id="@+id/iv_dialog_icon"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/tv_dialog_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_dialog_title"
+        tools:src="@drawable/ic_timer"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tv_dialog_content"
@@ -25,7 +37,7 @@
         android:textColor="@color/gray_gray1"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_dialog_title"
+        app:layout_constraintStart_toStartOf="@+id/iv_dialog_icon"
         app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title" />
 
     <androidx.appcompat.widget.AppCompatButton
