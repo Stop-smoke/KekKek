@@ -20,6 +20,12 @@ class PostContentViewHolder(
         initUserProfileView(headerItem.user, headerItem.post)
         initPostView(headerItem.post, headerItem.commentNum)
         clickPostLike(headerItem.post)
+
+        binding.ivPostPoster.setOnClickListener {
+            headerItem.post?.let { post ->
+                callback?.navigateToUserProfile(post.written.uid)
+            }
+        }
     }
 
     private fun clickPostLike(post: Post?) {

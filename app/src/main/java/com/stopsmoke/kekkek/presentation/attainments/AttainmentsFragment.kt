@@ -61,9 +61,9 @@ class AttainmentsFragment : Fragment() {
 
     private fun onBind(item: AttainmentsItem) = with(binding) {
         tvAttainmentsTimerNum.text = item.timeString
-        tvAttainmentsDescriptionLife.text = formatToOneDecimalPlace(item.savedLife) + "일"
+        tvAttainmentsDescriptionLife.text = formatToOneDecimalPlace(item.savedLife) + "시간"
         tvAttainmentsDescriptionMoney.text =
-            item.savedMoney.toLong().toString().chunked(3).joinToString(",") + "원"
+            item.savedMoney.toLong().toString().reversed().chunked(3).joinToString(",").reversed() + "원"
         tvAttainmentsDescriptionCigarette.text = formatToOneDecimalPlace(item.savedCigarette) + "개비"
     }
 

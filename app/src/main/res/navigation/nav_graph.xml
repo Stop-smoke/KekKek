@@ -327,7 +327,7 @@
 
     <fragment
         android:id="@+id/achievement"
-        android:name="com.stopsmoke.kekkek.presentation.achievement.AchievementFragment"
+        android:name="com.stopsmoke.kekkek.presentation.my.achievement.AchievementFragment"
         app:route="achievement"
         tools:layout="@layout/fragment_achievement" />
 

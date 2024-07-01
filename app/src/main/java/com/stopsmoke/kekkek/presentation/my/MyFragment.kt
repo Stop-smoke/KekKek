@@ -7,17 +7,22 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
+import com.stopsmoke.kekkek.domain.model.Achievement
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +32,7 @@ class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding: FragmentMyBinding get() = _binding!!
 
-    private val viewModel: MyViewModel by viewModels()
+    private val viewModel: MyViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,40 +117,56 @@ class MyFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.userData.collectLatestWithLifecycle(lifecycle) { user ->
-            when (user) {
-                is User.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                }
+        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+            if (user != null)
+                when (user) {
+                    is User.Error -> {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    }
 
-                is User.Guest -> {
-                    binding.tvMyName.text = "로그인이 필요합니다."
-                    binding.tvMyWritingNum.text = "?"
-                    binding.tvMyCommentNum.text = "?"
-                    binding.tvMyBookmarkNum.text = "?"
-                }
+                    is User.Guest -> {
+                        binding.tvMyName.text = "로그인이 필요합니다."
+                        binding.tvMyWritingNum.text = "?"
+                        binding.tvMyCommentNum.text = "?"
+                        binding.tvMyBookmarkNum.text = "?"
+                    }
 
-                is User.Registered -> {
+                    is User.Registered -> {
 
-                    binding.tvMyName.text = user.name
-                    binding.tvMyRank.text = "랭킹 ${user.ranking}위"
+                        binding.tvMyName.text = user.name
+                        binding.tvMyRank.text = "랭킹 ${user.ranking}위"
 
-                    when (user.profileImage) {
-                        is ProfileImage.Default -> {
-                            binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
-                        }
+                        when (user.profileImage) {
+                            is ProfileImage.Default -> {
+                                binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
+                            }
 
-                        is ProfileImage.Web -> {
-                            binding.ivMyProfile.load((user.profileImage as ProfileImage.Web).url) {
-                                crossfade(true)
+                            is ProfileImage.Web -> {
+                                binding.ivMyProfile.load((user.profileImage as ProfileImage.Web).url) {
+                                    crossfade(true)
+                                }
                             }
                         }
-                    }
+
+                        viewModel.setAchievementIdList(user.clearAchievementsList.takeLast(3))
 //                    binding.itvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                    }
                 }
+        }
+
+        viewModel.currentClearAchievementList.collectLatestWithLifecycle(lifecycle){list ->
+            val imageList = listOf(
+                listOf(binding.circleIvMyAchievement1, binding.tvMyAchievement1),
+                listOf(binding.circleIvMyAchievement2, binding.tvMyAchievement2),
+                listOf(binding.circleIvMyAchievement3, binding.tvMyAchievement3)
+                )
+            list.forEachIndexed { index, achievement ->
+                (imageList[index][0] as ImageView).load(achievement.image)
+                (imageList[index][1] as TextView).text = achievement.name
             }
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_my_toolbar, menu)
