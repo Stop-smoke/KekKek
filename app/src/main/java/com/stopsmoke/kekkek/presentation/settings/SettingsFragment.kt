@@ -54,6 +54,14 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     override fun onResume() {
         super.onResume()
+        val isNotificationActive =
+            NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
+        Log.d("active",isNotificationActive.toString())
+        if(isNotificationActive) {
+            binding.tvSettingNotificationActive.text = "켜짐"
+        } else {
+            binding.tvSettingNotificationActive.text = "꺼짐"
+        }
         activity?.invisible()
     }
 
@@ -102,12 +110,12 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 //                version = null,
 //                cardViewType = SettingsMultiViewEnum.MY_PAGE
 //            ),
-            SettingsItem(
-                settingTitle = "알림",
-                cardViewType = SettingsMultiViewEnum.LIST,
-                profileInfo = null,
-                version = null
-            ),
+//            SettingsItem(
+//                settingTitle = "알림",
+//                cardViewType = SettingsMultiViewEnum.LIST,
+//                profileInfo = null,
+//                version = null
+//            ),
 //            SettingsItem(
 //                settingTitle = "언어",
 //                cardViewType = SettingsMultiViewEnum.LIST,
@@ -162,6 +170,9 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
         includeSettingsProfile.root.setOnClickListener {
             findNavController().navigate(R.id.action_setting_to_setting_profile)
         }
+        settingNotification.setOnClickListener {
+            notification()
+        }
     }
 
     override fun onDestroyView() {
@@ -174,37 +185,36 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
         findNavController().navigate(R.id.action_setting_to_setting_profile)
     }
 
-    override fun onClickSettingList(settingItem: SettingsItem) {
-        when (settingItem.settingTitle) {
-            "알림" -> {
-                val intent = when {
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-                        Intent().apply {
-                            action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                            putExtra(Settings.EXTRA_APP_PACKAGE, activity?.packageName)
-                        }
-                    }
-
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-                        Intent().apply {
-                            action = "android.settings.APP_NOTIFICAITON_SETTINGS"
-                            putExtra("app_package", activity?.packageName)
-                            putExtra("app_uid", activity?.applicationInfo?.uid)
-                        }
-                    }
-
-                    else -> {
-                        Intent().apply {
-                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            addCategory(Intent.CATEGORY_DEFAULT)
-                            data = Uri.parse("package:${activity?.packageName}")
-                        }
-                    }
+    private fun notification() {
+        val intent = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+                Intent().apply {
+                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                    putExtra(Settings.EXTRA_APP_PACKAGE, activity?.packageName)
                 }
-                startActivity(intent)
-//                findNavController().navigate(R.id.action_setting_to_setting_notification)
             }
 
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+                Intent().apply {
+                    action = "android.settings.APP_NOTIFICAITON_SETTINGS"
+                    putExtra("app_package", activity?.packageName)
+                    putExtra("app_uid", activity?.applicationInfo?.uid)
+                }
+            }
+
+            else -> {
+                Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addCategory(Intent.CATEGORY_DEFAULT)
+                    data = Uri.parse("package:${activity?.packageName}")
+                }
+            }
+        }
+        startActivity(intent)
+    }
+
+    override fun onClickSettingList(settingItem: SettingsItem) {
+        when (settingItem.settingTitle) {
             "언어" -> {
                 findNavController().navigate(R.id.action_setting_to_setting_language)
             }
