@@ -31,7 +31,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
                 }
@@ -44,7 +45,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
                 }
@@ -62,7 +64,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
             }
@@ -115,7 +118,8 @@ class CommentRepositoryImpl @Inject constructor(
                 val earliest = it.earliestReply.map { reply ->
                     reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                 }
-                it.asExternalModel(earliest)
+                val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                it.asExternalModel(earliest, isLiked)
             }
         }
     }

@@ -42,7 +42,8 @@ class AddCommentUseCase @Inject constructor(
             parent = CommentParent(
                 postType = postType, postId = postId, postTitle = postTitle
             ),
-            replyCount = 0
+            replyCount = 0,
+            isLiked = false
         )
         return commentRepository.addCommentItem(comment)
     }

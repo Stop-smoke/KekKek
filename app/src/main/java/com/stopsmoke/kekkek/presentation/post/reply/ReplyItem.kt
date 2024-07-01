@@ -66,7 +66,8 @@ fun ReplyRecyclerviewItem.ReplyRecyclerviewComment.toComment() = Comment(
     earliestReply = reply,
     written = written,
     parent = parent,
-    replyCount = 0
+    replyCount = 0,
+    isLiked = false
 )
 
 fun Reply.toReplyRecyclerviewItem() = ReplyRecyclerviewItem.ReplyRecyclerviewReply(
