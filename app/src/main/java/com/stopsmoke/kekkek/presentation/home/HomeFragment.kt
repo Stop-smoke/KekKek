@@ -32,6 +32,10 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by activityViewModels()
 
+    private val timerStopDialog: HomeTimerStopDialogFragment by lazy {
+        HomeTimerStopDialogFragment()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -131,22 +135,7 @@ class HomeFragment : Fragment() {
         binding.ivHomeTimerController.setOnClickListener {
             if (viewModel.uiState.value.startTimerSate
             ) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("타이머 초기화")
-                builder.setMessage("금연을 중단하시겠습니까? \n지금까지 노력하신 시간이 모두 초기화됩니다.")
-                builder.setIcon(R.drawable.ic_timer)
-
-                val listener = DialogInterface.OnClickListener { _, type ->
-                    when (type) {
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            viewModel.setStopUserHistory()
-                        }
-                    }
-                }
-
-                builder.setPositiveButton("예", listener)
-                builder.setNegativeButton("아니요", null)
-                builder.show()
+                timerStopDialog.show(childFragmentManager, "timerStopDialog")
             } else {
                 viewModel.setStartUserHistory()
             }
