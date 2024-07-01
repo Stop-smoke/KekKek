@@ -158,10 +158,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 .collectLatestWithLifecycle(lifecycle) { }
         }
 
-        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            postViewAdapter.submitData(it)
-        }
-
         viewModel.previewCommentItem.collectLatestWithLifecycle(lifecycle) {
             previewCommentAdapter.submitList(it)
         }
@@ -184,11 +180,6 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            if (!isNetworkAvailable(requireContext())) {
-                Toast.makeText(requireContext(), "네트워크 연결 오류", Toast.LENGTH_SHORT).show()
-                findNavController().popBackStack()
-                return@collectLatestWithLifecycle
-            }
             postViewAdapter.submitData(it)
         }
     }
@@ -288,8 +279,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     }
 
     override fun commentLikeClick(comment: Comment) {
-        viewModel.commentLikeClick(comment)
-//        postViewAdapter.refresh()
+        viewModel.toggleCommentLike(comment)
     }
 
     override fun clickPostLike(post: Post) {
