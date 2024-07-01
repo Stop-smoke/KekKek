@@ -1,7 +1,9 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,9 @@ import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiStat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 @AndroidEntryPoint
 class SettingsProfileFragment : Fragment() {
@@ -43,21 +48,63 @@ class SettingsProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                val inputStream = requireContext().contentResolver.openInputStream(uri)
-                if (inputStream != null) {
-                    viewModel.settingProfile(inputStream)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error resetting input stream",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                handleImageUrl(uri)
             } else {
                 Toast.makeText(requireContext(), "Error opening input stream", Toast.LENGTH_SHORT)
                     .show()
             }
         }
+    }
+
+    private fun handleImageUrl(uri: Uri) {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        if (inputStream != null) {
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val rotatedBitmap = getCorrectlyOrientedBitmap(uri, bitmap)
+            val rotatedInputStream = bitmapToInputStream(rotatedBitmap)
+            if (rotatedInputStream!=null) {
+                viewModel.settingProfile(rotatedInputStream)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Error converting bitmap to inputstream",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Error resetting input stream",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun bitmapToInputStream(bitmap: Bitmap): InputStream? {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        return if(bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)) {
+            ByteArrayInputStream(byteArrayOutputStream.toByteArray())
+        } else null
+    }
+
+    private fun getCorrectlyOrientedBitmap(uri: Uri, bitmap: Bitmap): Bitmap {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val exif = inputStream?.let { ExifInterface(it) }
+        val orientation = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        inputStream?.close()
+
+        return when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270f)
+            else -> bitmap
+        }
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, degree: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degree)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
 
@@ -189,17 +236,6 @@ class SettingsProfileFragment : Fragment() {
                 }
             }
     }
-
-    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
-        val matrix = Matrix()
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
-            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
-        }
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -29,6 +29,10 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
+import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
+import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -36,7 +40,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostViewFragment : Fragment(), PostCommentCallback {
+class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
 
     private var _binding: FragmentPostViewBinding? = null
     private val binding get() = _binding!!
@@ -195,6 +199,15 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
+    private fun showCommentDeleteDialog(commentId: String) {
+        val commentDeleteDialog = PostCommentDeleteDialogFragment(
+            this@PostViewFragment,
+            DeleteDialogType.CommentDeleteDialog(commentId)
+        )
+        commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
+    }
+
+
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
             findNavController().popBackStack()
@@ -206,6 +219,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment)
+//                postViewAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
             }
@@ -298,5 +312,17 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 "comment_id" to comment.id
             )
         )
+    }
+
+    //PostCommentDialogCallback
+    override fun deleteComment(commentId: String) {
+        viewModel.deleteComment(commentId)
+        postViewAdapter.refresh()
+    }
+
+    override fun deletePost(postId: String) {
+        viewModel.deletePost(postId)
+        Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 }

@@ -1,190 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/post_write"
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/post_write"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    xmlns:aztec="http://schemas.android.com/apk/res-auto"-->
+<!--    tools:context=".presentation.post.PostWriteFragment">-->
+
+<!--    <include-->
+<!--        android:id="@+id/include_post_write_app_bar"-->
+<!--        layout="@layout/fragment_post_write_app_bar" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/et_post_write_title"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:hint="@string/post_write_title"-->
+<!--        android:inputType="text"-->
+<!--        android:maxLines="1"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/include_post_write_app_bar" />-->
+
+<!--    <View-->
+<!--        android:id="@+id/grayline"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:background="@color/bg_thin_gray"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/et_post_write_title" />-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/cl_postWrite_editor"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="15dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/grayline">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_bold"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:padding="5dp"-->
+<!--            android:src="@drawable/ic_editor_1"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_italic"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_italic"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:src="@drawable/ic_editor_2"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_bold"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_underline"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_bold"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_bold" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_underline"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:paddingLeft="1dp"-->
+<!--            android:paddingTop="3dp"-->
+<!--            android:paddingBottom="3dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:src="@drawable/ic_editor_3"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_italic"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_line_through"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_italic"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_italic" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_line_through"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:clickable="true"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:src="@drawable/ic_editor_4"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_underline"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_text_color"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_underline"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_underline" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_text_color"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:src="@drawable/ic_editor_5"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_line_through"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_background_color"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_line_through"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_line_through" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_background_color"-->
+<!--            android:layout_width="33dp"-->
+<!--            android:layout_height="33dp"-->
+<!--            android:padding="4dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:src="@drawable/ic_editor_6"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_text_color"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_link"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_text_color"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_text_color" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_link"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:padding="3dp"-->
+<!--            android:layout_marginStart="24dp"-->
+<!--            android:background="@drawable/bg_text_editor"-->
+<!--            android:clickable="true"-->
+<!--            android:src="@drawable/ic_editor_8"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_post_write_background_color"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/iv_post_write_background_color" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/cl_post_write_content"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="#F4F6F8"-->
+<!--        android:padding="20dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/cl_postWrite_editor">-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/et_post_write_content"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:ems="10"-->
+<!--            android:gravity="start|top"-->
+<!--            android:hint="@string/post_write_content"-->
+<!--            android:inputType="textMultiLine"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/iv_post_write_image"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_post_write_image"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="gone"-->
+<!--            android:scaleType="fitXY"-->
+<!--            android:background="@drawable/bg_home_motivation"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aztec="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.post.PostWriteFragment">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/include_post_write_app_bar"
-        layout="@layout/fragment_post_write_app_bar" />
+    <org.wordpress.aztec.toolbar.AztecToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/aztec_format_bar_height"
+        android:layout_alignParentBottom="true">
+    </org.wordpress.aztec.toolbar.AztecToolbar>
 
-    <EditText
-        android:id="@+id/et_post_write_title"
+    <ScrollView
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
-        android:background="@android:color/transparent"
-        android:hint="@string/post_write_title"
-        android:inputType="text"
-        android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_post_write_app_bar" />
+        android:layout_above="@+id/toolbar"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true">
 
-    <View
-        android:id="@+id/grayline"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/bg_thin_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_post_write_title" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_postWrite_editor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/grayline">
-
-        <ImageView
-            android:id="@+id/iv_post_write_bold"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:padding="5dp"
-            android:src="@drawable/ic_editor_1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_italic"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_italic"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:src="@drawable/ic_editor_2"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_bold"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_underline"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_bold"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_bold" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_underline"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:paddingLeft="1dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:src="@drawable/ic_editor_3"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_italic"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_line_through"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_italic"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_italic" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_line_through"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="24dp"
-            android:clickable="true"
-            android:background="@drawable/bg_text_editor"
-            android:src="@drawable/ic_editor_4"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_underline"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_text_color"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_underline"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_underline" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_text_color"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:src="@drawable/ic_editor_5"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_line_through"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_background_color"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_line_through"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_line_through" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_background_color"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:padding="4dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:src="@drawable/ic_editor_6"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_text_color"
-            app:layout_constraintEnd_toStartOf="@+id/iv_post_write_link"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_text_color"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_text_color" />
-
-        <ImageView
-            android:id="@+id/iv_post_write_link"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="3dp"
-            android:layout_marginStart="24dp"
-            android:background="@drawable/bg_text_editor"
-            android:clickable="true"
-            android:src="@drawable/ic_editor_8"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_post_write_background_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_post_write_background_color"
-            app:layout_constraintTop_toTopOf="@+id/iv_post_write_background_color" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_post_write_content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#F4F6F8"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_postWrite_editor">
-
-        <EditText
-            android:id="@+id/et_post_write_content"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/post_write_content"
-            android:inputType="textMultiLine"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            android:id="@+id/container_frame_layout">
 
-        <ImageView
-            android:id="@+id/iv_post_write_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <org.wordpress.aztec.AztecText
+                android:id="@+id/visualEditor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:hint="@string/edit_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:scrollbars="vertical"
+                android:imeOptions="flagNoExtractUi"
+                aztec:historyEnable="true"
+                aztec:historySize="10"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <org.wordpress.aztec.source.SourceViewEditText
+                android:id="@+id/sourceEditor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:hint="@string/source_hint"
+                android:inputType="textNoSuggestions|textMultiLine"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:scrollbars="vertical"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:imeOptions="flagNoExtractUi"
+                aztec:codeBackgroundColor="@android:color/transparent"
+                aztec:codeTextColor="@android:color/white"/>
+
+        </FrameLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
