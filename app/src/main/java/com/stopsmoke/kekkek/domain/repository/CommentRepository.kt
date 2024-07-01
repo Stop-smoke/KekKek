@@ -23,4 +23,8 @@ interface CommentRepository {
    fun getCommentCount(postId: String): Flow<Long>
 
    fun getComment(postId: String, commentId: String): Flow<Comment>
+
+   suspend fun addCommentLike(postId: String, commentId: String)
+
+   suspend fun removeCommentLike(postId: String, commentId: String)
 }
