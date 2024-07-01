@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -133,6 +134,7 @@ class PostViewAdapter : PagingDataAdapter<CommentUiState, RecyclerView.ViewHolde
                 }
             }
 
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
                 oldItem: CommentUiState,
                 newItem: CommentUiState,
