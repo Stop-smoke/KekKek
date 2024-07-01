@@ -16,6 +16,41 @@
         android:id="@+id/include_settings_profile"
         layout="@layout/item_settings_profile" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setting_notification"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_setting_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4C4C4C"
+            android:textSize="18sp"
+            android:fontFamily="@font/pretendard_medium"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="알림" />
+
+        <TextView
+            android:id="@+id/tv_setting_notification_active"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:padding="4dp"
+            tools:text="알림 상태"
+            android:textSize="12sp"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_setting"
         android:layout_width="match_parent"

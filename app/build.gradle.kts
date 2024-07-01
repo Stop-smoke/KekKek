@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.androidx.runtime.android)
     implementation(libs.androidx.ui.text.android)
     implementation(libs.activity)
+    api("org.wordpress:aztec:v1.6.2")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // TEST
     testImplementation(libs.junit)
@@ -162,10 +164,10 @@ dependencies {
     implementation("androidx.exifinterface:exifinterface:1.3.7")
 
     //Lottie
-    implementation ("com.airbnb.android:lottie:6.0.0")
+    implementation("com.airbnb.android:lottie:6.0.0")
 
     //splash 아이콘 숨기기
-    implementation ("androidx.core:core-splashscreen:1.0.0-beta01")
+    implementation("androidx.core:core-splashscreen:1.0.0-beta01")
 
     // algolia 검색 api
     implementation("com.algolia:instantsearch-android-paging3:3.3.1")
