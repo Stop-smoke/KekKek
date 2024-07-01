@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
 
     val user = userRepository.getUserData().stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.Eagerly,:ㅈㅂ
         initialValue = null
     )
 
