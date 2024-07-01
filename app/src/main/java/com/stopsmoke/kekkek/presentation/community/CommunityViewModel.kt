@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -42,12 +43,17 @@ class CommunityViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        postRepository.getPost(postCategory)
-            .map { pagingData ->
-                pagingData.map { post ->
-                    post.toCommunityWritingListItem()
+        try {
+            postRepository.getPost(postCategory)
+                .map { pagingData ->
+                    pagingData.map { post ->
+                        post.toCommunityWritingListItem()
+                    }
                 }
-            }
+        } catch (e: Exception) {
+            _uiState.emit(CommunityUiState.ErrorExit)
+            emptyFlow()
+        }
     }
         .cachedIn(viewModelScope)
         .catch {
@@ -56,21 +62,26 @@ class CommunityViewModel @Inject constructor(
 
 
     val topPopularPosts = posts.flatMapLatest {
-        postRepository.getTopPopularItems()
+        try {
+            postRepository.getTopPopularItems()
+        } catch (e: Exception) {
+            _uiState.emit(CommunityUiState.ErrorExit)
+            emptyFlow()
+        }
     }
 
     fun setCategory(categoryString: String) {
-        updateCategory(categoryString.toPostCategory())
-    }
-
-    private fun updateCategory(postCategory: PostCategory) {
-        _category.value = postCategory
+        _category.value = categoryString.toPostCategory()
     }
 
     init {
         viewModelScope.launch {
-            val noticeBannerPost = postRepository.getTopNotice()
-            _noticeBanner.emit(noticeBannerPost)
+            try {
+                val noticeBannerPost = postRepository.getTopNotice()
+                _noticeBanner.emit(noticeBannerPost)
+            } catch (e: Exception) {
+                _uiState.emit(CommunityUiState.ErrorExit)
+            }
         }
     }
 

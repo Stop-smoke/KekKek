@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
 
     val user = userRepository.getUserData().stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,:ㅈㅂ
+        started = SharingStarted.Eagerly,
         initialValue = null
     )
 
@@ -265,6 +265,7 @@ class HomeViewModel @Inject constructor(
         }catch (e:Exception){
             _uiState.emit(HomeUiState.ErrorExit)
         }
+
     }
 
     fun getMyRank(){
