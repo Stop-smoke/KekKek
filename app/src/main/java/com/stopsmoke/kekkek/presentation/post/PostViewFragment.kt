@@ -32,6 +32,7 @@ import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
+import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -47,8 +48,8 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     private val viewModel: PostViewModel by viewModels()
 
     private lateinit var postViewAdapter: PostViewAdapter
-
     private lateinit var previewCommentAdapter: PreviewCommentAdapter
+    private lateinit var postConcatAdapter: ConcatAdapter
 
     private val postDeleteDialog = lazy {
         AlertDialog.Builder(requireContext())
@@ -143,26 +144,27 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListener()
         initCommentRecyclerView()
+        collectPostHeaderItem()
         observeCommentRecyclerViewItem()
         observeBookmarkState()
         postViewAdapter.registerCallback(this)
+        collectPreviewCommentItem()
+        setupListener()
+        autoScrollKeyboardWithRecyclerView()
+    }
 
+    private fun collectPostHeaderItem() {
         lifecycleScope.launch {
             combine(
                 viewModel.user,
                 viewModel.post,
                 viewModel.commentCount
             ) { user: User?, post: Post?, l: Long? ->
-                val headerItem = PostHeaderItem(user, post, l ?: 0)
+                val headerItem = PostContentItem(user, post, l ?: 0)
                 postViewAdapter.updatePostHeader(headerItem)
             }
                 .collectLatestWithLifecycle(lifecycle) { }
-        }
-
-        viewModel.previewCommentItem.collectLatestWithLifecycle(lifecycle) {
-            previewCommentAdapter.submitList(it)
         }
     }
 
@@ -190,7 +192,8 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     private fun initCommentRecyclerView() {
         postViewAdapter = PostViewAdapter()
         previewCommentAdapter = PreviewCommentAdapter()
-        binding.rvPostView.adapter = ConcatAdapter(postViewAdapter, previewCommentAdapter)
+        postConcatAdapter = ConcatAdapter(postViewAdapter, previewCommentAdapter)
+        binding.rvPostView.adapter = postConcatAdapter
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
 
         val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
@@ -206,6 +209,23 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
     }
 
+    private fun autoScrollKeyboardWithRecyclerView() {
+        binding.rvPostView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                binding.rvPostView.scrollBy(0, oldBottom - bottom)
+            }
+        }
+    }
+
+    private fun collectPreviewCommentItem() {
+        viewModel.previewCommentItem.collectLatestWithLifecycle(lifecycle) {
+            previewCommentAdapter.submitList(it)
+
+            if (it.isNotEmpty()) {
+                binding.rvPostView.smoothScrollToPosition(postConcatAdapter.itemCount)
+            }
+        }
+    }
 
     private fun setupListener() = with(binding) {
         includePostViewAppBar.ivPostBack.setOnClickListener {
