@@ -54,6 +54,7 @@ fun ReplyRecyclerviewItem.ReplyRecyclerviewReply.toReply() = Reply(
     text = text,
     commentParent = commentParent,
     replyParent = replyParent,
+    isLiked = true
 )
 
 fun ReplyRecyclerviewItem.ReplyRecyclerviewComment.toComment() = Comment(
@@ -62,9 +63,10 @@ fun ReplyRecyclerviewItem.ReplyRecyclerviewComment.toComment() = Comment(
     dateTime = dateTime,
     likeUser = likeUser,
     unlikeUser = unlikeUser,
-    reply = reply,
+    earliestReply = reply,
     written = written,
-    parent = parent
+    parent = parent,
+    replyCount = 0
 )
 
 fun Reply.toReplyRecyclerviewItem() = ReplyRecyclerviewItem.ReplyRecyclerviewReply(
@@ -84,7 +86,7 @@ fun Comment.toReplyRecyclerviewItem() = ReplyRecyclerviewItem.ReplyRecyclerviewC
     dateTime = dateTime,
     likeUser = likeUser,
     unlikeUser = unlikeUser,
-    reply = reply,
+    reply = earliestReply,
     written = written,
     parent = parent
 )

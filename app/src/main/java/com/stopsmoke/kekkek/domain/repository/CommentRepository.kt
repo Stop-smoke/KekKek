@@ -22,5 +22,5 @@ interface CommentRepository {
 
    fun getCommentCount(postId: String): Flow<Long>
 
-   suspend fun getComment(postId: String, commentId:String): Comment
+   fun getComment(postId: String, commentId: String): Flow<Comment>
 }

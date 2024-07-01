@@ -13,10 +13,9 @@ import com.stopsmoke.kekkek.domain.repository.NotificationRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.SearchRepository
-import com.stopsmoke.kekkek.firestore.dao.BookmarkRepository
+import com.stopsmoke.kekkek.domain.repository.BookmarkRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 

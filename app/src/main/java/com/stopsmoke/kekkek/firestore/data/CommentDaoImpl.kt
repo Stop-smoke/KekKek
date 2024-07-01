@@ -6,9 +6,7 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.toObject
-import com.stopsmoke.kekkek.data.mapper.toEntity
-import com.stopsmoke.kekkek.domain.model.emptyComment
+import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
@@ -17,7 +15,7 @@ import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -43,20 +41,13 @@ class CommentDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun getComment(postId: String, commentId: String): CommentEntity {
-        try {
-                val documentSnapshot = firestore.collection(POST_COLLECTION)
-                    .document(postId)
-                    .collection(COMMENT_COLLECTION)
-                    .document(commentId)
-                    .get()
-                    .await()
-                val comment = documentSnapshot.toObject<CommentEntity>()
-                return comment ?: emptyComment().toEntity()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return emptyComment().toEntity()
-            }
+    override fun getComment(postId: String, commentId: String): Flow<CommentEntity> {
+        return firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .dataObjects<CommentEntity>()
+            .mapNotNull { it }
     }
 
     override fun getMyCommentItems(uid: String): Flow<PagingData<CommentEntity>> {

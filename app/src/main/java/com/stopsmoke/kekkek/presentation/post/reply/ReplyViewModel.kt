@@ -10,7 +10,6 @@ import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.Written
-import com.stopsmoke.kekkek.domain.model.emptyComment
 import com.stopsmoke.kekkek.domain.model.emptyReply
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
@@ -27,6 +26,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class ReplyViewModel @Inject constructor(
     private val replyRepository: ReplyRepository,
     userRepository: UserRepository,
-    private val commentRepository: CommentRepository
+    private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
     val user: StateFlow<User?> = userRepository.getUserData()
@@ -46,48 +46,78 @@ class ReplyViewModel @Inject constructor(
             initialValue = null
         )
 
-    private val _replyId = MutableStateFlow<ReplyIdItem>(ReplyIdItem.init())
-    val replyId = _replyId.asStateFlow()
+    private val _postId: MutableStateFlow<String> = MutableStateFlow("")
+    val postId = _postId.asStateFlow()
 
-    private val _comment = MutableStateFlow<Comment>(emptyComment())
-    val comment: StateFlow<Comment> = _comment.asStateFlow()
+    fun updatePostId(id: String) {
+        viewModelScope.launch {
+            _postId.emit(id)
+        }
+    }
 
-    suspend fun updateComment() = viewModelScope.launch{
-        _comment.value = commentRepository.getComment(
-            commentId = replyId.value.commentId,
-            postId = replyId.value.postId
-        )
+    private val _commentId: MutableStateFlow<String> = MutableStateFlow("")
+    val commentId = _commentId.asStateFlow()
+
+    fun updateCommentId(id: String) {
+        viewModelScope.launch {
+            _commentId.emit(id)
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val reply: Flow<PagingData<Reply>> = replyId.flatMapLatest { replyIdItem ->
-        if (replyIdItem.postId.isEmpty() || replyIdItem.commentId.isEmpty()) {
+    val comment: StateFlow<Comment?> = postId.zip(commentId) { postId, commentId ->
+        if (postId.isBlank() || commentId.isBlank()) {
+            return@zip emptyList()
+        }
+
+        listOf(postId, commentId)
+    }
+        .flatMapLatest {
+            val postId = it.getOrNull(0) ?: return@flatMapLatest emptyFlow()
+            val commentId = it.getOrNull(1) ?: return@flatMapLatest emptyFlow()
+
+            commentRepository.getComment(postId, commentId)
+        }
+        .catch {
+            it.printStackTrace()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reply: Flow<PagingData<Reply>> = commentId.flatMapLatest {
+        if (it.isBlank()) {
             return@flatMapLatest emptyFlow()
         }
-        replyRepository.getReply(commentId = replyIdItem.commentId, postId = replyIdItem.postId)
-    }.map { pagingModel->
-        pagingModel.insertSeparators { before: Reply?, after: Reply? ->
-            if(before == null) return@insertSeparators emptyReply()
-            return@insertSeparators null
-        }
-    }.catch {
-        it.printStackTrace()
-    }.cachedIn(viewModelScope)
-
-
-    fun setReplyId(replyIdItem: ReplyIdItem){
-        _replyId.value = replyIdItem
+        replyRepository.getReply(it)
     }
+        .map { pagingModel ->
+            pagingModel.insertSeparators { before: Reply?, after: Reply? ->
+                if (before == null) return@insertSeparators emptyReply()
+                return@insertSeparators null
+            }
+        }
+        .cachedIn(viewModelScope)
+        .catch {
+            it.printStackTrace()
+        }
 
-    fun addReply(reply:String) = viewModelScope.launch{
-        if(user.value is User.Registered) {
-            val user = user.value as User.Registered
+    fun addReply(reply: String) = viewModelScope.launch {
+        try {
+            if (comment.value == null) {
+                return@launch
+            }
+
+            val user = user.value as? User.Registered ?: return@launch
             replyRepository.addReply(
                 reply = Reply(
                     id = "",
-                    written =  Written(
+                    written = Written(
                         uid = user.uid,
-                        name = user.name ,
+                        name = user.name,
                         profileImage = user.profileImage,
                         ranking = user.ranking
                     ),
@@ -95,24 +125,38 @@ class ReplyViewModel @Inject constructor(
                     unlikeUser = emptyList(),
                     dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
                     text = reply,
-                    commentParent = comment.value.parent,
-                    replyParent = comment.value.id
+                    commentParent = comment.value!!.parent,
+                    replyParent = comment.value!!.id,
+                    isLiked = false
                 )
             )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     fun deleteReply(reply: Reply) = viewModelScope.launch {
-        replyRepository.deleteReply(reply)
+        try {
+            replyRepository.deleteReply(reply)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    fun commentLikeClick(updateComment: Comment) = viewModelScope.launch{
-        commentRepository.setCommentItem(updateComment)
-        updateComment()
+    fun commentLikeClick(updateComment: Comment) = viewModelScope.launch {
+        try {
+            commentRepository.setCommentItem(updateComment)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    fun updateReply(reply: Reply) = viewModelScope.launch{
-        replyRepository.updateReply(reply)
+    fun updateReply(reply: Reply) = viewModelScope.launch {
+        try {
+            replyRepository.updateReply(reply)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 

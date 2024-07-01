@@ -13,8 +13,9 @@ data class Reply(
     val text: String,
     val commentParent: CommentParent,
     var replyParent: String,
-){
+    val isLiked: Boolean
+) {
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
 }
 
-fun emptyReply()= ReplyEntity().asExternalModel()
+fun emptyReply()= ReplyEntity().asExternalModel(false)

@@ -193,4 +193,5 @@
     <string name="error_missing_title">앗, 페이지가 존재하지 않아요!</string>
     <string name="error_missing_description">존재하지 않는 페이지로 접근했어요.\n 뒤로가기를 클릭해주세요.</string>
 
+    <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 </resources>

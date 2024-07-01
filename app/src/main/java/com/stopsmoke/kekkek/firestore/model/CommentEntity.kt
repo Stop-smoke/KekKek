@@ -18,12 +18,15 @@ data class CommentEntity(
     @get:PropertyName("unlike_user") @set:PropertyName("unlike_user")
     var unlikeUser: List<String> = emptyList(),
 
-    @get:PropertyName("reply")
-    val reply: List<ReplyEntity> = emptyList(),
+    @get:PropertyName("earliest_reply") @set:PropertyName("earliest_reply")
+    var earliestReply: List<ReplyEntity> = emptyList(),
 
     @get:PropertyName("written") @set:PropertyName("written")
     var written: WrittenEntity? = null,
 
     @get:PropertyName("parent") @set:PropertyName("parent")
     var parent: CommentParentEntity? = null,
+
+    @get:PropertyName("reply_count") @set:PropertyName("reply_count")
+    var replyCount: Long? = null,
 )

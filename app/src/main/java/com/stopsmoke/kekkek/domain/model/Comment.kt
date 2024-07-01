@@ -9,9 +9,10 @@ data class Comment(
     val dateTime: DateTime,
     val likeUser: List<String>,
     val unlikeUser: List<String>,
-    val reply: List<Reply>,
+    val earliestReply: List<Reply>,
     val written: Written,
-    val parent: CommentParent
+    val parent: CommentParent,
+    val replyCount: Long
 ) {
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
 }
@@ -22,7 +23,8 @@ fun emptyComment() = Comment(
     dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
     likeUser = emptyList(),
     unlikeUser = emptyList(),
-    reply = emptyList(),
+    earliestReply = emptyList(),
     written = Written("", "", ProfileImage.Default, 0),
-    parent = CommentParent(PostCategory.UNKNOWN, "", "")
+    parent = CommentParent(PostCategory.UNKNOWN, "", ""),
+    replyCount = 0
 )

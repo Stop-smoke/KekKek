@@ -4,6 +4,7 @@ import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentParent
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.toPostCategory
 import com.stopsmoke.kekkek.domain.model.toRequestString
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
@@ -11,20 +12,21 @@ import com.stopsmoke.kekkek.firestore.model.CommentParentEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 
-internal fun CommentEntity.asExternalModel(): Comment =
+internal fun CommentEntity.asExternalModel(earliestReply: List<Reply>): Comment =
     Comment(
         id = id ?: "null",
         text = text ?: "null",
         dateTime = dateTime.asExternalModel(),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
-        reply = reply.map { it.asExternalModel() },
+        earliestReply = earliestReply,
         written = written.asExternalModel(),
         parent = parent?.asExternalModel() ?: CommentParent(
             postType = PostCategory.UNKNOWN,
             postId = "null",
             postTitle = "null"
-        )
+        ),
+        replyCount = replyCount ?: 0
     )
 
 internal fun CommentParentEntity.asExternalModel(): CommentParent =
@@ -47,7 +49,7 @@ internal fun Comment.toEntity(): CommentEntity = CommentEntity(
     dateTime = dateTime.toEntity(),
     likeUser = likeUser,
     unlikeUser = unlikeUser,
-    reply = reply.map {
+    earliestReply = earliestReply.map {
         ReplyEntity(
             written = WrittenEntity(
                 uid = it.written.uid,
@@ -67,5 +69,6 @@ internal fun Comment.toEntity(): CommentEntity = CommentEntity(
         profileImage = (written.profileImage as? ProfileImage.Web)?.url,
         ranking = written.ranking
     ),
-    parent = parent.toEntity()
+    parent = parent.toEntity(),
+    replyCount = replyCount
 )

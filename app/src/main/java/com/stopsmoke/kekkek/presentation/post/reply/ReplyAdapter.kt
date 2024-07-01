@@ -57,7 +57,7 @@ class ReplyAdapter(
         private val binding: ItemCommentBinding
     ) : ViewHolder(binding.root) {
         override fun bind(reply: Reply):Unit = with(binding) {
-            val comment = viewModel.comment.value
+            val comment = viewModel.comment.value ?: return@with
             tvCommentNickname.text = comment.written.name
             tvCommentDescription.text = comment.text
             tvCommentHour.text = comment.elapsedCreatedDateTime.toResourceId(itemView.context)
@@ -71,7 +71,7 @@ class ReplyAdapter(
 
             tvCommentLikeNum.text = comment.likeUser.size.toString()
             val userUid = (viewModel.user.value as? User.Registered)?.uid ?: ""
-            var isLikeUser: Boolean = userUid in viewModel.comment.value.likeUser
+            var isLikeUser: Boolean = userUid in viewModel.comment.value!!.likeUser
 
             if (isLikeUser) ivCommentLike.setColorFilter(
                 ContextCompat.getColor(

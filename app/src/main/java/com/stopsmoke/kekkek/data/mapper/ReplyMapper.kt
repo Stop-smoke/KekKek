@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 
-internal fun ReplyEntity?.asExternalModel(): Reply =
+internal fun ReplyEntity?.asExternalModel(isLiked: Boolean): Reply =
     Reply(
         id = this?.id ?: "null",
         written = this?.written.asExternalModel(),
@@ -20,7 +20,8 @@ internal fun ReplyEntity?.asExternalModel(): Reply =
             postId = "null",
             postTitle = "null"
         ),
-        replyParent = this?.replyParent ?: "null"
+        replyParent = this?.replyParent ?: "null",
+        isLiked = isLiked
     )
 
 internal fun Reply.toEntity(): ReplyEntity =

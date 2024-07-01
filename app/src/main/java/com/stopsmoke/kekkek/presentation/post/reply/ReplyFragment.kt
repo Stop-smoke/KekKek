@@ -40,15 +40,19 @@ class ReplyFragment : Fragment(), ReplyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.getParcelable<ReplyIdItem>("replyIdItem")?.let {
-            viewModel.setReplyId(it)
+        arguments?.getString("post_id")?.let {
+            viewModel.updatePostId(it)
+        }
+
+        arguments?.getString("comment_id")?.let {
+            viewModel.updateCommentId(it)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentReplyBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -74,10 +78,6 @@ class ReplyFragment : Fragment(), ReplyCallback {
     private fun initViewModel() = with(viewModel) {
         reply.collectLatestWithLifecycle(lifecycle) {
             replyAdapter.submitData(it)
-        }
-
-        replyId.collectLatestWithLifecycle(lifecycle){
-            viewModel.updateComment()
         }
 
         comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {
