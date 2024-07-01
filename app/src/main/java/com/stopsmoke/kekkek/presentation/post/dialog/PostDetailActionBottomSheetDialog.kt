@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater

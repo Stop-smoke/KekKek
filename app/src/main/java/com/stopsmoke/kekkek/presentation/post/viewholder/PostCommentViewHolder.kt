@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.presentation.post.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class PostCommentViewHolder(

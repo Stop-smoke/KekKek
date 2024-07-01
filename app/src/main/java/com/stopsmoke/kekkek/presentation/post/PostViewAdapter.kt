@@ -10,6 +10,7 @@ import com.stopsmoke.kekkek.databinding.RecyclerviewPostViewReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostCommentViewHolder
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostContentViewHolder
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostReplyViewHolder

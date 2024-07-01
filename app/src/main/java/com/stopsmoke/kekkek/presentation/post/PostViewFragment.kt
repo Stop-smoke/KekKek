@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
@@ -28,6 +27,10 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
+import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
+import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -35,7 +38,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostViewFragment : Fragment(), PostCommentCallback {
+class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
 
     private var _binding: FragmentPostViewBinding? = null
     private val binding get() = _binding!!
@@ -121,20 +124,12 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
-    private fun showCommentDeleteDialog(postId: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("댓글 삭제")
-            .setMessage("댓글을 삭제하시겠습니까?")
-            .setPositiveButton("예") { dialog, _ ->
-                viewModel.deleteComment(postId)
-                postViewAdapter.refresh()
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+    private fun showCommentDeleteDialog(commentId: String) {
+        val commentDeleteDialog = PostCommentDeleteDialogFragment(
+            this@PostViewFragment,
+            DeleteDialogType.CommentDeleteDialog(commentId)
+        )
+        commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
     }
 
 
@@ -220,22 +215,14 @@ class PostViewFragment : Fragment(), PostCommentCallback {
     }
 
     private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시글 삭제")
-            .setMessage("게시글을 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { dialog, _ ->
-                viewModel.post.value?.id?.let { postId ->
-                    viewModel.deletePost(postId)
-                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+        viewModel.post.value?.let { post ->
+            val postDeleteDialog = PostCommentDeleteDialogFragment(
+                this@PostViewFragment,
+                DeleteDialogType.PostDeleteDialog(post.id)
+            )
+
+            postDeleteDialog.show(childFragmentManager, "postDeleteDialog")
+        }
     }
 
     override fun onResume() {
@@ -261,7 +248,7 @@ class PostViewFragment : Fragment(), PostCommentCallback {
 
 
     override fun deleteItem(comment: Comment) {
-        when(val user = viewModel.user.value){
+        when (val user = viewModel.user.value) {
             is User.Error -> {
 
             }
@@ -307,5 +294,17 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 "comment_id" to comment.id
             )
         )
+    }
+
+    //PostCommentDialogCallback
+    override fun deleteComment(commentId: String) {
+        viewModel.deleteComment(commentId)
+        postViewAdapter.refresh()
+    }
+
+    override fun deletePost(postId: String) {
+        viewModel.deletePost(postId)
+        Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 }
