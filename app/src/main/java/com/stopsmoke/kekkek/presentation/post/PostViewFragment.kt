@@ -145,48 +145,11 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCommentRecyclerView()
-        collectPostHeaderItem()
+        collectPostItem()
         observeCommentRecyclerViewItem()
-        observeBookmarkState()
-        postViewAdapter.registerCallback(this)
-        collectPreviewCommentItem()
         setupListener()
         autoScrollKeyboardWithRecyclerView()
-    }
-
-    private fun collectPostHeaderItem() {
-        lifecycleScope.launch {
-            combine(
-                viewModel.user,
-                viewModel.post,
-                viewModel.commentCount
-            ) { user: User?, post: Post?, l: Long? ->
-                val headerItem = PostContentItem(user, post, l ?: 0)
-                postViewAdapter.updatePostHeader(headerItem)
-            }
-                .collectLatestWithLifecycle(lifecycle) { }
-        }
-    }
-
-    private fun observeBookmarkState() = lifecycleScope.launch {
-        combine(viewModel.post, viewModel.user) { post, user ->
-            if (user !is User.Registered) return@combine
-            if (post == null) return@combine
-
-            if (post.bookmarkUser.contains(user.uid)) {
-                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-            } else {
-                binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
-            }
-        }
-            .flowWithLifecycle(lifecycle)
-            .collect()
-    }
-
-    private fun observeCommentRecyclerViewItem() {
-        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            postViewAdapter.submitData(it)
-        }
+        collectPreviewCommentItem()
     }
 
     private fun initCommentRecyclerView() {
@@ -199,6 +162,36 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
         val height = resources.getDimensionPixelSize(R.dimen.divider_height)
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
+    }
+
+    private fun collectPostItem() {
+        lifecycleScope.launch {
+            combine(
+                viewModel.user,
+                viewModel.post,
+                viewModel.commentCount
+            ) { user: User?, post: Post?, l: Long? ->
+                val headerItem = PostContentItem(user, post, l ?: 0)
+                postViewAdapter.updatePostHeader(headerItem)
+
+                if (user !is User.Registered) return@combine
+                if (post == null) return@combine
+
+                if (post.bookmarkUser.contains(user.uid)) {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                } else {
+                    binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
+                }
+            }
+                .flowWithLifecycle(lifecycle)
+                .collect()
+        }
+    }
+
+    private fun observeCommentRecyclerViewItem() {
+        viewModel.comment.collectLatestWithLifecycle(lifecycle) {
+            postViewAdapter.submitData(it)
+        }
     }
 
     private fun showCommentDeleteDialog(commentId: String) {
@@ -250,6 +243,8 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         includePostViewAppBar.ivPostMore.setOnClickListener {
             postActionDialog.value.show()
         }
+
+        postViewAdapter.registerCallback(this@PostViewFragment)
     }
 
     override fun onResume() {
