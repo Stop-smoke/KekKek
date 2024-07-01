@@ -31,7 +31,6 @@ class AttainmentsViewModel @Inject constructor(
 
     private var timeString: String = ""
     private var savedMoneyPerMinute: Double = 0.0
-    private var savedLifePerMinute: Double = 0.0
     private var savedCigarettePerMinute: Double = 0.0
     private var savedDatePerMinute: Double = 0.0
 
@@ -52,7 +51,7 @@ class AttainmentsViewModel @Inject constructor(
                             history = user.history,
                             savedDate = savedDatePerMinute,
                             savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                            savedLife = savedLifePerMinute * totalMinutesTime,
+                            savedLife = getLifeWithCigarette(savedCigarettePerMinute * totalMinutesTime),
                             savedCigarette = savedCigarettePerMinute * totalMinutesTime,
                             timeString = formatElapsedTime(totalSecondsTime)
                         )
@@ -62,35 +61,6 @@ class AttainmentsViewModel @Inject constructor(
 
                 else -> {}
             }
-        }
-    }
-
-    fun updateTestUserData() = viewModelScope.launch {
-        val userData = userRepository.getUserData("테스트_계정")
-        when (userData) {
-            is Result.Success -> {
-                userData.data.collect { user ->
-                    _currentUserState.value = user
-
-                    val totalMinutesTime = user.history.getTotalMinutesTime()
-                    val totalSecondsTime = user.history.getTotalSecondsTime()
-                    timeString = formatElapsedTime(totalMinutesTime)
-                    calculateSavedValues(user.userConfig)
-                    _uiState.emit(
-                        AttainmentsItem(
-                            history = user.history,
-                            savedDate = savedDatePerMinute,
-                            savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                            savedLife = savedLifePerMinute * totalMinutesTime,
-                            savedCigarette = savedCigarettePerMinute * totalMinutesTime,
-                            timeString = formatElapsedTime(totalSecondsTime)
-                        )
-                    )
-                    if (user.history.getStartTimerState()) startTimer()
-                }
-            }
-
-            else -> {}
         }
     }
 
@@ -116,7 +86,7 @@ class AttainmentsViewModel @Inject constructor(
                     prev.copy(
                         savedDate = savedDatePerMinute,
                         savedMoney = savedMoneyPerMinute * currentMinutes,
-                        savedLife = savedLifePerMinute * currentMinutes,
+                        savedLife = getLifeWithCigarette(savedCigarettePerMinute * currentMinutes),
                         savedCigarette = savedCigarettePerMinute * currentMinutes,
                     )
                 }
@@ -140,9 +110,6 @@ class AttainmentsViewModel @Inject constructor(
 
         // 하루에 소비하는 총 시간 (분 단위)
         val totalMinutesSmokedPerDay = 24 * 60.0 // 하루 전체 시간
-
-        // 하루에 소비하는 담배 분당 생명 절약량
-        savedLifePerMinute = totalCigarettesPerDay / totalMinutesSmokedPerDay
 
         // 하루에 소비하는 갑의 분당 비용
         savedMoneyPerMinute = totalPackCostPerDay / totalMinutesSmokedPerDay
@@ -168,10 +135,8 @@ class AttainmentsViewModel @Inject constructor(
         return "${daysString}일 ${hoursString}:${minutesString}:${secondsString}"
     }
 
-    fun timeStringToMinutes(timeString: String): Long {
-        val parts = timeString.split("시간")
-        val hours = if (parts.size > 1) parts[0].trim().toLong() else 0L
-        val minutes = parts.last().replace("분", "").trim().toLong()
-        return hours * 60 + minutes
+    private fun getLifeWithCigarette(cigarette: Double): Double{ // 1개비에 5분, 시간 단위로 출력
+        return (cigarette * 5) / 60
     }
+
 }
