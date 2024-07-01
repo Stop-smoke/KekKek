@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
@@ -28,10 +27,10 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
-import com.stopsmoke.kekkek.presentation.post.callback.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
-import com.stopsmoke.kekkek.presentation.post.dialog.PostDeleteCommentDialogFragment
+import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
+import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -126,7 +125,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     private fun showCommentDeleteDialog(commentId: String) {
-        val commentDeleteDialog = PostDeleteCommentDialogFragment(
+        val commentDeleteDialog = PostCommentDeleteDialogFragment(
             this@PostViewFragment,
             DeleteDialogType.CommentDeleteDialog(commentId)
         )
@@ -217,7 +216,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     private fun showDeleteConfirmationDialog() {
         viewModel.post.value?.let { post ->
-            val postDeleteDialog = PostDeleteCommentDialogFragment(
+            val postDeleteDialog = PostCommentDeleteDialogFragment(
                 this@PostViewFragment,
                 DeleteDialogType.PostDeleteDialog(post.id)
             )

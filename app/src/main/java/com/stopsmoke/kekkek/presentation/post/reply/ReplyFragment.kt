@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
@@ -22,12 +21,14 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.post.reply.callback.ReplyCallback
+import com.stopsmoke.kekkek.presentation.post.reply.callback.ReplyDialogCallback
+import com.stopsmoke.kekkek.presentation.post.reply.dialog.ReplyDeleteDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ReplyFragment : Fragment(), ReplyCallback {
+class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback {
     private var _binding: FragmentReplyBinding? = null
     private val binding get() = _binding!!
 
@@ -166,18 +167,12 @@ class ReplyFragment : Fragment(), ReplyCallback {
     }
 
     private fun showDeleteDialog(reply: Reply) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("댓글 삭제")
-            .setMessage("댓글을 삭제하시겠습니까?")
-            .setPositiveButton("예") { dialog, _ ->
-                viewModel.deleteReply(reply)
-                replyAdapter.refresh()
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+       val replyDeleteDialog = ReplyDeleteDialogFragment(this@ReplyFragment, reply)
+        replyDeleteDialog.show(childFragmentManager, "replyDeleteDialog")
+    }
+
+    override fun deleteReply(reply: Reply) {
+        viewModel.deleteReply(reply)
+        replyAdapter.refresh()
     }
 }

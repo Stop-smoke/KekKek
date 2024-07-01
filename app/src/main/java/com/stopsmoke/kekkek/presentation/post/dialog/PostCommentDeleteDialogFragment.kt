@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
-import com.stopsmoke.kekkek.presentation.post.PostViewModel
-import com.stopsmoke.kekkek.presentation.post.callback.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 
-class PostDeleteCommentDialogFragment(
+class PostCommentDeleteDialogFragment(
     private val callback: PostCommentDialogCallback,
     private val dialogType: DeleteDialogType
 ) : DialogFragment() {
@@ -68,6 +66,10 @@ class PostDeleteCommentDialogFragment(
                 }
             }
         }
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
