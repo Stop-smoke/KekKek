@@ -28,6 +28,7 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.callback.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.PostDeleteCommentDialogFragment
@@ -125,7 +126,10 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     private fun showCommentDeleteDialog(commentId: String) {
-        val commentDeleteDialog = PostDeleteCommentDialogFragment(this@PostViewFragment, commentId)
+        val commentDeleteDialog = PostDeleteCommentDialogFragment(
+            this@PostViewFragment,
+            DeleteDialogType.CommentDeleteDialog(commentId)
+        )
         commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
     }
 
@@ -212,22 +216,14 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시글 삭제")
-            .setMessage("게시글을 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { dialog, _ ->
-                viewModel.post.value?.id?.let { postId ->
-                    viewModel.deletePost(postId)
-                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+        viewModel.post.value?.let { post ->
+            val postDeleteDialog = PostDeleteCommentDialogFragment(
+                this@PostViewFragment,
+                DeleteDialogType.PostDeleteDialog(post.id)
+            )
+
+            postDeleteDialog.show(childFragmentManager, "postDeleteDialog")
+        }
     }
 
     override fun onResume() {
@@ -253,7 +249,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
 
     override fun deleteItem(comment: Comment) {
-        when(val user = viewModel.user.value){
+        when (val user = viewModel.user.value) {
             is User.Error -> {
 
             }
@@ -302,12 +298,14 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     //PostCommentDialogCallback
-    override fun deleteComment(commentId:String) {
+    override fun deleteComment(commentId: String) {
         viewModel.deleteComment(commentId)
         postViewAdapter.refresh()
     }
 
-    override fun deletePost() {
-        TODO("Not yet implemented")
+    override fun deletePost(postId: String) {
+        viewModel.deletePost(postId)
+        Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 }

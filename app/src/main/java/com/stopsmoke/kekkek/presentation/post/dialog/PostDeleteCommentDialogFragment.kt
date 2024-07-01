@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
 import com.stopsmoke.kekkek.presentation.post.PostViewModel
+import com.stopsmoke.kekkek.presentation.post.callback.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 
 class PostDeleteCommentDialogFragment(
     private val callback: PostCommentDialogCallback,
-    private val commentId: String
-):DialogFragment() {
+    private val dialogType: DeleteDialogType
+) : DialogFragment() {
     private var _binding: FragmentCommonDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -31,22 +32,42 @@ class PostDeleteCommentDialogFragment(
         initListener()
     }
 
-    private fun bind() = with(binding){
-        tvDialogTitle.text = "댓글 삭제"
-        tvDialogContent.text = "댓글을 삭제하시겠습니까?"
+    private fun bind() = with(binding) {
+        when (dialogType) {
+            is DeleteDialogType.CommentDeleteDialog -> {
+                tvDialogTitle.text = "댓글 삭제"
+                tvDialogContent.text = "댓글을 삭제하시겠습니까?"
+            }
 
+            is DeleteDialogType.PostDeleteDialog -> {
+                tvDialogTitle.text = "게시글 삭제"
+                tvDialogContent.text = "게시글을 삭제하시겠습니까?"
+            }
+        }
         btnDialogFinish.text = "예"
         btnDialogCancel.text = "아니요"
     }
 
-    private fun initListener() = with(binding){
+    private fun initListener() = with(binding) {
         btnDialogCancel.setOnClickListener {
             dismiss()
         }
 
-        btnDialogFinish.setOnClickListener {
-            callback.deleteComment(commentId)
-            dismiss()
+        when (dialogType) {
+            is DeleteDialogType.CommentDeleteDialog -> {
+                btnDialogFinish.setOnClickListener {
+                    callback.deleteComment(dialogType.commentId)
+                    dismiss()
+                }
+            }
+
+            is DeleteDialogType.PostDeleteDialog -> {
+                btnDialogFinish.setOnClickListener {
+                    callback.deletePost(dialogType.postId)
+                    dismiss()
+                }
+            }
         }
+
     }
 }
