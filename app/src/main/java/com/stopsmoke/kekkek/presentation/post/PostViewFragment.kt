@@ -28,6 +28,9 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.isNetworkAvailable
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
+import com.stopsmoke.kekkek.presentation.post.dialog.PostDeleteCommentDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -35,7 +38,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostViewFragment : Fragment(), PostCommentCallback {
+class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
 
     private var _binding: FragmentPostViewBinding? = null
     private val binding get() = _binding!!
@@ -121,20 +124,9 @@ class PostViewFragment : Fragment(), PostCommentCallback {
         binding.rvPostView.addItemDecoration(CustomItemDecoration(color, height))
     }
 
-    private fun showCommentDeleteDialog(postId: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("댓글 삭제")
-            .setMessage("댓글을 삭제하시겠습니까?")
-            .setPositiveButton("예") { dialog, _ ->
-                viewModel.deleteComment(postId)
-                postViewAdapter.refresh()
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+    private fun showCommentDeleteDialog(commentId: String) {
+        val commentDeleteDialog = PostDeleteCommentDialogFragment(this@PostViewFragment, commentId)
+        commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
     }
 
 
@@ -307,5 +299,15 @@ class PostViewFragment : Fragment(), PostCommentCallback {
                 "comment_id" to comment.id
             )
         )
+    }
+
+    //PostCommentDialogCallback
+    override fun deleteComment(commentId:String) {
+        viewModel.deleteComment(commentId)
+        postViewAdapter.refresh()
+    }
+
+    override fun deletePost() {
+        TODO("Not yet implemented")
     }
 }

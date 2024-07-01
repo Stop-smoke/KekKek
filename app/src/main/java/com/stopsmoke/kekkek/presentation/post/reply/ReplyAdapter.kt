@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.post.reply
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,9 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.databinding.ItemReplyBinding
 import com.stopsmoke.kekkek.databinding.UnknownItemBinding
-import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.post.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class ReplyAdapter(

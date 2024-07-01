@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.post.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.PostHeaderItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
