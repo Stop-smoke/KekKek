@@ -16,6 +16,7 @@ import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
+import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,15 +112,15 @@ class PostViewModel @Inject constructor(
         .map { pagingData ->
             pagingData
                 .map {
-                    CommentUiState.CommentType(it)
+                    PostViewCommentRecyclerViewUiState.CommentType(it)
                 }
                 .insertSeparators { before, after ->
                     if (before == null) {
-                        return@insertSeparators CommentUiState.Header
+                        return@insertSeparators PostViewCommentRecyclerViewUiState.Header
                     }
 
                     if (before.item.earliestReply.isNotEmpty()) {
-                        return@insertSeparators CommentUiState.ReplyType(before.item)
+                        return@insertSeparators PostViewCommentRecyclerViewUiState.ReplyType(before.item)
                     }
 
                     null
@@ -129,7 +130,7 @@ class PostViewModel @Inject constructor(
         .combine(commentTransferLike) { pagingData, commentLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
-                    is CommentUiState.CommentType -> {
+                    is PostViewCommentRecyclerViewUiState.CommentType -> {
                         if (commentLikeList.contains(uiState.item.id)) {
                             val likeUser =
                                 uiState.item.likeUser.toggleElement((user.value as User.Registered).uid)
@@ -143,17 +144,17 @@ class PostViewModel @Inject constructor(
                         uiState
                     }
 
-                    is CommentUiState.Header -> uiState
-                    is CommentUiState.ReplyType -> uiState
+                    is PostViewCommentRecyclerViewUiState.Header -> uiState
+                    is PostViewCommentRecyclerViewUiState.ReplyType -> uiState
                 }
             }
         }
         .combine(replyTransferLike) { pagingData, replyLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
-                    is CommentUiState.CommentType -> uiState
-                    is CommentUiState.Header -> uiState
-                    is CommentUiState.ReplyType -> {
+                    is PostViewCommentRecyclerViewUiState.CommentType -> uiState
+                    is PostViewCommentRecyclerViewUiState.Header -> uiState
+                    is PostViewCommentRecyclerViewUiState.ReplyType -> {
                         val replyList = uiState.item.earliestReply.map { reply ->
                             if (replyLikeList.contains(reply.id)) {
                                 reply.copy(
@@ -281,14 +282,4 @@ class PostViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-}
-
-sealed interface CommentUiState {
-
-    data object Header : CommentUiState
-
-    data class CommentType(val item: Comment) : CommentUiState
-
-    data class ReplyType(val item: Comment) : CommentUiState
-
 }
