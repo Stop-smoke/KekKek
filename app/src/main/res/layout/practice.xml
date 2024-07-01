@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:aztec="http://schemas.android.com/apk/res-auto">
+
+    <org.wordpress.aztec.AztecText
+        android:id="@+id/visual"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:imeOptions="flagNoExtractUi"
+        aztec:historyEnable="false"/>
+
+    <org.wordpress.aztec.source.SourceViewEditText
+        android:id="@+id/source"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="textNoSuggestions|textMultiLine"
+        android:scrollbars="vertical"
+        android:imeOptions="flagNoExtractUi"
+        aztec:codeBackgroundColor="@android:color/transparent"
+        aztec:codeTextColor="@color/white"/>
+
+    <org.wordpress.aztec.toolbar.AztecToolbar
+        android:id="@+id/formatting_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/aztec_format_bar_height"
+        android:layout_alignParentBottom="true"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
