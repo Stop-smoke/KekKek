@@ -3,7 +3,6 @@ package com.stopsmoke.kekkek.firestore.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,7 +13,6 @@ import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.CommentEntity
-import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -145,6 +143,34 @@ class CommentDaoImpl @Inject constructor(
             .addOnFailureListener { throw it }
 
         awaitClose()
+    }
+
+    override suspend fun appendItemList(
+        postId: String,
+        commentId: String,
+        field: String,
+        items: Any,
+    ) {
+        firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .update(field, FieldValue.arrayUnion(items))
+            .await()
+    }
+
+    override suspend fun removeItemList(
+        postId: String,
+        commentId: String,
+        field: String,
+        items: Any,
+    ) {
+        firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .update(field, FieldValue.arrayRemove(items))
+            .await()
     }
 
     companion object {
