@@ -10,9 +10,8 @@ import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostViewReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostCommentViewHolder
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostContentViewHolder
@@ -22,12 +21,6 @@ import com.stopsmoke.kekkek.presentation.post.viewholder.PostReplyViewHolder
 private enum class PostViewType {
     POST, COMMENT, REPLY, DELETED
 }
-
-data class PostHeaderItem(
-    val user: User?,
-    val post: Post?,
-    val commentNum: Long,
-)
 
 class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, RecyclerView.ViewHolder>(diffUtil) {
 
@@ -41,9 +34,9 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
         callback = null
     }
 
-    private var headerItem = PostHeaderItem(null, null, 0)
+    private var headerItem = PostContentItem(null, null, 0)
 
-    fun updatePostHeader(postHeaderItem: PostHeaderItem) {
+    fun updatePostHeader(postHeaderItem: PostContentItem) {
         headerItem = postHeaderItem
         notifyItemChanged(0)
     }
