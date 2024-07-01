@@ -28,7 +28,6 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.isNetworkAvailable
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
@@ -219,7 +218,6 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.addComment(text = comment)
-//                postViewAdapter.refresh()
                 binding.etPostAddComment.setText("")
                 binding.root.hideSoftKeyboard()
             }
@@ -281,7 +279,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
         if (comment.written.uid == user.uid) {
             selectCommentId = comment.id
-            commentDeleteDialog.value.show()
+            showCommentDeleteDialog(comment.id)
         }
     }
 
