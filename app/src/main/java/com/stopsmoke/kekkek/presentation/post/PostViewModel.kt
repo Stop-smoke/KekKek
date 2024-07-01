@@ -99,8 +99,8 @@ class PostViewModel @Inject constructor(
     }
 
     private val commentTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
-
     private val replyTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
+    private val commentDeleteSet: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val comment = postId.flatMapLatest {
@@ -127,6 +127,17 @@ class PostViewModel @Inject constructor(
                 }
         }
         .cachedIn(viewModelScope)
+        .combine(commentDeleteSet) { pagingData, commentDeleteItemId ->
+            pagingData.map { uiState ->
+                if (
+                    uiState is PostViewCommentRecyclerViewUiState.CommentType &&
+                    commentDeleteItemId.contains(uiState.item.id)
+                    ) {
+                    return@map PostViewCommentRecyclerViewUiState.Deleted
+                }
+                uiState
+            }
+        }
         .combine(commentTransferLike) { pagingData, commentLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
@@ -146,6 +157,7 @@ class PostViewModel @Inject constructor(
 
                     is PostViewCommentRecyclerViewUiState.Header -> uiState
                     is PostViewCommentRecyclerViewUiState.ReplyType -> uiState
+                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
         }
@@ -167,6 +179,7 @@ class PostViewModel @Inject constructor(
                         }
                         uiState.copy(uiState.item.copy(earliestReply = replyList))
                     }
+                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
         }
@@ -196,7 +209,8 @@ class PostViewModel @Inject constructor(
 
     fun deleteComment(commentId: String) = try {
         viewModelScope.launch {
-            postId.value?.let { commentRepository.deleteCommentItem(it, commentId) }
+            commentDeleteSet.emit(commentDeleteSet.value.toggleElement(commentId))
+            commentRepository.deleteCommentItem(post.value!!.id, commentId)
         }
     } catch (e: Exception) {
         e.printStackTrace()

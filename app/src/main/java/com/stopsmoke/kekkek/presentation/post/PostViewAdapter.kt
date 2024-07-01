@@ -7,6 +7,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
+import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostViewReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.domain.model.Post
@@ -15,10 +16,11 @@ import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostCommentViewHolder
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostContentViewHolder
+import com.stopsmoke.kekkek.presentation.post.viewholder.PostDeletedItemAdapter
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostReplyViewHolder
 
 private enum class PostViewType {
-    POST, COMMENT, REPLY
+    POST, COMMENT, REPLY, DELETED
 }
 
 data class PostHeaderItem(
@@ -75,6 +77,15 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
                 PostReplyViewHolder(view, callback)
             }
 
+            PostViewType.DELETED.ordinal -> {
+                val view = RecyclerviewEmptyBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                PostDeletedItemAdapter(view)
+            }
+
             else -> throw IllegalStateException()
         }
 
@@ -98,10 +109,11 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)!!) {
+        return when (getItem(position)) {
             is PostViewCommentRecyclerViewUiState.Header -> PostViewType.POST.ordinal
             is PostViewCommentRecyclerViewUiState.CommentType -> PostViewType.COMMENT.ordinal
             is PostViewCommentRecyclerViewUiState.ReplyType -> PostViewType.REPLY.ordinal
+            else -> PostViewType.DELETED.ordinal
         }
     }
 
@@ -117,6 +129,7 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
                             is PostViewCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
                             is PostViewCommentRecyclerViewUiState.Header -> false
                             is PostViewCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
                     is PostViewCommentRecyclerViewUiState.Header -> {
@@ -124,6 +137,7 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
                             is PostViewCommentRecyclerViewUiState.CommentType -> "Header" == newItem.item.id
                             is PostViewCommentRecyclerViewUiState.Header -> true
                             is PostViewCommentRecyclerViewUiState.ReplyType -> "Header" == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
                     is PostViewCommentRecyclerViewUiState.ReplyType -> {
@@ -131,8 +145,11 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
                             is PostViewCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
                             is PostViewCommentRecyclerViewUiState.Header -> false
                             is PostViewCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
+
+                    PostViewCommentRecyclerViewUiState.Deleted -> true
                 }
             }
 

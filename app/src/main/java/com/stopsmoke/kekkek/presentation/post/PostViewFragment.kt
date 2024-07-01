@@ -315,7 +315,6 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     //PostCommentDialogCallback
     override fun deleteComment(commentId: String) {
         viewModel.deleteComment(commentId)
-        postViewAdapter.refresh()
     }
 
     override fun deletePost(postId: String) {

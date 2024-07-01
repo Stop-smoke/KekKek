@@ -10,4 +10,6 @@ sealed interface PostViewCommentRecyclerViewUiState {
 
     data class ReplyType(val item: Comment) : PostViewCommentRecyclerViewUiState
 
+    data object Deleted : PostViewCommentRecyclerViewUiState
+
 }
