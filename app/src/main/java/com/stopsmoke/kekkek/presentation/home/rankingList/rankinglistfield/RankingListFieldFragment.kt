@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,8 +20,11 @@ import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListCallback
 import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
 import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.core.Observable
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 @AndroidEntryPoint
 class RankingListFieldFragment : Fragment() {
@@ -66,18 +68,44 @@ class RankingListFieldFragment : Fragment() {
         initView()
         initViewModel()
         initListener()
+        startProgressAnimation()
     }
 
-    private fun initView() = with(binding) {
+    private fun startProgressAnimation() {
         val progressList = listOf(
-            progressBarRankingListRank1,
-            progressBarRankingListRank2,
-            progressBarRankingListRank3
+            binding.progressBarRankingListRank1,
+            binding.progressBarRankingListRank2,
+            binding.progressBarRankingListRank3
         )
 
+        val profileList = listOf(
+            binding.ivRankingListRank1Profile,
+            binding.ivRankingListRank2Profile,
+            binding.ivRankingListRank3Profile
+        )
+
+        val initialProgress = progressList.map { it.progress }
+
+        getInterval()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { interval ->
+                progressList.forEachIndexed { index, progressBar ->
+                    progressBar.progress = initialProgress[index] + interval.toInt()
+                    if(progressBar.progress == 100){
+                        profileList[index].visibility = View.VISIBLE
+                    }
+                }
+            }
+    }
+
+    private fun getInterval(): Observable<Long> =
+        Observable.interval(5L, TimeUnit.MILLISECONDS)
+            .map { it + 1 }
+            .take(100)
+
+    private fun initView() = with(binding) {
         when (field) {
             RankingListField.Time -> {
-
                 tvRankingListTypeTime.apply {
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_blue))
                     setBackgroundResource(R.drawable.bg_rankinglist_ranktype)
@@ -126,6 +154,8 @@ class RankingListFieldFragment : Fragment() {
 
     private fun initViewModel() = with(viewModel) {
         userRankingList.collectLatestWithLifecycle(lifecycle) {
+            binding.tvRankingListTotalUserNum.text = "전체 ${it.size}명"
+
             when (field) {
                 RankingListField.Time -> {
                     val list = it.filter { it.startTime != null }.sortedBy { it.startTime }
