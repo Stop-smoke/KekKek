@@ -13,6 +13,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
@@ -23,11 +24,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
+import java.io.InputStream
 import java.util.Calendar
 import javax.inject.Inject
 
 internal class PostDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
+    private val storageDao: StorageDao
 ) : PostDao {
 
     override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
@@ -154,21 +157,52 @@ internal class PostDaoImpl @Inject constructor(
         }
     }
 
+    override suspend fun addPost(postEntity: PostEntity, inputStream: InputStream) {
+        firestore.collection(COLLECTION).document().let { document ->
+            val uploadUrl = storageDao.uploadFile(inputStream, "posts/${document.id}/image.jpeg")
+
+            document.set(postEntity.copy(id = document.id, imagesUrl = listOf(uploadUrl)))
+                .addOnFailureListener { throw it }
+                .addOnCanceledListener { throw CancellationException() }
+                .await()
+        }
+
+    }
+
     override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
         return try {
             val updateMap = mapOf(
                 "category" to postEntity.category,
                 "title" to postEntity.title,
                 "text" to postEntity.text,
-                "date_time" to postEntity.dateTime)
+                "date_time" to postEntity.dateTime
+            )
             firestore.collection(COLLECTION)
                 .document(postEntity.id ?: return Result.Error(NullPointerException()))
                 .update(updateMap)
                 .await()
             Result.Success(Unit)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Result.Error(e)
         }
+    }
+
+    override suspend fun editPost(postEntity: PostEntity, inputStream: InputStream) {
+        val uploadUrl = storageDao.uploadFile(inputStream, "posts/${postEntity.id}/image.jpeg")
+
+        val updateMap = mapOf(
+            "category" to postEntity.category,
+            "title" to postEntity.title,
+            "text" to postEntity.text,
+            "date_time" to postEntity.dateTime,
+            "images_url" to listOf(uploadUrl)
+        )
+
+
+        firestore.collection(COLLECTION)
+            .document(postEntity.id!!)
+            .update(updateMap)
+            .await()
     }
 
     override suspend fun updateOrInsertPost(postEntity: PostEntity) {
@@ -190,17 +224,17 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun getPopularPostItems(): Flow<List<PostEntity>> {
-            // 현재 시간에서 7일 전 시간 계산
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, -7)
-            val sevenDaysAgo = Timestamp(calendar.time)
+        // 현재 시간에서 7일 전 시간 계산
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -7)
+        val sevenDaysAgo = Timestamp(calendar.time)
 
-            val query = firestore.collection(COLLECTION)
-                .whereGreaterThan("date_time.created", sevenDaysAgo)
-                .orderBy("views", Query.Direction.DESCENDING)
-                .limit(2)
+        val query = firestore.collection(COLLECTION)
+            .whereGreaterThan("date_time.created", sevenDaysAgo)
+            .orderBy("views", Query.Direction.DESCENDING)
+            .limit(2)
 
-            return query.dataObjects<PostEntity>()
+        return query.dataObjects<PostEntity>()
     }
 
     override fun getTopNotice(limit: Long): Flow<List<PostEntity>> {
@@ -341,7 +375,7 @@ internal class PostDaoImpl @Inject constructor(
                     .await()
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -366,7 +400,7 @@ internal class PostDaoImpl @Inject constructor(
                     .await()
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

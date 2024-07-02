@@ -5,7 +5,7 @@
     android:id="@+id/post_write"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.post.PostWriteFragment">
+    tools:context=".presentation.post.postviewwrite.PostWriteFragment">
 
     <include
         android:id="@+id/include_post_write_app_bar"

@@ -13,16 +13,19 @@ import com.stopsmoke.kekkek.domain.model.Written
 import com.stopsmoke.kekkek.domain.model.toRequestString
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import java.io.InputStream
 import javax.inject.Inject
 
 internal class PostRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val userRepository: UserRepository,
+    private val storageDao: StorageDao
 ) : PostRepository {
     override fun getPost(category: PostCategory): Flow<PagingData<Post>> {
         return postDao.getPost(category = category.toRequestString())
@@ -95,6 +98,18 @@ internal class PostRepositoryImpl @Inject constructor(
             Result.Error(e)
         }
 
+    override suspend fun addPost(post: PostEdit, inputStream: InputStream) {
+        val user = (userRepository.getUserData().first() as User.Registered)
+        val written = Written(
+            uid = user.uid,
+            name = user.name,
+            profileImage = user.profileImage,
+            ranking = user.ranking,
+        )
+
+        postDao.addPost(post.toEntity(written), inputStream)
+    }
+
     override suspend fun deletePost(postId: String): Result<Unit> {
         return try {
             postDao.deletePost(postId)
@@ -112,6 +127,10 @@ internal class PostRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Result.Error(e)
         }
+    }
+
+    override suspend fun editPost(post: Post, inputStream: InputStream) {
+        postDao.editPost(post.toEntity(), inputStream)
     }
 
     override suspend fun getTopPopularItems(): Flow<List<Post>> =
@@ -172,5 +191,9 @@ internal class PostRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.Error(e)
         }
+    }
+
+    override suspend fun setImage(inputStream: InputStream, path: String) {
+        val uploadUrl = storageDao.uploadFile(inputStream, path)
     }
 }
