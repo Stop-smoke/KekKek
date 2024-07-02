@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.settings.profile
+package com.stopsmoke.kekkek.presentation.post.postviewwrite
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentProfileImageUploadProgressBinding
 
-class ProfileImageUploadProgressFragment : DialogFragment() {
+class PostWriteUploadProgressFragment : DialogFragment() {
     private var _binding: FragmentProfileImageUploadProgressBinding? = null
     private val binding: FragmentProfileImageUploadProgressBinding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
