@@ -139,28 +139,6 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
         aztecObject.sourceEditor?.displayStyledAndFormattedHtml(EXAMPLE)
 
 
-        // 원래 코드
-//        ivPostWriteBold.setOnClickListener {
-//
-//        }
-//        ivPostWriteItalic.setOnClickListener {
-//
-//        }
-//        ivPostWriteUnderline.setOnClickListener {
-//
-//        }
-//        ivPostWriteLineThrough.setOnClickListener {
-//
-//        }
-//        ivPostWriteTextColor.setOnClickListener {
-//
-//        }
-//        ivPostWriteBackgroundColor.setOnClickListener {
-//
-//        }
-//        ivPostWriteLink.setOnClickListener {
-//            pickImageLauncher.launch("image/*")
-//        }
     }
 
     private fun initView() = with(binding) {
@@ -213,13 +191,14 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
             if (binding.etPostWriteTitle.text.isEmpty() || binding.aztec.text.isEmpty()) {
                 Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
             } else {
+                Log.d("aztec",aztec.toFormattedHtml())
                 val dialog = builder.create()
                 dialog.show()
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
-                        text = aztec.text.toString(),
+                        text = aztec.toFormattedHtml(),
                         dateTime = DateTime(
                             created = viewModel.post.value?.dateTime?.created
                                 ?: LocalDateTime.now(), modified = LocalDateTime.now()
