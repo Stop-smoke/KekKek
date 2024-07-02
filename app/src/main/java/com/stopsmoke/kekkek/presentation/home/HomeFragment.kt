@@ -1,10 +1,15 @@
 package com.stopsmoke.kekkek.presentation.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -35,6 +40,7 @@ class HomeFragment : Fragment(), ErrorHandle {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        checkNotificationPermission()
     }
 
     override fun onCreateView(
@@ -121,7 +127,6 @@ class HomeFragment : Fragment(), ErrorHandle {
     }
 
 
-
     private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -138,7 +143,7 @@ class HomeFragment : Fragment(), ErrorHandle {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    when(state) {
+                    when (state) {
                         is HomeUiState.NormalUiState -> onBind(state)
                         is HomeUiState.ErrorExit -> {
                             errorExit(findNavController())
@@ -154,11 +159,11 @@ class HomeFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle){
+        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle) {
             viewModel.getMyRank()
         }
 
-        viewModel.myRank.collectLatestWithLifecycle(lifecycle){
+        viewModel.myRank.collectLatestWithLifecycle(lifecycle) {
             binding.tvHomeRankNum.text = "${viewModel.myRank.value}위"
         }
     }
@@ -206,5 +211,20 @@ class HomeFragment : Fragment(), ErrorHandle {
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
         navController.navigate("attainments")
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        ) {
+            // 푸쉬 권한 없음
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                200
+            )
+        }
     }
 }
