@@ -19,7 +19,8 @@ import javax.inject.Inject
 class PostWriteViewModel @Inject constructor(
     private val postRepository: PostRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<PostWriteUiState> = MutableStateFlow(PostWriteUiState.InitUiState)
+    private val _uiState: MutableStateFlow<PostWriteUiState> =
+        MutableStateFlow(PostWriteUiState.InitUiState)
     val uiState = _uiState.asStateFlow()
 
     private val _post = MutableStateFlow<Post?>(null)
@@ -34,8 +35,12 @@ class PostWriteViewModel @Inject constructor(
 
     fun addPost(post: PostEdit) {
         viewModelScope.launch {
-            postRepository.addPost(post)
-            _uiState.emit(PostWriteUiState.Success)
+            try {
+                postRepository.addPost(post)
+                _uiState.emit(PostWriteUiState.Success)
+            } catch (e: Exception) {
+                _uiState.emit(PostWriteUiState.ErrorExit)
+            }
         }
     }
 
@@ -45,22 +50,26 @@ class PostWriteViewModel @Inject constructor(
                 postRepository.addPost(post, inputStream)
                 _uiState.emit(PostWriteUiState.Success)
             } catch (e: Exception) {
-                e.printStackTrace()
+                _uiState.emit(PostWriteUiState.ErrorExit)
             }
         }
     }
 
     fun editPost(postEdit: PostEdit) {
         viewModelScope.launch {
-            val editPost = post.value?.copy(
-                title = postEdit.title,
-                text = postEdit.text,
-                dateTime = postEdit.dateTime,
-                category = postEdit.category.toPostCategory()
-            )
+            try {
+                val editPost = post.value?.copy(
+                    title = postEdit.title,
+                    text = postEdit.text,
+                    dateTime = postEdit.dateTime,
+                    category = postEdit.category.toPostCategory()
+                )
 
-            editPost?.let { postRepository.editPost(editPost) }
-            _uiState.emit(PostWriteUiState.Success)
+                editPost?.let { postRepository.editPost(editPost) }
+                _uiState.emit(PostWriteUiState.Success)
+            } catch (e: Exception) {
+                _uiState.emit(PostWriteUiState.ErrorExit)
+            }
         }
     }
 
@@ -77,7 +86,7 @@ class PostWriteViewModel @Inject constructor(
                 editPost?.let { postRepository.editPost(editPost, inputStream) }
                 _uiState.emit(PostWriteUiState.Success)
             } catch (e: Exception) {
-                e.printStackTrace()
+                _uiState.emit(PostWriteUiState.ErrorExit)
             }
         }
     }
@@ -86,6 +95,11 @@ class PostWriteViewModel @Inject constructor(
         val post = postRepository.getPostForPostId(postId)
         _post.emit(post)
     }
+
+    fun setLoading() {
+        _uiState.value = PostWriteUiState.LadingUiState
+    }
+
 
     fun setPostImage(inputStream: InputStream) {
         viewModelScope.launch {
