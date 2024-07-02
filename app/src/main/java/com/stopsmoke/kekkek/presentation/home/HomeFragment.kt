@@ -127,7 +127,6 @@ class HomeFragment : Fragment(), ErrorHandle {
     }
 
 
-
     private fun initToolbar() {
         binding.toolbarHome.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -144,7 +143,7 @@ class HomeFragment : Fragment(), ErrorHandle {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    when(state) {
+                    when (state) {
                         is HomeUiState.NormalUiState -> onBind(state)
                         is HomeUiState.ErrorExit -> {
                             errorExit(findNavController())
@@ -160,11 +159,11 @@ class HomeFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle){
+        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle) {
             viewModel.getMyRank()
         }
 
-        viewModel.myRank.collectLatestWithLifecycle(lifecycle){
+        viewModel.myRank.collectLatestWithLifecycle(lifecycle) {
             binding.tvHomeRankNum.text = "${viewModel.myRank.value}위"
         }
     }
@@ -215,9 +214,17 @@ class HomeFragment : Fragment(), ErrorHandle {
     }
 
     private fun checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU && PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        ) {
             // 푸쉬 권한 없음
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.POST_NOTIFICATIONS), 200)
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                200
+            )
         }
     }
 }

@@ -11,7 +11,9 @@ data class RankingListItem(
     val userID : String,
     val name: String,
     val startTime: LocalDateTime?,
-    val profileImage: String?
+    val profileImage: String?,
+    val clearAchievementInt: Int,
+    val introduction: String?
 ):Parcelable
 
 fun (User.Registered).toRankingListItem() = RankingListItem(
@@ -20,5 +22,7 @@ fun (User.Registered).toRankingListItem() = RankingListItem(
     startTime = if (history.historyTimeList.isNotEmpty()
         && history.historyTimeList.last().quitSmokingStopDateTime == null) history.historyTimeList.last().quitSmokingStartDateTime
     else null,
-    profileImage = if(profileImage is ProfileImage.Web) (profileImage as ProfileImage.Web).url else null
+    profileImage = if(profileImage is ProfileImage.Web) (profileImage as ProfileImage.Web).url else null,
+    clearAchievementInt = clearAchievementsList.size,
+    introduction = introduction
 )
