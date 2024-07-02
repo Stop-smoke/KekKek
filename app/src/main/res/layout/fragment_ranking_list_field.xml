@@ -64,10 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginEnd="20dp"
-            android:progress="100"
+            android:progress="0"
             android:progressDrawable="@drawable/custom_ranking_progress_rank1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="100" />
 
         <ImageView
             android:id="@+id/iv_rankingList_rank1Crown"
@@ -117,10 +118,12 @@
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank1"
             app:layout_constraintEnd_toEndOf="@id/progressBar_rankingList_rank1"
             app:layout_constraintTop_toTopOf="@id/progressBar_rankingList_rank1"
-            tools:src="@drawable/ic_thumb_up" />
+            tools:src="@drawable/ic_thumb_up"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--  rank2  -->
@@ -139,10 +142,11 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginEnd="20dp"
-            android:progress="100"
+            android:progress="0"
             android:progressDrawable="@drawable/custom_ranking_progress_rank2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="100" />
 
         <ImageView
             android:id="@+id/iv_rankingList_rank2Crown"
@@ -192,10 +196,12 @@
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank2"
             app:layout_constraintEnd_toEndOf="@id/progressBar_rankingList_rank2"
             app:layout_constraintTop_toTopOf="@id/progressBar_rankingList_rank2"
-            tools:src="@drawable/ic_thumb_up" />
+            tools:src="@drawable/ic_thumb_up"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--  rank3  -->
@@ -214,10 +220,11 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginEnd="20dp"
-            android:progress="100"
+            android:progress="0"
             android:progressDrawable="@drawable/custom_ranking_progress_rank3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="100" />
 
         <ImageView
             android:id="@+id/iv_rankingList_rank3Crown"
@@ -267,10 +274,12 @@
             android:layout_height="40dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank3"
             app:layout_constraintEnd_toEndOf="@id/progressBar_rankingList_rank3"
             app:layout_constraintTop_toTopOf="@id/progressBar_rankingList_rank3"
-            tools:src="@drawable/ic_thumb_up" />
+            tools:src="@drawable/ic_thumb_up"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
