@@ -251,10 +251,6 @@ class HomeViewModel @Inject constructor(
         try {
             val list = userRepository.getAllUserData().map { user ->
                 (user as User.Registered).toRankingListItem()
-            }.filter { item ->
-                item.startTime != null
-            }.sortedBy { item ->
-                item.startTime!!
             }
 
             (user as? User.Registered)?.let {

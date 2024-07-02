@@ -4,32 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
+import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
+import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListFieldFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RankingListFragment : Fragment() {
+class RankingListFragment : Fragment(), RankingListCallback{
     private var _binding: FragmentRankingListBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by activityViewModels()
-
-    private val listAdapter: RankingListAdapter by lazy {
-        RankingListAdapter()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,76 +35,42 @@ class RankingListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initViewModel()
     }
 
     private fun initView() = with(binding) {
-        initViewPager()
         setBackPressed()
-        initRankRecyclerview()
+        replaceFragment(RankingListFieldFragment.newInstance(RankingListField.Time))
     }
 
     private fun setBackPressed() {
-        val ivRankingListBack =
-            requireActivity().findViewById<ImageView>(R.id.iv_rankingList_back)
+        val ivRankingListBack = binding.includeRankingListAppBar.ivRankingListBack
         ivRankingListBack.setOnClickListener {
             findNavController().popBackStack()
-        }
-    }
-
-    private fun initRankRecyclerview() {
-        binding.rvRankingListRankState.adapter = listAdapter
-        binding.rvRankingListRankState.layoutManager = LinearLayoutManager(requireContext())
-
-        listAdapter.registerCallbackListener(
-            object : RankingListCallback {
-                override fun navigationToUserProfile(uid: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_rankingList_to_userProfile,
-                        args = bundleOf("uid" to uid)
-                    )
-                }
-            }
-        )
-
-        viewModel.getAllUserData()
-    }
-
-    private fun initViewPager() = with(binding) {
-        vpRankingListRegionalTopRank.adapter = RankingListViewpagerAdapter(this@RankingListFragment)
-        vpRankingListRegionalTopRank.isUserInputEnabled = false
-        vpRankingListRegionalTopRank.offscreenPageLimit =
-            (vpRankingListRegionalTopRank.adapter as RankingListViewpagerAdapter).getItemCount()
-
-        val tabTitles = listOf("전국")
-
-        TabLayoutMediator(
-            tabLayoutRankingListRegionalUnit,
-            vpRankingListRegionalTopRank
-        ) { tab, position ->
-            val customView =
-                LayoutInflater.from(context).inflate(R.layout.custom_tab_ranking_list, null)
-            val textView = customView as TextView
-            textView.text = tabTitles[position]
-            tab.customView = customView
-        }.attach()
-    }
-
-    private fun initViewModel() = with(viewModel) {
-        userRankingList.collectLatestWithLifecycle(lifecycle) {
-            listAdapter.submitList(it.take(30))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        listAdapter.unregisterCallbackListener()
         activity?.visible()
     }
+
 
     override fun onResume() {
         super.onResume()
         activity?.invisible()
+    }
+
+    override fun replaceFragment(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.frameLayout_rankingList, fragment)
+            .commit()
+    }
+
+    override fun navigationToUserProfile(uid: String) {
+        findNavController().navigate(
+            resId = R.id.action_rankingList_to_userProfile,
+            args = bundleOf("uid" to uid)
+        )
     }
 }
