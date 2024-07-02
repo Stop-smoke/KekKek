@@ -5,6 +5,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 
 interface PostDao {
 
@@ -25,7 +26,11 @@ interface PostDao {
 
     suspend fun addPost(postEntity: PostEntity)
 
+    suspend fun addPost(postEntity: PostEntity, inputStream: InputStream)
+
     suspend fun editPost(postEntity: PostEntity): Result<Unit>
+
+    suspend fun editPost(postEntity: PostEntity, inputStream: InputStream)
 
     suspend fun updateOrInsertPost(postEntity: PostEntity)
 

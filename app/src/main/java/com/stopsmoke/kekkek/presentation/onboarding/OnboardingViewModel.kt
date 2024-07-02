@@ -144,11 +144,11 @@ class OnboardingViewModel @Inject constructor(
         }
 
     private fun syncFcmToken() {
-        viewModelScope.launch {
-            userRepository.updateUserData(
-                mapOf("fcm_token" to Firebase.messaging.token.await())
-            )
-        }
+//        viewModelScope.launch {
+//            userRepository.updateUserData(
+//                mapOf("fcm_token" to Firebase.messaging.token.await())
+//            )
+//        }
     }
 }
 

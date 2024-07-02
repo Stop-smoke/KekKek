@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.post.PostWriteFragment">
+    tools:context=".presentation.post.postviewwrite.PostWriteFragment">
 
     <include
         android:id="@+id/include_post_edit_app_bar"

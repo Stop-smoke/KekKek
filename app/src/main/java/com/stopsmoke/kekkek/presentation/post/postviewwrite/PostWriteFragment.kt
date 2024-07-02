@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.postviewwrite
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,7 +10,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import android.media.ExifInterface
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,6 +20,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -27,6 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
@@ -34,10 +36,15 @@ import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
@@ -70,7 +77,7 @@ class PostWriteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPostWriteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -137,6 +144,12 @@ class PostWriteFragment : Fragment() {
                 dialog.show()
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    var inputStream: InputStream? = null
+                    (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
+                        inputStream =
+                            BitmapCompressor(bitmapToInputStream(bitmap!!)!!).getCompressedFile().inputStream()
+                    }
+
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
@@ -148,10 +161,14 @@ class PostWriteFragment : Fragment() {
                             .trim()
                             .toPostWriteCategory()
                     )
-                    if (viewModel.post.value == null) viewModel.addPost(post)
-                    else viewModel.editPost(post)
+                    if (viewModel.post.value == null) {
+                        if (inputStream != null) viewModel.addPost(post, inputStream!!)
+                        else viewModel.addPost(post)
+                    } else {
+                        if (inputStream != null) viewModel.editPost(post, inputStream!!)
+                        else viewModel.editPost(post)
+                    }
                     dialog.dismiss()
-                    findNavController().popBackStack()
                 }
             }
         }
@@ -179,6 +196,15 @@ class PostWriteFragment : Fragment() {
                     createDialogBuilder()
                 }
         }
+
+        uiState.collectLatestWithLifecycle(lifecycle){
+            when(it){
+                PostWriteUiState.InitUiState -> {}
+                PostWriteUiState.Success -> {
+                    findNavController().popBackStack()
+                }
+            }
+        }
     }
 
     private fun onBind(post: Post) = with(binding) {
@@ -191,12 +217,13 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun insertImage(url: Uri) {
-        val inputStream = requireContext().contentResolver.openInputStream(url)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
+        val rotatedBitmap =
+            requireContext().contentResolver.openInputStream(url).use { inputStream ->
+                val bitmap = BitmapFactory.decodeStream(inputStream)
 
-        val orientation = getOrientation(url)
-        val rotatedBitmap = rotateBitmap(bitmap, orientation)
+                val orientation = getOrientation(inputStream)
+                rotateBitmap(bitmap, orientation)
+            }
 
         val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
         val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
@@ -204,21 +231,22 @@ class PostWriteFragment : Fragment() {
 
         val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
 
+
         binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
         binding.ivPostWriteImage.visibility = View.VISIBLE
         binding.ivDeleteImage.visibility = View.VISIBLE
     }
 
-    private fun getOrientation(uri: Uri): Int {
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        inputStream?.use { stream ->
-            val exifInterface = ExifInterface(stream)
-            return exifInterface.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
+    private fun getOrientation(inputStream: InputStream?): Int {
+        if (inputStream == null) {
+            return ExifInterface.ORIENTATION_UNDEFINED
         }
-        return ExifInterface.ORIENTATION_UNDEFINED
+
+        val exifInterface = ExifInterface(inputStream)
+        return exifInterface.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
     }
 
     private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
@@ -249,6 +277,13 @@ class PostWriteFragment : Fragment() {
         canvas.drawBitmap(bitmap, rect, rect, paint)
 
         return output
+    }
+
+    private fun bitmapToInputStream(bitmap: Bitmap): InputStream? {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        return if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)) {
+            ByteArrayInputStream(byteArrayOutputStream.toByteArray())
+        } else null
     }
 
     private fun initTextEditor() = with(binding) {

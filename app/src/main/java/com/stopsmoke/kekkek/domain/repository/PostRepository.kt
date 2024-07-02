@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.PostEdit
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 
 interface PostRepository {
     fun getPost(category: PostCategory = PostCategory.ALL): Flow<PagingData<Post>>
@@ -20,9 +21,13 @@ interface PostRepository {
 
     suspend fun addPost(post: PostEdit): Result<Unit>
 
+    suspend fun addPost(post: PostEdit, inputStream: InputStream)
+
     suspend fun deletePost(postId: String): Result<Unit>
 
     suspend fun editPost(post: Post): Result<Unit>
+
+    suspend fun editPost(post: Post, inputStream: InputStream)
 
     suspend fun getTopPopularItems(): Flow<List<Post>>
 
@@ -42,4 +47,5 @@ interface PostRepository {
 
     suspend fun deleteBookmark(postId: String): Result<Unit>
 
+    suspend fun setImage(inputStream: InputStream, path: String)
 }
