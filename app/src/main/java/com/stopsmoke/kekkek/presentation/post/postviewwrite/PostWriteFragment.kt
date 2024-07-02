@@ -37,6 +37,7 @@ import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -48,7 +49,7 @@ import java.io.InputStream
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
-class PostWriteFragment : Fragment() {
+class PostWriteFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
@@ -144,6 +145,7 @@ class PostWriteFragment : Fragment() {
                 dialog.show()
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    viewModel.setLoading()
                     var inputStream: InputStream? = null
                     (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                         inputStream =
@@ -203,6 +205,13 @@ class PostWriteFragment : Fragment() {
                 PostWriteUiState.Success -> {
                     findNavController().popBackStack()
                 }
+
+                PostWriteUiState.LadingUiState -> {
+                    val uploadProgress = PostWriteUploadProgressFragment()
+                    uploadProgress.show(childFragmentManager, "uploadProgress")
+                }
+
+                PostWriteUiState.ErrorExit -> errorExit(findNavController())
             }
         }
     }
