@@ -30,10 +30,6 @@ class CommunityViewModel @Inject constructor(
         MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    private val _isPostChanged = MutableStateFlow(false)
-    val isPostChanged: StateFlow<Boolean> get() = _isPostChanged.asStateFlow()
-
-
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
@@ -82,12 +78,6 @@ class CommunityViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.emit(CommunityUiState.ErrorExit)
             }
-        }
-    }
-
-    fun setPostChanged(isChanged: Boolean) {
-        viewModelScope.launch {
-            _isPostChanged.emit(isChanged)
         }
     }
 

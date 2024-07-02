@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.domain.model.toPostCategory
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
@@ -214,10 +215,13 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         // 삭제될 때 시도
-        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+        val isPostDeletedFlow = savedStateHandle?.getStateFlow(NavigationKey.IS_DELETED_POST, false)
+
+        isPostDeletedFlow?.collectLatestWithLifecycle(lifecycle) { isDeleted ->
             if (isDeleted) {
+                binding.rvCommunityList.smoothScrollToPosition(0)
                 listAdapter.refresh()
-                viewModel.setPostChanged(false)
             }
         }
     }

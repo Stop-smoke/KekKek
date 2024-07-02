@@ -27,6 +27,7 @@ import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
@@ -57,9 +58,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
             .setMessage("게시글을 삭제하시겠습니까?")
             .setPositiveButton("삭제") { dialog, _ ->
                 viewModel.post.value?.id?.let { postId ->
-                    viewModel.deletePost(postId)
-                    Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                    deletePost(postId)
                 }
                 dialog.dismiss()
             }
@@ -132,6 +131,12 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         arguments?.getString("post_id", null)?.let {
             viewModel.updatePostId(it)
         }
+
+        initPostDeletedResult()
+    }
+
+    private fun initPostDeletedResult() {
+        putNavigationResult(NavigationKey.IS_DELETED_POST, false)
     }
 
     override fun onCreateView(
@@ -334,6 +339,11 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     override fun deletePost(postId: String) {
         viewModel.deletePost(postId)
         Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        putNavigationResult(NavigationKey.IS_DELETED_POST, true)
         findNavController().popBackStack()
+    }
+
+    private fun<T> putNavigationResult(key: String, value: T) {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(key, value)
     }
 }
