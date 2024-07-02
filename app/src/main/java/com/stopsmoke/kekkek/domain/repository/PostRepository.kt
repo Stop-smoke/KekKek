@@ -16,7 +16,7 @@ interface PostRepository {
 
     fun getPost(uid: String): Flow<PagingData<Post>>
 
-    fun getPostItem(postId: String): Flow<List<Post>>
+    fun getPostItem(postId: String): Flow<Post>
 
     suspend fun addPost(post: PostEdit): Result<Unit>
 
@@ -26,7 +26,7 @@ interface PostRepository {
 
     suspend fun getTopPopularItems(): Flow<List<Post>>
 
-    suspend fun getTopNotice(): Post
+    fun getTopNotice(limit: Long): Flow<List<Post>>
 
     suspend fun getPopularPostList(): List<Post>
 

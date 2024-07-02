@@ -8,15 +8,18 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.domain.model.toPostCategory
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -24,11 +27,11 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class CommunityFragment : Fragment() {
+class CommunityFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 
-    private val viewModel: CommunityViewModel by activityViewModels()
+    private val viewModel: CommunityViewModel by viewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -57,11 +60,8 @@ class CommunityFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.let { activity ->
-            activity?.visible()
-        }
+        activity?.visible()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -69,12 +69,11 @@ class CommunityFragment : Fragment() {
         listAdapter.unregisterCallbackListener()
     }
 
-
-    private fun initView() = with(binding) {
+    private fun initView() {
         initRecyclerView()
         initCommunityCategory()
         setToolbarMenu()
-
+        resetCommunityListScrollOnUpdate()
     }
 
     private fun initRecyclerView() {
@@ -148,15 +147,14 @@ class CommunityFragment : Fragment() {
             LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
         val adapterList =
             requireContext().resources.getStringArray(R.array.community_category).toList()
-        val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
-            if (viewModel.category.value == adapterList[clickPosition].toPostCategory()) {
-                listAdapter.refresh()
-            } else {
+        val adapter = CommunityCategoryListAdapter { clickPosition ->
+            if (viewModel.category.value != adapterList[clickPosition].toPostCategory()) {
                 viewModel.setCategory(adapterList[clickPosition])
+                return@CommunityCategoryListAdapter
             }
-
-            rvCommunityList.scrollToPosition(0)
-        })
+            binding.rvCommunityList.smoothScrollToPosition(0)
+            binding.rvCommunityCategory.smoothScrollToPosition(0)
+        }
         adapter.submitList(adapterList)
         rvCommunityCategory.adapter = adapter
     }
@@ -180,18 +178,17 @@ class CommunityFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    onBind(state)
+                    when(state) {
+                        is CommunityUiState.CommunityNormalUiState -> onBind(state)
+                        CommunityUiState.ErrorExit -> errorExit(findNavController())
+                    }
                 }
         }
 
         //게시글
-        viewLifecycleOwner.lifecycleScope.launch {
-            posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { posts ->
-                    listAdapter.submitData(posts)
-                }
+        posts.collectLatestWithLifecycle(lifecycle) { posts ->
+            listAdapter.submitData(posts)
         }
-
 
         //인기글 배너
         viewLifecycleOwner.lifecycleScope.launch {
@@ -210,55 +207,65 @@ class CommunityFragment : Fragment() {
         }
 
         // 삭제될 때 시도
-        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+        val isPostDeletedFlow = savedStateHandle?.getStateFlow(NavigationKey.IS_DELETED_POST, false)
+
+        isPostDeletedFlow?.collectLatestWithLifecycle(lifecycle) { isDeleted ->
             if (isDeleted) {
+                binding.rvCommunityList.smoothScrollToPosition(0)
                 listAdapter.refresh()
-                viewModel.setPostChanged(false)
             }
         }
     }
 
-    private fun onBind(communityUiState: CommunityUiState) {
-        when (communityUiState) {
-            is CommunityUiState.CommunityNormalUiState -> {
-                val tvCommunityTitle1 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_title1)
-                val tvCommunityViewNum1 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_viewNum1)
-                val tvCommunityLikeNum1 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_likeNum1)
-                val tvCommunityCommentNum1 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_commentNum1)
-                val tvCommunityPostType1 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_postType1)
-
-                val tvCommunityTitle2 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_title2)
-                val tvCommunityViewNum2 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_viewNum2)
-                val tvCommunityLikeNum2 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_likeNum2)
-                val tvCommunityCommentNum2 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_commentNum2)
-                val tvCommunityPostType2 =
-                    requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
-
-                communityUiState.popularItem.postInfo1.postInfo.let {
-                    tvCommunityTitle1.text = it.title
-                    tvCommunityViewNum1.text = it.view.toString()
-                    tvCommunityLikeNum1.text = it.like.toString()
-                    tvCommunityCommentNum1.text = it.comment.toString()
-                    tvCommunityPostType1.text = it.postType
-                }
-
-                communityUiState.popularItem.postInfo2.postInfo.let {
-                    tvCommunityTitle2.text = it.title
-                    tvCommunityViewNum2.text = it.view.toString()
-                    tvCommunityLikeNum2.text = it.like.toString()
-                    tvCommunityCommentNum2.text = it.comment.toString()
-                    tvCommunityPostType2.text = it.postType
+    private fun resetCommunityListScrollOnUpdate() {
+        listAdapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+                    super.onItemRangeChanged(positionStart, itemCount, payload)
+                    binding.rvCommunityList.scrollToPosition(0)
                 }
             }
+        )
+    }
+
+    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) {
+        val tvCommunityTitle1 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_title1)
+        val tvCommunityViewNum1 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum1)
+        val tvCommunityLikeNum1 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum1)
+        val tvCommunityCommentNum1 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum1)
+        val tvCommunityPostType1 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_postType1)
+
+        val tvCommunityTitle2 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_title2)
+        val tvCommunityViewNum2 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum2)
+        val tvCommunityLikeNum2 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum2)
+        val tvCommunityCommentNum2 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum2)
+        val tvCommunityPostType2 =
+            requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
+
+        communityUiState.popularItem.postInfo1.postInfo.let {
+            tvCommunityTitle1.text = it.title
+            tvCommunityViewNum1.text = it.view.toString()
+            tvCommunityLikeNum1.text = it.like.toString()
+            tvCommunityCommentNum1.text = it.comment.toString()
+            tvCommunityPostType1.text = it.postType
+        }
+
+        communityUiState.popularItem.postInfo2.postInfo.let {
+            tvCommunityTitle2.text = it.title
+            tvCommunityViewNum2.text = it.view.toString()
+            tvCommunityLikeNum2.text = it.like.toString()
+            tvCommunityCommentNum2.text = it.comment.toString()
+            tvCommunityPostType2.text = it.postType
         }
     }
 }

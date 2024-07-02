@@ -47,7 +47,7 @@ private fun Context.commentNotificationBuilder(
         /* context = */ this,
         /* channelId = */ COMMENT_NOTIFICATION_ID
     )
-        .setSmallIcon(R.drawable.ic_brand_logo_white)
+        .setSmallIcon(R.drawable.ic_notification_white)
         .setColor(getColor(R.color.primary_blue))
         .setContentTitle(title)
         .setContentText(content)

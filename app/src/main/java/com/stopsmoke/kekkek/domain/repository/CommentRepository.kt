@@ -10,7 +10,7 @@ interface CommentRepository {
 
     fun getCommentItems(commentFilter: CommentFilter): Flow<PagingData<Comment>>
 
-    suspend fun addCommentItem(comment: Comment): Result<Unit>
+    suspend fun addCommentItem(comment: Comment): String
 
     fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>>
 
@@ -23,4 +23,8 @@ interface CommentRepository {
    fun getCommentCount(postId: String): Flow<Long>
 
    fun getComment(postId: String, commentId: String): Flow<Comment>
+
+   suspend fun addCommentLike(postId: String, commentId: String)
+
+   suspend fun removeCommentLike(postId: String, commentId: String)
 }

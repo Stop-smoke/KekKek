@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
-import com.stopsmoke.kekkek.presentation.post.PostHeaderItem
+import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
 
@@ -16,9 +16,9 @@ class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
     private val callback: PostCommentCallback?
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(headerItem: PostHeaderItem) {
+    fun bind(headerItem: PostContentItem) {
         initUserProfileView(headerItem.user, headerItem.post)
-        initPostView(headerItem.post, headerItem.commentNum)
+        initPostView(headerItem.post)
         clickPostLike(headerItem.post)
 
         binding.ivPostPoster.setOnClickListener {
@@ -55,7 +55,7 @@ class PostContentViewHolder(
         }
     }
 
-    private fun initPostView(post: Post?, commentNum: Long) = with(binding) {
+    private fun initPostView(post: Post?) = with(binding) {
         if (post == null) return@with
 
         tvPostPosterNickname.text = post.written.name
@@ -68,7 +68,7 @@ class PostContentViewHolder(
         tvPostCommentNum.text = post.commentCount.toString()
         tvPostViewNum.text = post.views.toString()
         initWrittenProfileImage(post.written.profileImage)
-        binding.tvPostCommentNum.text = commentNum.toString()
+        binding.tvPostCommentNum.text = post.commentCount.toString()
     }
 
     private fun initWrittenProfileImage(profileImage: ProfileImage) {

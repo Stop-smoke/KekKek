@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -23,22 +24,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CommunityUiState> =
         MutableStateFlow(CommunityUiState.init())
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    private val _isPostChanged = MutableStateFlow(false)
-    val isPostChanged: StateFlow<Boolean> get() = _isPostChanged.asStateFlow()
-
-
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
-    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
-    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
+    fun setCategory(categoryString: String) {
+        viewModelScope.launch {
+            _category.emit(categoryString.toPostCategory())
+        }
+    }
 
+    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+        .map { post ->
+            post.first()
+        }
+        .catch {
+            _uiState.emit(CommunityUiState.ErrorExit)
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
@@ -51,32 +58,17 @@ class CommunityViewModel @Inject constructor(
     }
         .cachedIn(viewModelScope)
         .catch {
+            _uiState.emit(CommunityUiState.ErrorExit)
             it.printStackTrace()
         }
 
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     val topPopularPosts = posts.flatMapLatest {
-        postRepository.getTopPopularItems()
-    }
-
-    fun setCategory(categoryString: String) {
-        updateCategory(categoryString.toPostCategory())
-    }
-
-    private fun updateCategory(postCategory: PostCategory) {
-        _category.value = postCategory
-    }
-
-    init {
-        viewModelScope.launch {
-            val noticeBannerPost = postRepository.getTopNotice()
-            _noticeBanner.emit(noticeBannerPost)
-        }
-    }
-
-    fun setPostChanged(isChanged: Boolean) {
-        viewModelScope.launch {
-            _isPostChanged.emit(isChanged)
+        try {
+            postRepository.getTopPopularItems()
+        } catch (e: Exception) {
+            _uiState.emit(CommunityUiState.ErrorExit)
+            emptyFlow()
         }
     }
 

@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.firestore.dao
 
 import androidx.paging.PagingData
-import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
@@ -22,7 +21,7 @@ interface PostDao {
 
     fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>>
 
-    fun getPostItem(postId: String): Flow<List<PostEntity>>
+    fun getPostItem(postId: String): Flow<PostEntity>
 
     suspend fun addPost(postEntity: PostEntity)
 
@@ -34,7 +33,7 @@ interface PostDao {
 
     suspend fun getPopularPostItems(): Flow<List<PostEntity>>
 
-    suspend fun getTopNotice(): PostEntity
+    fun getTopNotice(limit: Long): Flow<List<PostEntity>>
 
     suspend fun getPopularPostList(): List<PostEntity>
 

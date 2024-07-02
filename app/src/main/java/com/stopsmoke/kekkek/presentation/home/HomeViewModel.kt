@@ -15,10 +15,13 @@ import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,9 +31,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val postRepository: PostRepository
+    postRepository: PostRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.init())
+    private val _uiState: MutableStateFlow<HomeUiState> =
+        MutableStateFlow(HomeUiState.NormalUiState.init())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var timerJob: Job? = null
@@ -47,68 +51,72 @@ class HomeViewModel @Inject constructor(
         initialValue = null
     )
 
-    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
-    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            val noticeBannerPost = postRepository.getTopNotice()
-            _noticeBanner.emit(noticeBannerPost)
+    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+        .map { post ->
+            post.first()
         }
-    }
+        .catch {
+            _uiState.emit(HomeUiState.ErrorExit)
+        }
 
     fun updateUserData() = viewModelScope.launch {
-        val userData = userRepository.getUserData()
-        userData.collect { user ->
-            _currentUserState.value = user
-            when (user) {
-                is User.Registered -> {
+        try {
+            val userData = userRepository.getUserData()
+            userData.collect { user ->
+                _currentUserState.value = user
+                when (user) {
+                    is User.Registered -> {
 
-                    if (user.history.historyTimeList.isEmpty()) {
-                        setEmptyStartUserHistory()
+                        if (user.history.historyTimeList.isEmpty()) {
+                            setEmptyStartUserHistory()
+                        }
+
+                        val totalMinutesTime = user.history.getTotalMinutesTime()
+                        timeString = formatElapsedTime(totalMinutesTime)
+                        calculateSavedValues(user.userConfig)
+                        _uiState.emit(
+                            HomeUiState.NormalUiState(
+                                homeItem = HomeItem(
+                                    timeString = timeString,
+                                    savedMoney = savedMoneyPerMinute * totalMinutesTime,
+                                    savedLife = savedLifePerMinute * totalMinutesTime,
+                                    rank = user.ranking,
+                                    addictionDegree = user.cigaretteAddictionTestResult ?: "테스트 필요",
+                                    history = user.history
+                                ),
+                                startTimerSate = user.history.getStartTimerState()
+                            )
+                        )
                     }
 
-                    val totalMinutesTime = user.history.getTotalMinutesTime()
-                    timeString = formatElapsedTime(totalMinutesTime)
-                    calculateSavedValues(user.userConfig)
-                    _uiState.emit(
-                        HomeUiState(
-                            homeItem = HomeItem(
-                                timeString = timeString,
-                                savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                                savedLife = savedLifePerMinute * totalMinutesTime,
-                                rank = user.ranking,
-                                addictionDegree = user.cigaretteAddictionTestResult ?: "테스트 필요",
-                                history = user.history
-                            ),
-                            startTimerSate = user.history.getStartTimerState()
-                        )
-                    )
+                    else -> {}
                 }
-
-                else -> {}
             }
+        } catch (e: Exception) {
+            _uiState.emit(HomeUiState.ErrorExit)
         }
     }
 
 
     fun startTimer() {
         timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (true) {
-                timeString =
-                    formatElapsedTime(
-                        (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime()
-                            ?: 0
-                    )
-                _uiState.update { prev ->
-                    prev.copy(
-                        homeItem = prev.homeItem.copy(
-                            timeString = timeString
+        (uiState.value as? HomeUiState.NormalUiState).let {
+            timerJob = viewModelScope.launch {
+                while (true) {
+                    timeString =
+                        formatElapsedTime(
+                            (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime()
+                                ?: 0
                         )
-                    )
+                    _uiState.update { prev ->
+                        (prev as HomeUiState.NormalUiState).copy(
+                            homeItem = prev.homeItem.copy(
+                                timeString = timeString
+                            )
+                        )
+                    }
+                    delay(1000) // 1 second
                 }
-                delay(1000) // 1 second
             }
         }
     }
@@ -116,72 +124,85 @@ class HomeViewModel @Inject constructor(
     fun stopTimer() = viewModelScope.launch {
         timerJob?.cancel()
         timerJob = null
-
     }
 
     fun setStopUserHistory() = viewModelScope.launch {
-        if (currentUserState.value is User.Registered) {
-            val user = (currentUserState.value as User.Registered)
-            val updatedHistoryTimeList = user.history.historyTimeList.toMutableList()
-            val lastItem = updatedHistoryTimeList.last().copy(
-                quitSmokingStopDateTime = LocalDateTime.now()
-            )
-
-            updatedHistoryTimeList[updatedHistoryTimeList.size - 1] = lastItem
-
-            val updatedUserHistory =
-                user.history.copy(
-                    historyTimeList = updatedHistoryTimeList,
-                    totalMinutesTime = timeStringToMinutes(uiState.value.homeItem.timeString)
+        try {
+            if (currentUserState.value is User.Registered) {
+                val user = (currentUserState.value as User.Registered)
+                val updatedHistoryTimeList = user.history.historyTimeList.toMutableList()
+                val lastItem = updatedHistoryTimeList.last().copy(
+                    quitSmokingStopDateTime = LocalDateTime.now()
                 )
-            userRepository.setUserData(user.copy(history = updatedUserHistory))
 
-            updateUserData()
+                updatedHistoryTimeList[updatedHistoryTimeList.size - 1] = lastItem
+
+                val updatedUserHistory =
+                    user.history.copy(
+                        historyTimeList = updatedHistoryTimeList,
+                        totalMinutesTime = timeStringToMinutes((uiState.value as HomeUiState.NormalUiState).homeItem.timeString)
+                    )
+                userRepository.setUserData(user.copy(history = updatedUserHistory))
+
+                updateUserData()
+            }
+        } catch (e: Exception) {
+            _uiState.emit(HomeUiState.ErrorExit)
         }
     }
 
     fun setStartUserHistory() = viewModelScope.launch {
-        if (currentUserState.value is User.Registered) {
-            val user = currentUserState.value as User.Registered
+        try {
+            if (currentUserState.value is User.Registered) {
+                val user = currentUserState.value as User.Registered
 
-            var updatedHistoryTimeList: MutableList<HistoryTime>? = null
+                var updatedHistoryTimeList: MutableList<HistoryTime>? = null
 
-            if (user.history.historyTimeList.isNotEmpty()) {
-                updatedHistoryTimeList = user.history.historyTimeList.toMutableList()
-            } else updatedHistoryTimeList = mutableListOf()
+                if (user.history.historyTimeList.isNotEmpty()) {
+                    updatedHistoryTimeList = user.history.historyTimeList.toMutableList()
+                } else updatedHistoryTimeList = mutableListOf()
 
-            val lastItem = HistoryTime(
-                quitSmokingStartDateTime = LocalDateTime.now(),
-                quitSmokingStopDateTime = null
-            )
-            updatedHistoryTimeList.add(lastItem)
+                val lastItem = HistoryTime(
+                    quitSmokingStartDateTime = LocalDateTime.now(),
+                    quitSmokingStopDateTime = null
+                )
+                updatedHistoryTimeList.add(lastItem)
 
-            val updatedUserHistory =
-                user.history.copy(historyTimeList = updatedHistoryTimeList)
+                val updatedUserHistory =
+                    user.history.copy(historyTimeList = updatedHistoryTimeList)
 
-            userRepository.setUserData(user.copy(history = updatedUserHistory))
+                userRepository.setUserData(user.copy(history = updatedUserHistory))
 
-            updateUserData()
+                updateUserData()
+            }
+        } catch (e: Exception) {
+            _uiState.emit(HomeUiState.ErrorExit)
         }
+
     }
 
 
     private fun setEmptyStartUserHistory() = viewModelScope.launch {
-        if (currentUserState.value is User.Registered) {
-            val user = currentUserState.value as User.Registered
+        try {
+            if (currentUserState.value is User.Registered) {
+                val user = currentUserState.value as User.Registered
 
-            var updatedHistoryTimeList: MutableList<HistoryTime> = mutableListOf()
-            val lastItem = HistoryTime(
-                quitSmokingStartDateTime = LocalDateTime.now(),
-                quitSmokingStopDateTime = null
-            )
-            updatedHistoryTimeList.add(lastItem)
+                var updatedHistoryTimeList: MutableList<HistoryTime> = mutableListOf()
+                val lastItem = HistoryTime(
+                    quitSmokingStartDateTime = LocalDateTime.now(),
+                    quitSmokingStopDateTime = null
+                )
+                updatedHistoryTimeList.add(lastItem)
 
-            val updatedUserHistory =
-                user.history.copy(historyTimeList = updatedHistoryTimeList)
+                val updatedUserHistory =
+                    user.history.copy(historyTimeList = updatedHistoryTimeList)
 
-            userRepository.setUserData(user.copy(history = updatedUserHistory))
+                userRepository.setUserData(user.copy(history = updatedUserHistory))
+            }
+        } catch (e: Exception) {
+            _uiState.emit(HomeUiState.ErrorExit)
         }
+
     }
 
     private fun formatElapsedTime(elapsedTimeMinutes: Long): String {
@@ -225,24 +246,29 @@ class HomeViewModel @Inject constructor(
     val myRank get() = _myRank.asStateFlow()
 
     fun getAllUserData() = viewModelScope.launch {
-        val list = userRepository.getAllUserData().map{user->
-            (user as User.Registered).toRankingListItem()
-        }.filter { item->
-            item.startTime != null
-        }.sortedBy {item ->
-            item.startTime!!
+        try {
+            val list = userRepository.getAllUserData().map { user ->
+                (user as User.Registered).toRankingListItem()
+            }.filter { item ->
+                item.startTime != null
+            }.sortedBy { item ->
+                item.startTime!!
+            }
+
+            (user as? User.Registered)?.let {
+                _myRank.value = list.indexOf(it.toRankingListItem())
+            }
+
+            _userRankingList.emit(list)
+        } catch (e: Exception) {
+            _uiState.emit(HomeUiState.ErrorExit)
         }
 
-        (user as? User.Registered)?.let{
-            _myRank.value = list.indexOf(it.toRankingListItem())
-        }
-
-        _userRankingList.emit(list)
     }
 
-    fun getMyRank(){
-        (user.value as? User.Registered)?.let{
-            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem())+1
+    fun getMyRank() {
+        (user.value as? User.Registered)?.let {
+            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem()) + 1
         }
     }
 }

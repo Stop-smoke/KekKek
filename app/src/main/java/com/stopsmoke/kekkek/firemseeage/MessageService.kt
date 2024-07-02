@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.firestore.dao.UserDao
 import com.stopsmoke.kekkek.notifications.commentNotificationNotify
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class MessageService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        serviceLifeScope = CoroutineScope(Dispatchers.Unconfined)
+        serviceLifeScope = CoroutineScope(SupervisorJob())
     }
 
     override fun onDestroy() {

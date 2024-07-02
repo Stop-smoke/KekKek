@@ -3,6 +3,8 @@ package com.stopsmoke.kekkek.presentation.onboarding
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.stopsmoke.kekkek.data.mapper.emptyHistory
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -101,6 +104,7 @@ class OnboardingViewModel @Inject constructor(
             )
             userRepository.setUserData(user)
             userRepository.setOnboardingComplete(true)
+
             delay(1300)
             _onboardingUiState.emit(OnboardingUiState.Success)
         }
@@ -126,9 +130,11 @@ class OnboardingViewModel @Inject constructor(
                 is User.Guest -> AuthenticationUiState.Guest
                 is User.Registered -> {
                     if (user.name.isBlank()) {
+                        syncFcmToken()
                         return@flatMapLatest flowOf(AuthenticationUiState.NewMember)
                     }
                     userRepository.setOnboardingComplete(true)
+                    syncFcmToken()
                     AuthenticationUiState.AlreadyUser
                 }
             }
@@ -136,6 +142,14 @@ class OnboardingViewModel @Inject constructor(
                     flowOf(it)
                 }
         }
+
+    private fun syncFcmToken() {
+        viewModelScope.launch {
+            userRepository.updateUserData(
+                mapOf("fcm_token" to Firebase.messaging.token.await())
+            )
+        }
+    }
 }
 
 sealed interface AuthenticationUiState {

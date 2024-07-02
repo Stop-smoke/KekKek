@@ -12,22 +12,25 @@ import com.stopsmoke.kekkek.firestore.model.CommentParentEntity
 import com.stopsmoke.kekkek.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
 
-internal fun CommentEntity.asExternalModel(earliestReply: List<Reply>): Comment =
-    Comment(
-        id = id ?: "null",
-        text = text ?: "null",
-        dateTime = dateTime.asExternalModel(),
-        likeUser = likeUser,
-        unlikeUser = unlikeUser,
-        earliestReply = earliestReply,
-        written = written.asExternalModel(),
-        parent = parent?.asExternalModel() ?: CommentParent(
-            postType = PostCategory.UNKNOWN,
-            postId = "null",
-            postTitle = "null"
-        ),
-        replyCount = replyCount ?: 0
-    )
+internal fun CommentEntity.asExternalModel(
+    earliestReply: List<Reply>,
+    isLiked: Boolean,
+): Comment = Comment(
+    id = id ?: "null",
+    text = text ?: "null",
+    dateTime = dateTime.asExternalModel(),
+    likeUser = likeUser,
+    unlikeUser = unlikeUser,
+    earliestReply = earliestReply,
+    written = written.asExternalModel(),
+    parent = parent?.asExternalModel() ?: CommentParent(
+        postType = PostCategory.UNKNOWN,
+        postId = "null",
+        postTitle = "null"
+    ),
+    replyCount = replyCount ?: 0,
+    isLiked = isLiked
+)
 
 internal fun CommentParentEntity.asExternalModel(): CommentParent =
     CommentParent(
