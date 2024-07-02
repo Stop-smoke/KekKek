@@ -216,18 +216,6 @@ class PostViewModel @Inject constructor(
         e.printStackTrace()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val commentCount = postId.flatMapLatest { id ->
-        if (id.isNullOrBlank()) {
-            return@flatMapLatest emptyFlow()
-        }
-
-        commentRepository.getCommentCount(id)
-    }
-        .catch {
-            it.printStackTrace()
-        }
-
     fun toggleLikeToPost() = try {
         viewModelScope.launch {
             val user = user.first() as? User.Registered ?: return@launch

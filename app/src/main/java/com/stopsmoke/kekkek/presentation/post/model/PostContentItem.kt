@@ -6,5 +6,4 @@ import com.stopsmoke.kekkek.domain.model.User
 data class PostContentItem(
     val user: User?,
     val post: Post?,
-    val commentNum: Long,
 )

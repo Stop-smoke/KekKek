@@ -169,9 +169,8 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
             combine(
                 viewModel.user,
                 viewModel.post,
-                viewModel.commentCount
-            ) { user: User?, post: Post?, l: Long? ->
-                val headerItem = PostContentItem(user, post, l ?: 0)
+            ) { user: User?, post: Post? ->
+                val headerItem = PostContentItem(user, post)
                 postViewAdapter.updatePostHeader(headerItem)
 
                 if (user !is User.Registered) return@combine
