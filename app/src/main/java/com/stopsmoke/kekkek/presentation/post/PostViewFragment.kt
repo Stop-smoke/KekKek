@@ -178,10 +178,14 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
                 val headerItem = PostContentItem(user, post)
                 postViewAdapter.updatePostHeader(headerItem)
 
-                if (user !is User.Registered) return@combine
-                if (post == null) return@combine
+                if (user !is User.Registered || post?.id == "null" || post?.id.isNullOrBlank()) {
+                    binding.clPostAddComment.visibility = View.GONE
+                    return@combine
+                }
 
-                if (post.bookmarkUser.contains(user.uid)) {
+                binding.clPostAddComment.visibility = View.VISIBLE
+
+                if (post!!.bookmarkUser.contains(user.uid)) {
                     binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark_filled)
                 } else {
                     binding.includePostViewAppBar.ivPostBookmark.setImageResource(R.drawable.ic_bookmark)
