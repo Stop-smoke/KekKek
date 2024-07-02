@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.PostCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 
 class CommunityListAdapter :
@@ -39,30 +39,6 @@ class CommunityListAdapter :
         private val binding: ItemCommunityPostwritingBinding,
         private val callback: CommunityCallbackListener?,
     ) : ViewHolder(binding.root) {
-
-        init {
-            with(binding) {
-                root.setOnClickListener {
-//                    val post = CommunityWritingItem(
-//                        userInfo = UserInfo(
-//                            name = tvItemWritingName.text.toString(),
-//                            rank = tvItemWritingRank.text.to,
-//                            profileImage = circleIvItemWritingProfile
-//                        ),
-//                        postInfo = PostInfo(
-//                            title = tvItemWritingTitle.text.toString(),
-//                            postType = "",
-//                            view = tvItemWritingViewNum.text,
-//                            like = tvItemWritingLikeNum,
-//                            comment = tvItemWritingCommentNum
-//                        ),
-//                        postImage = "",
-//                        post = tvItemWritingPost,
-//                        postTime = tvItemWritingTimeStamp
-//                    )
-                }
-            }
-        }
 
         override fun bind(item: CommunityWritingItem): Unit = with(binding) {
             item.postInfo.let {
@@ -116,7 +92,7 @@ class CommunityListAdapter :
                 DateTimeUnit.SECOND -> "초"
             }
 
-            return "${pastTime.number} ${timeType} 전"
+            return "${pastTime.number} $timeType 전"
         }
 
         private fun setMarginEnd(view: TextView, end: Int) {
@@ -151,14 +127,15 @@ class CommunityListAdapter :
                 oldItem: CommunityWritingItem,
                 newItem: CommunityWritingItem,
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.postInfo.id == newItem.postInfo.id
             }
 
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
                 oldItem: CommunityWritingItem,
                 newItem: CommunityWritingItem,
             ): Boolean {
-                return oldItem == newItem
+                return oldItem === newItem
             }
 
         }
