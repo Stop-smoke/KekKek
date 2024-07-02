@@ -254,7 +254,7 @@
 
     <fragment
         android:id="@+id/attainments"
-        android:name="com.stopsmoke.kekkek.presentation.attainments.AttainmentsFragment"
+        android:name="com.stopsmoke.kekkek.presentation.home.attainments.AttainmentsFragment"
         app:route="attainments"
         tools:layout="@layout/fragment_attainments" />
 
@@ -373,5 +373,11 @@
             android:id="@+id/action_reply_to_userProfile"
             app:destination="@id/user_profile" />
     </fragment>
+
+    <fragment
+        android:id="@+id/error"
+        app:route="error"
+        android:name="com.stopsmoke.kekkek.presentation.error.ErrorFragment"
+        tools:layout="@layout/fragment_error_server_etc" />
 
 </navigation>
