@@ -73,6 +73,11 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.updateKeyword("")
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
