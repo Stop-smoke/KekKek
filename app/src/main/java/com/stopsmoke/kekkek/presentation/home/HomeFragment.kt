@@ -1,16 +1,17 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import android.app.AlertDialog
-import android.content.DialogInterface
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,6 @@ import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,6 +40,7 @@ class HomeFragment : Fragment(), ErrorHandle {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        checkNotificationPermission()
     }
 
     override fun onCreateView(
@@ -211,5 +212,12 @@ class HomeFragment : Fragment(), ErrorHandle {
     fun navigateToAttainmentsFragment() {
         val navController = findNavController()
         navController.navigate("attainments")
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU && PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)){
+            // 푸쉬 권한 없음
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.POST_NOTIFICATIONS), 200)
+        }
     }
 }
