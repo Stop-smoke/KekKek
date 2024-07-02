@@ -6,17 +6,13 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.AggregateField
-import com.google.firebase.firestore.AggregateQuerySnapshot
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
-import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.PostDao
 import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.PostEntity
@@ -25,6 +21,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 import javax.inject.Inject
@@ -141,12 +138,11 @@ internal class PostDaoImpl @Inject constructor(
         }.flow
     }
 
-    override fun getPostItem(postId: String): Flow<List<PostEntity>> {
-        val query = firestore.collection(COLLECTION)
-            .whereEqualTo("id", postId)
-            .limit(1)
-
-        return query.dataObjects<PostEntity>()
+    override fun getPostItem(postId: String): Flow<PostEntity> {
+        return firestore.collection(COLLECTION)
+            .document(postId)
+            .dataObjects<PostEntity>()
+            .mapNotNull { it }
     }
 
     override suspend fun addPost(postEntity: PostEntity) {

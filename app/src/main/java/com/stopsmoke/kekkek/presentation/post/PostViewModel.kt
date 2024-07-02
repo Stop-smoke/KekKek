@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.stopsmoke.kekkek.toggleElement
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.Post
@@ -17,6 +16,7 @@ import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
 import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
+import com.stopsmoke.kekkek.toggleElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -70,14 +69,9 @@ class PostViewModel @Inject constructor(
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
-
-        postRepository.addViews(it)
         postRepository.getPostItem(it)
 
     }
-        .flatMapLatest {
-            flowOf(it.first())
-        }
         .catch {
             it.printStackTrace()
         }

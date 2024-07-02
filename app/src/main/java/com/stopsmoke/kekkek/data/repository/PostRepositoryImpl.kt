@@ -17,6 +17,7 @@ import com.stopsmoke.kekkek.firestore.dao.PostDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 internal class PostRepositoryImpl @Inject constructor(
@@ -68,10 +69,13 @@ internal class PostRepositoryImpl @Inject constructor(
         Result.Error(e)
     }
 
-    override fun getPostItem(postId: String): Flow<List<Post>> {
+    override fun getPostItem(postId: String): Flow<Post> {
         return postDao.getPostItem(postId)
             .map {
-                it.map { it.asExternalModel() }
+                it.asExternalModel()
+            }
+            .onStart {
+                postDao.addViews(postId)
             }
     }
 
