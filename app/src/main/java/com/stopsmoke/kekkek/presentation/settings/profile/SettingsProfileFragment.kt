@@ -18,12 +18,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
+import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -127,11 +129,23 @@ class SettingsProfileFragment : Fragment() {
 
         binding.clProfileServiceOut.setOnClickListener {
             val dialog = SettingServiceOutDialogFragment()
-            dialog.show(requireActivity().supportFragmentManager, "ServiceOutDialogFragment")
+            dialog.show(childFragmentManager, "ServiceOutDialogFragment")
         }
 
-        viewModel.onboardingScreenRequest.collectLatestWithLifecycle(lifecycle) {
-            navigateToAuthenticationScreen()
+        viewModel.exitAppUiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is ExitAppUiState.Failure -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(R.string.settings_user_profile_with_draw_fail_message),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                is ExitAppUiState.Loading -> {  }
+                is ExitAppUiState.Success -> {
+                    navigateToAuthenticationScreen()
+                }
+            }
         }
 
         viewModel.profileImageUploadUiState.collectLatestWithLifecycle(lifecycle) {

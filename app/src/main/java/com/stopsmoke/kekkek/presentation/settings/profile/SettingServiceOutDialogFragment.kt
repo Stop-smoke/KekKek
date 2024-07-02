@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.settings.profile
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -32,6 +33,12 @@ class SettingServiceOutDialogFragment : DialogFragment() {
         return binding.root
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -39,7 +46,6 @@ class SettingServiceOutDialogFragment : DialogFragment() {
     }
 
     private fun initView() = with(binding) {
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         tvDialogTitle.text = "서비스 계정을 탈퇴하시겠습니까?"
         tvDialogContent.text = "탈퇴하기를 누르시면 지금까지 작성한 글과 댓글이 사라지며 계정을 복구할 수 없습니다. 그래도 정말 탈퇴하시겠습니까?"
         btnDialogFinish.text = "탈퇴하기"
