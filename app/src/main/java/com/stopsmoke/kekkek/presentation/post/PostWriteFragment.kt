@@ -10,7 +10,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import android.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,6 +38,7 @@ import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
@@ -70,7 +71,7 @@ class PostWriteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPostWriteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -191,12 +192,12 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun insertImage(url: Uri) {
-        val inputStream = requireContext().contentResolver.openInputStream(url)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
+        val rotatedBitmap = requireContext().contentResolver.openInputStream(url).use { inputStream ->
+            val bitmap = BitmapFactory.decodeStream(inputStream)
 
-        val orientation = getOrientation(url)
-        val rotatedBitmap = rotateBitmap(bitmap, orientation)
+            val orientation = getOrientation(inputStream)
+            rotateBitmap(bitmap, orientation)
+        }
 
         val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
         val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
@@ -209,16 +210,16 @@ class PostWriteFragment : Fragment() {
         binding.ivDeleteImage.visibility = View.VISIBLE
     }
 
-    private fun getOrientation(uri: Uri): Int {
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        inputStream?.use { stream ->
-            val exifInterface = ExifInterface(stream)
-            return exifInterface.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
+    private fun getOrientation(inputStream: InputStream?): Int {
+        if (inputStream == null) {
+            return ExifInterface.ORIENTATION_UNDEFINED
         }
-        return ExifInterface.ORIENTATION_UNDEFINED
+
+        val exifInterface = ExifInterface(inputStream)
+        return exifInterface.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
     }
 
     private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {

@@ -15,8 +15,8 @@ data class Post(
     val bookmarkUser: List<String>,
     val category: PostCategory,
     val views: Long,
-    val commentCount: Long
-    // Todo: profileImage 변수 추가 필요
+    val commentCount: Long,
+    val imagesUrl: List<String>
 ) {
     val createdElapsedDateTime = dateTime.created.getElapsedDateTime()
 
@@ -43,7 +43,8 @@ data class Post(
             bookmarkUser = emptyList(),
             category = PostCategory.UNKNOWN,
             views = 0,
-            commentCount = 0
+            commentCount = 0,
+            imagesUrl = listOf()
         )
     }
 }
