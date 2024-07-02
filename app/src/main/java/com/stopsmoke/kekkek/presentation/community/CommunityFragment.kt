@@ -8,14 +8,16 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.domain.model.toPostCategory
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
@@ -29,7 +31,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 
-    private val viewModel: CommunityViewModel by activityViewModels()
+    private val viewModel: CommunityViewModel by viewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -58,11 +60,8 @@ class CommunityFragment : Fragment(), ErrorHandle {
 
     override fun onResume() {
         super.onResume()
-        activity?.let { activity ->
-            activity?.visible()
-        }
+        activity?.visible()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -70,12 +69,11 @@ class CommunityFragment : Fragment(), ErrorHandle {
         listAdapter.unregisterCallbackListener()
     }
 
-
-    private fun initView() = with(binding) {
+    private fun initView() {
         initRecyclerView()
         initCommunityCategory()
         setToolbarMenu()
-
+        resetCommunityListScrollOnUpdate()
     }
 
     private fun initRecyclerView() {
@@ -149,15 +147,14 @@ class CommunityFragment : Fragment(), ErrorHandle {
             LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
         val adapterList =
             requireContext().resources.getStringArray(R.array.community_category).toList()
-        val adapter = CommunityCategoryListAdapter(onClick = { clickPosition ->
-            if (viewModel.category.value == adapterList[clickPosition].toPostCategory()) {
-                listAdapter.refresh()
-            } else {
+        val adapter = CommunityCategoryListAdapter { clickPosition ->
+            if (viewModel.category.value != adapterList[clickPosition].toPostCategory()) {
                 viewModel.setCategory(adapterList[clickPosition])
+                return@CommunityCategoryListAdapter
             }
-
-            rvCommunityList.scrollToPosition(0)
-        })
+            binding.rvCommunityList.smoothScrollToPosition(0)
+            binding.rvCommunityCategory.smoothScrollToPosition(0)
+        }
         adapter.submitList(adapterList)
         rvCommunityCategory.adapter = adapter
     }
@@ -189,13 +186,9 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         //게시글
-        viewLifecycleOwner.lifecycleScope.launch {
-            posts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { posts ->
-                    listAdapter.submitData(posts)
-                }
+        posts.collectLatestWithLifecycle(lifecycle) { posts ->
+            listAdapter.submitData(posts)
         }
-
 
         //인기글 배너
         viewLifecycleOwner.lifecycleScope.launch {
@@ -214,12 +207,26 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         // 삭제될 때 시도
-        viewModel.isPostChanged.collectLatestWithLifecycle(lifecycle) { isDeleted ->
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+        val isPostDeletedFlow = savedStateHandle?.getStateFlow(NavigationKey.IS_DELETED_POST, false)
+
+        isPostDeletedFlow?.collectLatestWithLifecycle(lifecycle) { isDeleted ->
             if (isDeleted) {
+                binding.rvCommunityList.smoothScrollToPosition(0)
                 listAdapter.refresh()
-                viewModel.setPostChanged(false)
             }
         }
+    }
+
+    private fun resetCommunityListScrollOnUpdate() {
+        listAdapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
+                    super.onItemRangeChanged(positionStart, itemCount, payload)
+                    binding.rvCommunityList.scrollToPosition(0)
+                }
+            }
+        )
     }
 
     private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) {

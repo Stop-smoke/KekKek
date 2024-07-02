@@ -34,7 +34,7 @@ class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, Re
         callback = null
     }
 
-    private var headerItem = PostContentItem(null, null, 0)
+    private var headerItem = PostContentItem(null, null)
 
     fun updatePostHeader(postHeaderItem: PostContentItem) {
         headerItem = postHeaderItem

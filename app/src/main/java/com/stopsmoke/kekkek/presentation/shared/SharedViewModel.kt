@@ -38,12 +38,12 @@ class SharedViewModel @Inject constructor(
 
     val userData = userRepository.getUserData("테스트_계정")
 
-    init {
-        viewModelScope.launch {
-            val noticeBannerPost = postRepository.getTopNotice()
-            _noticeBanner.emit(noticeBannerPost)
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            val noticeBannerPost = postRepository.getTopNotice(1)
+//            _noticeBanner.emit(noticeBannerPost)
+//        }
+//    }
 
     fun updateUserData(user: User) = viewModelScope.launch {
         when(user) {
