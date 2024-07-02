@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
+import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,20 +71,30 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private val _onboardingScreenRequest = MutableSharedFlow<Unit>()
-    val onboardingScreenRequest = _onboardingScreenRequest.asSharedFlow()
+    private val _exitAppUiState = MutableStateFlow<ExitAppUiState>(ExitAppUiState.Loading)
+    val exitAppUiState = _exitAppUiState.asStateFlow()
 
     fun logout() {
         viewModelScope.launch {
-            userRepository.logout()
-            _onboardingScreenRequest.emit(Unit)
+            try {
+                userRepository.logout()
+                _exitAppUiState.emit(ExitAppUiState.Success)
+            } catch (e: Exception) {
+                _exitAppUiState.emit(ExitAppUiState.Failure(e))
+                e.printStackTrace()
+            }
         }
     }
 
     fun withdraw() {
         viewModelScope.launch {
-            userRepository.withdraw()
-            _onboardingScreenRequest.emit(Unit)
+            try {
+                userRepository.withdraw()
+                _exitAppUiState.emit(ExitAppUiState.Success)
+            } catch (e: Exception) {
+                _exitAppUiState.emit(ExitAppUiState.Failure(e))
+                e.printStackTrace()
+            }
         }
     }
 
