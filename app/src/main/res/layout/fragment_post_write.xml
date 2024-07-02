@@ -1,42 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:id="@+id/post_write"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    xmlns:aztec="http://schemas.android.com/apk/res-auto"-->
-<!--    tools:context=".presentation.post.PostWriteFragment">-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post_write"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:aztec="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.post.PostWriteFragment">
 
-<!--    <include-->
-<!--        android:id="@+id/include_post_write_app_bar"-->
-<!--        layout="@layout/fragment_post_write_app_bar" />-->
+    <include
+        android:id="@+id/include_post_write_app_bar"
+        layout="@layout/fragment_post_write_app_bar" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/et_post_write_title"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:hint="@string/post_write_title"-->
-<!--        android:inputType="text"-->
-<!--        android:maxLines="1"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/include_post_write_app_bar" />-->
+    <EditText
+        android:id="@+id/et_post_write_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/post_write_title"
+        android:inputType="text"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/include_post_write_app_bar" />
 
-<!--    <View-->
-<!--        android:id="@+id/grayline"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:background="@color/bg_thin_gray"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/et_post_write_title" />-->
+    <View
+        android:id="@+id/grayline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/bg_thin_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_post_write_title" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grayline">
+
+        <org.wordpress.aztec.toolbar.AztecToolbar
+            android:id="@+id/formatting_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/aztec_format_bar_height"
+            android:layout_alignParentBottom="true"></org.wordpress.aztec.toolbar.AztecToolbar>
+
+        <ScrollView
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/formatting_toolbar"
+            android:layout_alignParentTop="true"
+            android:fillViewport="true">
+
+            <FrameLayout
+                android:id="@+id/container_frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.wordpress.aztec.AztecText
+                    android:id="@+id/aztec"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|start"
+                    android:hint="@string/edit_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:scrollbars="vertical"
+                    aztec:textColor="@android:color/black"
+                    aztec:historyEnable="true"
+                    aztec:historySize="10" />
+
+                <org.wordpress.aztec.source.SourceViewEditText
+                    android:id="@+id/source"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|start"
+                    android:hint="@string/source_hint"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textNoSuggestions|textMultiLine"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:scrollbars="vertical"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    aztec:codeBackgroundColor="@android:color/transparent"
+                    aztec:codeTextColor="@android:color/white" />
+
+            </FrameLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
 
 <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
 <!--        android:id="@+id/cl_postWrite_editor"-->
@@ -190,69 +258,10 @@
 <!--            app:layout_constraintEnd_toEndOf="parent"/>-->
 <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aztec="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <org.wordpress.aztec.toolbar.AztecToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/aztec_format_bar_height"
-        android:layout_alignParentBottom="true">
-    </org.wordpress.aztec.toolbar.AztecToolbar>
 
-    <ScrollView
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/toolbar"
-        android:layout_alignParentTop="true"
-        android:fillViewport="true">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/container_frame_layout">
 
-            <org.wordpress.aztec.AztecText
-                android:id="@+id/visualEditor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top|start"
-                android:hint="@string/edit_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp"
-                android:scrollbars="vertical"
-                android:imeOptions="flagNoExtractUi"
-                aztec:historyEnable="true"
-                aztec:historySize="10"/>
 
-            <org.wordpress.aztec.source.SourceViewEditText
-                android:id="@+id/sourceEditor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top|start"
-                android:hint="@string/source_hint"
-                android:inputType="textNoSuggestions|textMultiLine"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp"
-                android:scrollbars="vertical"
-                android:textSize="14sp"
-                android:visibility="gone"
-                android:imeOptions="flagNoExtractUi"
-                aztec:codeBackgroundColor="@android:color/transparent"
-                aztec:codeTextColor="@android:color/white"/>
-
-        </FrameLayout>
-
-    </ScrollView>
-
-</RelativeLayout>

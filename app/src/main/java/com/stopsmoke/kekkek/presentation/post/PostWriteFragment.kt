@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -58,6 +59,7 @@ import androidx.core.text.set
 import com.stopsmoke.kekkek.presentation.extensions.GlideImageLoader
 import com.stopsmoke.kekkek.presentation.extensions.GlideVideoThumbnailLoader
 import org.wordpress.aztec.Aztec
+import org.wordpress.aztec.AztecText
 import org.wordpress.aztec.ITextFormat
 import org.wordpress.aztec.toolbar.IAztecToolbarClickListener
 import org.wordpress.aztec.toolbar.ToolbarAction
@@ -69,35 +71,40 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
+    companion object {
+        private const val BOLD = "<b>Bold</b><br>"
+        private const val ITALIC = "<i>Italic</i><br>"
+        private const val UNDERLINE = "<u>Underline</u><br>"
+        private const val STRIKETHROUGH =
+            "<s class=\"test\">Strikethrough</s><br>" // <s> or <strike> or <del>
+        private const val BACKGROUND =
+            "<span style=\"background-color:#005082\">BACK<b>GROUND</b></span><br>"
+        private const val IMG =
+            "[caption align=\"alignright\"]<img src=\"https://examplebloge.files.wordpress.com/2017/02/3def4804-d9b5-11e6-88e6-d7d8864392e0.png\" />Caption[/caption]"
+        private const val FOREGROUND = "<span style=\"color:#ff0000\">Text Color</span><br>"
 
-//    private val viewModel: PostWrite ViewModel by viewModels()
-//    private val communityViewModel: CommunityViewModel by activityViewModels()
-//    private val pickImageLauncher = registerForActivityResult(
-//        ActivityResultContracts.GetContent()
-//    ) { url ->
-//        url?.let {
-//            insertImage(it)
-//        }
-//    }
-//
-//    private val builder by lazy {
-//        AlertDialog.Builder(requireContext())
-//    }
-//
-//    private var isBold = false
-//    private var isItalic = false
-//    private var isUnderline = false
-//    private var isStrikethrough = false
-//    private var currentTextColor: Int? = null
-//    private var currentBackgroundColor: Int? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        arguments?.getString("post_id")?.let {
-//            viewModel.updatePostId(it)
-//        }
-//    }
+        private val EXAMPLE =
+            BOLD + ITALIC + UNDERLINE + STRIKETHROUGH + FOREGROUND + BACKGROUND + IMG
+
+    }
+
+    private val MEDIA_PHOTOS_PERMISSION_REQUEST_CODE: Int = 1003
+    private val REQUEST_MEDIA_PHOTO: Int = 2003
+
+    protected lateinit var aztecObject: Aztec
+
+    private val viewModel: PostWriteViewModel by viewModels()
+
+    private val builder by lazy {
+        AlertDialog.Builder(requireContext())
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.getString("post_id")?.let {
+            viewModel.updatePostId(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,191 +116,30 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initView()
-//        initViewModel()
-//        initListener()
+        initView()
+        initViewModel()
+        initListener()
         initTextEditor()
     }
 
     private fun initTextEditor() = with(binding) {
-        Aztec.with(visualEditor, sourceEditor, toolbar, this@PostWriteFragment)
+        //aztec 코드
+        aztecObject = Aztec.with(aztec, source, formattingToolbar, this@PostWriteFragment)
             .setImageGetter(GlideImageLoader(requireContext()))
             .setVideoThumbnailGetter(GlideVideoThumbnailLoader(requireContext()))
-        toolbar.setToolbarItems(ToolbarItems.BasicLayout(ToolbarAction.BOLD, ToolbarAction.ITALIC, ToolbarAction.UNDERLINE, ToolbarAction.STRIKETHROUGH))
-        visualEditor.addMediaAfterBlocks()
+        formattingToolbar.setToolbarItems(
+            ToolbarItems.BasicLayout(
+                ToolbarAction.BOLD,
+                ToolbarAction.ITALIC,
+                ToolbarAction.UNDERLINE,
+                ToolbarAction.STRIKETHROUGH
+            )
+        )
+        aztec.addMediaAfterBlocks()
+        aztecObject.sourceEditor?.displayStyledAndFormattedHtml(EXAMPLE)
 
-    }
 
-    private fun initView() = with(binding) {
-//        initSpinner()
-    }
-
-//    private fun initSpinner() = with(binding) {
-//        val category = resources.getStringArray(R.array.post_category)
-//        val adapter =
-//            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
-//        includePostWriteAppBar.spinnerPostWrite.adapter = adapter
-//        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener =
-//            object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(
-//                    parent: AdapterView<*>?,
-//                    view: View?,
-//                    position: Int,
-//                    id: Long
-//                ) {
-//                    includePostWriteAppBar.tvPostWriteType.text = category[position]
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>?) {}
-//
-//            }
-//    }
-//
-//    private fun createDialogBuilder() = with(builder) {
-//        if (viewModel.post.value == null) {
-//            builder.setTitle("게시물 등록")
-//            builder.setMessage("게시물을 등록하시겠습니까?")
-//            builder.setIcon(R.drawable.ic_post)
-//        } else {
-//            builder.setTitle("게시물 수정")
-//            builder.setMessage("게시물을 수정하시겠습니까?")
-//            builder.setIcon(R.drawable.ic_post)
-//        }
-//
-//        builder.setPositiveButton("예", null)
-//        builder.setNegativeButton("아니요", null)
-//    }
-//
-//    private fun initListener() = with(binding) {
-//        initTextEditor()
-//
-//        includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
-//
-//        includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
-//            if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
-//                Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
-//            } else {
-//                val dialog = builder.create()
-//                dialog.show()
-//
-//                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-//                    val post = PostEdit(
-//                        title = etPostWriteTitle.text.toString(),
-//                        text = etPostWriteContent.text.toString(),
-//                        dateTime = DateTime(
-//                            created = viewModel.post.value?.dateTime?.created
-//                                ?: LocalDateTime.now(), modified = LocalDateTime.now()
-//                        ),
-//                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
-//                            .trim()
-//                            .toPostWriteCategory()
-//                    )
-//                    if (viewModel.post.value == null) viewModel.addPost(post)
-//                    else viewModel.editPost(post)
-//                    dialog.dismiss()
-//                    findNavController().popBackStack()
-//                }
-//            }
-//        }
-//
-//        includePostWriteAppBar.tvPostWriteType.setOnClickListener {
-//            includePostWriteAppBar.spinnerPostWrite.performClick()
-//        }
-//    }
-//
-//    private fun initViewModel() = with(viewModel) {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-//                .collectLatest {
-//                    it?.let { onBind(it) }
-//                    createDialogBuilder()
-//                }
-//        }
-//    }
-//
-//    private fun onBind(post: Post) = with(binding) {
-//        etPostWriteContent.setText(post.text)
-//        etPostWriteTitle.setText(post.title)
-//
-//        includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
-//
-//        includePostWriteAppBar.tvPostWriteRegister.text = "수정"
-//    }
-//
-//    private fun insertImage(url: Uri) {
-//        val inputStream = requireContext().contentResolver.openInputStream(url)
-//        val bitmap = BitmapFactory.decodeStream(inputStream)
-//        inputStream?.close()
-//
-//        val orientation = getOrientation(url)
-//        val rotatedBitmap = rotateBitmap(bitmap, orientation)
-//
-//        val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
-//        val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
-//        val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, width, height, true)
-//
-//        val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
-//
-//        binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
-//        binding.ivPostWriteImage.visibility = View.VISIBLE
-//    }
-//
-//    private fun getOrientation(uri: Uri): Int {
-//        val inputStream = requireContext().contentResolver.openInputStream(uri)
-//        inputStream?.use { stream ->
-//            val exifInterface = ExifInterface(stream)
-//            return exifInterface.getAttributeInt(
-//                ExifInterface.TAG_ORIENTATION,
-//                ExifInterface.ORIENTATION_UNDEFINED
-//            )
-//        }
-//        return ExifInterface.ORIENTATION_UNDEFINED
-//    }
-//
-//    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
-//        val matrix = Matrix()
-//        when (orientation) {
-//            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
-//            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
-//            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
-//            else -> return bitmap
-//        }
-//        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-//    }
-//
-//    private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
-//        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-//        val canvas = Canvas(output)
-//
-//        val paint = Paint()
-//        val rect = Rect(0, 0, bitmap.width, bitmap.height)
-//        val rectF = RectF(rect)
-//
-//        paint.isAntiAlias = true
-//        canvas.drawARGB(0, 0, 0, 0)
-//        paint.color = Color.BLACK
-//        canvas.drawRoundRect(rectF, radius, radius, paint)
-//
-//        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-//        canvas.drawBitmap(bitmap, rect, rect, paint)
-//
-//        return output
-//    }
-//
-//    private fun initTextEditor() = with(binding) {
-//
-//        val visualEditor = binding.visual
-//        val sourceEditor = binding.source
-//        val toolbar = binding.formattingToolbar
-//
-////        toolbar.setToolbarItems(ToolbarItems.BasicLayout(ToolbarAction.BOLD, ToolbarAction.ITALIC, ToolbarAction.UNDERLINE, ToolbarAction.STRIKETHROUGH, ToolbarAction.))
-//
-////        Aztec.with(visualEditor, sourceEditor, toolbar, requireContext())
-////            .setImageGetter(GlideImageLoader(requireContext()))
-////            .setVideoThumbnailGetter(GlideVideoThumbnailLoader(requireContext()))
-//
+        // 원래 코드
 //        ivPostWriteBold.setOnClickListener {
 //
 //        }
@@ -315,7 +161,164 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
 //        ivPostWriteLink.setOnClickListener {
 //            pickImageLauncher.launch("image/*")
 //        }
-//    }
+    }
+
+    private fun initView() = with(binding) {
+        initSpinner()
+    }
+
+    private fun initSpinner() = with(binding) {
+        val category = resources.getStringArray(R.array.post_category)
+        val adapter =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
+        includePostWriteAppBar.spinnerPostWrite.adapter = adapter
+        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    includePostWriteAppBar.tvPostWriteType.text = category[position]
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            }
+    }
+
+    private fun createDialogBuilder() = with(builder) {
+        if (viewModel.post.value == null) {
+            builder.setTitle("게시물 등록")
+            builder.setMessage("게시물을 등록하시겠습니까?")
+            builder.setIcon(R.drawable.ic_post)
+        } else {
+            builder.setTitle("게시물 수정")
+            builder.setMessage("게시물을 수정하시겠습니까?")
+            builder.setIcon(R.drawable.ic_post)
+        }
+
+        builder.setPositiveButton("예", null)
+        builder.setNegativeButton("아니요", null)
+    }
+
+    private fun initListener() = with(binding) {
+
+        includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
+            if (binding.etPostWriteTitle.text.isEmpty() || binding.aztec.text.isEmpty()) {
+                Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
+            } else {
+                val dialog = builder.create()
+                dialog.show()
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    val post = PostEdit(
+                        title = etPostWriteTitle.text.toString(),
+                        text = aztec.text.toString(),
+                        dateTime = DateTime(
+                            created = viewModel.post.value?.dateTime?.created
+                                ?: LocalDateTime.now(), modified = LocalDateTime.now()
+                        ),
+                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                            .trim()
+                            .toPostWriteCategory()
+                    )
+                    if (viewModel.post.value == null) viewModel.addPost(post)
+                    else viewModel.editPost(post)
+                    dialog.dismiss()
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        includePostWriteAppBar.tvPostWriteType.setOnClickListener {
+            includePostWriteAppBar.spinnerPostWrite.performClick()
+        }
+    }
+
+    private fun initViewModel() = with(viewModel) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest {
+                    it?.let { onBind(it) }
+                    createDialogBuilder()
+                }
+        }
+    }
+
+    private fun onBind(post: Post) = with(binding) {
+        aztec.setText(post.text)
+        etPostWriteTitle.setText(post.title)
+
+        includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
+
+        includePostWriteAppBar.tvPostWriteRegister.text = "수정"
+    }
+
+    private fun insertImage(url: Uri) {
+        val inputStream = requireContext().contentResolver.openInputStream(url)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        val orientation = getOrientation(url)
+        val rotatedBitmap = rotateBitmap(bitmap, orientation)
+
+        val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
+        val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
+        val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, width, height, true)
+
+        val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
+
+//        binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
+//        binding.ivPostWriteImage.visibility = View.VISIBLE
+    }
+
+    private fun getOrientation(uri: Uri): Int {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        inputStream?.use { stream ->
+            val exifInterface = ExifInterface(stream)
+            return exifInterface.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+        }
+        return ExifInterface.ORIENTATION_UNDEFINED
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            else -> return bitmap
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+
+        paint.isAntiAlias = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = Color.BLACK
+        canvas.drawRoundRect(rectF, radius, radius, paint)
+
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
+    }
 
     override fun onResume() {
         super.onResume()
@@ -329,32 +332,24 @@ class PostWriteFragment : Fragment(), IAztecToolbarClickListener {
     }
 
     override fun onToolbarCollapseButtonClicked() {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarExpandButtonClicked() {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarFormatButtonClicked(format: ITextFormat, isKeyboardShortcut: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarHeadingButtonClicked() {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarHtmlButtonClicked() {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarListButtonClicked() {
-        TODO("Not yet implemented")
     }
 
     override fun onToolbarMediaButtonClicked(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
-
 }
-
