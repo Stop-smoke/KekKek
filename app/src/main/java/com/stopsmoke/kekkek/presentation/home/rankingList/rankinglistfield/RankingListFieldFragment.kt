@@ -99,7 +99,7 @@ class RankingListFieldFragment : Fragment() {
     }
 
     private fun getInterval(): Observable<Long> =
-        Observable.interval(5L, TimeUnit.MILLISECONDS)
+        Observable.interval(7L, TimeUnit.MILLISECONDS)
             .map { it + 1 }
             .take(100)
 
