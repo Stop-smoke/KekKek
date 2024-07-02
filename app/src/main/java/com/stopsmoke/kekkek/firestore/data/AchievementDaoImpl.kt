@@ -7,6 +7,7 @@ import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.firestore.model.AchievementEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
@@ -50,6 +51,7 @@ class AchievementDaoImpl @Inject constructor(
     }
 
     override suspend fun getAchievementListItem(achievementIdList: List<String>): Flow<List<AchievementEntity>> {
+        if(achievementIdList.isEmpty()) return emptyFlow()
         return firestore.collection(COLLECTION)
             .whereIn("id", achievementIdList)
             .dataObjects<AchievementEntity>()

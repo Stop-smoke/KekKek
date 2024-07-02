@@ -40,4 +40,7 @@ data class SearchPostEntity(
 
     @SerialName("date_time")
     var dateTime: DateTimeEntity? = null,
+
+    @SerialName("images_url")
+    val imagesUrl: List<String>
 )

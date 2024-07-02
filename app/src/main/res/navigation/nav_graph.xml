@@ -241,7 +241,7 @@
 
     <fragment
         android:id="@+id/post_write"
-        android:name="com.stopsmoke.kekkek.presentation.post.PostWriteFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.postviewwrite.PostWriteFragment"
         app:route="post_write"
         tools:layout="@layout/fragment_post_write" />
 

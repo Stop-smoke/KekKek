@@ -47,7 +47,8 @@ fun PostEntity.asExternalModel(): Post =
         },
         views = views ?: 0,
         commentCount = commentCount ?: 0,
-        bookmarkUser = bookmarkUser
+        bookmarkUser = bookmarkUser,
+        imagesUrl = imagesUrl
     )
 
 internal fun PostEdit.toEntity(written: Written) = PostEntity(
@@ -129,5 +130,6 @@ internal fun SearchPostEntity.asExternalModel(): Post =
         },
         views = views ?: 0,
         commentCount = commentCount ?: 0,
-        bookmarkUser = bookmarkUser
+        bookmarkUser = bookmarkUser,
+        imagesUrl = imagesUrl
     )

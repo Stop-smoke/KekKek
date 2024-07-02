@@ -37,5 +37,8 @@ data class PostEntity(
     var views: Long? = null,
 
     @get:PropertyName("comment_count") @set:PropertyName("comment_count")
-    var commentCount: Long? = null
+    var commentCount: Long? = null,
+
+    @get:PropertyName("images_url") @set:PropertyName("images_url")
+    var imagesUrl: List<String> = emptyList()
 )
