@@ -203,21 +203,12 @@ internal class PostDaoImpl @Inject constructor(
             return query.dataObjects<PostEntity>()
     }
 
-    override suspend fun getTopNotice(): PostEntity {
-        return try {
-            val query = firestore.collection(COLLECTION)
-                .whereEqualTo("category", "notice")
-                .orderBy("date_time.created", Query.Direction.DESCENDING)
-                .limit(1)
-                .get()
-                .await()
-
-            val document = query.documents.firstOrNull()
-            document?.toObject<PostEntity>() ?: PostEntity()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            PostEntity()
-        }
+    override fun getTopNotice(limit: Long): Flow<List<PostEntity>> {
+        return firestore.collection(COLLECTION)
+            .whereEqualTo("category", "notice")
+            .orderBy("date_time.created", Query.Direction.DESCENDING)
+            .limit(limit)
+            .dataObjects<PostEntity>()
     }
 
     override suspend fun getPopularPostList(): List<PostEntity> {

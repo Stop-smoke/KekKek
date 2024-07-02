@@ -26,7 +26,7 @@ interface PostRepository {
 
     suspend fun getTopPopularItems(): Flow<List<Post>>
 
-    suspend fun getTopNotice(): Post
+    fun getTopNotice(limit: Long): Flow<List<Post>>
 
     suspend fun getPopularPostList(): List<Post>
 

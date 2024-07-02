@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CommunityUiState> =
         MutableStateFlow(CommunityUiState.init())
@@ -33,51 +33,42 @@ class CommunityViewModel @Inject constructor(
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
 
-    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
-    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
+    fun setCategory(categoryString: String) {
+        viewModelScope.launch {
+            _category.emit(categoryString.toPostCategory())
+        }
+    }
 
+    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+        .map { post ->
+            post.first()
+        }
+        .catch {
+            _uiState.emit(CommunityUiState.ErrorExit)
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        try {
-            postRepository.getPost(postCategory)
-                .map { pagingData ->
-                    pagingData.map { post ->
-                        post.toCommunityWritingListItem()
-                    }
+        postRepository.getPost(postCategory)
+            .map { pagingData ->
+                pagingData.map { post ->
+                    post.toCommunityWritingListItem()
                 }
-        } catch (e: Exception) {
-            _uiState.emit(CommunityUiState.ErrorExit)
-            emptyFlow()
-        }
+            }
     }
         .cachedIn(viewModelScope)
         .catch {
+            _uiState.emit(CommunityUiState.ErrorExit)
             it.printStackTrace()
         }
 
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     val topPopularPosts = posts.flatMapLatest {
         try {
             postRepository.getTopPopularItems()
         } catch (e: Exception) {
             _uiState.emit(CommunityUiState.ErrorExit)
             emptyFlow()
-        }
-    }
-
-    fun setCategory(categoryString: String) {
-        _category.value = categoryString.toPostCategory()
-    }
-
-    init {
-        viewModelScope.launch {
-            try {
-                val noticeBannerPost = postRepository.getTopNotice()
-                _noticeBanner.emit(noticeBannerPost)
-            } catch (e: Exception) {
-                _uiState.emit(CommunityUiState.ErrorExit)
-            }
         }
     }
 

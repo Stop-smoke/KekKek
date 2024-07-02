@@ -15,10 +15,13 @@ import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,9 +31,10 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val postRepository: PostRepository
+    postRepository: PostRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.NormalUiState.init())
+    private val _uiState: MutableStateFlow<HomeUiState> =
+        MutableStateFlow(HomeUiState.NormalUiState.init())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var timerJob: Job? = null
@@ -47,19 +51,13 @@ class HomeViewModel @Inject constructor(
         initialValue = null
     )
 
-    private val _noticeBanner = MutableStateFlow(Post.emptyPost())
-    val noticeBanner: StateFlow<Post> get() = _noticeBanner.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            try {
-                val noticeBannerPost = postRepository.getTopNotice()
-                _noticeBanner.emit(noticeBannerPost)
-            }catch (e:Exception){
-                _uiState.emit(HomeUiState.ErrorExit)
-            }
+    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+        .map { post ->
+            post.first()
         }
-    }
+        .catch {
+            _uiState.emit(HomeUiState.ErrorExit)
+        }
 
     fun updateUserData() = viewModelScope.launch {
         try {
@@ -94,7 +92,7 @@ class HomeViewModel @Inject constructor(
                     else -> {}
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -102,7 +100,7 @@ class HomeViewModel @Inject constructor(
 
     fun startTimer() {
         timerJob?.cancel()
-        (uiState.value as? HomeUiState.NormalUiState).let{
+        (uiState.value as? HomeUiState.NormalUiState).let {
             timerJob = viewModelScope.launch {
                 while (true) {
                     timeString =
@@ -148,7 +146,7 @@ class HomeViewModel @Inject constructor(
 
                 updateUserData()
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -177,7 +175,7 @@ class HomeViewModel @Inject constructor(
 
                 updateUserData()
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -201,7 +199,7 @@ class HomeViewModel @Inject constructor(
 
                 userRepository.setUserData(user.copy(history = updatedUserHistory))
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -262,15 +260,15 @@ class HomeViewModel @Inject constructor(
             }
 
             _userRankingList.emit(list)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
     }
 
-    fun getMyRank(){
-        (user.value as? User.Registered)?.let{
-            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem())+1
+    fun getMyRank() {
+        (user.value as? User.Registered)?.let {
+            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem()) + 1
         }
     }
 }
