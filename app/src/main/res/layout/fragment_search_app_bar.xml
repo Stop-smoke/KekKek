@@ -29,6 +29,8 @@
         android:fontFamily="@font/pretendard_medium"
         android:hint="검색어를 입력하세요"
         android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
         android:minHeight="36dp"
         android:paddingStart="36dp"
         android:textColorHint="#626475"
