@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -68,6 +69,12 @@ class RankingListFieldFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+        val progressList = listOf(
+            progressBarRankingListRank1,
+            progressBarRankingListRank2,
+            progressBarRankingListRank3
+        )
+
         when (field) {
             RankingListField.Time -> {
 

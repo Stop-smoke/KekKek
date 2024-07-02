@@ -75,9 +75,10 @@
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/li_achievement_progress"
-            android:layout_width="229dp"
+            android:layout_width="0dp"
             android:layout_height="15dp"
             android:layout_marginEnd="8dp"
+            android:maxWidth="250dp"
             app:indicatorColor="#3182F6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_achievement_progress_number"
