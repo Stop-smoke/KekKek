@@ -22,7 +22,7 @@ class AddCommentUseCase @Inject constructor(
         postTitle: String,
         postType: PostCategory,
         text: String,
-    ) {
+    ): String{
         val user = userRepository.getUserData().first() as User.Registered
 
         val comment = Comment(
@@ -42,8 +42,9 @@ class AddCommentUseCase @Inject constructor(
             parent = CommentParent(
                 postType = postType, postId = postId, postTitle = postTitle
             ),
-            replyCount = 0
+            replyCount = 0,
+            isLiked = false
         )
-        commentRepository.addCommentItem(comment)
+        return commentRepository.addCommentItem(comment)
     }
 }

@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
-import com.stopsmoke.kekkek.presentation.post.PostHeaderItem
+import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
 
@@ -16,7 +16,7 @@ class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
     private val callback: PostCommentCallback?
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(headerItem: PostHeaderItem) {
+    fun bind(headerItem: PostContentItem) {
         initUserProfileView(headerItem.user, headerItem.post)
         initPostView(headerItem.post, headerItem.commentNum)
         clickPostLike(headerItem.post)

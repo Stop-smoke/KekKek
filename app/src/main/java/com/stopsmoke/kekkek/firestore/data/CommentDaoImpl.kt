@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
@@ -84,17 +85,25 @@ class CommentDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun addComment(commentEntity: CommentEntity) {
-        firestore
-            .collection(POST_COLLECTION)
+    override suspend fun addComment(commentEntity: CommentEntity): String {
+        val documentId: String
+
+        firestore.collection(POST_COLLECTION)
             .document(commentEntity.parent!!.postId!!)
             .collection(COMMENT_COLLECTION)
             .document().let { documentReference ->
+                documentId = documentReference.id
                 documentReference.set(
-                    commentEntity.copy(id = documentReference.id)
+                    commentEntity.copy(
+                        id = documentReference.id
+                    )
                 )
+                documentReference.update("date_time.created", FieldValue.serverTimestamp())
+                documentReference.update("date_time.modified", FieldValue.serverTimestamp())
             }
             .await()
+
+        return documentId
     }
 
     override suspend fun setCommentItem(commentEntity: CommentEntity) {
@@ -134,6 +143,34 @@ class CommentDaoImpl @Inject constructor(
             .addOnFailureListener { throw it }
 
         awaitClose()
+    }
+
+    override suspend fun appendItemList(
+        postId: String,
+        commentId: String,
+        field: String,
+        items: Any,
+    ) {
+        firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .update(field, FieldValue.arrayUnion(items))
+            .await()
+    }
+
+    override suspend fun removeItemList(
+        postId: String,
+        commentId: String,
+        field: String,
+        items: Any,
+    ) {
+        firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .update(field, FieldValue.arrayRemove(items))
+            .await()
     }
 
     companion object {

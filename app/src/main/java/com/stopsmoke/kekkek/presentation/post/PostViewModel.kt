@@ -2,11 +2,10 @@ package com.stopsmoke.kekkek.presentation.post
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.stopsmoke.kekkek.addOrRemove
+import com.stopsmoke.kekkek.toggleElement
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.CommentFilter
 import com.stopsmoke.kekkek.domain.model.Post
@@ -17,9 +16,9 @@ import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
+import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -88,10 +87,23 @@ class PostViewModel @Inject constructor(
             initialValue = null
         )
 
-    private val replyTransferLike: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    private val _previewCommentItem: MutableStateFlow<List<Comment>> = MutableStateFlow(emptyList())
+    val previewCommentItem get() = _previewCommentItem.asStateFlow()
+
+    fun updatePreviewCommentItem(comment: Comment) {
+        viewModelScope.launch {
+            val newComment = previewCommentItem.value.toMutableList()
+            newComment.add(comment)
+            _previewCommentItem.emit(newComment)
+        }
+    }
+
+    private val commentTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
+    private val replyTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
+    private val commentDeleteSet: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val comment: Flow<PagingData<CommentUiState>> = postId.flatMapLatest {
+    val comment = postId.flatMapLatest {
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
@@ -100,32 +112,66 @@ class PostViewModel @Inject constructor(
         .map { pagingData ->
             pagingData
                 .map {
-                    CommentUiState.CommentType(it)
+                    PostViewCommentRecyclerViewUiState.CommentType(it)
                 }
                 .insertSeparators { before, after ->
                     if (before == null) {
-                        return@insertSeparators CommentUiState.Header
+                        return@insertSeparators PostViewCommentRecyclerViewUiState.Header
                     }
 
                     if (before.item.earliestReply.isNotEmpty()) {
-                        return@insertSeparators CommentUiState.ReplyType(before.item)
+                        return@insertSeparators PostViewCommentRecyclerViewUiState.ReplyType(before.item)
                     }
 
                     null
                 }
         }
         .cachedIn(viewModelScope)
+        .combine(commentDeleteSet) { pagingData, commentDeleteItemId ->
+            pagingData.map { uiState ->
+                if (
+                    uiState is PostViewCommentRecyclerViewUiState.CommentType &&
+                    commentDeleteItemId.contains(uiState.item.id)
+                    ) {
+                    return@map PostViewCommentRecyclerViewUiState.Deleted
+                }
+                uiState
+            }
+        }
+        .combine(commentTransferLike) { pagingData, commentLikeList ->
+            pagingData.map { uiState ->
+                when (uiState) {
+                    is PostViewCommentRecyclerViewUiState.CommentType -> {
+                        if (commentLikeList.contains(uiState.item.id)) {
+                            val likeUser =
+                                uiState.item.likeUser.toggleElement((user.value as User.Registered).uid)
+                            return@map uiState.copy(
+                                uiState.item.copy(
+                                    likeUser = likeUser,
+                                    isLiked = !uiState.item.isLiked
+                                )
+                            )
+                        }
+                        uiState
+                    }
+
+                    is PostViewCommentRecyclerViewUiState.Header -> uiState
+                    is PostViewCommentRecyclerViewUiState.ReplyType -> uiState
+                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
+                }
+            }
+        }
         .combine(replyTransferLike) { pagingData, replyLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
-                    is CommentUiState.CommentType -> uiState
-                    is CommentUiState.Header -> uiState
-                    is CommentUiState.ReplyType -> {
+                    is PostViewCommentRecyclerViewUiState.CommentType -> uiState
+                    is PostViewCommentRecyclerViewUiState.Header -> uiState
+                    is PostViewCommentRecyclerViewUiState.ReplyType -> {
                         val replyList = uiState.item.earliestReply.map { reply ->
                             if (replyLikeList.contains(reply.id)) {
                                 reply.copy(
                                     isLiked = !reply.isLiked,
-                                    likeUser = reply.likeUser.addOrRemove((user.value as User.Registered).uid)
+                                    likeUser = reply.likeUser.toggleElement((user.value as User.Registered).uid)
                                 )
                             } else {
                                 reply
@@ -133,6 +179,7 @@ class PostViewModel @Inject constructor(
                         }
                         uiState.copy(uiState.item.copy(earliestReply = replyList))
                     }
+                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
         }
@@ -140,15 +187,19 @@ class PostViewModel @Inject constructor(
             it.printStackTrace()
         }
 
-    fun addComment(text: String, postTitle: String) {
+    fun addComment(text: String) {
         try {
             viewModelScope.launch {
                 if (post.value == null) return@launch
-                addCommentUseCase(
+                val newCommentDocId = addCommentUseCase(
                     postId = post.value!!.id,
-                    postTitle = postTitle,
+                    postTitle = post.value!!.title,
                     postType = post.value!!.category,
                     text = text
+                )
+
+                updatePreviewCommentItem(
+                    commentRepository.getComment(postId.value!!, newCommentDocId).first()
                 )
             }
         } catch (e: Exception) {
@@ -158,7 +209,8 @@ class PostViewModel @Inject constructor(
 
     fun deleteComment(commentId: String) = try {
         viewModelScope.launch {
-            postId.value?.let { commentRepository.deleteCommentItem(it, commentId) }
+            commentDeleteSet.emit(commentDeleteSet.value.toggleElement(commentId))
+            commentRepository.deleteCommentItem(post.value!!.id, commentId)
         }
     } catch (e: Exception) {
         e.printStackTrace()
@@ -208,9 +260,14 @@ class PostViewModel @Inject constructor(
         e.printStackTrace()
     }
 
-    fun commentLikeClick(comment: Comment) = viewModelScope.launch {
+    fun toggleCommentLike(comment: Comment) = viewModelScope.launch {
         try {
-            commentRepository.setCommentItem(comment)
+            if (comment.isLiked) {
+                commentRepository.removeCommentLike(post.value!!.id, comment.id)
+            } else {
+                commentRepository.addCommentLike(post.value!!.id, comment.id)
+            }
+            commentTransferLike.emit(commentTransferLike.value.toggleElement(comment.id))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -218,7 +275,7 @@ class PostViewModel @Inject constructor(
 
     fun toggleReplyLike(reply: Reply) = viewModelScope.launch {
         try {
-            val replyList = replyTransferLike.value.addOrRemove(reply.id)
+            val replyList = replyTransferLike.value.toggleElement(reply.id)
             replyTransferLike.emit(replyList)
 
             if (reply.isLiked) {
@@ -239,14 +296,4 @@ class PostViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-}
-
-sealed interface CommentUiState {
-
-    data object Header : CommentUiState
-
-    data class CommentType(val item: Comment) : CommentUiState
-
-    data class ReplyType(val item: Comment) : CommentUiState
-
 }

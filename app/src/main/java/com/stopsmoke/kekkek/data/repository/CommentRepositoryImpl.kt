@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.data.repository
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.data.mapper.toEntity
 import com.stopsmoke.kekkek.domain.model.Comment
@@ -13,6 +14,7 @@ import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.firestore.dao.CommentDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -31,7 +33,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
                 }
@@ -44,7 +47,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
                 }
@@ -62,7 +66,8 @@ class CommentRepositoryImpl @Inject constructor(
                             val earliest = it.earliestReply.map { reply ->
                                 reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                             }
-                            it.asExternalModel(earliest)
+                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            it.asExternalModel(earliest, isLiked)
                         }
                     }
             }
@@ -75,13 +80,8 @@ class CommentRepositoryImpl @Inject constructor(
         }
 
 
-    override suspend fun addCommentItem(comment: Comment): Result<Unit> {
-        return try {
-            commentDao.addComment(comment.toEntity())
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun addCommentItem(comment: Comment): String {
+        return commentDao.addComment(comment.toEntity())
     }
 
     override suspend fun setCommentItem(comment: Comment): Result<Unit> {
@@ -120,8 +120,33 @@ class CommentRepositoryImpl @Inject constructor(
                 val earliest = it.earliestReply.map { reply ->
                     reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
                 }
-                it.asExternalModel(earliest)
+                val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                it.asExternalModel(earliest, isLiked)
             }
         }
+    }
+
+    override suspend fun addCommentLike(postId: String, commentId: String) {
+        val user = userRepository.getUserData().first() as? User.Registered
+            ?: throw GuestModeException()
+
+        commentDao.appendItemList(
+            postId = postId,
+            commentId = commentId,
+            field = "like_user",
+            items = user.uid
+            )
+    }
+
+    override suspend fun removeCommentLike(postId: String, commentId: String) {
+        val user = userRepository.getUserData().first() as? User.Registered
+            ?: throw GuestModeException()
+
+        commentDao.removeItemList(
+            postId = postId,
+            commentId = commentId,
+            field = "like_user",
+            items = user.uid
+        )
     }
 }

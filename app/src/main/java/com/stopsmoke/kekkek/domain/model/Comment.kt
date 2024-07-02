@@ -12,7 +12,8 @@ data class Comment(
     val earliestReply: List<Reply>,
     val written: Written,
     val parent: CommentParent,
-    val replyCount: Long
+    val replyCount: Long,
+    val isLiked: Boolean
 ) {
     val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
 }
@@ -26,5 +27,6 @@ fun emptyComment() = Comment(
     earliestReply = emptyList(),
     written = Written("", "", ProfileImage.Default, 0),
     parent = CommentParent(PostCategory.UNKNOWN, "", ""),
-    replyCount = 0
+    replyCount = 0,
+    isLiked = false
 )

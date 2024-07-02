@@ -1,31 +1,28 @@
 package com.stopsmoke.kekkek.presentation.post
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
+import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostViewReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostCommentViewHolder
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostContentViewHolder
+import com.stopsmoke.kekkek.presentation.post.viewholder.PostDeletedItemAdapter
 import com.stopsmoke.kekkek.presentation.post.viewholder.PostReplyViewHolder
 
 private enum class PostViewType {
-    POST, COMMENT, REPLY
+    POST, COMMENT, REPLY, DELETED
 }
 
-data class PostHeaderItem(
-    val user: User?,
-    val post: Post?,
-    val commentNum: Long,
-)
-
-class PostViewAdapter : PagingDataAdapter<CommentUiState, RecyclerView.ViewHolder>(diffUtil) {
+class PostViewAdapter : PagingDataAdapter<PostViewCommentRecyclerViewUiState, RecyclerView.ViewHolder>(diffUtil) {
 
     private var callback: PostCommentCallback? = null
 
@@ -37,9 +34,9 @@ class PostViewAdapter : PagingDataAdapter<CommentUiState, RecyclerView.ViewHolde
         callback = null
     }
 
-    private var headerItem = PostHeaderItem(null, null, 0)
+    private var headerItem = PostContentItem(null, null, 0)
 
-    fun updatePostHeader(postHeaderItem: PostHeaderItem) {
+    fun updatePostHeader(postHeaderItem: PostContentItem) {
         headerItem = postHeaderItem
         notifyItemChanged(0)
     }
@@ -73,6 +70,15 @@ class PostViewAdapter : PagingDataAdapter<CommentUiState, RecyclerView.ViewHolde
                 PostReplyViewHolder(view, callback)
             }
 
+            PostViewType.DELETED.ordinal -> {
+                val view = RecyclerviewEmptyBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                PostDeletedItemAdapter(view)
+            }
+
             else -> throw IllegalStateException()
         }
 
@@ -85,58 +91,65 @@ class PostViewAdapter : PagingDataAdapter<CommentUiState, RecyclerView.ViewHolde
             }
 
             is PostCommentViewHolder -> {
-                holder.bind((item as CommentUiState.CommentType).item)
+                holder.bind((item as PostViewCommentRecyclerViewUiState.CommentType).item)
             }
 
             is PostReplyViewHolder -> {
-                val uiState = item as CommentUiState.ReplyType
+                val uiState = item as PostViewCommentRecyclerViewUiState.ReplyType
                 holder.bind(uiState.item)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)!!) {
-            is CommentUiState.Header -> PostViewType.POST.ordinal
-            is CommentUiState.CommentType -> PostViewType.COMMENT.ordinal
-            is CommentUiState.ReplyType -> PostViewType.REPLY.ordinal
+        return when (getItem(position)) {
+            is PostViewCommentRecyclerViewUiState.Header -> PostViewType.POST.ordinal
+            is PostViewCommentRecyclerViewUiState.CommentType -> PostViewType.COMMENT.ordinal
+            is PostViewCommentRecyclerViewUiState.ReplyType -> PostViewType.REPLY.ordinal
+            else -> PostViewType.DELETED.ordinal
         }
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<CommentUiState>() {
+        private val diffUtil = object : DiffUtil.ItemCallback<PostViewCommentRecyclerViewUiState>() {
             override fun areItemsTheSame(
-                oldItem: CommentUiState,
-                newItem: CommentUiState,
+                oldItem: PostViewCommentRecyclerViewUiState,
+                newItem: PostViewCommentRecyclerViewUiState,
             ): Boolean {
                 return when(oldItem) {
-                    is CommentUiState.CommentType -> {
+                    is PostViewCommentRecyclerViewUiState.CommentType -> {
                         when(newItem) {
-                            is CommentUiState.CommentType -> oldItem.item.id == newItem.item.id
-                            is CommentUiState.Header -> false
-                            is CommentUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.Header -> false
+                            is PostViewCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
-                    is CommentUiState.Header -> {
+                    is PostViewCommentRecyclerViewUiState.Header -> {
                         when(newItem) {
-                            is CommentUiState.CommentType -> "Header" == newItem.item.id
-                            is CommentUiState.Header -> true
-                            is CommentUiState.ReplyType -> "Header" == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.CommentType -> "Header" == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.Header -> true
+                            is PostViewCommentRecyclerViewUiState.ReplyType -> "Header" == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
-                    is CommentUiState.ReplyType -> {
+                    is PostViewCommentRecyclerViewUiState.ReplyType -> {
                         when(newItem) {
-                            is CommentUiState.CommentType -> oldItem.item.id == newItem.item.id
-                            is CommentUiState.Header -> false
-                            is CommentUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
+                            is PostViewCommentRecyclerViewUiState.Header -> false
+                            is PostViewCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
+                            PostViewCommentRecyclerViewUiState.Deleted -> false
                         }
                     }
+
+                    PostViewCommentRecyclerViewUiState.Deleted -> true
                 }
             }
 
+            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(
-                oldItem: CommentUiState,
-                newItem: CommentUiState,
+                oldItem: PostViewCommentRecyclerViewUiState,
+                newItem: PostViewCommentRecyclerViewUiState,
             ): Boolean {
                 return oldItem === newItem
             }
