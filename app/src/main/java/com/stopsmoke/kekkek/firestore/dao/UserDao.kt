@@ -29,4 +29,6 @@ interface UserDao {
     fun getActivities(uid: String): Flow<ActivitiesEntity>
 
     suspend fun getAllUserData(): List<UserEntity>
+
+    suspend fun withdraw(uid: String)
 }

@@ -104,6 +104,7 @@ class OnboardingViewModel @Inject constructor(
             )
             userRepository.setUserData(user)
             userRepository.setOnboardingComplete(true)
+            syncFcmToken()
 
             delay(1300)
             _onboardingUiState.emit(OnboardingUiState.Success)
@@ -129,8 +130,11 @@ class OnboardingViewModel @Inject constructor(
                 is User.Error -> AuthenticationUiState.Error(user.t)
                 is User.Guest -> AuthenticationUiState.Guest
                 is User.Registered -> {
-                    if (user.name.isBlank()) {
-                        syncFcmToken()
+                    if (uid.value.isBlank()) {
+                        return@flatMapLatest flowOf(AuthenticationUiState.Init)
+                    }
+
+                    if (user.uid.isBlank()) {
                         return@flatMapLatest flowOf(AuthenticationUiState.NewMember)
                     }
                     userRepository.setOnboardingComplete(true)
@@ -144,11 +148,11 @@ class OnboardingViewModel @Inject constructor(
         }
 
     private fun syncFcmToken() {
-//        viewModelScope.launch {
-//            userRepository.updateUserData(
-//                mapOf("fcm_token" to Firebase.messaging.token.await())
-//            )
-//        }
+        viewModelScope.launch {
+            userRepository.updateUserData(
+                mapOf("fcm_token" to Firebase.messaging.token.await())
+            )
+        }
     }
 }
 

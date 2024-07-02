@@ -155,7 +155,9 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun withdraw() {
-        authDataSource.withdraw()
+        (user.value as? User.Registered)?.let {
+            userDao.withdraw(it.uid)
+        }
         user.emit(User.Guest)
         preferencesDataSource.clearAll()
     }

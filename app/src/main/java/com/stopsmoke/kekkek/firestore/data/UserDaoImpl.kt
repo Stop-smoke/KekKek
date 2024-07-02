@@ -1,21 +1,17 @@
 package com.stopsmoke.kekkek.firestore.data
 
 import android.util.Log
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.firestore.POST_COLLECTION
+import com.stopsmoke.kekkek.firestore.WITHDRAW_USER_COLLECTION
 import com.stopsmoke.kekkek.firestore.dao.UserDao
-import com.stopsmoke.kekkek.firestore.data.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.firestore.model.ActivitiesEntity
-import com.stopsmoke.kekkek.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -195,6 +191,12 @@ internal class UserDaoImpl @Inject constructor(
             e.printStackTrace()
             emptyList()
         }
+    }
+
+    override suspend fun withdraw(uid: String) {
+        firestore.collection(WITHDRAW_USER_COLLECTION)
+            .add(mapOf("uid" to uid))
+            .await()
     }
 
     companion object {

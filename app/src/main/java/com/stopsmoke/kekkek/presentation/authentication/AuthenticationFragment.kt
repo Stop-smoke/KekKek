@@ -24,6 +24,7 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.onboarding.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
+import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.visible
 
 class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
@@ -129,6 +130,11 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     }
 
     override fun onSuccess(user: FirebaseUser) {
+        if (user.uid.isBlank()) {
+            view?.snackbarLongShow("최근에 탈퇴한 유저로 확인됩니다\n30분 뒤에 다시 시도해 주세요")
+            return
+        }
+
         viewModel.updateUid(user.uid)
         viewModel.updateUserName(user.displayName ?: getString(R.string.login_default_nickname))
         Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
