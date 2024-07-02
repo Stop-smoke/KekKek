@@ -42,5 +42,5 @@ data class SearchPostEntity(
     var dateTime: DateTimeEntity? = null,
 
     @SerialName("images_url")
-    val imagesUrl: List<String>
+    val imagesUrl: List<String> = emptyList()
 )
