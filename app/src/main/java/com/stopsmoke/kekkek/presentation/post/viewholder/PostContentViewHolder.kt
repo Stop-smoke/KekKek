@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.post.viewholder
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
@@ -43,7 +44,10 @@ class PostContentViewHolder(
         }
 
         when (user) {
-            is User.Error -> { itemView.snackbarLongShow("유저 정보 에러") }
+            is User.Error -> {
+                itemView.snackbarLongShow("유저 정보 에러")
+            }
+
             is User.Guest -> {}
             is User.Registered -> {
                 if (post.likeUser.contains(user.uid)) {
@@ -69,6 +73,11 @@ class PostContentViewHolder(
         tvPostViewNum.text = post.views.toString()
         initWrittenProfileImage(post.written.profileImage)
         binding.tvPostCommentNum.text = post.commentCount.toString()
+
+        if (post.imagesUrl.isNotEmpty()) {
+            binding.ivPostViewImage.load(post.imagesUrl[0])
+            binding.ivPostViewImage.visibility = View.VISIBLE
+        }
     }
 
     private fun initWrittenProfileImage(profileImage: ProfileImage) {

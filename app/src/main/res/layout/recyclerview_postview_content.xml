@@ -84,12 +84,24 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            android:minHeight="200dp"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_post_title"
-            tools:text="아리랑아리랑아리랑 아리랑아라리" />
+            android:paddingBottom="60dp"
+            tools:text="아리랑아리랑아리랑 아리랑아라리리리컬 매지컬 나노나나나니나 니나노 라라라라 로로로로 이리ㅣㄹ리ㅣ 라랑랑라ㅣㅁ이프미\" />
+
+    <ImageView
+        android:id="@+id/iv_postView_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:src = "@drawable/img_example"
+        android:scaleType="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/tv_post_description"
+        app:layout_constraintStart_toStartOf="@id/tv_post_description"
+        app:layout_constraintEnd_toEndOf="@id/tv_post_description"/>
 
         <View
             android:layout_width="match_parent"
@@ -107,7 +119,7 @@
             android:paddingBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_post_description">
+            app:layout_constraintTop_toBottomOf="@id/iv_postView_image">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_post_view_heart"
