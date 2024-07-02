@@ -33,14 +33,16 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_foreground" />
+            android:resource="@drawable/ic_notification_white" />
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/white" /> <!-- 에드몹 -->
+            android:resource="@color/primary_blue" />
+
+        <!-- 에드몹 -->
         <!-- adMpb, 추후 출시 applicationId 추가, kakaoApi 역시 hash key에 릴리즈키 등록해야한다는데.. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
