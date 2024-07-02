@@ -1,23 +1,26 @@
 package com.stopsmoke.kekkek.presentation.post
 
-import android.graphics.Typeface
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
+import android.media.ExifInterface
+import android.net.Uri
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,7 +34,6 @@ import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,11 +42,18 @@ import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class PostWriteFragment : Fragment() {
+
     private var _binding: FragmentPostWriteBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PostWriteViewModel by viewModels()
-    private val communityViewModel: CommunityViewModel by activityViewModels()
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { url ->
+        url?.let {
+            insertImage(it)
+        }
+    }
 
     private val builder by lazy {
         AlertDialog.Builder(requireContext())
@@ -105,7 +114,7 @@ class PostWriteFragment : Fragment() {
             builder.setIcon(R.drawable.ic_post)
         } else {
             builder.setTitle("게시물 수정")
-            builder.setMessage("게시물을 수정하시겠습니까??")
+            builder.setMessage("게시물을 수정하시겠습니까?")
             builder.setIcon(R.drawable.ic_post)
         }
 
@@ -114,6 +123,7 @@ class PostWriteFragment : Fragment() {
     }
 
     private fun initListener() = with(binding) {
+        initTextEditor()
 
         includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
             findNavController().popBackStack()
@@ -130,8 +140,12 @@ class PostWriteFragment : Fragment() {
                     val post = PostEdit(
                         title = etPostWriteTitle.text.toString(),
                         text = etPostWriteContent.text.toString(),
-                        dateTime = DateTime(created = viewModel.post.value?.dateTime?.created ?: LocalDateTime.now(), modified = LocalDateTime.now()),
-                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString().trim()
+                        dateTime = DateTime(
+                            created = viewModel.post.value?.dateTime?.created
+                                ?: LocalDateTime.now(), modified = LocalDateTime.now()
+                        ),
+                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                            .trim()
                             .toPostWriteCategory()
                     )
                     if (viewModel.post.value == null) viewModel.addPost(post)
@@ -142,9 +156,19 @@ class PostWriteFragment : Fragment() {
             }
         }
 
+        ivDeleteImage.setOnClickListener {
+            deleteImage()
+        }
+
         includePostWriteAppBar.tvPostWriteType.setOnClickListener {
             includePostWriteAppBar.spinnerPostWrite.performClick()
         }
+    }
+
+    private fun deleteImage() = with(binding) {
+        ivPostWriteImage.setImageBitmap(null)
+        ivDeleteImage.visibility = View.GONE
+        ivDeleteImage.visibility = View.GONE
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -166,20 +190,70 @@ class PostWriteFragment : Fragment() {
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
     }
 
-    private fun runTextEditor(span: Any?) {
-        val etPostWriteContent = binding.etPostWriteContent
-        val start = etPostWriteContent.selectionStart
-        val end = etPostWriteContent.selectionEnd
-        if (start != end) {
-            val spannableString = SpannableStringBuilder(etPostWriteContent.text)
-            spannableString.setSpan(
-                span,
-                start,
-                end,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE // 경계선 포함
+    private fun insertImage(url: Uri) {
+        val inputStream = requireContext().contentResolver.openInputStream(url)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        val orientation = getOrientation(url)
+        val rotatedBitmap = rotateBitmap(bitmap, orientation)
+
+        val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
+        val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
+        val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, width, height, true)
+
+        val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
+
+        binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
+        binding.ivPostWriteImage.visibility = View.VISIBLE
+        binding.ivDeleteImage.visibility = View.VISIBLE
+    }
+
+    private fun getOrientation(uri: Uri): Int {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        inputStream?.use { stream ->
+            val exifInterface = ExifInterface(stream)
+            return exifInterface.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
             )
-            etPostWriteContent.text = spannableString
-            etPostWriteContent.setSelection(start, end) // setSelection : 선택 영역 유지
+        }
+        return ExifInterface.ORIENTATION_UNDEFINED
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            else -> return bitmap
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+
+        paint.isAntiAlias = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = Color.BLACK
+        canvas.drawRoundRect(rectF, radius, radius, paint)
+
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
+    }
+
+    private fun initTextEditor() = with(binding) {
+        ivPostWriteLink.setOnClickListener {
+            pickImageLauncher.launch("image/*")
         }
     }
 
