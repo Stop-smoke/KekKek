@@ -151,8 +151,10 @@ internal class PostDaoImpl @Inject constructor(
     override suspend fun addPost(postEntity: PostEntity) {
         firestore.collection(COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
-                .addOnFailureListener { throw it }
-                .addOnCanceledListener { throw CancellationException() }
+                .await()
+            document.update("date_time.created", FieldValue.serverTimestamp())
+                .await()
+            document.update("date_time.modified", FieldValue.serverTimestamp())
                 .await()
         }
     }
