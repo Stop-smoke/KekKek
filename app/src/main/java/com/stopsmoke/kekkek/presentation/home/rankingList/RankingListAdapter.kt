@@ -13,10 +13,13 @@ import com.stopsmoke.kekkek.domain.model.HistoryTime
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Ranking
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
 import java.time.Duration
 import java.time.LocalDateTime
 
-class RankingListAdapter
+class RankingListAdapter(
+    private val rankingListField: RankingListField
+)
     : ListAdapter<RankingListItem, RankingListAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<RankingListItem>() {
         override fun areItemsTheSame(
@@ -48,7 +51,7 @@ class RankingListAdapter
         private val binding: RecyclerviewRankinglistRankstateItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: RankingListItem) = with(binding) {
-            tvRankStateItem.text = item.name
+            tvRankStateItem.text = item.introduction
             tvRankStateItemUserName.text = item.name
             tvRankStateItemRankNum.text = (absoluteAdapterPosition + 1).toString()
 
@@ -60,8 +63,10 @@ class RankingListAdapter
                 circleIvRankStateItemProfile.load(item.profileImage)
             }
 
-            tvRankingListTime.text = getRankingTime(item.startTime!!)
-
+            tvRankingListTime.text = when(rankingListField) {
+                RankingListField.Achievement -> item.clearAchievementInt.toString() + "개"
+                RankingListField.Time -> getRankingTime(item.startTime!!)
+            }
             circleIvRankStateItemProfile.setOnClickListener {
                 callback?.navigationToUserProfile(item.userID)
             }
