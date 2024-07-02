@@ -11,7 +11,6 @@ class AuthenticationDataSource @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ) {
 
-
     fun getUid() = callbackFlow<String?> {
 
         val authStateListener = FirebaseAuth.AuthStateListener {
