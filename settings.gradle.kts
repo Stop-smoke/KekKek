@@ -12,6 +12,7 @@ pluginManagement {
         maven { url = java.net.URI("https://a8c-libs.s3.amazonaws.com/android") }
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
