@@ -29,6 +29,7 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
@@ -290,11 +291,6 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     override fun onDestroy() {
         super.onDestroy()
         postViewAdapter.unregisterCallback()
-    }
-
-    private fun View.hideSoftKeyboard() {
-        val inputMethodManager = getSystemService(context, InputMethodManager::class.java)
-        inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
     }
 
     override fun deleteItem(comment: Comment) {

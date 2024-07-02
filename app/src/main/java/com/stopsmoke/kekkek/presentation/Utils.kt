@@ -7,7 +7,9 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
@@ -132,4 +134,9 @@ fun (User.Registered).getTotalDay(): Long{
         }
     }
     return totalDay
+}
+
+internal fun View.hideSoftKeyboard() {
+    val inputMethodManager = ContextCompat.getSystemService(context, InputMethodManager::class.java)
+    inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
 }
