@@ -57,7 +57,7 @@ class SmokingAddictionTestResultFragment : Fragment() {
                     tvTestResultType.text = "니코틴에 대한 의존이 이미 심한 상태"
                     tvTestResultDescription.text =
                         "심한 금단증상으로 \n금연을 이어가기 힘든 경우로 보입니다. \n\n전문가의 도움을 받아보시는 것을 \n추천 드립니다."
-                    ivTestResultIcon.setImageResource(R.drawable.ic_thumb_down)
+                    ivTestResultIcon.setImageResource(R.drawable.ic_test_bad)
                     viewModel.updateCigaretteAddictionTestResult("담배 중독 상태 😱")
                 }
             }
