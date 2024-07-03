@@ -116,12 +116,12 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 //                profileInfo = null,
 //                version = null
 //            ),
-//            SettingsItem(
-//                settingTitle = "언어",
-//                cardViewType = SettingsMultiViewEnum.LIST,
-//                profileInfo = null,
-//                version = null
-//            ),
+            SettingsItem(
+                settingTitle = "언어",
+                cardViewType = SettingsMultiViewEnum.LIST,
+                profileInfo = null,
+                version = null
+            ),
 //            SettingsItem(
 //                settingTitle = "테마",
 //                cardViewType = SettingsMultiViewEnum.LIST,

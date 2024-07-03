@@ -1,18 +1,16 @@
 <resources>
     <string name="app_name">켁켁이</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
     <!-- editor -->
-    <string name="edit_hint">Tenochtitlan is the hint</string>
-    <string name="source_hint">Codex is the source</string>
+    <string name="edit_hint" translatable="false">Tenochtitlan is the hint</string>
+    <string name="source_hint" translatable="false">Codex is the source</string>
 
     <!--  Home  -->
-    <string name="home_start">start</string>
-    <string name="home_performance">성과</string>
-    <string name="home_test">중독 테스트</string>
+    <string name="home_start" translatable="false">start</string>
     <string name="home_test_detail">중독테스트를 실시해보세요!</string>
     <string name="home_motivation">동기부여</string>
-    <string name="home_keep">keep</string>
+    <string name="home_keep" translatable="false">keep</string>
     <string name="home_day_description">금연한 지</string>
     <string name="home_cigarette_description">피우지\n않은 담배</string>
     <string name="home_save_money_description">돈 절약</string>
@@ -78,47 +76,11 @@
     <string name="question8_answer3">예</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
+    <string name="next" translatable="false">Next</string>
+    <string name="previous" translatable="false">Previous</string>
 
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
     <string name="test_result_title">테스트 결과</string>
     <string name="test_result_ok">확인</string>
     <string name="post_add_comment">댓글을 남겨주세요.</string>
@@ -174,7 +136,7 @@
     <string name="tv_profile_show_setting_detail">선택하면 다른 사람에게 프로필을 공개합니다.</string>
     <string name="setting_log_out">로그아웃</string>
     <string name="setting_service_out">서비스 계정 탈퇴</string>
-    <string name="setting_language_english">English</string>
+    <string name="setting_language_english">영어</string>
     <string name="setting_language_korean">한글</string>
 
     <string name="community_category_notice">공지사항</string>
@@ -200,4 +162,28 @@
     <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 
     <string name="settings_user_profile_with_draw_fail_message">정보를 처리하는 과정에서 오류가 발생하였습니다.</string>
+    <string name="home_test">중독 테스트</string>
+    <string name="home_performance">성과</string>
+    <string name="radio_button_english">영어</string>
+    <string name="radio_button_korean">한글</string>
+    <string name="tv_my_antiSmokingSetting">금연설정</string>
+    <string name="tv_my_customerService">고객센터</string>
+    <string name="tv_my_complaint">커뮤니티 신고하기</string>
+    <string name="tv_home_timer">금연한 지</string>
+    <string name="tv_home_timerNum">203시간 5분</string>
+    <string name="tv_home_noticeBox">공지사항</string>
+    <string name="tv_home_savedMoneyTitle">절약한 돈</string>
+    <string name="tv_home_savedMoneyNum">3,524 원</string>
+    <string name="tv_home_testTitle">중독 테스트</string>
+    <string name="tv_home_testDegree">100 원</string>
+    <string name="iv_home_test">검사하기</string>
+    <string name="tv_home_rankTitle">랭킹</string>
+    <string name="tv_home_rankNum">확인하러가기</string>
+    <string name="tv_home_savedLifeTitle">금단 증상 팁</string>
+    <string name="tv_home_savedLifeNum">팁 확인</string>
+    <string name="tv_home_motivation">담배를 피워도 괴롭고,\n끊어도 괴롭다면,\n 어떤 괴로움을 선택하겠는가?</string>
+    <string name="tv_my_activity">나의 활동</string>
+    <string name="tv_my_writing">내가 쓴 글</string>
+    <string name="tv_my_comment">나의 댓글</string>
+    <string name="tv_my_bookmark">북마크</string>
 </resources>
