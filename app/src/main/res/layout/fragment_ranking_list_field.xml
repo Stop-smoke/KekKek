@@ -107,7 +107,7 @@
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rankingList_rank1Name"
             app:layout_constraintEnd_toEndOf="@id/tv_rankingList_rank1Name"
             app:layout_constraintStart_toStartOf="@id/tv_rankingList_rank1Name"
             tools:text="이상한 담배왕, 난 담배를 펴, 정말 많이 펴, 근데 1등이야" />
@@ -185,7 +185,7 @@
             android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank2"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rankingList_rank2Name"
             app:layout_constraintEnd_toEndOf="@id/tv_rankingList_rank2Name"
             app:layout_constraintStart_toStartOf="@id/tv_rankingList_rank2Name"
             tools:text="이상한 담배왕, 난 담배를 펴, 정말 많이 펴, 근데 1등이야" />
@@ -263,7 +263,7 @@
             android:maxLines="1"
             android:textColor="#334EAF"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/progressBar_rankingList_rank3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_rankingList_rank3Name"
             app:layout_constraintEnd_toEndOf="@id/tv_rankingList_rank3Name"
             app:layout_constraintStart_toStartOf="@id/tv_rankingList_rank3Name"
             tools:text="이상한 담배왕, 난 담배를 펴, 정말 많이 펴, 근데 1등이야" />

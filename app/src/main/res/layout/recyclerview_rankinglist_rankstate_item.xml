@@ -47,14 +47,15 @@
         android:id="@+id/tv_rankStateItem_"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
         android:fontFamily="@font/pretendard_regular"
+        android:maxLines="1"
         android:textColor="@color/gray"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@id/circleIv_rankStateItem_profile"
         app:layout_constraintEnd_toEndOf="@id/tv_rankStateItem_userName"
         app:layout_constraintStart_toStartOf="@id/tv_rankStateItem_userName"
-        android:maxLines="1"
-        android:ellipsize="end"
+        app:layout_constraintTop_toBottomOf="@+id/tv_rankStateItem_userName"
         tools:text="을추게할거야탈골됐자나" />
 
     <TextView
