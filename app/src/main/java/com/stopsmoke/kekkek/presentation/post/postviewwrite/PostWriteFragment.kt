@@ -40,7 +40,6 @@ import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
@@ -186,8 +185,8 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
     private fun deleteImage() = with(binding) {
         ivPostWriteImage.setImageBitmap(null)
-        ivDeleteImage.visibility = View.GONE
-        ivDeleteImage.visibility = View.GONE
+        cvPostWriteImage.visibility = View.GONE
+        cvPostWriteImage.visibility = View.GONE
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -240,10 +239,9 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
         val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
 
-
         binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
-        binding.ivPostWriteImage.visibility = View.VISIBLE
-        binding.ivDeleteImage.visibility = View.VISIBLE
+        binding.cvPostWriteImage.visibility = View.VISIBLE
+        binding.cvPostWriteImage.visibility = View.VISIBLE
     }
 
     private fun getOrientation(inputStream: InputStream?): Int {
