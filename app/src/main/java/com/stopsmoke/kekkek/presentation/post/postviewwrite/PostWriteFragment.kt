@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
@@ -26,7 +27,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
@@ -141,7 +141,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
         includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
             if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
-                Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "제목 또는 내용을 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 val dialog = builder.create()
                 dialog.show()
@@ -151,7 +151,8 @@ class PostWriteFragment : Fragment(), ErrorHandle {
                     var inputStream: InputStream? = null
                     (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                         inputStream =
-                            BitmapCompressor(bitmapToInputStream(bitmap!!)!!).getCompressedFile().inputStream()
+                            BitmapCompressor(bitmapToInputStream(bitmap!!)!!).getCompressedFile()
+                                .inputStream()
                     }
 
                     val post = PostEdit(
@@ -201,8 +202,8 @@ class PostWriteFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle){
-            when(it){
+        uiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
                 PostWriteUiState.InitUiState -> {}
                 PostWriteUiState.Success -> {
                     findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
