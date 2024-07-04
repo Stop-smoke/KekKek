@@ -36,11 +36,12 @@ import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
@@ -73,6 +74,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
         arguments?.getString("post_id")?.let {
             viewModel.updatePostId(it)
         }
+        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, false)
     }
 
     override fun onCreateView(
@@ -186,8 +188,8 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
     private fun deleteImage() = with(binding) {
         ivPostWriteImage.setImageBitmap(null)
-        ivDeleteImage.visibility = View.GONE
-        ivDeleteImage.visibility = View.GONE
+        cvPostWriteImage.visibility = View.GONE
+        cvPostWriteImage.visibility = View.GONE
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -203,6 +205,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
             when(it){
                 PostWriteUiState.InitUiState -> {}
                 PostWriteUiState.Success -> {
+                    findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
                     findNavController().popBackStack()
                 }
 
@@ -240,10 +243,9 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
         val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)
 
-
         binding.ivPostWriteImage.setImageBitmap(roundedBitmap)
-        binding.ivPostWriteImage.visibility = View.VISIBLE
-        binding.ivDeleteImage.visibility = View.VISIBLE
+        binding.cvPostWriteImage.visibility = View.VISIBLE
+        binding.cvPostWriteImage.visibility = View.VISIBLE
     }
 
     private fun getOrientation(inputStream: InputStream?): Int {
