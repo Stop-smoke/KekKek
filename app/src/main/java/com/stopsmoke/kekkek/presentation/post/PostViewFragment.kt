@@ -35,6 +35,7 @@ import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -137,7 +138,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     private fun initPostDeletedResult() {
-        putNavigationResult(NavigationKey.IS_DELETED_POST, false)
+        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, false)
     }
 
     override fun onCreateView(
@@ -339,11 +340,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     override fun deletePost(postId: String) {
         viewModel.deletePost(postId)
         Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-        putNavigationResult(NavigationKey.IS_DELETED_POST, true)
+        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
         findNavController().popBackStack()
-    }
-
-    private fun<T> putNavigationResult(key: String, value: T) {
-        findNavController().previousBackStackEntry?.savedStateHandle?.set(key, value)
     }
 }

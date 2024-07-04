@@ -36,8 +36,10 @@ import com.stopsmoke.kekkek.domain.model.PostEdit
 import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
 import com.stopsmoke.kekkek.domain.model.toStringKR
 import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -72,6 +74,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
         arguments?.getString("post_id")?.let {
             viewModel.updatePostId(it)
         }
+        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, false)
     }
 
     override fun onCreateView(
@@ -202,6 +205,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
             when(it){
                 PostWriteUiState.InitUiState -> {}
                 PostWriteUiState.Success -> {
+                    findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
                     findNavController().popBackStack()
                 }
 
