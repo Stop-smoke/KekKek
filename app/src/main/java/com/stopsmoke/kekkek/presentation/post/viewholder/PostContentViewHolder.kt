@@ -76,7 +76,7 @@ class PostContentViewHolder(
 
         if (post.imagesUrl.isNotEmpty()) {
             binding.ivPostViewImage.load(post.imagesUrl[0])
-            binding.ivPostViewImage.visibility = View.VISIBLE
+            binding.cvPostViewImage.visibility = View.VISIBLE
         }
     }
 

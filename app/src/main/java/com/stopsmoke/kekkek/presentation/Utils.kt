@@ -14,6 +14,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.snackbar.Snackbar
@@ -139,4 +141,8 @@ fun (User.Registered).getTotalDay(): Long{
 internal fun View.hideSoftKeyboard() {
     val inputMethodManager = ContextCompat.getSystemService(context, InputMethodManager::class.java)
     inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
+}
+
+internal fun<T> NavController.putNavigationResult(key: String, value: T) {
+    previousBackStackEntry?.savedStateHandle?.set(key, value)
 }

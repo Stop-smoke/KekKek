@@ -80,24 +80,34 @@
             android:gravity="start|top"
             android:hint="@string/post_write_content"
             android:inputType="textMultiLine"
-            app:layout_constraintBottom_toTopOf="@id/iv_post_write_image"
+            app:layout_constraintBottom_toTopOf="@id/cv_post_write_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_post_write_image"
-            android:layout_width="0dp"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_post_write_image"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_home_motivation"
-            android:scaleType="center"
+            app:strokeColor="@null"
             android:visibility="gone"
+            app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
-            tools:src="@drawable/img_example"
-            tools:visibility="visible" />
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_post_write_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_home_motivation"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/img_example" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <ImageView
             android:id="@+id/iv_delete_image"
@@ -106,8 +116,9 @@
             android:layout_margin="8dp"
             android:src="@drawable/ic_delete"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/iv_post_write_image"
-            app:layout_constraintTop_toTopOf="@id/iv_post_write_image" />
+            app:layout_constraintEnd_toEndOf="@+id/cv_post_write_image"
+            app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
