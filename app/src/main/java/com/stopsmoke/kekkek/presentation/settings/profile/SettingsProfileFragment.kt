@@ -23,6 +23,7 @@ import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
@@ -43,7 +44,7 @@ class SettingsProfileFragment : Fragment() {
     private val viewModel: SettingsViewModel by activityViewModels()
 
     private val progressDialog = lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        ProfileImageUploadProgressFragment()
+        CircularProgressDialogFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,7 +173,7 @@ class SettingsProfileFragment : Fragment() {
     }
 
     private fun showProgressDialog() {
-        progressDialog.value.show(childFragmentManager, ProfileImageUploadProgressFragment.TAG)
+        progressDialog.value.show(childFragmentManager, CircularProgressDialogFragment.TAG)
     }
 
     private fun navigateToAuthenticationScreen() {
