@@ -15,10 +15,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.isVisible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 

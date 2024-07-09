@@ -23,8 +23,8 @@ import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.CustomItemDecoration
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
@@ -36,7 +36,7 @@ import com.stopsmoke.kekkek.presentation.post.detail.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.detail.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.putNavigationResult
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine

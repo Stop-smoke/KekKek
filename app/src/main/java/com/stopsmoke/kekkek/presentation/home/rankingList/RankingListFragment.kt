@@ -10,11 +10,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
-import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
 import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListFieldFragment
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

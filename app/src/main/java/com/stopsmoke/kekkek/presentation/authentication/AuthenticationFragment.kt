@@ -20,12 +20,12 @@ import com.stopsmoke.kekkek.authorization.google.GoogleAuthorizationCallbackList
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
-import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.onboarding.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 
 class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
     GoogleAuthorizationCallbackListener {

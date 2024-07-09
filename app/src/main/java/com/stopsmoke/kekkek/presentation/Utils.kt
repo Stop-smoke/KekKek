@@ -1,36 +1,98 @@
 package com.stopsmoke.kekkek.presentation
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.Spannable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.domain.model.User
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+
+fun FragmentActivity.visible() {
+    (this as? MainActivity)?.let {
+        val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+        layout.visibility = View.VISIBLE
+    }
+}
+
+fun FragmentActivity.invisible() {
+    (this as? MainActivity)?.let {
+        val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+        layout.visibility = View.GONE
+    }
+}
+
+fun FragmentActivity.isVisible(): Boolean {
+    val layout = findViewById<ConstraintLayout>(R.id.bottom_navigation)
+    return View.VISIBLE == layout.visibility
+}
+
+fun getRelativeTime(pastTime: ElapsedDateTime): String {
+    val timeType = when (pastTime.elapsedDateTime) {
+        DateTimeUnit.YEAR -> "년"
+        DateTimeUnit.MONTH -> "달"
+        DateTimeUnit.DAY -> "일"
+        DateTimeUnit.WEEK -> "주"
+        DateTimeUnit.HOUR -> "시간"
+        DateTimeUnit.MINUTE -> "분"
+        DateTimeUnit.SECOND -> "초"
+    }
+    return "${pastTime.number} ${timeType} 전"
+}
+
+fun convertSpannableToHtml(spannable: Spannable): String {
+    return Html.toHtml(spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE)
+}
+
+fun convertHtmlToSpannable(html: String): Spannable {
+    return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT) as Spannable
+}
+
+fun<T> List<T>.toggleElement(value: T): List<T> {
+    if (contains(value)) {
+        return this.toMutableList().apply {
+            remove(value)
+        }
+    }
+    return this.toMutableList().apply {
+        add(value)
+    }
+}
+
+fun<T> Set<T>.toggleElement(value: T): Set<T> {
+    if (contains(value)) {
+        return this.toMutableSet().apply {
+            remove(value)
+        }
+    }
+    return this.toMutableSet().apply {
+        add(value)
+    }
+}
 
 internal fun ElapsedDateTime.toResourceId(context: Context): String =
     when (elapsedDateTime) {
@@ -97,32 +159,6 @@ internal fun ImageView.setDefaultProfileImage(profileImage: ProfileImage) {
     when(profileImage) {
         ProfileImage.Default -> setImageResource(R.drawable.ic_user_profile_test)
         is ProfileImage.Web -> load(profileImage.url)
-    }
-}
-
-
-class CustomItemDecoration(private val color: Int, private val height: Int) : RecyclerView.ItemDecoration() {
-    private val paint = Paint()
-
-    init {
-        paint.color = color
-        paint.strokeWidth = height.toFloat()
-    }
-
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left = parent.paddingLeft
-        val right = parent.width - parent.paddingRight
-
-        val childCount = parent.childCount
-        for (i in 0 until childCount) {
-            val child = parent.getChildAt(i)
-
-            val params = child.layoutParams as RecyclerView.LayoutParams
-            val top = child.bottom + params.bottomMargin
-            val bottom = top + height
-
-            c.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)
-        }
     }
 }
 

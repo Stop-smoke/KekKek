@@ -9,8 +9,8 @@ import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSettingsSupportBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
 class SettingsSupportFragment : Fragment() {
 

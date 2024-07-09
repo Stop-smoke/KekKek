@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.stopsmoke.kekkek.databinding.FragmentErrorServerEtcBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
 class ErrorServerEtcFragment : Fragment() {
 
