@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myCommentList
+package com.stopsmoke.kekkek.presentation.my.comment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

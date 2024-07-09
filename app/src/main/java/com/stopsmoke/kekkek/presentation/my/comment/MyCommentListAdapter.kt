@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myCommentList
+package com.stopsmoke.kekkek.presentation.my.comment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

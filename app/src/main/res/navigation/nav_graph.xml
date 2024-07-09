@@ -122,7 +122,7 @@
             app:destination="@id/my_bookmark_list" />
         <action
             android:id="@+id/action_myPage_to_myCommentList"
-            app:destination="@id/my_comment_list" />
+            app:destination="@id/my_comment_screen" />
         <action
             android:id="@+id/action_my_page_to_nav_onboarding"
             app:destination="@id/nav_onboarding" />
@@ -293,13 +293,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/my_comment_list"
-        android:name="com.stopsmoke.kekkek.presentation.myCommentList.MyCommentFragment"
-        app:route="my_comment_list"
+        android:id="@+id/my_comment_screen"
+        android:name="com.stopsmoke.kekkek.presentation.my.comment.MyCommentFragment"
+        app:route="my_comment_screen"
         tools:layout="@layout/fragment_my_comment">
 
         <action
-            android:id="@+id/action_myCommentList_to_postView"
+            android:id="@+id/action_my_comment_screen_to_postView"
             app:destination="@id/post_view" />
     </fragment>
 

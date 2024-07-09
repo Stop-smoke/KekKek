@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myCommentList
+package com.stopsmoke.kekkek.presentation.my.comment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,7 +62,7 @@ class MyCommentFragment : Fragment() {
                 }
                 override fun navigateToPost(postId: String) {
                     findNavController().navigate(
-                        resId = R.id.action_myCommentList_to_postView,
+                        resId = R.id.action_my_comment_screen_to_postView,
                         args = bundleOf("post_id" to postId)
                     )
                 }
