@@ -354,13 +354,13 @@
 
     <fragment
         android:id="@+id/reply"
-        android:name="com.stopsmoke.kekkek.presentation.post.reply.ReplyFragment"
+        android:name="com.stopsmoke.kekkek.presentation.reply.ReplyFragment"
         app:route="reply"
         tools:layout="@layout/fragment_reply">
 
         <argument
             android:name="replyIdItem"
-            app:argType="com.stopsmoke.kekkek.presentation.post.reply.ReplyIdItem"/>
+            app:argType="com.stopsmoke.kekkek.presentation.reply.ReplyIdItem"/>
 
         <action
             android:id="@+id/action_reply_to_userProfile"

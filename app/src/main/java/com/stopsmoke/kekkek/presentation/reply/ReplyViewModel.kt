@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.reply
+package com.stopsmoke.kekkek.presentation.reply
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

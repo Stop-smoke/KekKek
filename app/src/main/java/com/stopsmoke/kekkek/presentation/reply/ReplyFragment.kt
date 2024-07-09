@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.reply
+package com.stopsmoke.kekkek.presentation.reply
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,9 +21,9 @@ import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.post.reply.callback.ReplyCallback
-import com.stopsmoke.kekkek.presentation.post.reply.callback.ReplyDialogCallback
-import com.stopsmoke.kekkek.presentation.post.reply.dialog.ReplyDeleteDialogFragment
+import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
+import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
+import com.stopsmoke.kekkek.presentation.reply.dialog.ReplyDeleteDialogFragment
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 

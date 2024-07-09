@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.reply
+package com.stopsmoke.kekkek.presentation.reply
 
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +16,7 @@ import com.stopsmoke.kekkek.databinding.UnknownItemBinding
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.Reply
 import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.presentation.post.reply.callback.ReplyCallback
+import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class ReplyAdapter(
