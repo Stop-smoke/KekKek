@@ -17,12 +17,11 @@ import com.stopsmoke.kekkek.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.getTotalDay
+import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
-import com.stopsmoke.kekkek.presentation.getTotalDay
-import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
-import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -155,6 +154,9 @@ class UserProfileViewModel @Inject constructor(
                 }
             }
     }
+        .catch {
+            it.printStackTrace()
+        }
 
     private fun Achievement.getItem() = AchievementItem(
         id = id,
@@ -166,6 +168,7 @@ class UserProfileViewModel @Inject constructor(
         requestCode = requestCode
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val activities: StateFlow<Activities> = uid.flatMapLatest { uid ->
         try {
             userRepository.getActivities(uid!!)
@@ -173,11 +176,15 @@ class UserProfileViewModel @Inject constructor(
             e.printStackTrace()
             emptyFlow()
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyActivities()
-    )
+    }
+        .catch {
+            it.printStackTrace()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyActivities()
+        )
 
     suspend fun getCurrentProgress(activities: Activities) {
         val userData = user.value
