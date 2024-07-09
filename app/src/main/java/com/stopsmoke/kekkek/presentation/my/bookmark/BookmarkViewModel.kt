@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myBookmarkList
+package com.stopsmoke.kekkek.presentation.my.bookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

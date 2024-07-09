@@ -253,16 +253,16 @@
 
     <fragment
         android:id="@+id/my_bookmark_list"
-        android:name="com.stopsmoke.kekkek.presentation.myBookmarkList.BookmarkFragment"
-        app:route="my_bookmark_list"
+        android:name="com.stopsmoke.kekkek.presentation.my.bookmark.BookmarkFragment"
+        app:route="my_bookmark_screen"
         tools:layout="@layout/fragment_bookmark">
 
         <action
-            android:id="@+id/action_myBookmarkList_to_postView"
+            android:id="@+id/action_my_bookmark_screen_to_post_view"
             app:destination="@id/post_view" />
 
         <action
-            android:id="@+id/action_myBookmarkList_to_userProfile"
+            android:id="@+id/action_my_bookmark_screen_to_userProfile"
             app:destination="@id/user_profile" />
     </fragment>
 

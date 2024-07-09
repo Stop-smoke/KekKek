@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myBookmarkList
+package com.stopsmoke.kekkek.presentation.my.bookmark
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -65,14 +65,14 @@ class BookmarkFragment : Fragment() {
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
                     findNavController().navigate(
-                        resId = R.id.action_myBookmarkList_to_userProfile,
+                        resId = R.id.action_my_bookmark_screen_to_userProfile,
                         args = bundleOf("uid" to uid)
                     )
                 }
 
                 override fun navigateToPost(postId: String) {
                     findNavController().navigate(
-                        resId = R.id.action_myBookmarkList_to_postView,
+                        resId = R.id.action_my_bookmark_screen_to_post_view,
                         args = bundleOf("post_id" to postId)
                     )
                 }
