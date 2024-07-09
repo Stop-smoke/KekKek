@@ -1,13 +1,13 @@
-package com.stopsmoke.kekkek.presentation.popularWritingList
+package com.stopsmoke.kekkek.presentation.post.popular
 
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 
-data class PopularWritingListUiState (
+data class PopularPostUiState (
     val list: List<CommunityWritingItem>,
     val isLoading: Boolean =false
 ) {
     companion object {
-        fun init() = PopularWritingListUiState(
+        fun init() = PopularPostUiState(
             list = emptyList()
         )
     }

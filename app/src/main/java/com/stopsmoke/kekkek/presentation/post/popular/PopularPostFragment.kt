@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.popularWritingList
+package com.stopsmoke.kekkek.presentation.post.popular
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,32 +9,30 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentPopularWritingListBinding
+import com.stopsmoke.kekkek.databinding.FragmentPopularPostBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PopularWritingListFragment : Fragment() {
-    private var _binding: FragmentPopularWritingListBinding? = null
-    val binding: FragmentPopularWritingListBinding get() = _binding!!
+class PopularPostFragment : Fragment() {
+    private var _binding: FragmentPopularPostBinding? = null
+    val binding: FragmentPopularPostBinding get() = _binding!!
 
-    private val listAdapter: PopularWritingListAdapter by lazy {
-        PopularWritingListAdapter()
+    private val listAdapter: PopularPostListAdapter by lazy {
+        PopularPostListAdapter()
     }
 
-    private val viewModel: PopularWritingListViewModel by viewModels()
+    private val viewModel: PopularPostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +41,8 @@ class PopularWritingListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentPopularWritingListBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentPopularPostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -75,7 +73,7 @@ class PopularWritingListFragment : Fragment() {
 
                 override fun navigateToPost(postId: String) {
                     findNavController().navigate(
-                        resId = R.id.action_popularWritingList_to_postView,
+                        resId = R.id.action_popular_post_screen_to_postView,
                         args = bundleOf("post_id" to postId)
                     )
                 }
@@ -106,7 +104,7 @@ class PopularWritingListFragment : Fragment() {
 
     }
 
-    private fun onBind(uiState: PopularWritingListUiState) = with(binding) {
+    private fun onBind(uiState: PopularPostUiState) = with(binding) {
         listAdapter.submitList(uiState.list)
     }
 

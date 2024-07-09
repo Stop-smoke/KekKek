@@ -82,10 +82,10 @@
             app:destination="@id/post_view" />
         <action
             android:id="@+id/action_community_to_popularWritingList"
-            app:destination="@id/popular_writing_list" />
+            app:destination="@id/popular_post_screen" />
         <action
             android:id="@+id/action_community_to_popular_writing_list"
-            app:destination="@id/popular_writing_list" />
+            app:destination="@id/popular_post_screen" />
         <action
             android:id="@+id/action_community_to_notice_list"
             app:destination="@id/notice_list" />
@@ -278,13 +278,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/popular_writing_list"
-        android:name="com.stopsmoke.kekkek.presentation.popularWritingList.PopularWritingListFragment"
-        app:route="popular_writing_list"
-        tools:layout="@layout/fragment_popular_writing_list">
+        android:id="@+id/popular_post_screen"
+        android:name="com.stopsmoke.kekkek.presentation.post.popular.PopularPostFragment"
+        app:route="popular_post_screen"
+        tools:layout="@layout/fragment_popular_post">
 
         <action
-            android:id="@+id/action_popularWritingList_to_postView"
+            android:id="@+id/action_popular_post_screen_to_postView"
             app:destination="@id/post_view" />
 
         <action

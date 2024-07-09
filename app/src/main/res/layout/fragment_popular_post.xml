@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.popularWritingList.PopularWritingListFragment">
+    tools:context=".presentation.post.popular.PopularPostFragment">
 
     <include
         android:id="@+id/include_popular_writing_list_app_bar"
