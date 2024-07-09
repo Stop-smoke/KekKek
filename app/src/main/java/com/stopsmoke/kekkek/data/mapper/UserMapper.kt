@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.data.mapper
 
-import com.google.firebase.Timestamp
-import com.stopsmoke.kekkek.domain.model.History
 import com.stopsmoke.kekkek.domain.model.Location
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
@@ -10,7 +8,6 @@ import com.stopsmoke.kekkek.firestore.model.LocationEntity
 import com.stopsmoke.kekkek.firestore.model.UserConfigEntity
 import com.stopsmoke.kekkek.firestore.model.UserEntity
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 internal fun User.Registered.toEntity(): UserEntity =
     UserEntity(
@@ -65,11 +62,3 @@ internal fun LocationEntity.toExternalModel() = Location(
     longitude = longitude ?: 0,
     region = region ?: ""
 )
-
-internal fun Timestamp.toLocalDateTime(): LocalDateTime =
-    LocalDateTime.ofEpochSecond(this.seconds, 0 , ZoneOffset.UTC)
-
-fun LocalDateTime.toFirebaseTimestamp(): Timestamp {
-    val milliseconds = this.toInstant(ZoneOffset.UTC).toEpochMilli()
-    return Timestamp(milliseconds / 1000, ((milliseconds % 1000) * 1000000).toInt())
-}
