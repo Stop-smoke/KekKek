@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.noticeWritingList
+package com.stopsmoke.kekkek.presentation.post.notice
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

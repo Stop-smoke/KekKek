@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.noticeWritingList
+package com.stopsmoke.kekkek.presentation.post.notice
 
 import android.view.LayoutInflater
 import android.view.View

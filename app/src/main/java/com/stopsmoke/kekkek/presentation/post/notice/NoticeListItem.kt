@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.noticeWritingList
+package com.stopsmoke.kekkek.presentation.post.notice
 
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory

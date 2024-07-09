@@ -343,7 +343,7 @@
 
     <fragment
         android:id="@+id/notice_list"
-        android:name="com.stopsmoke.kekkek.presentation.noticeWritingList.NoticeListFragment"
+        android:name="com.stopsmoke.kekkek.presentation.post.notice.NoticeListFragment"
         app:route="notice_list"
         tools:layout="@layout/fragment_notice_list">
 

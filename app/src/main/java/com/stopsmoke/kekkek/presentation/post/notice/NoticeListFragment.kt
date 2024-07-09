@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.noticeWritingList
+package com.stopsmoke.kekkek.presentation.post.notice
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,6 @@ import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
