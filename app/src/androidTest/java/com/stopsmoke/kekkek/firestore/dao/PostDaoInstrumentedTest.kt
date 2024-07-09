@@ -1,20 +1,19 @@
 package com.stopsmoke.kekkek.firestore.dao
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.stopsmoke.kekkek.firestorage.data.StorageDaoImpl
 import com.stopsmoke.kekkek.firestore.data.PostDaoImpl
 import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
 import com.stopsmoke.kekkek.firestore.model.PostEntity
 import com.stopsmoke.kekkek.firestore.model.WrittenEntity
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.time.LocalDateTime
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
@@ -24,7 +23,7 @@ class PostDaoInstrumentedTest {
 
     @Before
     fun init() {
-        postDao = PostDaoImpl(Firebase.firestore)
+        postDao = PostDaoImpl(Firebase.firestore, StorageDaoImpl(Firebase.storage.reference))
     }
 
 //    @Test // 게시글 가져오기
