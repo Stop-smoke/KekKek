@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.callback
+package com.stopsmoke.kekkek.presentation.post.detail.callback
 
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.Post

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.dialog
+package com.stopsmoke.kekkek.presentation.post.detail.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
-import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
+import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentDialogCallback
 
 class PostCommentDeleteDialogFragment(
     private val callback: PostCommentDialogCallback,

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.callback
+package com.stopsmoke.kekkek.presentation.post.detail.callback
 
 interface PostCommentDialogCallback {
     fun deleteComment(commentId:String)

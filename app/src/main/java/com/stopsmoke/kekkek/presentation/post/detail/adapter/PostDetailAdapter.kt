@@ -10,7 +10,7 @@ import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostViewReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
-import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
+import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostDetailCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostCommentViewHolder

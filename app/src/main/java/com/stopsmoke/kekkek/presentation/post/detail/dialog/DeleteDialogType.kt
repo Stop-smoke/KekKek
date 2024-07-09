@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.dialog
+package com.stopsmoke.kekkek.presentation.post.detail.dialog
 
 sealed class DeleteDialogType(){
     data class CommentDeleteDialog(var commentId: String): DeleteDialogType()
