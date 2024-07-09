@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.detail.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.presentation.post.viewholder.PreviewCommentHolder
+import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PreviewCommentHolder
 
 class PreviewCommentAdapter : ListAdapter<Comment, PreviewCommentHolder>(diffUtil) {
 

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.viewholder
+package com.stopsmoke.kekkek.presentation.post.detail.viewholder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

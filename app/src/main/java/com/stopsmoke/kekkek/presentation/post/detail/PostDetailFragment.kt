@@ -28,9 +28,10 @@ import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
-import com.stopsmoke.kekkek.presentation.post.PreviewCommentAdapter
+import com.stopsmoke.kekkek.presentation.post.detail.adapter.PreviewCommentAdapter
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
+import com.stopsmoke.kekkek.presentation.post.detail.adapter.PostDetailAdapter
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
