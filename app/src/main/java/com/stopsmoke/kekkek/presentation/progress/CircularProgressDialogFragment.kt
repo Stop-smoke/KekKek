@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.postviewwrite
+package com.stopsmoke.kekkek.presentation.progress
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentProfileImageUploadProgressBinding
+import com.stopsmoke.kekkek.databinding.FragmentCircularProgressDialog
 
-class PostWriteUploadProgressFragment : DialogFragment() {
-    private var _binding: FragmentProfileImageUploadProgressBinding? = null
-    private val binding: FragmentProfileImageUploadProgressBinding get() = _binding!!
+class CircularProgressDialogFragment : DialogFragment() {
+    private var _binding: FragmentCircularProgressDialog? = null
+    private val binding: FragmentCircularProgressDialog get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.TransparentBackgroundDialogFragmentStyle)
@@ -31,7 +31,7 @@ class PostWriteUploadProgressFragment : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentProfileImageUploadProgressBinding.inflate(inflater, container, false)
+        _binding = FragmentCircularProgressDialog.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,6 +41,6 @@ class PostWriteUploadProgressFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "ProfileImageUploadProgressFragment"
+        const val TAG = "FragmentCircularProgressDialog"
     }
 }

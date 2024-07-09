@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.postviewwrite
+package com.stopsmoke.kekkek.presentation.post.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,11 +16,11 @@ import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class PostWriteViewModel @Inject constructor(
+class PostEditViewModel @Inject constructor(
     private val postRepository: PostRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<PostWriteUiState> =
-        MutableStateFlow(PostWriteUiState.InitUiState)
+    private val _uiState: MutableStateFlow<PostEditUiState> =
+        MutableStateFlow(PostEditUiState.InitUiState)
     val uiState = _uiState.asStateFlow()
 
     private val _post = MutableStateFlow<Post?>(null)
@@ -37,9 +37,9 @@ class PostWriteViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 postRepository.addPost(post)
-                _uiState.emit(PostWriteUiState.Success)
+                _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
-                _uiState.emit(PostWriteUiState.ErrorExit)
+                _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
     }
@@ -48,9 +48,9 @@ class PostWriteViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 postRepository.addPost(post, inputStream)
-                _uiState.emit(PostWriteUiState.Success)
+                _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
-                _uiState.emit(PostWriteUiState.ErrorExit)
+                _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
     }
@@ -66,9 +66,9 @@ class PostWriteViewModel @Inject constructor(
                 )
 
                 editPost?.let { postRepository.editPost(editPost) }
-                _uiState.emit(PostWriteUiState.Success)
+                _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
-                _uiState.emit(PostWriteUiState.ErrorExit)
+                _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
     }
@@ -84,9 +84,9 @@ class PostWriteViewModel @Inject constructor(
                 )
 
                 editPost?.let { postRepository.editPost(editPost, inputStream) }
-                _uiState.emit(PostWriteUiState.Success)
+                _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
-                _uiState.emit(PostWriteUiState.ErrorExit)
+                _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
     }
@@ -97,7 +97,7 @@ class PostWriteViewModel @Inject constructor(
     }
 
     fun setLoading() {
-        _uiState.value = PostWriteUiState.LadingUiState
+        _uiState.value = PostEditUiState.LadingUiState
     }
 
 

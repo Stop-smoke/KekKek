@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post.postviewwrite
+package com.stopsmoke.kekkek.presentation.post.edit
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,7 +29,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.data.utils.BitmapCompressor
-import com.stopsmoke.kekkek.databinding.FragmentPostWriteBinding
+import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
 import com.stopsmoke.kekkek.domain.model.DateTime
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.PostEdit
@@ -39,6 +39,7 @@ import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,12 +51,12 @@ import java.io.InputStream
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
-class PostWriteFragment : Fragment(), ErrorHandle {
+class PostEditFragment : Fragment(), ErrorHandle {
 
-    private var _binding: FragmentPostWriteBinding? = null
+    private var _binding: FragmentPostEditBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PostWriteViewModel by viewModels()
+    private val viewModel: PostEditViewModel by viewModels()
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { url ->
@@ -81,7 +82,7 @@ class PostWriteFragment : Fragment(), ErrorHandle {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPostWriteBinding.inflate(inflater, container, false)
+        _binding = FragmentPostEditBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -203,18 +204,18 @@ class PostWriteFragment : Fragment(), ErrorHandle {
 
         uiState.collectLatestWithLifecycle(lifecycle){
             when(it){
-                PostWriteUiState.InitUiState -> {}
-                PostWriteUiState.Success -> {
+                PostEditUiState.InitUiState -> {}
+                PostEditUiState.Success -> {
                     findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
                     findNavController().popBackStack()
                 }
 
-                PostWriteUiState.LadingUiState -> {
-                    val uploadProgress = PostWriteUploadProgressFragment()
+                PostEditUiState.LadingUiState -> {
+                    val uploadProgress = CircularProgressDialogFragment()
                     uploadProgress.show(childFragmentManager, "uploadProgress")
                 }
 
-                PostWriteUiState.ErrorExit -> errorExit(findNavController())
+                PostEditUiState.ErrorExit -> errorExit(findNavController())
             }
         }
     }
