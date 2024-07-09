@@ -47,10 +47,6 @@ class UserProfileAchievementFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel){
-        activities.collectLatestWithLifecycle(lifecycle){
-            getCurrentProgress(it)
-        }
-
         achievements.collectLatestWithLifecycle(lifecycle){
             listAdapter.submitList(sortedAchievement(it))
         }
