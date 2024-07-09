@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
@@ -46,7 +46,7 @@ class NoticeListAdapter
 
 
     class ViewHolder(
-        private val binding: ItemCommunityPostwritingBinding,
+        private val binding: ItemPostBinding,
         private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CommunityWritingItem) = with(binding) {
@@ -122,7 +122,7 @@ class NoticeListAdapter
         viewType: Int
     ): ViewHolder {
         return ViewHolder(
-            ItemCommunityPostwritingBinding.inflate(
+            ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

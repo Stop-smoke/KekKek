@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.toStringKR
@@ -36,7 +36,7 @@ class CommunityListAdapter :
     }
 
     class WritingPostViewHolder(
-        private val binding: ItemCommunityPostwritingBinding,
+        private val binding: ItemPostBinding,
         private val callback: CommunityCallbackListener?,
     ) : ViewHolder(binding.root) {
 
@@ -108,7 +108,7 @@ class CommunityListAdapter :
         viewType: Int,
     ): CommunityListAdapter.ViewHolder =
         WritingPostViewHolder(
-            ItemCommunityPostwritingBinding.inflate(
+            ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

@@ -116,7 +116,7 @@
             app:destination="@id/my_supportcenter" />
         <action
             android:id="@+id/action_myPage_to_myWritingList"
-            app:destination="@id/my_writing_list" />
+            app:destination="@id/my_post_screen" />
         <action
             android:id="@+id/action_myPage_to_myBookmarkList"
             app:destination="@id/my_bookmark_list" />
@@ -246,13 +246,6 @@
         tools:layout="@layout/fragment_post_write" />
 
     <fragment
-        android:id="@+id/post_edit"
-        android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
-        app:route="post_edit"
-        tools:layout="@layout/fragment_post_edit" />
-
-
-    <fragment
         android:id="@+id/attainments"
         android:name="com.stopsmoke.kekkek.presentation.home.attainments.AttainmentsFragment"
         app:route="attainments"
@@ -274,13 +267,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/my_writing_list"
-        android:name="com.stopsmoke.kekkek.presentation.myWritingList.MyWritingListFragment"
+        android:id="@+id/my_post_screen"
+        android:name="com.stopsmoke.kekkek.presentation.my.post.MyPostFragment"
         app:route="my_writing_list"
-        tools:layout="@layout/fragment_my_writing_list">
+        tools:layout="@layout/fragment_my_post">
 
         <action
-            android:id="@+id/action_myWritingList_to_postView"
+            android:id="@+id/action_my_post_screen_to_post_view"
             app:destination="@id/post_view" />
     </fragment>
 

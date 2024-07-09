@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.toResourceId
@@ -23,7 +23,7 @@ class UserPostListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPostViewHolder {
         val view =
-            ItemCommunityPostwritingBinding.inflate(
+            ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -32,7 +32,7 @@ class UserPostListAdapter(
     }
 
     class UserPostViewHolder(
-        val binding: ItemCommunityPostwritingBinding,
+        val binding: ItemPostBinding,
         private val itemClick: (Post) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 

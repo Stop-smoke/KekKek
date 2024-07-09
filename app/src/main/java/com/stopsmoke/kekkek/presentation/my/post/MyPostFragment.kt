@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.myWritingList
+package com.stopsmoke.kekkek.presentation.my.post
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentMyWritingListBinding
+import com.stopsmoke.kekkek.databinding.FragmentMyPostBinding
 import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -20,21 +20,21 @@ import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyWritingListFragment : Fragment() {
-    private var _binding: FragmentMyWritingListBinding? = null
-    val binding: FragmentMyWritingListBinding get() = _binding!!
+class MyPostFragment : Fragment() {
+    private var _binding: FragmentMyPostBinding? = null
+    private val binding: FragmentMyPostBinding get() = _binding!!
 
-    private val listAdapter: MyWritingListAdapter by lazy {
-        MyWritingListAdapter()
+    private val listAdapter: MyPostListAdapter by lazy {
+        MyPostListAdapter()
     }
 
-    private val viewModel: MyWritingLIstViewModel by viewModels()
+    private val viewModel: MyPostViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyWritingListBinding.inflate(inflater, container, false)
+        _binding = FragmentMyPostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,7 +65,7 @@ class MyWritingListFragment : Fragment() {
 
                 override fun navigateToPost(postId: String) {
                     findNavController().navigate(
-                        resId = R.id.action_myWritingList_to_postView,
+                        resId = R.id.action_my_post_screen_to_post_view,
                         args = bundleOf("post_id" to postId)
                     )
                 }

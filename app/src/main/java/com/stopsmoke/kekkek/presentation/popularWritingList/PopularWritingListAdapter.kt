@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.domain.model.PostCategory
@@ -21,14 +20,14 @@ class PopularWritingListAdapter
     object : DiffUtil.ItemCallback<CommunityWritingItem>() {
         override fun areItemsTheSame(
             oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
+            newItem: CommunityWritingItem,
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
             oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
+            newItem: CommunityWritingItem,
         ): Boolean {
             return oldItem == newItem
         }
@@ -46,7 +45,7 @@ class PopularWritingListAdapter
     }
 
     class ViewHolder(
-        private val binding: ItemCommunityPostwritingBinding,
+        private val binding: ItemPostBinding,
         private val callback: CommunityCallbackListener?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CommunityWritingItem) = with(binding) {
@@ -125,10 +124,10 @@ class PopularWritingListAdapter
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): ViewHolder {
         return ViewHolder(
-            ItemCommunityPostwritingBinding.inflate(
+            ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
