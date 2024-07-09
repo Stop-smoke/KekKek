@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentCircularProgressDialog
+import com.stopsmoke.kekkek.databinding.FragmentCircularProgressDialogBinding
 
 class CircularProgressDialogFragment : DialogFragment() {
-    private var _binding: FragmentCircularProgressDialog? = null
-    private val binding: FragmentCircularProgressDialog get() = _binding!!
+    private var _binding: FragmentCircularProgressDialogBinding? = null
+    private val binding: FragmentCircularProgressDialogBinding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.TransparentBackgroundDialogFragmentStyle)
@@ -31,7 +31,7 @@ class CircularProgressDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentCircularProgressDialog.inflate(inflater, container, false)
+        _binding = FragmentCircularProgressDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
