@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListAdapter
@@ -58,7 +58,7 @@ class RankingListFieldFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRankingListFieldBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -144,11 +144,11 @@ class RankingListFieldFragment : Fragment() {
 
     private fun initListener() = with(binding) {
         tvRankingListTypeTime.setOnClickListener {
-            callback?.replaceFragment(RankingListFieldFragment.newInstance(RankingListField.Time))
+            callback?.replaceFragment(newInstance(RankingListField.Time))
         }
 
         tvRankingListTypeAchievement.setOnClickListener {
-            callback?.replaceFragment(RankingListFieldFragment.newInstance(RankingListField.Achievement))
+            callback?.replaceFragment(newInstance(RankingListField.Achievement))
         }
     }
 

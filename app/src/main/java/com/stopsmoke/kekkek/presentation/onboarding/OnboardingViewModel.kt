@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
-import com.stopsmoke.kekkek.data.mapper.emptyHistory
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.model.UserConfig
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.data.mapper.emptyHistory
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.UserConfig
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

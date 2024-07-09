@@ -34,10 +34,6 @@ class PopularPostFragment : Fragment() {
 
     private val viewModel: PopularPostViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -121,7 +117,7 @@ class PopularPostFragment : Fragment() {
             if (activity.isVisible()) {
                 viewModel.reload()
             }
-            activity?.invisible()
+            activity.invisible()
         }
     }
 

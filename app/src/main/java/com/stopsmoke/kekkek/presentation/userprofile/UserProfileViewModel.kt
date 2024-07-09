@@ -5,23 +5,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.Achievement
-import com.stopsmoke.kekkek.domain.model.Activities
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentFilter
-import com.stopsmoke.kekkek.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.model.emptyActivities
-import com.stopsmoke.kekkek.domain.repository.AchievementRepository
-import com.stopsmoke.kekkek.domain.repository.CommentRepository
-import com.stopsmoke.kekkek.domain.repository.PostRepository
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.Achievement
+import com.stopsmoke.kekkek.core.domain.model.Activities
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.CommentFilter
+import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.emptyActivities
+import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
+import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
+import com.stopsmoke.kekkek.core.domain.repository.PostRepository
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
 import com.stopsmoke.kekkek.presentation.getTotalDay
-import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
 import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -180,8 +179,7 @@ class UserProfileViewModel @Inject constructor(
     )
 
     suspend fun getCurrentProgress(activities: Activities) {
-        val userData = user.value
-        when (userData) {
+        when (val userData = user.value) {
             is User.Registered -> {
                 val list = userRepository.getAllUserData().map{user->
                     (user as User.Registered).toRankingListItem()

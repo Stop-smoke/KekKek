@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import com.stopsmoke.kekkek.data.mapper.emptyHistory
-import com.stopsmoke.kekkek.domain.model.History
+import com.stopsmoke.kekkek.core.data.mapper.emptyHistory
 
 sealed interface HomeUiState{
     data class NormalUiState(
@@ -9,7 +8,7 @@ sealed interface HomeUiState{
         val startTimerSate: Boolean
     ):HomeUiState {
         companion object {
-            fun init() = HomeUiState.NormalUiState(
+            fun init() = NormalUiState(
                 homeItem = HomeItem(
                     timeString = "0분",
                     savedMoney = 0.0,

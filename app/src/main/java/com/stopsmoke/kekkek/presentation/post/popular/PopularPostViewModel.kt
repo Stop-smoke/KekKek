@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.post.popular
 
 import androidx.lifecycle.ViewModel
-import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

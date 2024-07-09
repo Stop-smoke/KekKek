@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
-import com.stopsmoke.kekkek.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 
 class MyPostListAdapter : PagingDataAdapter<Post, MyPostViewHolder>(diffUtil) {

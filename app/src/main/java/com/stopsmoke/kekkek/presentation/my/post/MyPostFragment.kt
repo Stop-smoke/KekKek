@@ -33,7 +33,7 @@ class MyPostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMyPostBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -96,7 +96,7 @@ class MyPostFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity?.invisible()
+            activity.invisible()
         }
     }
 

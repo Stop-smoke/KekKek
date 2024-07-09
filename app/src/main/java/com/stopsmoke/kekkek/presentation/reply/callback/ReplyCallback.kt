@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.reply.callback
 
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.Reply
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.Reply
 
 interface ReplyCallback {
     fun deleteItem(reply: Reply)

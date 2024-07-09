@@ -34,7 +34,7 @@ class GlideLoaderModule : LibraryGlideModule() {
                 width: Int,
                 height: Int,
                 options: Options
-        ): ModelLoader.LoadData<InputStream>? {
+        ): ModelLoader.LoadData<InputStream> {
             return ModelLoader.LoadData<InputStream>(ObjectKey(model), VideoThumbnailFetcher(model, context))
         }
 

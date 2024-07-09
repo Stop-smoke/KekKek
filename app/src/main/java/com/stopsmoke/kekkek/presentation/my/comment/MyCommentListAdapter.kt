@@ -6,8 +6,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentParent
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.getResourceString
 

@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.toStringKR
+import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
+import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.toStringKR
 
 class CommunityListAdapter :
     PagingDataAdapter<CommunityWritingItem, CommunityListAdapter.ViewHolder>(diffUtil) {
@@ -106,7 +106,7 @@ class CommunityListAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): CommunityListAdapter.ViewHolder =
+    ): ViewHolder =
         WritingPostViewHolder(
             ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -117,7 +117,7 @@ class CommunityListAdapter :
         )
 
 
-    override fun onBindViewHolder(holder: CommunityListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
     }
 

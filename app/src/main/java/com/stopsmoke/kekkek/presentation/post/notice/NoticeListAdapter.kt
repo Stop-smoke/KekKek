@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
+import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 

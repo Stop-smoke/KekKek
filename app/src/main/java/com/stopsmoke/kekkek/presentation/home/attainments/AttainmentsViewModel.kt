@@ -2,13 +2,12 @@ package com.stopsmoke.kekkek.presentation.home.attainments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.model.UserConfig
-import com.stopsmoke.kekkek.domain.model.getStartTimerState
-import com.stopsmoke.kekkek.domain.model.getTotalMinutesTime
-import com.stopsmoke.kekkek.domain.model.getTotalSecondsTime
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.UserConfig
+import com.stopsmoke.kekkek.core.domain.model.getStartTimerState
+import com.stopsmoke.kekkek.core.domain.model.getTotalMinutesTime
+import com.stopsmoke.kekkek.core.domain.model.getTotalSecondsTime
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +25,8 @@ class AttainmentsViewModel @Inject constructor(
         MutableStateFlow(AttainmentsItem.init())
     val uiState: StateFlow<AttainmentsItem> = _uiState.asStateFlow()
 
-    private var _currentUserState = MutableStateFlow<User>(User.Guest)
+    private var _currentUserState = MutableStateFlow<User>(
+        User.Guest)
     val currentUserState = _currentUserState.asStateFlow()
 
     private var timeString: String = ""

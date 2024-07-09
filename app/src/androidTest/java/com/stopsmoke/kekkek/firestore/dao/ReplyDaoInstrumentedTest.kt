@@ -4,11 +4,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.stopsmoke.kekkek.firestore.data.ReplyDaoImpl
-import com.stopsmoke.kekkek.firestore.model.CommentParentEntity
-import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
-import com.stopsmoke.kekkek.firestore.model.ReplyEntity
-import com.stopsmoke.kekkek.firestore.model.WrittenEntity
+import com.stopsmoke.kekkek.core.firestore.dao.ReplyDao
+import com.stopsmoke.kekkek.core.firestore.data.ReplyDaoImpl
+import com.stopsmoke.kekkek.core.firestore.model.CommentParentEntity
+import com.stopsmoke.kekkek.core.firestore.model.DateTimeEntity
+import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
+import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

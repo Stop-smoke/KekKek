@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.home.attainments
 
-import com.stopsmoke.kekkek.data.mapper.emptyHistory
-import com.stopsmoke.kekkek.domain.model.History
+import com.stopsmoke.kekkek.core.data.mapper.emptyHistory
+import com.stopsmoke.kekkek.core.domain.model.History
 
 data class AttainmentsItem(
     val history: History,

@@ -6,7 +6,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.stopsmoke.kekkek.firestorage.data.StorageDaoImpl
+import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
+import com.stopsmoke.kekkek.core.firestorage.data.StorageDaoImpl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

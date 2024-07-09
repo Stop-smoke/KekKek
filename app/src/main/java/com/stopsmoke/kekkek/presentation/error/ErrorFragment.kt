@@ -17,7 +17,7 @@ class ErrorFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentErrorServerEtcBinding.inflate(inflater, container, false)
         return binding.root
     }

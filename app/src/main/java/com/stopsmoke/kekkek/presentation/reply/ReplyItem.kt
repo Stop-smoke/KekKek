@@ -1,12 +1,12 @@
 package com.stopsmoke.kekkek.presentation.reply
 
 import android.os.Parcelable
-import com.stopsmoke.kekkek.domain.getElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentParent
-import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.Reply
-import com.stopsmoke.kekkek.domain.model.Written
+import com.stopsmoke.kekkek.core.domain.getElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.CommentParent
+import com.stopsmoke.kekkek.core.domain.model.DateTime
+import com.stopsmoke.kekkek.core.domain.model.Reply
+import com.stopsmoke.kekkek.core.domain.model.Written
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

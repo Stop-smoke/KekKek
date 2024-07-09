@@ -13,7 +13,7 @@ import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -107,7 +107,7 @@ class BookmarkFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity?.invisible()
+            activity.invisible()
         }
     }
 }

@@ -27,7 +27,7 @@ class RankingListFragment : Fragment(), RankingListCallback{
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRankingListBinding.inflate(inflater, container, false)
         return binding.root
     }

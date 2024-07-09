@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.domain.repository.BookmarkRepository
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

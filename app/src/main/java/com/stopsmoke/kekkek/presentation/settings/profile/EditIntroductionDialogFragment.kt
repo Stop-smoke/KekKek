@@ -28,7 +28,7 @@ class EditIntroductionDialogFragment(private val introduction: String) : DialogF
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ProfileEditIntroductionBinding.inflate(inflater, container, false)
         return binding.root
     }

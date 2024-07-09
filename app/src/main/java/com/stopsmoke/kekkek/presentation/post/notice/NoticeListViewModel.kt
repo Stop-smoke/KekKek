@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel

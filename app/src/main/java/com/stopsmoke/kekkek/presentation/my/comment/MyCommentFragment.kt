@@ -34,7 +34,7 @@ class MyCommentFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMyCommentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -92,7 +92,7 @@ class MyCommentFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity?.invisible()
+            activity.invisible()
         }
     }
 

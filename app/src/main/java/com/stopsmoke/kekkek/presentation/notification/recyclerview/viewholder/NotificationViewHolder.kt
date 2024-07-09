@@ -3,8 +3,8 @@ package com.stopsmoke.kekkek.presentation.notification.recyclerview.viewholder
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewNotificationItemBinding
-import com.stopsmoke.kekkek.domain.model.Notification
-import com.stopsmoke.kekkek.domain.model.NotificationCategory
+import com.stopsmoke.kekkek.core.domain.model.Notification
+import com.stopsmoke.kekkek.core.domain.model.NotificationCategory
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class NotificationViewHolder(

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
-import com.stopsmoke.kekkek.domain.model.Reply
+import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
 
 class ReplyDeleteDialogFragment(
@@ -20,7 +20,7 @@ class ReplyDeleteDialogFragment(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCommonDialogBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileAchievementBinding
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
@@ -29,7 +29,7 @@ class UserProfileAchievementFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentUserProfileAchievementBinding.inflate(inflater, container, false)
         return binding.root
     }

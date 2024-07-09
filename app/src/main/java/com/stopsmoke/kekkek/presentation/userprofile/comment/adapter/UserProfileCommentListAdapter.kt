@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewUserProfileCommentBinding
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentParent
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.presentation.getResourceString
 
 class UserProfileCommentListAdapter(

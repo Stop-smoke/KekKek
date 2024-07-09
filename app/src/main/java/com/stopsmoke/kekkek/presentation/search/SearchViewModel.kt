@@ -3,11 +3,9 @@ package com.stopsmoke.kekkek.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.stopsmoke.kekkek.algolia.AlgoliaDataSource
-import com.stopsmoke.kekkek.algolia.model.SearchPostEntity
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.repository.SearchRepository
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.repository.SearchRepository
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.RecyclerviewSearchRecommendBinding
-import com.stopsmoke.kekkek.domain.model.RecommendedKeyword
+import com.stopsmoke.kekkek.core.domain.model.RecommendedKeyword
 
 class KeywordRecommendedListAdapter(
     private val keywordSelectedListener: (String) -> Unit

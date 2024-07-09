@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.stopsmoke.kekkek.databinding.RecyclerviewNotificationItemBinding
-import com.stopsmoke.kekkek.domain.model.Notification
+import com.stopsmoke.kekkek.core.domain.model.Notification
 import com.stopsmoke.kekkek.presentation.notification.recyclerview.viewholder.NotificationViewHolder
 
 class NotificationItemListAdapter :

@@ -1,8 +1,8 @@
 package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.os.Parcelable
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.User
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
 

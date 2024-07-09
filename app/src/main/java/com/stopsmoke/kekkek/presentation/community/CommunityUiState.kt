@@ -11,7 +11,7 @@ sealed interface CommunityUiState {
     data object ErrorExit: CommunityUiState
 
     companion object {
-        fun init() = CommunityUiState.CommunityNormalUiState(
+        fun init() = CommunityNormalUiState(
             popularItem = CommunityPopularItem(
                 postInfo1 = emptyCommunityWritingListItem(),
                 postInfo2 = emptyCommunityWritingListItem()

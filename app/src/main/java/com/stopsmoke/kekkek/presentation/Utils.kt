@@ -20,11 +20,11 @@ import androidx.navigation.NavController
 import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
+import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.User
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest

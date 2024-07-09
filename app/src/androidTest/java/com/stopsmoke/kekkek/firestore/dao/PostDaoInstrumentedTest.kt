@@ -5,11 +5,12 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.stopsmoke.kekkek.firestorage.data.StorageDaoImpl
-import com.stopsmoke.kekkek.firestore.data.PostDaoImpl
-import com.stopsmoke.kekkek.firestore.model.DateTimeEntity
-import com.stopsmoke.kekkek.firestore.model.PostEntity
-import com.stopsmoke.kekkek.firestore.model.WrittenEntity
+import com.stopsmoke.kekkek.core.firestorage.data.StorageDaoImpl
+import com.stopsmoke.kekkek.core.firestore.dao.PostDao
+import com.stopsmoke.kekkek.core.firestore.data.PostDaoImpl
+import com.stopsmoke.kekkek.core.firestore.model.DateTimeEntity
+import com.stopsmoke.kekkek.core.firestore.model.PostEntity
+import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

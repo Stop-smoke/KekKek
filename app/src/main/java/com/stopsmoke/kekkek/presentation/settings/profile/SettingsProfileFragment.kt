@@ -20,8 +20,8 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
@@ -114,7 +114,7 @@ class SettingsProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentSettingsProfileBinding.inflate(inflater, container, false)
         return binding.root
     }

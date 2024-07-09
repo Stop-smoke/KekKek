@@ -28,13 +28,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.data.utils.BitmapCompressor
+import com.stopsmoke.kekkek.core.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
-import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostEdit
-import com.stopsmoke.kekkek.domain.model.toPostWriteCategory
-import com.stopsmoke.kekkek.domain.model.toStringKR
+import com.stopsmoke.kekkek.core.domain.model.DateTime
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.PostEdit
+import com.stopsmoke.kekkek.core.domain.model.toPostWriteCategory
+import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -152,7 +152,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
                     var inputStream: InputStream? = null
                     (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                         inputStream =
-                            BitmapCompressor(bitmapToInputStream(bitmap!!)!!).getCompressedFile().inputStream()
+                            BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile().inputStream()
                     }
 
                     val post = PostEdit(

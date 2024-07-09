@@ -28,7 +28,7 @@ class EditNameDialogFragment(private val name: String) : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ProfileEditNicknameBinding.inflate(inflater, container, false)
         return binding.root
     }

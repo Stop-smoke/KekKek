@@ -38,7 +38,7 @@ class NoticeListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNoticeListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -111,7 +111,7 @@ class NoticeListFragment : Fragment() {
             if (activity.isVisible()) {
                 listAdapter.refresh()
             }
-            activity?.invisible()
+            activity.invisible()
         }
     }
     companion object {

@@ -23,7 +23,7 @@ class OnboardingPriceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentOnboardingPriceBinding.inflate(inflater, container, false)
         return binding.root
     }

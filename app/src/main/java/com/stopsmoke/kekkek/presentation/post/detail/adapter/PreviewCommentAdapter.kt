@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
-import com.stopsmoke.kekkek.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PreviewCommentHolder
 
 class PreviewCommentAdapter : ListAdapter<Comment, PreviewCommentHolder>(diffUtil) {

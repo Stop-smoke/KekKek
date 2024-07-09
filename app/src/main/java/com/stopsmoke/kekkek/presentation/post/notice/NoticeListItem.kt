@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.post.notice
 
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.presentation.community.PostInfo
 import com.stopsmoke.kekkek.presentation.community.UserInfo
 

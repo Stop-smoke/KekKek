@@ -5,15 +5,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.DateTime
-import com.stopsmoke.kekkek.domain.model.Reply
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.model.Written
-import com.stopsmoke.kekkek.domain.model.emptyReply
-import com.stopsmoke.kekkek.domain.repository.CommentRepository
-import com.stopsmoke.kekkek.domain.repository.ReplyRepository
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.DateTime
+import com.stopsmoke.kekkek.core.domain.model.Reply
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.Written
+import com.stopsmoke.kekkek.core.domain.model.emptyReply
+import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
+import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -123,7 +123,10 @@ class ReplyViewModel @Inject constructor(
                     ),
                     likeUser = emptyList(),
                     unlikeUser = emptyList(),
-                    dateTime = DateTime(LocalDateTime.now(), LocalDateTime.now()),
+                    dateTime = DateTime(
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                    ),
                     text = reply,
                     commentParent = comment.value!!.parent,
                     replyParent = comment.value!!.id,
