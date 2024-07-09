@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ import com.stopsmoke.kekkek.domain.repository.PostRepository
 import com.stopsmoke.kekkek.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.domain.repository.UserRepository
 import com.stopsmoke.kekkek.domain.usecase.AddCommentUseCase
-import com.stopsmoke.kekkek.presentation.post.model.PostViewCommentRecyclerViewUiState
+import com.stopsmoke.kekkek.presentation.post.detail.model.PostDetailCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.toggleElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PostViewModel @Inject constructor(
+class PostDetailViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val postRepository: PostRepository,
     userRepository: UserRepository,
@@ -106,15 +106,15 @@ class PostViewModel @Inject constructor(
         .map { pagingData ->
             pagingData
                 .map {
-                    PostViewCommentRecyclerViewUiState.CommentType(it)
+                    PostDetailCommentRecyclerViewUiState.CommentType(it)
                 }
                 .insertSeparators { before, after ->
                     if (before == null) {
-                        return@insertSeparators PostViewCommentRecyclerViewUiState.Header
+                        return@insertSeparators PostDetailCommentRecyclerViewUiState.Header
                     }
 
                     if (before.item.earliestReply.isNotEmpty()) {
-                        return@insertSeparators PostViewCommentRecyclerViewUiState.ReplyType(before.item)
+                        return@insertSeparators PostDetailCommentRecyclerViewUiState.ReplyType(before.item)
                     }
 
                     null
@@ -124,10 +124,10 @@ class PostViewModel @Inject constructor(
         .combine(commentDeleteSet) { pagingData, commentDeleteItemId ->
             pagingData.map { uiState ->
                 if (
-                    uiState is PostViewCommentRecyclerViewUiState.CommentType &&
+                    uiState is PostDetailCommentRecyclerViewUiState.CommentType &&
                     commentDeleteItemId.contains(uiState.item.id)
                     ) {
-                    return@map PostViewCommentRecyclerViewUiState.Deleted
+                    return@map PostDetailCommentRecyclerViewUiState.Deleted
                 }
                 uiState
             }
@@ -135,7 +135,7 @@ class PostViewModel @Inject constructor(
         .combine(commentTransferLike) { pagingData, commentLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
-                    is PostViewCommentRecyclerViewUiState.CommentType -> {
+                    is PostDetailCommentRecyclerViewUiState.CommentType -> {
                         if (commentLikeList.contains(uiState.item.id)) {
                             val likeUser =
                                 uiState.item.likeUser.toggleElement((user.value as User.Registered).uid)
@@ -149,18 +149,18 @@ class PostViewModel @Inject constructor(
                         uiState
                     }
 
-                    is PostViewCommentRecyclerViewUiState.Header -> uiState
-                    is PostViewCommentRecyclerViewUiState.ReplyType -> uiState
-                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Header -> uiState
+                    is PostDetailCommentRecyclerViewUiState.ReplyType -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
         }
         .combine(replyTransferLike) { pagingData, replyLikeList ->
             pagingData.map { uiState ->
                 when (uiState) {
-                    is PostViewCommentRecyclerViewUiState.CommentType -> uiState
-                    is PostViewCommentRecyclerViewUiState.Header -> uiState
-                    is PostViewCommentRecyclerViewUiState.ReplyType -> {
+                    is PostDetailCommentRecyclerViewUiState.CommentType -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Header -> uiState
+                    is PostDetailCommentRecyclerViewUiState.ReplyType -> {
                         val replyList = uiState.item.earliestReply.map { reply ->
                             if (replyLikeList.contains(reply.id)) {
                                 reply.copy(
@@ -173,7 +173,7 @@ class PostViewModel @Inject constructor(
                         }
                         uiState.copy(uiState.item.copy(earliestReply = replyList))
                     }
-                    is PostViewCommentRecyclerViewUiState.Deleted -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
         }

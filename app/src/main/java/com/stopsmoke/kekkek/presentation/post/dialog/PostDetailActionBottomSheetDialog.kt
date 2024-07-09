@@ -28,7 +28,7 @@ class PostDetailActionBottomSheetDialog: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvEditPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_view_to_post_edit)
+            findNavController().navigate(R.id.action_post_detail_screen_to_post_edit)
             dismiss()
         }
 

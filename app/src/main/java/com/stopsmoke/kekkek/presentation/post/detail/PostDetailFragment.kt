@@ -1,14 +1,12 @@
-package com.stopsmoke.kekkek.presentation.post
+package com.stopsmoke.kekkek.presentation.post.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +17,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentPostViewBinding
+import com.stopsmoke.kekkek.databinding.FragmentPostDetailBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.domain.model.Comment
 import com.stopsmoke.kekkek.domain.model.Post
@@ -30,11 +28,12 @@ import com.stopsmoke.kekkek.presentation.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
+import com.stopsmoke.kekkek.presentation.post.PreviewCommentAdapter
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentDialogCallback
 import com.stopsmoke.kekkek.presentation.post.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.dialog.PostCommentDeleteDialogFragment
-import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,14 +42,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
+class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
 
-    private var _binding: FragmentPostViewBinding? = null
+    private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PostViewModel by viewModels()
+    private val viewModel: PostDetailViewModel by viewModels()
 
-    private lateinit var postViewAdapter: PostViewAdapter
+    private lateinit var postDetailAdapter: PostDetailAdapter
     private lateinit var previewCommentAdapter: PreviewCommentAdapter
     private lateinit var postConcatAdapter: ConcatAdapter
 
@@ -77,7 +76,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_view_to_my_complaint)
+            findNavController().navigate(R.id.action_post_detail_screen_to_my_complaint)
             bottomSheetDialog.dismiss()
         }
 
@@ -92,7 +91,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
 
             findNavController().navigate(
-                resId = R.id.action_post_view_to_post_edit,
+                resId = R.id.action_post_detail_screen_to_post_edit,
                 args = bundleOf("post_id" to viewModel.postId.value)
             )
             bottomSheetDialog.dismiss()
@@ -145,7 +144,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentPostViewBinding.inflate(inflater, container, false)
+        _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -160,9 +159,9 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
     }
 
     private fun initCommentRecyclerView() {
-        postViewAdapter = PostViewAdapter()
+        postDetailAdapter = PostDetailAdapter()
         previewCommentAdapter = PreviewCommentAdapter()
-        postConcatAdapter = ConcatAdapter(postViewAdapter, previewCommentAdapter)
+        postConcatAdapter = ConcatAdapter(postDetailAdapter, previewCommentAdapter)
         binding.rvPostView.adapter = postConcatAdapter
         binding.rvPostView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -178,7 +177,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
                 viewModel.post,
             ) { user: User?, post: Post? ->
                 val headerItem = PostContentItem(user, post)
-                postViewAdapter.updatePostHeader(headerItem)
+                postDetailAdapter.updatePostHeader(headerItem)
 
                 if (user !is User.Registered || post?.id == "null" || post?.id.isNullOrBlank()) {
                     binding.clPostAddComment.visibility = View.GONE
@@ -200,13 +199,13 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     private fun observeCommentRecyclerViewItem() {
         viewModel.comment.collectLatestWithLifecycle(lifecycle) {
-            postViewAdapter.submitData(it)
+            postDetailAdapter.submitData(it)
         }
     }
 
     private fun showCommentDeleteDialog(commentId: String) {
         val commentDeleteDialog = PostCommentDeleteDialogFragment(
-            this@PostViewFragment,
+            this@PostDetailFragment,
             DeleteDialogType.CommentDeleteDialog(commentId)
         )
         commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
@@ -254,7 +253,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
             postActionDialog.value.show()
         }
 
-        postViewAdapter.registerCallback(this@PostViewFragment)
+        postDetailAdapter.registerCallback(this@PostDetailFragment)
     }
 
     override fun onResume() {
@@ -291,7 +290,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     override fun onDestroy() {
         super.onDestroy()
-        postViewAdapter.unregisterCallback()
+        postDetailAdapter.unregisterCallback()
     }
 
     override fun deleteItem(comment: Comment) {
@@ -305,7 +304,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     override fun navigateToUserProfile(uid: String) {
         findNavController().navigate(
-            resId = R.id.action_post_view_to_user_profile,
+            resId = R.id.action_post_detail_screen_to_user_profile,
             args = bundleOf("uid" to uid)
         )
     }
@@ -324,7 +323,7 @@ class PostViewFragment : Fragment(), PostCommentCallback, PostCommentDialogCallb
 
     override fun navigateToReply(comment: Comment) {
         findNavController().navigate(
-            resId = R.id.action_post_view_to_reply,
+            resId = R.id.action_post_detail_screen_to_reply,
             args = bundleOf(
                 "post_id" to comment.parent.postId,
                 "comment_id" to comment.id

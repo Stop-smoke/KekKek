@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/post_view"
+    android:id="@+id/post_detail_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.post.PostViewFragment">
+    tools:context=".presentation.post.detail.PostDetailFragment">
 
     <include
         android:id="@+id/include_post_view_app_bar"

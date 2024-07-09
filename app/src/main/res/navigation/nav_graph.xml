@@ -79,7 +79,7 @@
             app:destination="@id/nav_settings" />
         <action
             android:id="@+id/action_community_to_post_view"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
         <action
             android:id="@+id/action_community_to_popularWritingList"
             app:destination="@id/popular_post_screen" />
@@ -216,26 +216,26 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_search_to_post_view"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
     </fragment>
 
     <fragment
-        android:id="@+id/post_view"
-        android:name="com.stopsmoke.kekkek.presentation.post.PostViewFragment"
-        app:route="post_view"
-        tools:layout="@layout/fragment_post_view">
+        android:id="@+id/post_detail_screen"
+        android:name="com.stopsmoke.kekkek.presentation.post.detail.PostDetailFragment"
+        app:route="post_detail_screen"
+        tools:layout="@layout/fragment_post_detail">
         <action
-            android:id="@+id/action_post_view_to_user_profile"
+            android:id="@+id/action_post_detail_screen_to_user_profile"
             app:destination="@id/user_profile" />
         <action
-            android:id="@+id/action_post_view_to_post_edit"
+            android:id="@+id/action_post_detail_screen_to_post_edit"
             app:destination="@id/post_write" />
         <action
-            android:id="@+id/action_post_view_to_my_complaint"
+            android:id="@+id/action_post_detail_screen_to_my_complaint"
             app:destination="@id/my_complaint" />
 
         <action
-            android:id="@+id/action_post_view_to_reply"
+            android:id="@+id/action_post_detail_screen_to_reply"
             app:destination="@id/reply" />
     </fragment>
 
@@ -259,7 +259,7 @@
 
         <action
             android:id="@+id/action_my_bookmark_screen_to_post_view"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
 
         <action
             android:id="@+id/action_my_bookmark_screen_to_userProfile"
@@ -274,7 +274,7 @@
 
         <action
             android:id="@+id/action_my_post_screen_to_post_view"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
     </fragment>
 
     <fragment
@@ -285,7 +285,7 @@
 
         <action
             android:id="@+id/action_popular_post_screen_to_postView"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
 
         <action
             android:id="@+id/action_popularWritingList_to_userProfile"
@@ -300,7 +300,7 @@
 
         <action
             android:id="@+id/action_my_comment_screen_to_postView"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
     </fragment>
 
     <fragment
@@ -315,7 +315,7 @@
 
         <action
             android:id="@+id/action_user_profile_to_post_view"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
     </fragment>
 
     <fragment
@@ -349,7 +349,7 @@
 
         <action
             android:id="@+id/action_noticeList_to_postView"
-            app:destination="@id/post_view" />
+            app:destination="@id/post_detail_screen" />
     </fragment>
 
     <fragment

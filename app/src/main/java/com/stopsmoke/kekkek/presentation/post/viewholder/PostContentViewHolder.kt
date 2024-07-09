@@ -9,7 +9,7 @@ import com.stopsmoke.kekkek.domain.model.Post
 import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.post.callback.PostCommentCallback
-import com.stopsmoke.kekkek.presentation.post.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
 
