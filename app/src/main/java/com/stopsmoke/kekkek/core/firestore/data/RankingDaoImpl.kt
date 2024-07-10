@@ -7,8 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.core.domain.model.RankingCategory
 import com.stopsmoke.kekkek.core.firestore.dao.RankingDao
-import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.core.firestore.model.RankingEntity
+import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.ranking.RankingListAdapter
@@ -20,11 +20,11 @@ import com.stopsmoke.kekkek.presentation.ranking.RankingListCallback
 import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
 import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 @AndroidEntryPoint
 class RankingListFieldFragment : Fragment() {

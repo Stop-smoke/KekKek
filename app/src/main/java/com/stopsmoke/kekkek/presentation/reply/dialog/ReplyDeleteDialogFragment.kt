@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
 import com.stopsmoke.kekkek.core.domain.model.Reply
+import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
 
 class ReplyDeleteDialogFragment(

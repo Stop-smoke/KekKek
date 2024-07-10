@@ -8,12 +8,12 @@ import com.stopsmoke.kekkek.core.data.repository.PostRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.ReplyRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.SearchRepositoryImpl
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
+import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.NotificationRepository
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.core.domain.repository.SearchRepository
-import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -3,8 +3,8 @@ package com.stopsmoke.kekkek.presentation.post.detail.viewholder
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.setDefaultProfileImage
 import com.stopsmoke.kekkek.presentation.toResourceId

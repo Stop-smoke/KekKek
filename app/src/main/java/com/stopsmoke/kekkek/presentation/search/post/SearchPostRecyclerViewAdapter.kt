@@ -6,9 +6,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.RecyclerviewSearchPostBinding
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.databinding.RecyclerviewSearchPostBinding
 import com.stopsmoke.kekkek.presentation.getResourceString
 import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDiffUtil

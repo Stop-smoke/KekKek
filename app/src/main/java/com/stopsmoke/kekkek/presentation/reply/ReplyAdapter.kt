@@ -9,12 +9,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemCommentBinding
-import com.stopsmoke.kekkek.databinding.ItemReplyBinding
-import com.stopsmoke.kekkek.databinding.UnknownItemBinding
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.databinding.ItemCommentBinding
+import com.stopsmoke.kekkek.databinding.ItemReplyBinding
+import com.stopsmoke.kekkek.databinding.UnknownItemBinding
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.toResourceId
 import com.stopsmoke.kekkek.presentation.utils.diffutil.ReplyDiffUtil

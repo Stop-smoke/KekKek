@@ -12,10 +12,10 @@ import com.stopsmoke.kekkek.core.domain.model.emptyActivities
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.getTotalDay
-import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
+import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

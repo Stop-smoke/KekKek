@@ -1,17 +1,15 @@
 package com.stopsmoke.kekkek.presentation.userprofile.achievement
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileAchievementBinding
-import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

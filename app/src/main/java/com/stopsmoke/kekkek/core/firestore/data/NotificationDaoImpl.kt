@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.stopsmoke.kekkek.core.firestore.dao.NotificationDao
-import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.core.firestore.model.NotificationEntity
+import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException

@@ -1,18 +1,16 @@
 package com.stopsmoke.kekkek.presentation.settings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.databinding.ItemSettingsListBinding
 import com.stopsmoke.kekkek.databinding.ItemSettingsProfileBinding
 import com.stopsmoke.kekkek.databinding.ItemSettingsVersionBinding
 import com.stopsmoke.kekkek.databinding.UnknownItemBinding
+import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
-import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 
 class SettingsAdapter(private val settingsOnClickListener: SettingsOnClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

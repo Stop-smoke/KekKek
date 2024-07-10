@@ -3,8 +3,8 @@ package com.stopsmoke.kekkek.presentation.notification.recyclerview.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import com.stopsmoke.kekkek.databinding.RecyclerviewNotificationItemBinding
 import com.stopsmoke.kekkek.core.domain.model.Notification
+import com.stopsmoke.kekkek.databinding.RecyclerviewNotificationItemBinding
 import com.stopsmoke.kekkek.presentation.notification.recyclerview.viewholder.NotificationViewHolder
 import com.stopsmoke.kekkek.presentation.utils.diffutil.NotificationDiffUtil
 

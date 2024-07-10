@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.core.domain.repository
 
-import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.Achievement
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory

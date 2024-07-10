@@ -19,11 +19,11 @@ import coil.load
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener

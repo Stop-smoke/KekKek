@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import com.stopsmoke.kekkek.presentation.home.HomeUiState
-
 sealed interface CommunityUiState {
     data class CommunityNormalUiState(
         val popularItem: CommunityPopularItem,

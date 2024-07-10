@@ -10,8 +10,8 @@ import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.REPLY_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.ReplyDao
-import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
+import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
