@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.extensions
+package com.stopsmoke.kekkek.presentation.utils
 
 import android.content.Context
 import android.graphics.Bitmap

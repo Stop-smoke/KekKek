@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.extensions
+package com.stopsmoke.kekkek.presentation.utils
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,7 +24,9 @@ import java.io.InputStream
 @GlideModule
 class GlideLoaderModule : LibraryGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.append(String::class.java, InputStream::class.java, ThumbnailLoader.Factory(context))
+        registry.append(String::class.java, InputStream::class.java,
+            ThumbnailLoader.Factory(context)
+        )
         super.registerComponents(context, glide, registry)
     }
 
