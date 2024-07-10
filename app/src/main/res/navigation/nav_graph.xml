@@ -247,7 +247,7 @@
 
     <fragment
         android:id="@+id/attainments"
-        android:name="com.stopsmoke.kekkek.presentation.home.attainments.AttainmentsFragment"
+        android:name="com.stopsmoke.kekkek.presentation.attainments.AttainmentsFragment"
         app:route="attainments"
         tools:layout="@layout/fragment_attainments" />
 

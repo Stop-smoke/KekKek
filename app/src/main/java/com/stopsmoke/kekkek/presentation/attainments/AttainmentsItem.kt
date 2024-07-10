@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.attainments
+package com.stopsmoke.kekkek.presentation.attainments
 
 import com.stopsmoke.kekkek.core.data.mapper.emptyHistory
 import com.stopsmoke.kekkek.core.domain.model.History

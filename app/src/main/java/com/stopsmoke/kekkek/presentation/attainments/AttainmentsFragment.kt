@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.attainments
+package com.stopsmoke.kekkek.presentation.attainments
 
 import android.os.Bundle
 import android.view.LayoutInflater
