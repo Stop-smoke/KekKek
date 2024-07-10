@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.stopsmoke.kekkek.core.firestore.NOTIFICATION_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.NotificationDao
 import com.stopsmoke.kekkek.core.firestore.model.NotificationEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
@@ -17,7 +18,7 @@ internal class NotificationDaoImpl @Inject constructor(
     private val fireStore: FirebaseFirestore,
 ) : NotificationDao {
     override fun getNotificationItems(uid: String): Flow<PagingData<NotificationEntity>> {
-        val collection = fireStore.collection(COLLECTION)
+        val collection = fireStore.collection(NOTIFICATION_COLLECTION)
         val query = collection
             .whereEqualTo("uid", uid)
             .orderBy("dateTime", Query.Direction.DESCENDING)
@@ -31,7 +32,7 @@ internal class NotificationDaoImpl @Inject constructor(
     }
 
     override suspend fun addNotificationItem(notificationEntity: NotificationEntity) {
-        val collection = fireStore.collection(COLLECTION)
+        val collection = fireStore.collection(NOTIFICATION_COLLECTION)
         collection.document().let { documentReference ->
             documentReference.set(
                 notificationEntity.copy(id = documentReference.id)
@@ -43,11 +44,7 @@ internal class NotificationDaoImpl @Inject constructor(
     }
 
     override suspend fun deleteNotificationItem(id: String) {
-        val collection = fireStore.collection(COLLECTION)
+        val collection = fireStore.collection(NOTIFICATION_COLLECTION)
         collection.document(id).delete().await()
-    }
-
-    companion object {
-        private const val COLLECTION = "notification"
     }
 }

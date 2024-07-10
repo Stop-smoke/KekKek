@@ -9,6 +9,7 @@ import com.google.firebase.firestore.toObjects
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
+import com.stopsmoke.kekkek.core.firestore.USER_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.WITHDRAW_USER_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.UserDao
 import com.stopsmoke.kekkek.core.firestore.model.ActivitiesEntity
@@ -25,7 +26,7 @@ internal class UserDaoImpl @Inject constructor(
 ) : UserDao {
 
     override fun getUser(uid: String): Flow<UserEntity> {
-        return firestore.collection(COLLECTION)
+        return firestore.collection(USER_COLLECTION)
             .document(uid)
             .dataObjects<UserEntity>()
             .map { it ?: UserEntity() }
@@ -33,7 +34,7 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun getUserDataFormatUser(uid: String): UserEntity? {
         return try {
-            val document = firestore.collection(COLLECTION).document(uid).get().await()
+            val document = firestore.collection(USER_COLLECTION).document(uid).get().await()
             document.toObject<UserEntity>()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -43,7 +44,7 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun setUser(userEntity: UserEntity) {
         try {
-            firestore.collection(COLLECTION).document(userEntity.uid!!)
+            firestore.collection(USER_COLLECTION).document(userEntity.uid!!)
                 .set(userEntity)
                 .addOnFailureListener { throw it }
                 .await()
@@ -54,14 +55,14 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
         try {
-            val querySnapshot = firestore.collection(COLLECTION).document(userEntity.uid!!)
+            val querySnapshot = firestore.collection(USER_COLLECTION).document(userEntity.uid!!)
                 .get()
                 .await()
 
             val setUserItem = querySnapshot.toObject<UserEntity>()?.copy(name = name)
 
             if (setUserItem != null) {
-                firestore.collection(COLLECTION).document(userEntity.uid)
+                firestore.collection(USER_COLLECTION).document(userEntity.uid)
                     .set(setUserItem)
                     .addOnFailureListener { exception ->
                         Log.e("Firestore", "Failed to set document", exception)
@@ -78,14 +79,14 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun setUserDataForIntroduction(userEntity: UserEntity, introduction: String) {
         try {
-            val querySnapshot = firestore.collection(COLLECTION).document(userEntity.uid!!)
+            val querySnapshot = firestore.collection(USER_COLLECTION).document(userEntity.uid!!)
                 .get()
                 .await()
 
             val setUserItem = querySnapshot.toObject<UserEntity>()?.copy(introduction = introduction)
 
             if (setUserItem != null) {
-                firestore.collection(COLLECTION).document(userEntity.uid)
+                firestore.collection(USER_COLLECTION).document(userEntity.uid)
                     .set(setUserItem)
                     .addOnFailureListener { exception ->
                         Log.e("Firestore", "Failed to set document", exception)
@@ -101,7 +102,7 @@ internal class UserDaoImpl @Inject constructor(
     }
 
     override suspend fun updateUser(uid: String, map: Map<String, Any>) {
-        firestore.collection(COLLECTION).document(uid)
+        firestore.collection(USER_COLLECTION).document(uid)
             .update(map)
             .await()
     }
@@ -109,7 +110,7 @@ internal class UserDaoImpl @Inject constructor(
     override suspend fun startQuitSmokingTimer(uid: String): Result<Unit> {
         var result: Result<Unit> = Result.Loading
 
-        firestore.collection(COLLECTION)
+        firestore.collection(USER_COLLECTION)
             .document(uid)
             .set(UserEntity())
             .addOnSuccessListener {
@@ -126,7 +127,7 @@ internal class UserDaoImpl @Inject constructor(
     override suspend fun stopQuitSmokingTimer(uid: String): Result<Unit> {
         var result: Result<Unit> = Result.Loading
 
-        firestore.collection(COLLECTION)
+        firestore.collection(USER_COLLECTION)
             .document(uid)
             .set(UserEntity())
             .addOnSuccessListener {
@@ -142,7 +143,7 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun nameDuplicateInspection(name: String): Boolean {
         return try {
-            val querySnapshot = firestore.collection(COLLECTION)
+            val querySnapshot = firestore.collection(USER_COLLECTION)
                 .whereEqualTo("name", name)
                 .get()
                 .await()
@@ -185,7 +186,7 @@ internal class UserDaoImpl @Inject constructor(
 
     override suspend fun getAllUserData(): List<UserEntity> {
         return try {
-            val querySnapshot = firestore.collection(COLLECTION).get().await()
+            val querySnapshot = firestore.collection(USER_COLLECTION).get().await()
             querySnapshot.toObjects<UserEntity>()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -197,9 +198,5 @@ internal class UserDaoImpl @Inject constructor(
         firestore.collection(WITHDRAW_USER_COLLECTION)
             .add(mapOf("uid" to uid))
             .await()
-    }
-
-    companion object {
-        private const val COLLECTION = "user"
     }
 }

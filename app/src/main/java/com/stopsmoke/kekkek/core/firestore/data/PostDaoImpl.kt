@@ -14,10 +14,13 @@ import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.toObject
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
+import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
+import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
 import com.stopsmoke.kekkek.core.firestore.model.PostEntity
 import com.stopsmoke.kekkek.core.firestore.model.UserEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
+import com.stopsmoke.kekkek.core.firestore.whereNotNullEqualTo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +37,7 @@ internal class PostDaoImpl @Inject constructor(
 ) : PostDao {
 
     override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
-        val query = firestore.collection(COLLECTION)
+        val query = firestore.collection(POST_COLLECTION)
             .whereNotNullEqualTo("category", category)
             .orderBy("date_time", Query.Direction.DESCENDING)
 
@@ -52,7 +55,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override fun getPostForWrittenUid(writtenUid: String): Flow<PagingData<PostEntity>> {
         return try {
-            val query = firestore.collection(COLLECTION)
+            val query = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("written.uid", writtenUid)
                 .orderBy("date_time", Query.Direction.DESCENDING)
                 .limit(10)
@@ -90,7 +93,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override fun getBookmark(postIdList: List<String>): Flow<PagingData<PostEntity>> {
         return try {
-            val query = firestore.collection(COLLECTION)
+            val query = firestore.collection(POST_COLLECTION)
                 .whereIn("id", postIdList)
 
             Pager(
@@ -125,7 +128,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override fun getPostUserFilter(uid: String): Flow<PagingData<PostEntity>> {
-        val query = firestore.collection(COLLECTION)
+        val query = firestore.collection(POST_COLLECTION)
             .whereEqualTo("written.uid", uid)
             .orderBy("date_time.created", Query.Direction.DESCENDING)
 
@@ -142,14 +145,14 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override fun getPostItem(postId: String): Flow<PostEntity> {
-        return firestore.collection(COLLECTION)
+        return firestore.collection(POST_COLLECTION)
             .document(postId)
             .dataObjects<PostEntity>()
             .mapNotNull { it }
     }
 
     override suspend fun addPost(postEntity: PostEntity) {
-        firestore.collection(COLLECTION).document().let { document ->
+        firestore.collection(POST_COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
                 .await()
             document.update("date_time.created", FieldValue.serverTimestamp())
@@ -160,7 +163,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun addPost(postEntity: PostEntity, inputStream: InputStream) {
-        firestore.collection(COLLECTION).document().let { document ->
+        firestore.collection(POST_COLLECTION).document().let { document ->
             val uploadUrl = storageDao.uploadFile(inputStream, "posts/${document.id}/image.jpeg")
 
             document.set(postEntity.copy(id = document.id, imagesUrl = listOf(uploadUrl)))
@@ -179,7 +182,7 @@ internal class PostDaoImpl @Inject constructor(
                 "text" to postEntity.text,
                 "date_time" to postEntity.dateTime
             )
-            firestore.collection(COLLECTION)
+            firestore.collection(POST_COLLECTION)
                 .document(postEntity.id ?: return Result.Error(NullPointerException()))
                 .update(updateMap)
                 .await()
@@ -201,14 +204,14 @@ internal class PostDaoImpl @Inject constructor(
         )
 
 
-        firestore.collection(COLLECTION)
+        firestore.collection(POST_COLLECTION)
             .document(postEntity.id!!)
             .update(updateMap)
             .await()
     }
 
     override suspend fun updateOrInsertPost(postEntity: PostEntity) {
-        firestore.collection(COLLECTION)
+        firestore.collection(POST_COLLECTION)
             .document(postEntity.id!!)
             .set(postEntity)
             .addOnFailureListener { throw it }
@@ -217,7 +220,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun deletePost(postId: String) {
-        firestore.collection(COLLECTION)
+        firestore.collection(POST_COLLECTION)
             .document(postId)
             .delete()
             .addOnFailureListener { throw it }
@@ -231,7 +234,7 @@ internal class PostDaoImpl @Inject constructor(
         calendar.add(Calendar.DAY_OF_YEAR, -7)
         val sevenDaysAgo = Timestamp(calendar.time)
 
-        val query = firestore.collection(COLLECTION)
+        val query = firestore.collection(POST_COLLECTION)
             .whereGreaterThan("date_time.created", sevenDaysAgo)
             .orderBy("views", Query.Direction.DESCENDING)
             .limit(2)
@@ -240,7 +243,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override fun getTopNotice(limit: Long): Flow<List<PostEntity>> {
-        return firestore.collection(COLLECTION)
+        return firestore.collection(POST_COLLECTION)
             .whereEqualTo("category", "notice")
             .orderBy("date_time.created", Query.Direction.DESCENDING)
             .limit(limit)
@@ -254,7 +257,7 @@ internal class PostDaoImpl @Inject constructor(
             calendar.add(Calendar.DAY_OF_YEAR, -7)
             val sevenDaysAgo = Timestamp(calendar.time)
 
-            val query = firestore.collection(COLLECTION)
+            val query = firestore.collection(POST_COLLECTION)
                 .whereGreaterThan("date_time.created", sevenDaysAgo)
                 .orderBy("views", Query.Direction.DESCENDING)
                 .limit(10)
@@ -274,7 +277,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override suspend fun getPostForPostId(postId: String): PostEntity {
         return try {
-            val query = firestore.collection(COLLECTION)
+            val query = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("id", postId)
                 .get()
                 .await()
@@ -304,7 +307,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override fun getLikeCount(postId: String): Flow<Long> = callbackFlow {
-        firestore.collection(COLLECTION)
+        firestore.collection(POST_COLLECTION)
             .whereEqualTo("post_data.post_id", postId)
             .count()
             .get(AggregateSource.SERVER)
@@ -320,7 +323,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun addLike(postId: String, uid: String): Result<Unit> {
-        val task = firestore.collection(COLLECTION)
+        val task = firestore.collection(POST_COLLECTION)
             .document(postId)
             .update("like_user", FieldValue.arrayUnion(uid))
             .also { it.await() }
@@ -332,7 +335,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun deleteLike(postId: String, uid: String): Result<Unit> {
-        val task = firestore.collection(COLLECTION)
+        val task = firestore.collection(POST_COLLECTION)
             .document(postId)
             .update("like_user", FieldValue.arrayRemove(uid))
             .also { it.await() }
@@ -344,7 +347,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun addViews(postId: String): Result<Unit> {
-        val task = firestore.collection(COLLECTION)
+        val task = firestore.collection(POST_COLLECTION)
             .document(postId)
             .collection("_counter_shards_")
             .document()
@@ -359,7 +362,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override suspend fun setProfileImage(userId: String, imgUrl: String) {
         try {
-            val getQuery = firestore.collection(COLLECTION)
+            val getQuery = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("written.uid", userId)
                 .get()
                 .await()
@@ -371,7 +374,7 @@ internal class PostDaoImpl @Inject constructor(
             }
 
             postList.forEach { post ->
-                firestore.collection(COLLECTION)
+                firestore.collection(POST_COLLECTION)
                     .document(post.id!!)
                     .set(post)
                     .await()
@@ -384,7 +387,7 @@ internal class PostDaoImpl @Inject constructor(
 
     override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
         try {
-            val getQuery = firestore.collection(COLLECTION)
+            val getQuery = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("written.uid", userEntity.uid!!)
                 .get()
                 .await()
@@ -396,7 +399,7 @@ internal class PostDaoImpl @Inject constructor(
             }
 
             postList.forEach { post ->
-                firestore.collection(COLLECTION)
+                firestore.collection(POST_COLLECTION)
                     .document(post.id!!)
                     .set(post)
                     .await()
@@ -408,7 +411,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun addBookmark(postId: String, uid: String): Result<Unit> {
-        val task = firestore.collection(COLLECTION)
+        val task = firestore.collection(POST_COLLECTION)
             .document(postId)
             .update("bookmark_user", FieldValue.arrayUnion(uid))
             .also { it.await() }
@@ -420,7 +423,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun deleteBookmark(postId: String, uid: String): Result<Unit> {
-        val task = firestore.collection(COLLECTION)
+        val task = firestore.collection(POST_COLLECTION)
             .document(postId)
             .update("bookmark_user", FieldValue.arrayRemove(uid))
             .also { it.await() }
@@ -432,7 +435,7 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override fun getBookmarkItems(uid: String): Flow<PagingData<PostEntity>> {
-        val query = firestore.collection(COLLECTION)
+        val query = firestore.collection(POST_COLLECTION)
             .whereArrayContains("bookmark_user", uid)
             .limit(30)
 
@@ -450,16 +453,6 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     companion object {
-        private const val COLLECTION = "post"
-        private const val COMMENT_COLLECTION = "comment"
         private const val PAGE_LIMIT = 30
-    }
-
-
-    private fun Query.whereNotNullEqualTo(field: String, value: Any?): Query {
-        if (value == null) {
-            return this
-        }
-        return whereEqualTo(field, value)
     }
 }

@@ -4,8 +4,10 @@ import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
+import com.stopsmoke.kekkek.core.firestore.ACHIEVEMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.AchievementDao
 import com.stopsmoke.kekkek.core.firestore.model.AchievementEntity
+import com.stopsmoke.kekkek.core.firestore.whereNotNullEqualTo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.mapNotNull
@@ -17,7 +19,7 @@ class AchievementDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : AchievementDao {
     override fun getAchievementItems(category: String?): Flow<List<AchievementEntity>> {
-        return firestore.collection(COLLECTION)
+        return firestore.collection(ACHIEVEMENT_COLLECTION)
             .whereNotNullEqualTo("category", category)
             .orderBy("max_progress", Query.Direction.ASCENDING) //orderBy 지정 시 오류 발생..
             .dataObjects<AchievementEntity>()
@@ -25,7 +27,7 @@ class AchievementDaoImpl @Inject constructor(
     }
 
     override suspend fun addAchievementItem(achievementEntity: AchievementEntity) {
-        val collection = firestore.collection(COLLECTION)
+        val collection = firestore.collection(ACHIEVEMENT_COLLECTION)
         collection.document().let { documentReference ->
             documentReference.set(
                 achievementEntity.copy(id = documentReference.id)
@@ -38,7 +40,7 @@ class AchievementDaoImpl @Inject constructor(
 
     override suspend fun getAchievementCount(category: String?): Long {
         return try {
-            firestore.collection(COLLECTION)
+            firestore.collection(ACHIEVEMENT_COLLECTION)
                 .whereNotNullEqualTo("category", category)
                 .count()
                 .get(AggregateSource.SERVER)
@@ -52,21 +54,13 @@ class AchievementDaoImpl @Inject constructor(
 
     override suspend fun getAchievementListItem(achievementIdList: List<String>): Flow<List<AchievementEntity>> {
         if(achievementIdList.isEmpty()) return emptyFlow()
-        return firestore.collection(COLLECTION)
+        return firestore.collection(ACHIEVEMENT_COLLECTION)
             .whereIn("id", achievementIdList)
             .dataObjects<AchievementEntity>()
     }
 
 
     companion object {
-        private const val COLLECTION = "achievement"
         private const val PAGE_LIMIT = 30
-    }
-
-    private fun Query.whereNotNullEqualTo(field: String, value: Any?): Query {
-        if (value == null) {
-            return this
-        }
-        return whereEqualTo(field, value)
     }
 }

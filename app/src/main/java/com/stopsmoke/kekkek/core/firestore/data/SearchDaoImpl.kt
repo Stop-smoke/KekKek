@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.core.firestore.data
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.dataObjects
+import com.stopsmoke.kekkek.core.firestore.RECOMMENDED_KEYWORD_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.SearchDao
 import com.stopsmoke.kekkek.core.firestore.model.RecommendedKeywordEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,4 @@ internal class SearchDaoImpl @Inject constructor(
             .mapNotNull { it }
     }
 
-    companion object {
-        private const val RECOMMENDED_KEYWORD_COLLECTION = "recommended_keyword"
-    }
 }
