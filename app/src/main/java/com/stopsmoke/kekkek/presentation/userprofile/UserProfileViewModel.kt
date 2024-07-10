@@ -21,7 +21,7 @@ import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
 import com.stopsmoke.kekkek.presentation.getTotalDay
-import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
+import com.stopsmoke.kekkek.presentation.home.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

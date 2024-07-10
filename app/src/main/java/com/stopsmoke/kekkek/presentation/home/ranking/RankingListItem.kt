@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.rankingList
+package com.stopsmoke.kekkek.presentation.home.ranking
 
 import android.os.Parcelable
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage

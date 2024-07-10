@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.rankingList
+package com.stopsmoke.kekkek.presentation.home.ranking
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewRankinglistRankstateItemBinding
-import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
+import com.stopsmoke.kekkek.presentation.home.ranking.field.RankingListField
 import com.stopsmoke.kekkek.presentation.utils.diffutil.RankingListItemDiffUtil
 import java.time.Duration
 import java.time.LocalDateTime

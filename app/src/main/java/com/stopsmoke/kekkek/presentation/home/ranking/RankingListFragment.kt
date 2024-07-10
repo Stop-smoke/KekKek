@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.rankingList
+package com.stopsmoke.kekkek.presentation.home.ranking
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,8 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
-import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
-import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListFieldFragment
+import com.stopsmoke.kekkek.presentation.home.ranking.field.RankingListField
+import com.stopsmoke.kekkek.presentation.home.ranking.field.RankingListFieldFragment
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 

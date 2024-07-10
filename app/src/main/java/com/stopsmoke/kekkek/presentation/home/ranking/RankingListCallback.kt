@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.rankingList
+package com.stopsmoke.kekkek.presentation.home.ranking
 
 import androidx.fragment.app.Fragment
 
