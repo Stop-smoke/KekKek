@@ -9,7 +9,7 @@ class NotificationDiffUtil : DiffUtil.ItemCallback<Notification>() {
     }
 
     override fun areContentsTheSame(oldItem: Notification, newItem: Notification): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
 }

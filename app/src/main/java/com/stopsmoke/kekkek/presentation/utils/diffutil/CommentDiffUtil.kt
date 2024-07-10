@@ -15,6 +15,6 @@ class CommentDiffUtil : DiffUtil.ItemCallback<Comment>() {
         oldItem: Comment,
         newItem: Comment,
     ): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 }
