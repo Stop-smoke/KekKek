@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.rankingMap
+package com.stopsmoke.kekkek.presentation.ranking.map
 
 import android.Manifest
 import android.content.pm.PackageManager

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.ranking.field
+package com.stopsmoke.kekkek.presentation.ranking.field
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

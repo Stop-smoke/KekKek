@@ -327,7 +327,7 @@
 
     <fragment
         android:id="@+id/ranking_list"
-        android:name="com.stopsmoke.kekkek.presentation.home.ranking.RankingListFragment"
+        android:name="com.stopsmoke.kekkek.presentation.ranking.RankingListFragment"
         app:route="ranking_list"
         tools:layout="@layout/fragment_ranking_list" >
         <action
@@ -337,7 +337,7 @@
 
     <fragment
         android:id="@+id/ranking_map"
-        android:name="com.stopsmoke.kekkek.presentation.rankingMap.RankingMapFragment"
+        android:name="com.stopsmoke.kekkek.presentation.ranking.map.RankingMapFragment"
         app:route="ranking_map"
         tools:layout="@layout/fragment_ranking_map" />
 

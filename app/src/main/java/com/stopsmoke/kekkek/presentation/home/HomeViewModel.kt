@@ -10,8 +10,8 @@ import com.stopsmoke.kekkek.core.domain.model.getStartTimerState
 import com.stopsmoke.kekkek.core.domain.model.getTotalMinutesTime
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
-import com.stopsmoke.kekkek.presentation.home.ranking.RankingListItem
-import com.stopsmoke.kekkek.presentation.home.ranking.toRankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

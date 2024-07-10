@@ -1,7 +1,7 @@
 package com.stopsmoke.kekkek.presentation.utils.diffutil
 
 import androidx.recyclerview.widget.DiffUtil
-import com.stopsmoke.kekkek.presentation.home.ranking.RankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
 
 class RankingListItemDiffUtil : DiffUtil.ItemCallback<RankingListItem>() {
 

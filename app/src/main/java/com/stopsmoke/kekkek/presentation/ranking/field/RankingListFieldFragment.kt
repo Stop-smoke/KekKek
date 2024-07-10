@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home.ranking.field
+package com.stopsmoke.kekkek.presentation.ranking.field
 
 import android.content.Context
 import android.os.Bundle
@@ -15,10 +15,10 @@ import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
-import com.stopsmoke.kekkek.presentation.home.ranking.RankingListAdapter
-import com.stopsmoke.kekkek.presentation.home.ranking.RankingListCallback
-import com.stopsmoke.kekkek.presentation.home.ranking.RankingListItem
-import com.stopsmoke.kekkek.presentation.home.ranking.toRankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.RankingListAdapter
+import com.stopsmoke.kekkek.presentation.ranking.RankingListCallback
+import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
 import java.time.Duration
