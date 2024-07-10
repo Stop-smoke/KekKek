@@ -20,10 +20,10 @@ import com.stopsmoke.kekkek.core.authorization.google.GoogleAuthorizationCallbac
 import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
-import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.onboarding.AuthenticationUiState
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
+import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.visible
 

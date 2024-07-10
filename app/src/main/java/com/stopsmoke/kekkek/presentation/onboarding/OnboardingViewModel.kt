@@ -10,6 +10,7 @@ import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.UserConfig
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -154,17 +155,4 @@ class OnboardingViewModel @Inject constructor(
             )
         }
     }
-}
-
-sealed interface AuthenticationUiState {
-
-    data object AlreadyUser : AuthenticationUiState
-
-    data object NewMember : AuthenticationUiState
-
-    data object Init : AuthenticationUiState
-
-    data class Error(val t: Throwable?) : AuthenticationUiState
-
-    data object Guest : AuthenticationUiState
 }
