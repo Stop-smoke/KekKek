@@ -5,22 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
+import com.stopsmoke.kekkek.presentation.utils.diffutil.AchievementItemDiffUtil
 
-class UserProfileAchievementListAdapter :  ListAdapter<AchievementItem, UserProfileAchievementListAdapter.AchievementViewHolder>(diffUtil) {
+class UserProfileAchievementListAdapter :
+    ListAdapter<AchievementItem, UserProfileAchievementListAdapter.AchievementViewHolder>(
+        AchievementItemDiffUtil()
+    ) {
 
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(achievement: AchievementItem) = with(binding){
+        fun bind(achievement: AchievementItem) = with(binding) {
 
             tvAchievementTitle.text = achievement.name
 
@@ -38,26 +40,37 @@ class UserProfileAchievementListAdapter :  ListAdapter<AchievementItem, UserProf
 
             var textCurrentProgress = 0
 
-            if(achievement.currentProgress >= achievement.maxProgress
-                && achievement.category != DatabaseCategory.RANK) { // 랭킹 이외 업적 클리어
+            if (achievement.currentProgress >= achievement.maxProgress
+                && achievement.category != DatabaseCategory.RANK
+            ) { // 랭킹 이외 업적 클리어
                 textCurrentProgress = achievement.maxProgress
-                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                clAchievementRoot.setBackgroundColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.gray_achievement_clear
+                    )
+                )
                 ivAchievementItemChecked.visibility = View.VISIBLE
-            }
-            else if(achievement.currentProgress < achievement.maxProgress // 랭킹 이외 업적 논 클리어
-                && achievement.category != DatabaseCategory.RANK){
+            } else if (achievement.currentProgress < achievement.maxProgress // 랭킹 이외 업적 논 클리어
+                && achievement.category != DatabaseCategory.RANK
+            ) {
                 textCurrentProgress = achievement.currentProgress
                 clAchievementRoot.setBackgroundColor(Color.WHITE)
                 ivAchievementItemChecked.visibility = View.GONE
-            }
-            else if(achievement.currentProgress <= achievement.maxProgress // 랭킹 업적 클리어
-                && achievement.category == DatabaseCategory.RANK){
+            } else if (achievement.currentProgress <= achievement.maxProgress // 랭킹 업적 클리어
+                && achievement.category == DatabaseCategory.RANK
+            ) {
                 textCurrentProgress = achievement.maxProgress
-                clAchievementRoot.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_achievement_clear))
+                clAchievementRoot.setBackgroundColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.gray_achievement_clear
+                    )
+                )
                 ivAchievementItemChecked.visibility = View.VISIBLE
-            }
-            else if(achievement.currentProgress > achievement.maxProgress // 랭킹 업적 논 클리어
-                && achievement.category == DatabaseCategory.RANK){
+            } else if (achievement.currentProgress > achievement.maxProgress // 랭킹 업적 논 클리어
+                && achievement.category == DatabaseCategory.RANK
+            ) {
                 textCurrentProgress = achievement.currentProgress
                 clAchievementRoot.setBackgroundColor(Color.WHITE)
                 ivAchievementItemChecked.visibility = View.GONE
@@ -81,24 +94,5 @@ class UserProfileAchievementListAdapter :  ListAdapter<AchievementItem, UserProf
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<AchievementItem>() {
-            override fun areItemsTheSame(
-                oldItem: AchievementItem,
-                newItem: AchievementItem
-            ): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(
-                oldItem: AchievementItem,
-                newItem: AchievementItem
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-        }
     }
 }

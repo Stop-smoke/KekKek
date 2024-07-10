@@ -3,25 +3,15 @@ package com.stopsmoke.kekkek.presentation.community
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemRecyclerviewCommunityCategoryBinding
+import com.stopsmoke.kekkek.presentation.utils.diffutil.StringDiffUtil
 
 class CommunityCategoryListAdapter(
     private val onClick: (clickPosition: Int) -> Unit
-): ListAdapter<String, CommunityCategoryListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
+): ListAdapter<String, CommunityCategoryListAdapter.ViewHolder>(StringDiffUtil()) {
     private val items = mutableListOf<TextView>()
     private var selectPosition = 0
 

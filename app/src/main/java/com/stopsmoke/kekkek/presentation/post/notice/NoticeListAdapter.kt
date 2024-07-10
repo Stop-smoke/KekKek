@@ -5,33 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class NoticeListAdapter
     : PagingDataAdapter<CommunityWritingItem, NoticeListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
-        override fun areItemsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
+    CommunityWritingItemDiffUtil()
 ) {
 
     private var callback: CommunityCallbackListener? = null
@@ -119,7 +105,7 @@ class NoticeListAdapter
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): ViewHolder {
         return ViewHolder(
             ItemPostBinding.inflate(

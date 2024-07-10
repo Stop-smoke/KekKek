@@ -3,15 +3,16 @@ package com.stopsmoke.kekkek.presentation.my.comment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
 import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.CommentParent
+import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.getResourceString
+import com.stopsmoke.kekkek.presentation.utils.diffutil.CommentDiffUtil
 
-class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.ViewHolder>(diffUtil) {
+class MyCommentListAdapter
+    : PagingDataAdapter<Comment, MyCommentListAdapter.ViewHolder>(CommentDiffUtil()) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -58,25 +59,5 @@ class MyCommentListAdapter : PagingDataAdapter<Comment, MyCommentListAdapter.Vie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-    companion object {
-
-        val diffUtil = object : DiffUtil.ItemCallback<Comment>() {
-            override fun areItemsTheSame(
-                oldItem: Comment,
-                newItem: Comment,
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: Comment,
-                newItem: Comment,
-            ): Boolean {
-                return oldItem == newItem
-            }
-        }
-
     }
 }

@@ -1,10 +1,8 @@
 package com.stopsmoke.kekkek.presentation.post.detail.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
@@ -17,13 +15,16 @@ import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostCommentViewH
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostContentViewHolder
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostDeletedItemAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostReplyViewHolder
+import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDetailCommentRecyclerViewUiStateDiffUtil
 
 private enum class PostDetailType {
     POST, COMMENT, REPLY, DELETED
 }
 
 class PostDetailAdapter :
-    PagingDataAdapter<PostDetailCommentRecyclerViewUiState, RecyclerView.ViewHolder>(diffUtil) {
+    PagingDataAdapter<PostDetailCommentRecyclerViewUiState, RecyclerView.ViewHolder>(
+        PostDetailCommentRecyclerViewUiStateDiffUtil()
+    ) {
 
     private var callback: PostCommentCallback? = null
 
@@ -109,54 +110,5 @@ class PostDetailAdapter :
             is PostDetailCommentRecyclerViewUiState.ReplyType -> PostDetailType.REPLY.ordinal
             else -> PostDetailType.DELETED.ordinal
         }
-    }
-
-    companion object {
-        private val diffUtil =
-            object : DiffUtil.ItemCallback<PostDetailCommentRecyclerViewUiState>() {
-                override fun areItemsTheSame(
-                    oldItem: PostDetailCommentRecyclerViewUiState,
-                    newItem: PostDetailCommentRecyclerViewUiState,
-                ): Boolean {
-                    return when (oldItem) {
-                        is PostDetailCommentRecyclerViewUiState.CommentType -> {
-                            when (newItem) {
-                                is PostDetailCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
-                                is PostDetailCommentRecyclerViewUiState.Header -> false
-                                is PostDetailCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
-                                PostDetailCommentRecyclerViewUiState.Deleted -> false
-                            }
-                        }
-
-                        is PostDetailCommentRecyclerViewUiState.Header -> {
-                            when (newItem) {
-                                is PostDetailCommentRecyclerViewUiState.CommentType -> "Header" == newItem.item.id
-                                is PostDetailCommentRecyclerViewUiState.Header -> true
-                                is PostDetailCommentRecyclerViewUiState.ReplyType -> "Header" == newItem.item.id
-                                PostDetailCommentRecyclerViewUiState.Deleted -> false
-                            }
-                        }
-
-                        is PostDetailCommentRecyclerViewUiState.ReplyType -> {
-                            when (newItem) {
-                                is PostDetailCommentRecyclerViewUiState.CommentType -> oldItem.item.id == newItem.item.id
-                                is PostDetailCommentRecyclerViewUiState.Header -> false
-                                is PostDetailCommentRecyclerViewUiState.ReplyType -> oldItem.item.id == newItem.item.id
-                                PostDetailCommentRecyclerViewUiState.Deleted -> false
-                            }
-                        }
-
-                        PostDetailCommentRecyclerViewUiState.Deleted -> true
-                    }
-                }
-
-                @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(
-                    oldItem: PostDetailCommentRecyclerViewUiState,
-                    newItem: PostDetailCommentRecyclerViewUiState,
-                ): Boolean {
-                    return oldItem === newItem
-                }
-            }
     }
 }

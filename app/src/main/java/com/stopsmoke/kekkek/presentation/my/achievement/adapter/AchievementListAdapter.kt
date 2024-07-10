@@ -1,26 +1,23 @@
 package com.stopsmoke.kekkek.presentation.my.achievement.adapter
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewAchievementItemBinding
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
-import com.stopsmoke.kekkek.presentation.my.achievement.AchievementViewModel
+import com.stopsmoke.kekkek.presentation.utils.diffutil.AchievementItemDiffUtil
 
 class AchievementListAdapter :
-    ListAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(diffUtil) {
+    ListAdapter<AchievementItem, AchievementListAdapter.AchievementViewHolder>(
+        AchievementItemDiffUtil()
+    ) {
 
     class AchievementViewHolder(
         val binding: RecyclerviewAchievementItemBinding,
@@ -86,24 +83,5 @@ class AchievementListAdapter :
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<AchievementItem>() {
-            override fun areItemsTheSame(
-                oldItem: AchievementItem,
-                newItem: AchievementItem
-            ): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(
-                oldItem: AchievementItem,
-                newItem: AchievementItem
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-        }
     }
 }

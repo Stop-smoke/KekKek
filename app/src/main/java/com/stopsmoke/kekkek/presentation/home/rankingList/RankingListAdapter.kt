@@ -2,36 +2,20 @@ package com.stopsmoke.kekkek.presentation.home.rankingList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewRankinglistRankstateItemBinding
 import com.stopsmoke.kekkek.presentation.home.rankingList.rankinglistfield.RankingListField
+import com.stopsmoke.kekkek.presentation.utils.diffutil.RankingListItemDiffUtil
 import java.time.Duration
 import java.time.LocalDateTime
 
 class RankingListAdapter(
     private val rankingListField: RankingListField
-)
-    : ListAdapter<RankingListItem, RankingListAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<RankingListItem>() {
-        override fun areItemsTheSame(
-            oldItem: RankingListItem,
-            newItem: RankingListItem
-        ): Boolean {
-            return oldItem == newItem
-        }
+) : ListAdapter<RankingListItem, RankingListAdapter.ViewHolder>(RankingListItemDiffUtil()) {
 
-        override fun areContentsTheSame(
-            oldItem: RankingListItem,
-            newItem: RankingListItem
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
     private var callback: RankingListCallback? = null
 
     fun registerCallbackListener(callback: RankingListCallback) {

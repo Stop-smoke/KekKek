@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
@@ -18,11 +17,12 @@ import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.utils.diffutil.ReplyDiffUtil
 
 class ReplyAdapter(
     private val viewModel: ReplyViewModel,
     private val viewLifecycleOwner: LifecycleOwner,
-) : PagingDataAdapter<Reply, ReplyAdapter.ViewHolder>(diffCallback) {
+) : PagingDataAdapter<Reply, ReplyAdapter.ViewHolder>(ReplyDiffUtil()) {
 
     private var callback: ReplyCallback? = null
 
@@ -195,19 +195,5 @@ class ReplyAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-
-    companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<Reply>() {
-            override fun areItemsTheSame(oldItem: Reply, newItem: Reply): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: Reply, newItem: Reply): Boolean {
-                return oldItem.id == newItem.id
-
-            }
-        }
     }
 }

@@ -1,15 +1,14 @@
 package com.stopsmoke.kekkek.presentation.my.post
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDiffUtil
 
-class MyPostListAdapter : PagingDataAdapter<Post, MyPostViewHolder>(diffUtil) {
+class MyPostListAdapter : PagingDataAdapter<Post, MyPostViewHolder>(PostDiffUtil()) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -36,24 +35,5 @@ class MyPostListAdapter : PagingDataAdapter<Post, MyPostViewHolder>(diffUtil) {
 
     override fun onBindViewHolder(holder: MyPostViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-    companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<Post>() {
-            override fun areItemsTheSame(
-                oldItem: Post,
-                newItem: Post,
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            @SuppressLint("DiffUtilEquals")
-            override fun areContentsTheSame(
-                oldItem: Post,
-                newItem: Post,
-            ): Boolean {
-                return oldItem === newItem
-            }
-        }
     }
 }

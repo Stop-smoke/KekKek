@@ -2,29 +2,14 @@ package com.stopsmoke.kekkek.presentation.post.popular
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
-class PopularPostListAdapter : ListAdapter<CommunityWritingItem, PopularPostListViewHolder>(
-    object : DiffUtil.ItemCallback<CommunityWritingItem>() {
-        override fun areItemsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem,
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: CommunityWritingItem,
-            newItem: CommunityWritingItem,
-        ): Boolean {
-            return oldItem == newItem
-        }
-    }
-) {
+class PopularPostListAdapter
+    : ListAdapter<CommunityWritingItem, PopularPostListViewHolder>(CommunityWritingItemDiffUtil()) {
 
     private var callback: CommunityCallbackListener? = null
 

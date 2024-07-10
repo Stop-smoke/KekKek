@@ -1,23 +1,23 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.toStringKR
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
+import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class CommunityListAdapter :
-    PagingDataAdapter<CommunityWritingItem, CommunityListAdapter.ViewHolder>(diffUtil) {
-
+    PagingDataAdapter<CommunityWritingItem, CommunityListAdapter.ViewHolder>(
+        CommunityWritingItemDiffUtil()
+    ) {
 
     private var callback: CommunityCallbackListener? = null
 
@@ -28,8 +28,6 @@ class CommunityListAdapter :
     fun unregisterCallbackListener() {
         callback = null
     }
-
-
 
     abstract class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         abstract fun bind(item: CommunityWritingItem)
@@ -62,7 +60,7 @@ class CommunityListAdapter :
                     ivItemWritingPostImage.visibility = View.GONE
                     setMarginEnd(tvItemWritingTitle, 16)
                 }
-                it.profileImage.let {imgUrl->
+                it.profileImage.let { imgUrl ->
                     if (imgUrl.isNullOrBlank()) circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
                     else circleIvItemWritingProfile.load(imgUrl)
                 }
@@ -119,25 +117,5 @@ class CommunityListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<CommunityWritingItem>() {
-            override fun areItemsTheSame(
-                oldItem: CommunityWritingItem,
-                newItem: CommunityWritingItem,
-            ): Boolean {
-                return oldItem.postInfo.id == newItem.postInfo.id
-            }
-
-            @SuppressLint("DiffUtilEquals")
-            override fun areContentsTheSame(
-                oldItem: CommunityWritingItem,
-                newItem: CommunityWritingItem,
-            ): Boolean {
-                return oldItem === newItem
-            }
-
-        }
     }
 }
