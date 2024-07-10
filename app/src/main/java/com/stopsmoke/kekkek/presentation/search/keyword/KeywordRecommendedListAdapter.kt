@@ -2,15 +2,17 @@ package com.stopsmoke.kekkek.presentation.search.keyword
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.stopsmoke.kekkek.core.domain.model.RecommendedKeyword
 import com.stopsmoke.kekkek.databinding.RecyclerviewSearchRecommendBinding
-import com.stopsmoke.kekkek.domain.model.RecommendedKeyword
+import com.stopsmoke.kekkek.presentation.utils.diffutil.RecommendedKeywordDiffUtil
 
 class KeywordRecommendedListAdapter(
     private val keywordSelectedListener: (String) -> Unit
-) : ListAdapter<RecommendedKeyword, KeywordRecommendedListAdapter.KeywordRecommendedViewHolder>(diffUtil) {
+) : ListAdapter<RecommendedKeyword, KeywordRecommendedListAdapter.KeywordRecommendedViewHolder>(
+    RecommendedKeywordDiffUtil()
+) {
 
     class KeywordRecommendedViewHolder(
         private val binding: RecyclerviewSearchRecommendBinding,
@@ -43,22 +45,4 @@ class KeywordRecommendedListAdapter(
         getItem(position)?.let { holder.bind(it) }
     }
 
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<RecommendedKeyword>() {
-            override fun areItemsTheSame(
-                oldItem: RecommendedKeyword,
-                newItem: RecommendedKeyword,
-            ): Boolean {
-                return oldItem.keyword == newItem.keyword
-            }
-
-            override fun areContentsTheSame(
-                oldItem: RecommendedKeyword,
-                newItem: RecommendedKeyword,
-            ): Boolean {
-                return oldItem == newItem
-            }
-
-        }
-    }
 }

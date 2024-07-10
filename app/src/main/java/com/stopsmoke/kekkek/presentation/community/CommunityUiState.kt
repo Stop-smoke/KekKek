@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.presentation.community
 
-import com.stopsmoke.kekkek.presentation.home.HomeUiState
-
 sealed interface CommunityUiState {
     data class CommunityNormalUiState(
         val popularItem: CommunityPopularItem,
@@ -11,7 +9,7 @@ sealed interface CommunityUiState {
     data object ErrorExit: CommunityUiState
 
     companion object {
-        fun init() = CommunityUiState.CommunityNormalUiState(
+        fun init() = CommunityNormalUiState(
             popularItem = CommunityPopularItem(
                 postInfo1 = emptyCommunityWritingListItem(),
                 postInfo2 = emptyCommunityWritingListItem()

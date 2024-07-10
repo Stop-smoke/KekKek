@@ -1,13 +1,13 @@
 package com.stopsmoke.kekkek.presentation.errorhandler
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.stopsmoke.kekkek.databinding.FragmentErrorServerEtcBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
 class ErrorServerEtcFragment : Fragment() {
 
@@ -23,7 +23,7 @@ class ErrorServerEtcFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentErrorServerEtcBinding.inflate(inflater, container, false)
         return binding.root
     }

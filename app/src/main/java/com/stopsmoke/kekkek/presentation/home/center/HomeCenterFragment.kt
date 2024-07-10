@@ -11,8 +11,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentHomeCenterBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
 class HomeCenterFragment : Fragment() {
     private var _binding: FragmentHomeCenterBinding? = null

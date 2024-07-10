@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.toPostCategory
-import com.stopsmoke.kekkek.domain.repository.PostRepository
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.toPostCategory
+import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

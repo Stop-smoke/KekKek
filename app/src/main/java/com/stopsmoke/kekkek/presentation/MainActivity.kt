@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,8 +10,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
-import com.stopsmoke.kekkek.domain.repository.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

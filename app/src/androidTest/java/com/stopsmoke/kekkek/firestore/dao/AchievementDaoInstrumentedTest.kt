@@ -3,8 +3,9 @@ package com.stopsmoke.kekkek.firestore.dao
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.stopsmoke.kekkek.firestore.data.AchievementDaoImpl
-import com.stopsmoke.kekkek.firestore.model.AchievementEntity
+import com.stopsmoke.kekkek.core.firestore.dao.AchievementDao
+import com.stopsmoke.kekkek.core.firestore.data.AchievementDaoImpl
+import com.stopsmoke.kekkek.core.firestore.model.AchievementEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

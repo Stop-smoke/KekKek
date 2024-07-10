@@ -1,6 +1,6 @@
 package com.stopsmoke.kekkek.presentation.my.achievement
 
-import com.stopsmoke.kekkek.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
 import java.math.BigDecimal
 import java.math.MathContext
 

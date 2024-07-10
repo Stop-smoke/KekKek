@@ -2,35 +2,26 @@ package com.stopsmoke.kekkek.presentation.my.achievement
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
-import com.stopsmoke.kekkek.domain.model.Achievement
-import com.stopsmoke.kekkek.domain.model.Activities
-import com.stopsmoke.kekkek.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.repository.AchievementRepository
-import com.stopsmoke.kekkek.domain.repository.RankingRepository
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.Achievement
+import com.stopsmoke.kekkek.core.domain.model.Activities
+import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.getTotalDay
-import com.stopsmoke.kekkek.presentation.home.rankingList.RankingListItem
-import com.stopsmoke.kekkek.presentation.home.rankingList.toRankingListItem
+import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel

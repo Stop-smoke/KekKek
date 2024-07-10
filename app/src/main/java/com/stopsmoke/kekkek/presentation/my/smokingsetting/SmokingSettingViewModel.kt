@@ -1,11 +1,10 @@
 package com.stopsmoke.kekkek.presentation.my.smokingsetting
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.repository.UserRepository
-import com.stopsmoke.kekkek.domain.usecase.UpdateUserSmokingSettingsUseCase
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.usecase.UpdateUserSmokingSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentErrorServerEtcBinding
-import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.invisible
 
 class ErrorFragment: Fragment() {
     private var _binding: FragmentErrorServerEtcBinding? = null
@@ -17,7 +17,7 @@ class ErrorFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentErrorServerEtcBinding.inflate(inflater, container, false)
         return binding.root
     }

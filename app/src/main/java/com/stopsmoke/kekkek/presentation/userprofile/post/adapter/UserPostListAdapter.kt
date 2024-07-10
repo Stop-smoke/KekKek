@@ -3,19 +3,18 @@ package com.stopsmoke.kekkek.presentation.userprofile.post.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.ItemCommunityPostwritingBinding
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDiffUtil
 
 class UserPostListAdapter(
-    private val itemClick: (Post) -> Unit
-) :
-    PagingDataAdapter<Post, UserPostListAdapter.UserPostViewHolder>(diffUtil) {
+    private val itemClick: (Post) -> Unit,
+) : PagingDataAdapter<Post, UserPostListAdapter.UserPostViewHolder>(PostDiffUtil()) {
 
     override fun onBindViewHolder(holder: UserPostViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
@@ -23,7 +22,7 @@ class UserPostListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPostViewHolder {
         val view =
-            ItemCommunityPostwritingBinding.inflate(
+            ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -32,8 +31,8 @@ class UserPostListAdapter(
     }
 
     class UserPostViewHolder(
-        val binding: ItemCommunityPostwritingBinding,
-        private val itemClick: (Post) -> Unit
+        val binding: ItemPostBinding,
+        private val itemClick: (Post) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(post: Post) {
@@ -59,19 +58,6 @@ class UserPostListAdapter(
             binding.root.setOnClickListener {
                 itemClick(post)
             }
-        }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Post>() {
-            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem == newItem
-            }
-
         }
     }
 }

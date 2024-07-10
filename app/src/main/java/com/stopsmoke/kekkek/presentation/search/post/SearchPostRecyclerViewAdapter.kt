@@ -3,19 +3,19 @@ package com.stopsmoke.kekkek.presentation.search.post
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.RecyclerviewSearchPostBinding
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.ProfileImage
 import com.stopsmoke.kekkek.presentation.getResourceString
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDiffUtil
 
 class SearchPostRecyclerViewAdapter(
     private val itemClickListener: (Post) -> Unit
-) : PagingDataAdapter<Post, SearchPostRecyclerViewAdapter.PostSearchViewHolder>(diffUtil) {
+) : PagingDataAdapter<Post, SearchPostRecyclerViewAdapter.PostSearchViewHolder>(PostDiffUtil()) {
 
     class PostSearchViewHolder(
         private val binding: RecyclerviewSearchPostBinding,
@@ -59,19 +59,6 @@ class SearchPostRecyclerViewAdapter(
     override fun onBindViewHolder(holder: PostSearchViewHolder, position: Int) {
         getItem(position)?.let {
             holder.bind(it)
-        }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Post>() {
-            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-                return oldItem == newItem
-            }
-
         }
     }
 }

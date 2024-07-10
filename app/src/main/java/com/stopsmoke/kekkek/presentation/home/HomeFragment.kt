@@ -16,11 +16,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -46,7 +46,7 @@ class HomeFragment : Fragment(), ErrorHandle {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.presentation.MainActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

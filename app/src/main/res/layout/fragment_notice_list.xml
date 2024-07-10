@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.noticeWritingList.NoticeListFragment">
+    tools:context=".presentation.post.notice.NoticeListFragment">
 
     <include
         android:id="@+id/include_notice_list_app_bar"
@@ -17,6 +17,6 @@
         app:layout_constraintTop_toBottomOf ="@id/include_notice_list_app_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/bg_gray"
-        tools:listitem="@layout/item_community_postwriting"/>
+        tools:listitem="@layout/item_post"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

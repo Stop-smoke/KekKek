@@ -15,9 +15,8 @@ import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.throttleFirst
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileBinding
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.userprofile.adapter.UserProfileViewPagerAdapter
 import com.stopsmoke.kekkek.presentation.utils.wrapTabIndicatorToTitle

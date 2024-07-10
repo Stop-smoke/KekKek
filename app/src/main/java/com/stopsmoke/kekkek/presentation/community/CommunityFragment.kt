@@ -15,12 +15,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.model.toPostCategory
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
-import com.stopsmoke.kekkek.domain.model.toPostCategory
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.stopsmoke.kekkek.firestore.data.SearchDaoImpl
+import com.stopsmoke.kekkek.core.firestore.dao.SearchDao
+import com.stopsmoke.kekkek.core.firestore.data.SearchDaoImpl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

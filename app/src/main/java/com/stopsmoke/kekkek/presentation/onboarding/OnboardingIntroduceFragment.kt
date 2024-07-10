@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingIntroduceBinding
-import com.stopsmoke.kekkek.invisible
+import com.stopsmoke.kekkek.presentation.invisible
 
 
 class OnboardingIntroduceFragment : Fragment() {
@@ -24,7 +24,7 @@ class OnboardingIntroduceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentOnboardingIntroduceBinding.inflate(inflater, container, false)
         return binding.root
     }

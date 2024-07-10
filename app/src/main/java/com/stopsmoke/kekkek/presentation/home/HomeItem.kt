@@ -1,6 +1,6 @@
 package com.stopsmoke.kekkek.presentation.home
 
-import com.stopsmoke.kekkek.domain.model.History
+import com.stopsmoke.kekkek.core.domain.model.History
 
 data class HomeItem (
     val timeString: String,

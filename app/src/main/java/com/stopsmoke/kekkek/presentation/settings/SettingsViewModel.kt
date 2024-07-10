@@ -2,16 +2,14 @@ package com.stopsmoke.kekkek.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn

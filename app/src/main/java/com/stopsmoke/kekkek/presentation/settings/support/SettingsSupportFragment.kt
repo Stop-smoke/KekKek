@@ -1,16 +1,16 @@
 package com.stopsmoke.kekkek.presentation.settings.support
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSettingsSupportBinding
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
 class SettingsSupportFragment : Fragment() {
 
