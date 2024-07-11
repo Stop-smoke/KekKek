@@ -4,21 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.model.Comment
+import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.databinding.RecyclerviewUserProfileCommentBinding
-import com.stopsmoke.kekkek.domain.model.Comment
-import com.stopsmoke.kekkek.domain.model.CommentParent
 import com.stopsmoke.kekkek.presentation.getResourceString
+import com.stopsmoke.kekkek.presentation.utils.diffutil.CommentDiffUtil
 
 class UserProfileCommentListAdapter(
-    private val itemClick: (Comment) -> Unit
-) : PagingDataAdapter<Comment, UserProfileCommentListAdapter.CommentViewHolder>(diffUtil) {
+    private val itemClick: (Comment) -> Unit,
+) : PagingDataAdapter<Comment, UserProfileCommentListAdapter.CommentViewHolder>(CommentDiffUtil()) {
 
     class CommentViewHolder(
         private val binding: RecyclerviewUserProfileCommentBinding,
-        private val itemClick: (Comment) -> Unit
+        private val itemClick: (Comment) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -29,7 +29,8 @@ class UserProfileCommentListAdapter(
                 comment.dateTime.modified.run {
                     "$year-${"%02d".format(monthValue)}-${"%02d".format(dayOfMonth)}"
                 }
-            binding.tvUserProfileCommentBody.text = itemView.context.getCommentStateString(comment.parent)
+            binding.tvUserProfileCommentBody.text =
+                itemView.context.getCommentStateString(comment.parent)
 
             binding.root.setOnClickListener {
                 itemClick(comment)
@@ -49,18 +50,6 @@ class UserProfileCommentListAdapter(
                 false
             )
         return CommentViewHolder(view, itemClick)
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Comment>() {
-            override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean {
-                return oldItem == newItem
-            }
-        }
     }
 }
 

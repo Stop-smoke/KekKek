@@ -1,6 +1,5 @@
 package com.stopsmoke.kekkek.presentation.settings
 
-import android.app.NotificationManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -20,11 +19,11 @@ import coil.load
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
-import com.stopsmoke.kekkek.domain.model.ProfileImage
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.invisible
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsItem
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsMultiViewEnum
 import com.stopsmoke.kekkek.presentation.settings.model.SettingsOnClickListener
@@ -40,7 +39,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -229,7 +228,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
             "오픈 소스 고지" -> {
                 startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
-                OssLicensesMenuActivity.setActivityTitle(getString(com.stopsmoke.kekkek.R.string.custom_license_title))
+                OssLicensesMenuActivity.setActivityTitle(getString(R.string.custom_license_title))
             }
 
             "개인 정보 보호 및 보안 안내" -> {

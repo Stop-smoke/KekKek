@@ -1,11 +1,11 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Parcelable
-import com.stopsmoke.kekkek.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.domain.model.Post
-import com.stopsmoke.kekkek.domain.model.PostCategory
-import com.stopsmoke.kekkek.domain.model.ProfileImage
+import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
+import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
+import com.stopsmoke.kekkek.core.domain.model.Post
+import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

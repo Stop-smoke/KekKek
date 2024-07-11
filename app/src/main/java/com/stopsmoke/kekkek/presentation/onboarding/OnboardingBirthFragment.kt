@@ -1,18 +1,6 @@
 package com.stopsmoke.kekkek.presentation.onboarding
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import com.google.firebase.Timestamp
-import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.invisible
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 
 class OnboardingBirthFragment : Fragment() {

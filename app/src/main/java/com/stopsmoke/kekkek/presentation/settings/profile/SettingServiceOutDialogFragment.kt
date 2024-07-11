@@ -28,7 +28,7 @@ class SettingServiceOutDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCommonDialogBinding.inflate(layoutInflater, container, false)
         return binding.root
     }

@@ -1,23 +1,21 @@
 package com.stopsmoke.kekkek.presentation.my.achievement
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
-import com.stopsmoke.kekkek.domain.model.User
-import com.stopsmoke.kekkek.invisible
-import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
-import com.stopsmoke.kekkek.visible
+import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
+import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

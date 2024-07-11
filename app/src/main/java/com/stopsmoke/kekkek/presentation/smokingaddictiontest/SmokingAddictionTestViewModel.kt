@@ -2,7 +2,7 @@ package com.stopsmoke.kekkek.presentation.smokingaddictiontest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.domain.usecase.UpdateCigaretteAddictionTestResultUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.UpdateCigaretteAddictionTestResultUseCase
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
