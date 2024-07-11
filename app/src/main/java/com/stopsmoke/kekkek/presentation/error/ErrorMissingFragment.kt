@@ -34,6 +34,10 @@ class ErrorMissingFragment : Fragment() {
         binding.ivMissingError.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.includeErrorMissingAppBar.ivErrorMissingBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
 

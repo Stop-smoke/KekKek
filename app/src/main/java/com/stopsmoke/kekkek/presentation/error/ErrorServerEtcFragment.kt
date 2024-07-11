@@ -34,6 +34,10 @@ class ErrorServerEtcFragment : Fragment() {
         binding.ivServerEtcError.setOnClickListener {
             activity?.finishAffinity()
         }
+
+        binding.includeErrorServerEtcAppBar.ivErrorServerEtcBack.setOnClickListener {
+            activity?.finishAffinity()
+        }
     }
 
 
