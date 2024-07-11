@@ -92,7 +92,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 }
 
                 is AuthenticationUiState.Guest -> {
-                    Toast.makeText(requireContext(), "게스트 모드 진행", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.guest_mode_message), Toast.LENGTH_SHORT).show()
                 }
             }
         }

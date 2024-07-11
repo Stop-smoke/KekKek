@@ -73,8 +73,8 @@
     <string name="notification_elapsed_minute">minutes ago</string>
     <string name="notification_elapsed_second">seconds ago</string>
     <string name="login_other_btn"><u>Use another method</u></string>
-    <string name="login_google">Use Google</string>
-    <string name="login_kakao">Use Kakao</string>
+    <string name="login_google">Google</string>
+    <string name="login_kakao">Kakao</string>
     <string name="login_default_nickname">KekKek</string>
     <string name="tv_my_post_title">My Posts</string>
     <string name="my_comment_title">My Comments</string>
@@ -142,4 +142,21 @@
     <string name="tv_my_writing">My Posts</string>
     <string name="tv_my_comment">My Comments</string>
     <string name="tv_my_bookmark">Bookmarks</string>
+    <string name="guest_mode_message">Proceeding in guest mode</string>
+    <string name="textView3">Hello?</string>
+    <string name="textView2">I\'m Kekkek helping you to quit smoking.</string>
+    <string name="btn_onboarding_next">Start</string>
+    <string name="tv_onboarding_name">What nickname would you like to use?</string>
+    <string name="et_onboarding_name">Please enter your name.</string>
+    <string name="tv_onboarding_warning">This name already exists!</string>
+    <string name="next_button">Next</string>
+    <string name="tv_onboarding_perday1">How many cigarettes</string>
+    <string name="tv_onboarding_perday2">do you smoke per day?</string>
+    <string name="tv_slider_value">0 cigarettes</string>
+    <string name="tv_onboarding_perpack1">How many cigarettes</string>
+    <string name="tv_onboarding_perpack2">are in a pack?</string>
+    <string name="tv_onboarding_price1">How much</string>
+    <string name="tv_onboarding_price2">does one pack cost?</string>
+    <string name="et_onboarding_price">Please enter the price.</string>
+    <string name="setting_finish">All settings are completed!</string>
 </resources>

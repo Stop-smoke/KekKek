@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="450dp"
         android:fontFamily="@font/pretendard_bold"
-        android:text="설정을 모두 완료하였어요!"
+        android:text="@string/setting_finish"
         android:textColor="@color/primary_blue"
         android:textSize="26sp"
         android:textStyle="bold"
