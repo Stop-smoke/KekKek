@@ -5,17 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentErrorServerEtcBinding
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.visible
 
-class ErrorFragment: Fragment() {
+class ErrorServerEtcFragment : Fragment() {
+
     private var _binding: FragmentErrorServerEtcBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentErrorServerEtcBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.invisible()
+
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentErrorServerEtcBinding.inflate(inflater, container, false)
@@ -24,28 +30,21 @@ class ErrorFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initListener()
-    }
 
-    private fun initListener() = with(binding){
-        includeErrorServerEtcAppBar.ivErrorServerEtcBack.setOnClickListener {
-            val navController = findNavController()
-
-            val isPopped = navController.popBackStack()
-
-            if (!isPopped) {
-                requireActivity().finish()
-            }
+        binding.ivServerEtcError.setOnClickListener {
+            activity?.finishAffinity()
         }
     }
+
 
     override fun onResume() {
         super.onResume()
         activity?.invisible()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.visible()
         _binding = null
     }
 }
