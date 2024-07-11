@@ -18,6 +18,7 @@ import com.stopsmoke.kekkek.common.throttleFirst
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.userprofile.adapter.UserProfileViewPagerAdapter
 import com.stopsmoke.kekkek.presentation.utils.wrapTabIndicatorToTitle
 import kotlinx.coroutines.flow.collectLatest
@@ -115,8 +116,7 @@ class UserProfileFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.postDetailScreenNavigate.throttleFirst(300).collectLatest {
-                    val bundle = bundleOf("post_id" to it)
-                    findNavController().navigate(R.id.action_user_profile_to_post_view, bundle)
+                    findNavController().navigateToPostDetailScreen(it)
                 }
             }
         }

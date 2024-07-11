@@ -67,7 +67,7 @@ class SmokingAddictionTestResultFragment : Fragment() {
     private fun setupListener() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
-                findNavController().popBackStack("home", false)
+                findNavController().popBackStack(R.id.home, false)
             }
         }
     }

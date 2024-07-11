@@ -22,6 +22,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
+import com.stopsmoke.kekkek.presentation.authentication.navigateToAuthenticationScreenWithBackStackClear
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
@@ -144,7 +145,7 @@ class SettingsProfileFragment : Fragment() {
                 }
                 is ExitAppUiState.Loading -> {  }
                 is ExitAppUiState.Success -> {
-                    navigateToAuthenticationScreen()
+                    findNavController().navigateToAuthenticationScreenWithBackStackClear()
                 }
             }
         }
@@ -174,14 +175,6 @@ class SettingsProfileFragment : Fragment() {
 
     private fun showProgressDialog() {
         progressDialog.value.show(childFragmentManager, CircularProgressDialogFragment.TAG)
-    }
-
-    private fun navigateToAuthenticationScreen() {
-        findNavController().navigate(route = "authentication_screen") {
-            popUpTo(findNavController().graph.id) {
-                inclusive = true
-            }
-        }
     }
 
     private fun initView() = with(binding) {

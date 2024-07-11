@@ -18,6 +18,8 @@ import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -77,12 +79,11 @@ class NoticeListFragment : Fragment() {
     private fun initListAdapterCallback() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
-                override fun navigateToUserProfile(uid: String) {}
+                override fun navigateToUserProfile(uid: String) {
+                    findNavController().navigateToUserProfileScreen(uid)
+                }
                 override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_noticeList_to_postView,
-                        args = bundleOf("post_id" to postId)
-                    )
+                    findNavController().navigateToPostDetailScreen(postId)
                 }
             }
         )

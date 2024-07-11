@@ -27,6 +27,7 @@ import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PostDetailAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PreviewCommentAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
@@ -34,7 +35,10 @@ import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentDialogC
 import com.stopsmoke.kekkek.presentation.post.detail.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.detail.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
 import com.stopsmoke.kekkek.presentation.putNavigationResult
+import com.stopsmoke.kekkek.presentation.reply.navigateToReplyScreen
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +81,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_detail_screen_to_my_complaint)
+            findNavController().navigateToMyComplaintScreen()
             bottomSheetDialog.dismiss()
         }
 
@@ -90,11 +94,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
 
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
-
-            findNavController().navigate(
-                resId = R.id.action_post_detail_screen_to_post_edit,
-                args = bundleOf("post_id" to viewModel.postId.value)
-            )
+            findNavController().navigateToPostEditScreen(viewModel.postId.value ?: return@setOnClickListener)
             bottomSheetDialog.dismiss()
         }
 
@@ -304,10 +304,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     }
 
     override fun navigateToUserProfile(uid: String) {
-        findNavController().navigate(
-            resId = R.id.action_post_detail_screen_to_user_profile,
-            args = bundleOf("uid" to uid)
-        )
+        findNavController().navigateToUserProfileScreen(uid)
     }
 
     override fun commentLikeClick(comment: Comment) {
@@ -323,12 +320,9 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     }
 
     override fun navigateToReply(comment: Comment) {
-        findNavController().navigate(
-            resId = R.id.action_post_detail_screen_to_reply,
-            args = bundleOf(
-                "post_id" to comment.parent.postId,
-                "comment_id" to comment.id
-            )
+        findNavController().navigateToReplyScreen(
+            postId = comment.parent.postId,
+            commentId = comment.id
         )
     }
 

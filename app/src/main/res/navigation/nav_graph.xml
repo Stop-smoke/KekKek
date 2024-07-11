@@ -13,359 +13,122 @@
     <fragment
         android:id="@+id/authentication"
         android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
-        app:route="authentication_screen"
-        tools:layout="@layout/fragment_authentication">
-        <action
-            android:id="@+id/action_authentication_to_onboarding_introduce"
-            app:destination="@id/nav_onboarding" />
-        <action
-            android:id="@+id/action_authentication_to_home"
-            app:destination="@id/home" />
-    </fragment>
+        tools:layout="@layout/fragment_authentication" />
 
     <fragment
         android:id="@+id/home"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
-        app:route="home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_home_to_home_center"
-            app:destination="@id/home_center" />
-        <action
-            android:id="@+id/action_home_to_home_tip"
-            app:destination="@id/home_tip" />
-        <action
-            android:id="@+id/action_home_to_attainments"
-            app:destination="@id/attainments" />
-        <action
-            android:id="@+id/action_home_to_notice_list"
-            app:destination="@id/notice_list" />
-        <action
-            android:id="@+id/action_home_to_nav_smoking_addiction_test_graph"
-            app:destination="@id/nav_smoking_addiction_test" />
-        <action
-            android:id="@+id/action_home_to_rankingList"
-            app:destination="@id/ranking_list"/>
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/home_tip"
         android:name="com.stopsmoke.kekkek.presentation.home.tip.HomeTipFragment"
-        app:route="home_tip"
         tools:layout="@layout/fragment_home_tip" />
 
     <fragment
         android:id="@+id/home_center"
         android:name="com.stopsmoke.kekkek.presentation.home.center.HomeCenterFragment"
-        app:route="home_center"
         tools:layout="@layout/fragment_home_center" />
 
     <fragment
         android:id="@+id/community"
         android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
-        app:route="community"
-        tools:layout="@layout/fragment_community">
-
-        <action
-            android:id="@+id/action_community_to_user_profile_screen"
-            app:destination="@id/user_profile">
-            <argument
-                android:name="uid"
-                app:argType="string" />
-        </action>
-
-        <action
-            android:id="@+id/action_community_page_to_nav_settings"
-            app:destination="@id/nav_settings" />
-        <action
-            android:id="@+id/action_community_to_post_view"
-            app:destination="@id/post_detail_screen" />
-        <action
-            android:id="@+id/action_community_to_popularWritingList"
-            app:destination="@id/popular_post_screen" />
-        <action
-            android:id="@+id/action_community_to_popular_writing_list"
-            app:destination="@id/popular_post_screen" />
-        <action
-            android:id="@+id/action_community_to_notice_list"
-            app:destination="@id/notice_list" />
-        <action
-            android:id="@+id/action_community_to_post_write"
-            app:destination="@id/post_write" />
-        <action
-            android:id="@+id/action_community_to_notification"
-            app:destination="@id/notification" />
-    </fragment>
+        tools:layout="@layout/fragment_community" />
 
     <fragment
         android:id="@+id/my_page"
         android:name="com.stopsmoke.kekkek.presentation.my.MyFragment"
-        app:route="my"
-        tools:layout="@layout/fragment_my">
-        <action
-            android:id="@+id/action_my_page_to_setting_profile"
-            app:destination="@id/settings_setting_profile" />
-        <action
-            android:id="@+id/action_my_page_to_nav_settings"
-            app:destination="@id/nav_settings" />
-        <action
-            android:id="@+id/action_my_page_to_notification"
-            app:destination="@id/notification" />
-        <action
-            android:id="@+id/action_my_page_to_my_supportcenter"
-            app:destination="@id/my_supportcenter" />
-        <action
-            android:id="@+id/action_myPage_to_myWritingList"
-            app:destination="@id/my_post_screen" />
-        <action
-            android:id="@+id/action_myPage_to_myBookmarkList"
-            app:destination="@id/my_bookmark_list" />
-        <action
-            android:id="@+id/action_myPage_to_myCommentList"
-            app:destination="@id/my_comment_screen" />
-        <action
-            android:id="@+id/action_my_page_to_nav_onboarding"
-            app:destination="@id/nav_onboarding" />
-        <action
-            android:id="@+id/action_my_page_to_onboarding_perday"
-            app:destination="@id/onboarding_perday" />
-        <action
-            android:id="@+id/action_my_page_to_settings_smoking_setting"
-            app:destination="@id/settings_smoking_setting" />
-        <action
-            android:id="@+id/action_my_page_to_my_complaint"
-            app:destination="@id/my_complaint" />
-    </fragment>
+        tools:layout="@layout/fragment_my" />
 
     <fragment
         android:id="@+id/settings_setting_profile"
         android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
-        app:route="profile_settings_screen"
-        tools:layout="@layout/fragment_settings_profile">
-        <action
-            android:id="@+id/action_settings_setting_profile_to_authentication"
-            app:destination="@id/authentication" />
-    </fragment>
+        tools:layout="@layout/fragment_settings_profile" />
 
     <fragment
         android:id="@+id/settings_smoking_setting"
         android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFragment"
-        app:route="settings_smoking_setting"
-        tools:layout="@layout/fragment_smoking_setting">
-    </fragment>
-
-<!--    <fragment-->
-<!--        android:id="@+id/resetting_onboarding_smoking_per_day"-->
-<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerDayFragment"-->
-<!--        tools:layout="@layout/fragment_smoking_per_day">-->
-<!--        <action-->
-<!--            android:id="@+id/action_resetting_onboarding_smoking_per_day_to_resetting_onboarding_smoking_per_pack"-->
-<!--            app:destination="@id/resetting_onboarding_smoking_per_pack" />-->
-<!--    </fragment>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/resetting_onboarding_smoking_per_pack"-->
-<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPerPackFragment"-->
-<!--        tools:layout="@layout/fragment_smoking_per_pack">-->
-<!--        <action-->
-<!--            android:id="@+id/action_resetting_onboarding_smoking_per_pack_to_resetting_onboarding_smoking_price"-->
-<!--            app:destination="@id/resetting_onboarding_smoking_price" />-->
-<!--    </fragment>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/resetting_onboarding_smoking_price"-->
-<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingPriceFragment"-->
-<!--        tools:layout="@layout/fragment_smoking_price">-->
-<!--        <action-->
-<!--            android:id="@+id/action_resetting_onboarding_smoking_price_to_resetting_onboarding_smoking_finish"-->
-<!--            app:destination="@id/resetting_onboarding_smoking_finish" />-->
-<!--    </fragment>-->
-
-<!--    <fragment-->
-<!--        android:id="@+id/resetting_onboarding_smoking_finish"-->
-<!--        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFinishFragment"-->
-<!--        tools:layout="@layout/fragment_smoking_setting_finish">-->
-
-<!--        <action-->
-<!--            android:id="@+id/action_resetting_onboarding_smoking_finish_to_my_page"-->
-<!--            app:destination="@id/my_page" />-->
-<!--    </fragment>-->
+        tools:layout="@layout/fragment_smoking_setting" />
 
     <fragment
         android:id="@+id/my_supportcenter"
         android:name="com.stopsmoke.kekkek.presentation.my.supportcenter.SupportCenterFragment"
-        app:route="my_supportcenter"
         tools:layout="@layout/fragment_support_center" />
 
     <fragment
         android:id="@+id/my_complaint"
         android:name="com.stopsmoke.kekkek.presentation.my.complaint.MyComplaintFragment"
-        app:route="my_complaint"
         tools:layout="@layout/fragment_my_complaint" />
 
     <fragment
         android:id="@+id/notification"
         android:name="com.stopsmoke.kekkek.presentation.notification.NotificationFragment"
-        app:route="notification"
         tools:layout="@layout/fragment_notification" />
 
     <fragment
         android:id="@+id/search"
         android:name="com.stopsmoke.kekkek.presentation.search.SearchFragment"
-        app:route="search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_search_to_post_view"
-            app:destination="@id/post_detail_screen" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/post_detail_screen"
         android:name="com.stopsmoke.kekkek.presentation.post.detail.PostDetailFragment"
-        app:route="post_detail_screen"
-        tools:layout="@layout/fragment_post_detail">
-        <action
-            android:id="@+id/action_post_detail_screen_to_user_profile"
-            app:destination="@id/user_profile" />
-        <action
-            android:id="@+id/action_post_detail_screen_to_post_edit"
-            app:destination="@id/post_write" />
-        <action
-            android:id="@+id/action_post_detail_screen_to_my_complaint"
-            app:destination="@id/my_complaint" />
-
-        <action
-            android:id="@+id/action_post_detail_screen_to_reply"
-            app:destination="@id/reply" />
-    </fragment>
+        tools:layout="@layout/fragment_post_detail" />
 
     <fragment
         android:id="@+id/post_write"
         android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
-        app:route="post_write"
         tools:layout="@layout/fragment_post_edit" />
 
     <fragment
         android:id="@+id/attainments"
         android:name="com.stopsmoke.kekkek.presentation.attainments.AttainmentsFragment"
-        app:route="attainments"
         tools:layout="@layout/fragment_attainments" />
 
     <fragment
         android:id="@+id/my_bookmark_list"
         android:name="com.stopsmoke.kekkek.presentation.my.bookmark.BookmarkFragment"
-        app:route="my_bookmark_screen"
-        tools:layout="@layout/fragment_bookmark">
-
-        <action
-            android:id="@+id/action_my_bookmark_screen_to_post_view"
-            app:destination="@id/post_detail_screen" />
-
-        <action
-            android:id="@+id/action_my_bookmark_screen_to_userProfile"
-            app:destination="@id/user_profile" />
-    </fragment>
+        tools:layout="@layout/fragment_bookmark" />
 
     <fragment
         android:id="@+id/my_post_screen"
         android:name="com.stopsmoke.kekkek.presentation.my.post.MyPostFragment"
-        app:route="my_writing_list"
-        tools:layout="@layout/fragment_my_post">
-
-        <action
-            android:id="@+id/action_my_post_screen_to_post_view"
-            app:destination="@id/post_detail_screen" />
-    </fragment>
+        tools:layout="@layout/fragment_my_post" />
 
     <fragment
         android:id="@+id/popular_post_screen"
         android:name="com.stopsmoke.kekkek.presentation.post.popular.PopularPostFragment"
-        app:route="popular_post_screen"
-        tools:layout="@layout/fragment_popular_post">
-
-        <action
-            android:id="@+id/action_popular_post_screen_to_postView"
-            app:destination="@id/post_detail_screen" />
-
-        <action
-            android:id="@+id/action_popularWritingList_to_userProfile"
-            app:destination="@id/user_profile" />
-    </fragment>
+        tools:layout="@layout/fragment_popular_post" />
 
     <fragment
         android:id="@+id/my_comment_screen"
         android:name="com.stopsmoke.kekkek.presentation.my.comment.MyCommentFragment"
-        app:route="my_comment_screen"
-        tools:layout="@layout/fragment_my_comment">
-
-        <action
-            android:id="@+id/action_my_comment_screen_to_postView"
-            app:destination="@id/post_detail_screen" />
-    </fragment>
+        tools:layout="@layout/fragment_my_comment" />
 
     <fragment
         android:id="@+id/user_profile"
         android:name="com.stopsmoke.kekkek.presentation.userprofile.UserProfileFragment"
-        app:route="user_profile"
-        tools:layout="@layout/fragment_user_profile">
-
-        <argument
-            android:name="uid"
-            app:argType="string" />
-
-        <action
-            android:id="@+id/action_user_profile_to_post_view"
-            app:destination="@id/post_detail_screen" />
-    </fragment>
+        tools:layout="@layout/fragment_user_profile" />
 
     <fragment
         android:id="@+id/achievement"
         android:name="com.stopsmoke.kekkek.presentation.my.achievement.AchievementFragment"
-        app:route="achievement"
         tools:layout="@layout/fragment_achievement" />
-
 
     <fragment
         android:id="@+id/ranking_list"
         android:name="com.stopsmoke.kekkek.presentation.ranking.RankingListFragment"
-        app:route="ranking_list"
-        tools:layout="@layout/fragment_ranking_list" >
-        <action
-            android:id="@+id/action_rankingList_to_userProfile"
-            app:destination="@id/user_profile"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/ranking_map"
-        android:name="com.stopsmoke.kekkek.presentation.ranking.map.RankingMapFragment"
-        app:route="ranking_map"
-        tools:layout="@layout/fragment_ranking_map" />
+        tools:layout="@layout/fragment_ranking_list" />
 
     <fragment
         android:id="@+id/notice_list"
         android:name="com.stopsmoke.kekkek.presentation.post.notice.NoticeListFragment"
-        app:route="notice_list"
-        tools:layout="@layout/fragment_notice_list">
-
-        <action
-            android:id="@+id/action_noticeList_to_postView"
-            app:destination="@id/post_detail_screen" />
-    </fragment>
+        app:route="notice_list" />
 
     <fragment
         android:id="@+id/reply"
         android:name="com.stopsmoke.kekkek.presentation.reply.ReplyFragment"
-        app:route="reply"
-        tools:layout="@layout/fragment_reply">
-
-        <argument
-            android:name="replyIdItem"
-            app:argType="com.stopsmoke.kekkek.presentation.reply.ReplyIdItem"/>
-
-        <action
-            android:id="@+id/action_reply_to_userProfile"
-            app:destination="@id/user_profile" />
-    </fragment>
+        tools:layout="@layout/fragment_reply" />
 
     <fragment
         android:id="@+id/error"
