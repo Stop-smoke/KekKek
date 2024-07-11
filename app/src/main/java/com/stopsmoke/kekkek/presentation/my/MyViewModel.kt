@@ -17,10 +17,12 @@ import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
 import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -33,53 +35,70 @@ class MyViewModel @Inject constructor(
     private val achievementRepository: AchievementRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    val user = userRepository.getUserData().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = null
-    )
+    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(User.Guest))
+    val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
+
+    val user = userRepository.getUserData()
+        .catch {
+            _uiState.emit(MyUiState.ErrorExit)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
 
 
     val activities: StateFlow<Result<Activities>> =
-        userRepository.getActivities().asResult().stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = Result.Loading
-        )
+        userRepository.getActivities()
+            .catch {
+                _uiState.emit(MyUiState.ErrorExit)
+            }
+            .asResult()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = Result.Loading
+            )
 
 
     private val _currentProgressItem = MutableStateFlow<CurrentProgress>(emptyCurrentProgress())
     val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
 
 
-    val achievements = currentProgressItem.flatMapLatest { progress ->
-        achievementRepository.getAchievementItems()
-            .let {
-                when (it) {
-                    is Result.Error -> {
-                        it.exception?.printStackTrace()
-                        emptyFlow()
-                    }
+    val achievements: Flow<List<AchievementItem>> = currentProgressItem.flatMapLatest { progress ->
+        try {
+            achievementRepository.getAchievementItems()
+                .let {
+                    when (it) {
+                        is Result.Error -> {
+                            it.exception?.printStackTrace()
+                            emptyFlow()
+                        }
 
-                    is Result.Loading -> emptyFlow()
-                    is Result.Success -> it.data.map { pagingData ->
-                        pagingData.map {
-                            it.getItem().copy(
-                                currentProgress = when (it.category) {
-                                    DatabaseCategory.COMMENT -> progress.comment.toInt()
-                                    DatabaseCategory.POST -> progress.post.toInt()
-                                    DatabaseCategory.USER -> progress.user.toInt()
-                                    DatabaseCategory.ACHIEVEMENT -> progress.achievement.toInt()
-                                    DatabaseCategory.RANK -> progress.rank.toInt()
-                                    else -> {
-                                        0
+                        is Result.Loading -> emptyFlow()
+                        is Result.Success -> it.data.map { pagingData ->
+                            pagingData.map {
+                                it.getItem().copy(
+                                    currentProgress = when (it.category) {
+                                        DatabaseCategory.COMMENT -> progress.comment.toInt()
+                                        DatabaseCategory.POST -> progress.post.toInt()
+                                        DatabaseCategory.USER -> progress.user.toInt()
+                                        DatabaseCategory.ACHIEVEMENT -> progress.achievement.toInt()
+                                        DatabaseCategory.RANK -> progress.rank.toInt()
+                                        else -> {
+                                            0
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
-            }
+        } catch (e: Exception) {
+            _uiState.emit(MyUiState.ErrorExit)
+            emptyFlow()
+        }
     }
 
     suspend fun getAchievementCount(): Long {
@@ -102,17 +121,18 @@ class MyViewModel @Inject constructor(
             is Result.Success -> {
                 when (userData) {
                     is User.Registered -> {
-                        val list = userRepository.getAllUserData().map{user->
+                        val list = userRepository.getAllUserData().map { user ->
                             (user as User.Registered).toRankingListItem()
-                        }.filter { item->
+                        }.filter { item ->
                             item.startTime != null
-                        }.sortedBy {item ->
+                        }.sortedBy { item ->
                             item.startTime!!
                         }.map {
                             it.userID
                         }
-                        val activities = (activities.value as? Result.Success)?.data ?: emptyActivities()
-                        val userRank = list.indexOf(userData.uid)+1
+                        val activities =
+                            (activities.value as? Result.Success)?.data ?: emptyActivities()
+                        val userRank = list.indexOf(userData.uid) + 1
 
                         _currentProgressItem.value = CurrentProgress(
                             user = userData.getTotalDay(),
@@ -126,8 +146,9 @@ class MyViewModel @Inject constructor(
                     else -> _currentProgressItem.value = emptyCurrentProgress()
                 }
             }
-            else ->{
-                // ui state 변경
+
+            else -> {
+                _uiState.emit(MyUiState.ErrorExit)
             }
         }
     }
@@ -137,26 +158,33 @@ class MyViewModel @Inject constructor(
 
 
     fun upDateUserAchievementList(achievementIdList: List<String>) = viewModelScope.launch {
-        val userData = user.value
-        if (userData is User.Registered) {
-            val updateList =
-                (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
-            userRepository.setUserData(
-                userData.copy(
-                    clearAchievementsList = updateList
+        try {
+            val userData = user.value
+            if (userData is User.Registered) {
+                val updateList =
+                    (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
+                userRepository.setUserData(
+                    userData.copy(
+                        clearAchievementsList = updateList
+                    )
                 )
-            )
+            }
+        } catch (e: Exception) {
+            _uiState.emit(MyUiState.ErrorExit)
         }
     }
 
     private val _currentClearAchievementIdList = MutableStateFlow<List<String>>(emptyList())
     val currentClearAchievementIdList = _currentClearAchievementIdList.asStateFlow()
 
-    val currentClearAchievementList = currentClearAchievementIdList.flatMapLatest {achievementIdList ->
-        achievementRepository.getAchievementListItem(achievementIdList)
-    }
+    val currentClearAchievementList =
+        currentClearAchievementIdList.flatMapLatest { achievementIdList ->
+            achievementRepository.getAchievementListItem(achievementIdList).catch {
+                _uiState.emit(MyUiState.ErrorExit)
+            }
+        }
 
-    fun setAchievementIdList(list: List<String>){
+    fun setAchievementIdList(list: List<String>) {
         _currentClearAchievementIdList.value = list
     }
 }
