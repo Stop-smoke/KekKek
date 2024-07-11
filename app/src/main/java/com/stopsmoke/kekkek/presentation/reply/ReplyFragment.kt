@@ -22,6 +22,7 @@ import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
 import com.stopsmoke.kekkek.presentation.reply.dialog.ReplyDeleteDialogFragment
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -159,10 +160,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback {
 
 
     override fun navigateToUserProfile(uid: String) {
-        findNavController().navigate(
-            resId = R.id.action_reply_to_userProfile,
-            args = bundleOf("uid" to uid)
-        )
+        findNavController().navigateToUserProfileScreen(uid)
     }
 
     private fun showDeleteDialog(reply: Reply) {

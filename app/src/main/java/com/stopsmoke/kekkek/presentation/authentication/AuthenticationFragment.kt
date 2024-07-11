@@ -21,9 +21,11 @@ import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.home.navigateToHomeGraphWithBackStackClear
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
+import com.stopsmoke.kekkek.presentation.onboarding.navigateToOnboardingGraph
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.visible
 
@@ -71,11 +73,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is AuthenticationUiState.AlreadyUser -> {
-                    findNavController().navigate("home") {
-                        popUpTo(findNavController().graph.id) {
-                            inclusive = true
-                        }
-                    }
+                    findNavController().navigateToHomeGraphWithBackStackClear()
                 }
 
                 is AuthenticationUiState.Init -> {
@@ -83,7 +81,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
                 }
 
                 is AuthenticationUiState.NewMember -> {
-                    findNavController().navigate("onboarding_graph")
+                    findNavController().navigateToOnboardingGraph()
                 }
 
                 is AuthenticationUiState.Error -> {

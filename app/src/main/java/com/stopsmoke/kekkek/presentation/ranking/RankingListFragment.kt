@@ -14,6 +14,7 @@ import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.ranking.field.RankingListField
 import com.stopsmoke.kekkek.presentation.ranking.field.RankingListFieldFragment
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,9 +69,6 @@ class RankingListFragment : Fragment(), RankingListCallback {
     }
 
     override fun navigationToUserProfile(uid: String) {
-        findNavController().navigate(
-            resId = R.id.action_rankingList_to_userProfile,
-            args = bundleOf("uid" to uid)
-        )
+        findNavController().navigateToUserProfileScreen(uid)
     }
 }
