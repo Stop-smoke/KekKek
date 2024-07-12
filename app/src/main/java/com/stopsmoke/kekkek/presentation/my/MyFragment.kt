@@ -20,12 +20,13 @@ import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MyFragment : Fragment() {
+class MyFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentMyBinding? = null
     private val binding: FragmentMyBinding get() = _binding!!
 
@@ -113,8 +114,8 @@ class MyFragment : Fragment() {
         }
     }
 
-    private fun initViewModel() {
-        viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
+    private fun initViewModel() = with(viewModel) {
+        user.collectLatestWithLifecycle(lifecycle) { user ->
             if (user != null)
                 when (user) {
                     is User.Error -> {
@@ -151,7 +152,7 @@ class MyFragment : Fragment() {
                 }
         }
 
-        viewModel.currentClearAchievementList.collectLatestWithLifecycle(lifecycle){list ->
+        currentClearAchievementList.collectLatestWithLifecycle(lifecycle){list ->
             val imageList = listOf(
                 listOf(binding.circleIvMyAchievement1, binding.tvMyAchievement1),
                 listOf(binding.circleIvMyAchievement2, binding.tvMyAchievement2),
@@ -160,6 +161,17 @@ class MyFragment : Fragment() {
             list.forEachIndexed { index, achievement ->
                 (imageList[index][0] as ImageView).load(achievement.image)
                 (imageList[index][1] as TextView).text = achievement.name
+            }
+        }
+
+        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
+            when(uiState){
+                MyUiState.ErrorExit -> {
+                    errorExit(findNavController())
+                }
+                is MyUiState.LoggedUiState -> {
+                    //위의 crrentClearAchievementList, user 감지 여기 하나로 합치고 싶음.
+                }
             }
         }
     }

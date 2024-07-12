@@ -9,14 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
-class SmokingSettingFragment : Fragment() {
+class SmokingSettingFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentSmokingSettingBinding? = null
     private val binding get() = _binding!!
@@ -33,51 +32,54 @@ class SmokingSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initButtons()
-        observeValue()
+        initViewModel()
     }
 
-    private fun observeValue() {
-        lifecycleScope.launch {
-            viewModel.perDay.collectLatest { perDay ->
-                binding.tvSmokingsettingValuePerday.text = perDay + " 개비"
+    private fun initViewModel() = with(viewModel) {
+        uiState.collectLatestWithLifecycle(lifecycle) { uiState ->
+            when (uiState) {
+                SmokingSettingUiState.InitUiState -> {}
+                is SmokingSettingUiState.NormalUiState -> {
+                    bind(uiState.item)
+                }
+                SmokingSettingUiState.ErrorExit -> errorExit(findNavController())
+                SmokingSettingUiState.ErrorMissing -> errorExit(findNavController())
             }
         }
-        lifecycleScope.launch {
-            viewModel.perPack.collectLatest { perPack ->
-                binding.tvSmokingsettingValuePerpack.text = perPack + " 개비"
-            }
-        }
-        lifecycleScope.launch {
-            viewModel.packPrice.collectLatest { perPrice ->
-                binding.tvSmokingsettingValuePerprice.text = perPrice + " 원"
-            }
-        }
+
     }
 
-    private fun initButtons() {
+    private fun bind(item: SmokingSettingItem) = with(binding){
+        tvSmokingsettingValuePerday.text = item.dailyCigarettesSmoked.toString() + " 개비"
+        tvSmokingsettingValuePerpack.text = item.packCigaretteCount.toString() + " 개비"
+        tvSmokingsettingValuePerprice.text = item.packPrice.toString() + " 원"
+
+        initButtons(item)
+    }
+
+
+    private fun initButtons(item: SmokingSettingItem) {
         binding.includeSmokingSettingAppBar.ivSmokingSettingBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        val perDay = item.dailyCigarettesSmoked.toString()
+        val perPack = item.packCigaretteCount.toString()
+        val packPrice = item.packPrice.toString()
+
         binding.btnSmokingsettingPerday.setOnClickListener {
-            showSmokingSettingDialog("설정하기 : 하루에 피는 담배 개비 수", viewModel.perDay.value) { newValue ->
-                viewModel.updateSmokingPerDay(newValue)
-                viewModel.updateUserConfig()
-                Log.d("담배설정", newValue)
+            showSmokingSettingDialog("설정하기 : 하루에 피는 담배 개비 수", perDay) { newValue ->
+                viewModel.updateUserConfig(SmokingSettingType.DailyCigarettesSmoked, newValue.toInt())
             }
         }
         binding.btnSmokingsettingPerpack.setOnClickListener {
-            showSmokingSettingDialog("설정하기 : 한 갑에 든 담배 개비 수", viewModel.perPack.value) { newValue ->
-                viewModel.updateSmokingPerPack(newValue)
-                viewModel.updateUserConfig()
-                Log.d("담배설정", newValue)
+            showSmokingSettingDialog("설정하기 : 한 갑에 든 담배 개비 수", perPack) { newValue ->
+                viewModel.updateUserConfig(SmokingSettingType.PackCigaretteCount, newValue.toInt())
             }
         }
         binding.btnSmokingsettingPerprice.setOnClickListener {
-            showSmokingSettingPriceDialog("설정하기 : 한 갑당 가격", viewModel.packPrice.value) { newValue ->
-                viewModel.updateSmokingPackPrice(newValue)
-                viewModel.updateUserConfig()
-                Log.d("담배설정", newValue)
+            showSmokingSettingPriceDialog("설정하기 : 한 갑당 가격", packPrice) { newValue ->
+                viewModel.updateUserConfig(SmokingSettingType.PackPrice, newValue.toInt())
             }
         }
     }
