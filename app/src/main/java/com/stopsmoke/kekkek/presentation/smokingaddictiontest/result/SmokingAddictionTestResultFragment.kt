@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestResultBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 
@@ -67,7 +68,7 @@ class SmokingAddictionTestResultFragment : Fragment() {
     private fun setupListener() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
-                findNavController().popBackStack(R.id.home, false)
+                findNavController().popBackStackInclusiveHome()
             }
         }
     }

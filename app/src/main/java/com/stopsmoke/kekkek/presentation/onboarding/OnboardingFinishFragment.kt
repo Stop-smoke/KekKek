@@ -11,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.home.navigateToHomeGraph
-import com.stopsmoke.kekkek.presentation.home.navigateToHomeGraphWithBackStackClear
+import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 
@@ -53,7 +52,7 @@ class OnboardingFinishFragment : Fragment() {
                 }
                 OnboardingUiState.Loading -> {  }
                 OnboardingUiState.Success -> {
-                    findNavController().navigateToHomeGraphWithBackStackClear()
+                    findNavController().popBackStackInclusiveHome()
                 }
             }
         }

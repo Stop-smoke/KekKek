@@ -21,7 +21,7 @@ import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorizationCallbackListener
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.home.navigateToHomeGraphWithBackStackClear
+import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
@@ -73,7 +73,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
         viewModel.isRegisteredUser.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is AuthenticationUiState.AlreadyUser -> {
-                    findNavController().navigateToHomeGraphWithBackStackClear()
+                    findNavController().popBackStackInclusiveHome()
                 }
 
                 is AuthenticationUiState.Init -> {

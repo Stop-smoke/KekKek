@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestStartBinding
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.smokingaddictiontest.navigateToSmokingAddictionTestScreen
 
 class SmokingAddictionTestStartFragment : Fragment() {
 
@@ -35,7 +35,7 @@ class SmokingAddictionTestStartFragment : Fragment() {
 
     private fun setupListener() {
         binding.btnTestStart.setOnClickListener {
-            findNavController().navigate(R.id.action_smoking_addiction_test_start_screen_to_smoking_addiction_test_screen)
+            findNavController().navigateToSmokingAddictionTestScreen()
         }
     }
 

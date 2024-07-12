@@ -10,3 +10,15 @@ internal fun NavController.navigateToSmokingAddictionTestGraph(
 ) {
     navigate(resId = R.id.nav_smoking_addiction_test, args = null,  navOptions = navOptions)
 }
+
+internal fun NavController.navigateToSmokingAddictionTestScreen(
+    navOptions: NavOptions = defaultNavigationOption
+) {
+   navigate(resId = R.id.smoking_addiction_test_screen, args = null, navOptions = navOptions)
+}
+
+internal fun NavController.navigateToSmokingAddictionTestResultScreen(
+    navOptions: NavOptions = defaultNavigationOption
+) {
+    navigate(resId = R.id.smoking_addiction_test_result_screen, args = null, navOptions = navOptions)
+}
