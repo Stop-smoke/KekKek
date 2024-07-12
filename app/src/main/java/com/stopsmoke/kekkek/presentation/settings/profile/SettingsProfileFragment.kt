@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -30,6 +31,7 @@ import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiStat
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -66,7 +68,7 @@ class SettingsProfileFragment : Fragment() {
             val bitmap = BitmapFactory.decodeStream(inputStream)
             val rotatedBitmap = getCorrectlyOrientedBitmap(uri, bitmap)
             val rotatedInputStream = bitmapToInputStream(rotatedBitmap)
-            if (rotatedInputStream!=null) {
+            if (rotatedInputStream != null) {
                 viewModel.settingProfile(rotatedInputStream)
             } else {
                 Toast.makeText(
@@ -86,7 +88,7 @@ class SettingsProfileFragment : Fragment() {
 
     private fun bitmapToInputStream(bitmap: Bitmap): InputStream? {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        return if(bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)) {
+        return if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)) {
             ByteArrayInputStream(byteArrayOutputStream.toByteArray())
         } else null
     }
@@ -94,7 +96,8 @@ class SettingsProfileFragment : Fragment() {
     private fun getCorrectlyOrientedBitmap(uri: Uri, bitmap: Bitmap): Bitmap {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val exif = inputStream?.let { ExifInterface(it) }
-        val orientation = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        val orientation =
+            exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
         inputStream?.close()
 
         return when (orientation) {
@@ -134,24 +137,27 @@ class SettingsProfileFragment : Fragment() {
             dialog.show(childFragmentManager, "ServiceOutDialogFragment")
         }
 
-        viewModel.exitAppUiState.collectLatestWithLifecycle(lifecycle) {
-            when (it) {
-                is ExitAppUiState.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(R.string.settings_user_profile_with_draw_fail_message),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+        viewModel.exitAppUiState
+            .distinctUntilChanged()
+            .collectLatestWithLifecycle(lifecycle, Lifecycle.State.CREATED) {
+                when (it) {
+                    is ExitAppUiState.Failure -> {
+                        Toast.makeText(
+                            requireContext(),
+                            resources.getString(R.string.settings_user_profile_with_draw_fail_message),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
 
-                is ExitAppUiState.Logout -> {
-                    findNavController().navigateToAuthenticationScreenWithBackStackClear()
-                }
-                is ExitAppUiState.Withdraw -> {
-                    findNavController().navigateToAuthenticationScreenWithBackStackClear()
+                    is ExitAppUiState.Logout -> {
+                        findNavController().navigateToAuthenticationScreenWithBackStackClear()
+                    }
+
+                    is ExitAppUiState.Withdraw -> {
+                        findNavController().navigateToAuthenticationScreenWithBackStackClear()
+                    }
                 }
             }
-        }
 
         viewModel.profileImageUploadUiState.collectLatestWithLifecycle(lifecycle) {
             when (it) {

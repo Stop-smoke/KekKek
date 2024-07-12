@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.presentation.utils.defaultNavigationOption
+import com.stopsmoke.kekkek.presentation.utils.newBuilder
 
 internal fun NavController.navigateToAuthenticationScreen(
     navOptions: NavOptions = defaultNavigationOption
@@ -11,15 +12,12 @@ internal fun NavController.navigateToAuthenticationScreen(
     navigate(resId = R.id.authentication, args = null, navOptions = navOptions)
 }
 
-internal fun NavController.navigateToAuthenticationScreenWithBackStackClear() {
-
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_in_from_right_fade_in)
-        .setExitAnim(R.anim.fade_out)
-        .setPopEnterAnim(R.anim.slide_in_from_left_fade_in)
-        .setPopExitAnim(R.anim.fade_out)
-        .setPopUpTo(R.id.authentication, false)
+internal fun NavController.navigateToAuthenticationScreenWithBackStackClear(
+    navOptions: NavOptions = defaultNavigationOption
+) {
+    val newNavOption = navOptions.newBuilder()
+        .setPopUpTo(destinationId = R.id.nav_graph, inclusive = true)
         .build()
 
-    navigate(resId = R.id.authentication, args = null, navOptions = navOptions)
+    navigate(resId = R.id.authentication, args = null, navOptions = newNavOption)
 }
