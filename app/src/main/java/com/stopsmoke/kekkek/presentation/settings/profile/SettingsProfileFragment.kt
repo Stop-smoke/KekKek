@@ -143,8 +143,11 @@ class SettingsProfileFragment : Fragment() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                is ExitAppUiState.Loading -> {  }
-                is ExitAppUiState.Success -> {
+
+                is ExitAppUiState.Logout -> {
+                    findNavController().navigateToAuthenticationScreenWithBackStackClear()
+                }
+                is ExitAppUiState.Withdraw -> {
                     findNavController().navigateToAuthenticationScreenWithBackStackClear()
                 }
             }
