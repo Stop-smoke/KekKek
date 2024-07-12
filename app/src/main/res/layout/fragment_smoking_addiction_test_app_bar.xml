@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_semi_bold"
-        android:text="담배 중독 검사"
+        android:text="@string/test_title"
         android:textSize="15sp"
         android:textColor="@color/background_dark"
         app:layout_constraintBottom_toBottomOf="parent"

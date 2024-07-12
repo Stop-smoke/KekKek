@@ -86,11 +86,11 @@ class HomeFragment : Fragment(), ErrorHandle {
                 is User.Registered -> {
                     viewModel.getMyRank()
                     if (it.cigaretteAddictionTestResult == null) {
-                        tvHomeTestDegree.text = "테스트 필요"
-                        ivHomeTest.text = "검사하기"
+                        tvHomeTestDegree.text = getString(R.string.home_test_required)
+                        ivHomeTest.text = getString(R.string.home_test)
                     } else {
                         tvHomeTestDegree.text = it.cigaretteAddictionTestResult
-                        ivHomeTest.text = "다시 검사하기"
+                        ivHomeTest.text = getString(R.string.home_retest)
 
                     }
                 }

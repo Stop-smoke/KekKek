@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
-            android:text="확인"
+            android:text="@string/test_result_ok"
             android:textColor="@color/tv_notice"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"

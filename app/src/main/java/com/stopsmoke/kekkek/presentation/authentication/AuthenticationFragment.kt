@@ -142,7 +142,7 @@ class AuthenticationFragment : Fragment(), KakaoAuthorizationCallbackListener,
 
     override fun onFailure(t: Throwable?) {
         if (context != null) {
-            Toast.makeText(context, "로그인 에러", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.error_login), Toast.LENGTH_SHORT).show()
         }
     }
 

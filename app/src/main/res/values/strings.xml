@@ -18,6 +18,9 @@
     <string name="menu_home">홈</string>
     <string name="menu_community">커뮤니티</string>
     <string name="menu_mypage">마이페이지</string>
+    <string name="home_test_required">테스트 필요</string>
+    <string name="home_test">검사하기</string>
+    <string name="home_retest">다시 검사하기</string>
 
     <!--  my fragment  -->
     <string name="popular_post">인기 포스트</string>
@@ -34,11 +37,17 @@
     <string name="test_start">테스트 시작하기</string>
 
     <!-- Test fragment -->
+    <string name="tv_test_description">니코틴 의존도 설문 도구에 의거한\n담배 중독 검사</string>
     <string name="question_sub_text">대략적으로 알려주세요.</string>
     <string name="question1_title">하루에 담배를 몇 개비 정도 피우십니까?</string>
     <string name="question1_answer1">15 개비 이하</string>
     <string name="question1_answer2">16 ∼ 25개비</string>
     <string name="question1_answer3">26 개비 이상</string>
+
+    <string name="tv_dialog_title">테스트를 종료하시겠습니까?</string>
+    <string name="tv_dialog_content">종료하기를 누르면 테스트를 종료할게요.\n진행중인 내용은 저장되지 않아요.</string>
+    <string name="btn_dialog_cancel">취소</string>
+    <string name="btn_dialog_finish">종료하기</string>
 
     <string name="question2_title">귀하가 피우는 담배의 니코틴 함량은 어느 정도입니까?</string>
     <string name="question2_answer1">낮다</string>
@@ -74,6 +83,16 @@
     <string name="question8_answer1">아니요</string>
     <string name="question8_answer2">잘 모르겠음</string>
     <string name="question8_answer3">예</string>
+
+    <string name="test_good_title">가장 쉽게 금연할 수 있는 상태</string>
+    <string name="test_good_content">흡연량과 흡연 시간이 늘어날수록 니코틴에 대한 의존도는 높아집니다.\n오늘부터 금연 성공을 이어가세요!</string>
+    <string name="test_good_home">담배 양호 상태 🙂</string>
+    <string name="test_soso_title">금연을 시작해야 할 상태</string>
+    <string name="test_soso_content">구체적인 증상이 나타나지 않아 \n 큰 어려움 없이 금연할 수 있지만, \n재흡연도 쉬운 시기입니다.</string>
+    <string name="test_soso_home">담배 의존 상태 😥</string>
+    <string name="test_bad_title">니코틴에 대한 의존이 이미 심한 상태</string>
+    <string name="test_bad_content">심한 금단증상으로\n금연을 이어가기 힘든 경우로 보입니다.\n전문가의 도움을 받아보시는 것을\n추천 드립니다.</string>
+    <string name="test_bad_home">담배 중독 상태 😱</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label" translatable="false">First Fragment</string>
@@ -158,11 +177,12 @@
     <string name="error_server_etc_description">켁켁이를 이용하는 도중 문제가 발생했습니다.\n 잠시 후 다시 시도해주세요.</string>
     <string name="error_missing_title">앗, 페이지가 존재하지 않아요!</string>
     <string name="error_missing_description">존재하지 않는 페이지로 접근했어요.\n 뒤로가기를 클릭해주세요.</string>
+    <string name="error_login">로그인 에러</string>
 
     <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 
     <string name="settings_user_profile_with_draw_fail_message">정보를 처리하는 과정에서 오류가 발생하였습니다.</string>
-    <string name="home_test">중독 테스트</string>
+    <string name="home_addiction_test">중독 테스트</string>
     <string name="home_performance">성과</string>
     <string name="radio_button_english">영어</string>
     <string name="radio_button_korean">한글</string>
