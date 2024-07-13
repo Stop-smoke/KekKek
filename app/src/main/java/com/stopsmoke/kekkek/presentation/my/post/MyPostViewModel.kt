@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation.my.post
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
@@ -24,11 +25,9 @@ class MyPostViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val post = user.flatMapLatest { user ->
         postRepository.getPost(uid = (user as? User.Registered)?.uid ?: "")
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
+
 
     private var currentUserJob: Job? = null
 }
