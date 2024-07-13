@@ -50,17 +50,9 @@ class UserProfileAchievementFragment : Fragment() {
         }
 
         achievements.collectLatestWithLifecycle(lifecycle){
-            listAdapter.submitList(sortedAchievement(it))
+            listAdapter.submitList(it)
         }
     }
-
-    private fun sortedAchievement(list: List<AchievementItem>): List<AchievementItem>{
-        val clearList = list.filter { it.progress >= 1.0.toBigDecimal() }
-        val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
-
-        return nonClearList + clearList
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()

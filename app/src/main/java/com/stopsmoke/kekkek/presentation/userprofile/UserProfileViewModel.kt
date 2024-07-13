@@ -126,6 +126,7 @@ class UserProfileViewModel @Inject constructor(
     val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
 
     val achievements = currentProgressItem.flatMapLatest { progress ->
+        if(progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
         achievementRepository.getAchievementItems()
             .let {
                 when (it) {
@@ -149,10 +150,17 @@ class UserProfileViewModel @Inject constructor(
                                     }
                                 }
                             )
-                        }
+                        }.sortedAchievement()
                     }
                 }
             }
+    }
+
+    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
+        val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
+        val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
+
+        return nonClearList + clearList
     }
 
     private fun Achievement.getItem() = AchievementItem(
