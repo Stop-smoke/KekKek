@@ -116,61 +116,59 @@ class MyFragment : Fragment(), ErrorHandle {
     }
 
     private fun initViewModel() = with(viewModel) {
-        user.collectLatestWithLifecycle(lifecycle) { userResult ->
-            when (userResult) {
-                is Result.Error -> {
-                    errorExit(findNavController())
-                }
+        user.collectLatestWithLifecycle(lifecycle) { user ->
+            if (user != null)
+                when (user) {
+                    is User.Error -> {
+                        errorExit(findNavController())
+                    }
 
-                Result.Loading -> {}
-                is Result.Success -> {
-                    val userData = userResult.data
-                    if (userData is User.Registered) {
-                        binding.tvMyName.text = userData.name
-                        binding.tvMyRank.text = "랭킹 ${userData.ranking}위"
-
-                        when (userData.profileImage) {
-                            is ProfileImage.Default -> {
-                                binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
-                            }
-
-                            is ProfileImage.Web -> {
-                                binding.ivMyProfile.load((userData.profileImage as ProfileImage.Web).url) {
-                                    crossfade(true)
-                                }
-                            }
-                        }
-                        viewModel.setAchievementIdList(userData.clearAchievementsList.takeLast(3))
-                    } else if (userData is User.Guest) {
+                    is User.Guest -> {
                         binding.tvMyName.text = "로그인이 필요합니다."
                         binding.tvMyWritingNum.text = "?"
                         binding.tvMyCommentNum.text = "?"
                         binding.tvMyBookmarkNum.text = "?"
                     }
-                }
 
-                null -> {}
-            }
+                    is User.Registered -> {
+                        binding.tvMyName.text = user.name
+                        binding.tvMyRank.text = "랭킹 ${user.ranking}위"
+
+                        when (user.profileImage) {
+                            is ProfileImage.Default -> {
+                                binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
+                            }
+
+                            is ProfileImage.Web -> {
+                                binding.ivMyProfile.load((user.profileImage as ProfileImage.Web).url) {
+                                    crossfade(true)
+                                }
+                            }
+                        }
+
+                        viewModel.setAchievementIdList(user.clearAchievementsList.takeLast(3))
+//                    binding.itvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                    }
+                }
         }
 
-        currentClearAchievementList.collectLatestWithLifecycle(lifecycle) { list ->
+        currentClearAchievementList.collectLatestWithLifecycle(lifecycle){list ->
             val imageList = listOf(
                 listOf(binding.circleIvMyAchievement1, binding.tvMyAchievement1),
                 listOf(binding.circleIvMyAchievement2, binding.tvMyAchievement2),
                 listOf(binding.circleIvMyAchievement3, binding.tvMyAchievement3)
-            )
+                )
             list.forEachIndexed { index, achievement ->
                 (imageList[index][0] as ImageView).load(achievement.image)
                 (imageList[index][1] as TextView).text = achievement.name
             }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle) { uiState ->
-            when (uiState) {
+        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
+            when(uiState){
                 MyUiState.ErrorExit -> {
                     errorExit(findNavController())
                 }
-
                 is MyUiState.LoggedUiState -> {
                     //위의 crrentClearAchievementList, user 감지 여기 하나로 합치고 싶음.
                 }

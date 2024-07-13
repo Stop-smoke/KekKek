@@ -40,7 +40,6 @@ class MyViewModel @Inject constructor(
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
     val user = userRepository.getUserData()
-        .asResult()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -112,7 +111,7 @@ class MyViewModel @Inject constructor(
     )
 
     suspend fun getCurrentProgress() {
-        val userData = (user.value as? Result.Success)?.data
+        val userData = user.value
 
         when (activities.value) {
             is Result.Success -> {
@@ -156,7 +155,7 @@ class MyViewModel @Inject constructor(
 
     fun upDateUserAchievementList(achievementIdList: List<String>) = viewModelScope.launch {
         try {
-            val userData = (user.value as? Result.Success)?.data
+            val userData = user.value
             if (userData is User.Registered) {
                 val updateList =
                     (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
