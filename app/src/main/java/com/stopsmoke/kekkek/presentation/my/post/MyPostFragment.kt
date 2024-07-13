@@ -51,7 +51,6 @@ class MyPostFragment : Fragment(), ErrorHandle {
                     errorExit(findNavController())
                 }
                 Result.Loading -> {
-                    TODO("로딩처리")
                 }
                 is Result.Success -> {
                     listAdapter.submitData(postData.data)
