@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
@@ -20,10 +21,8 @@ class BookmarkViewModel @Inject constructor(
 
     val user = userRepository.getUserData()
 
-    val post: Flow<PagingData<Post>> = bookmarkRepository.getBookmarkItems()
-        .catch {
-            it.printStackTrace()
-        }
+    val post = bookmarkRepository.getBookmarkItems()
         .cachedIn(viewModelScope)
+        .asResult()
 
 }
