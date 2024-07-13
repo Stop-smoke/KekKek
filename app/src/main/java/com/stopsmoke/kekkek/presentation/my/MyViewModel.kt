@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.my
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Achievement
@@ -49,9 +50,6 @@ class MyViewModel @Inject constructor(
 
     val activities: StateFlow<Result<Activities>> =
         userRepository.getActivities()
-            .catch {
-                _uiState.emit(MyUiState.ErrorExit)
-            }
             .asResult()
             .stateIn(
                 scope = viewModelScope,

@@ -11,16 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyCommentBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyCommentFragment : Fragment() {
+class MyCommentFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentMyCommentBinding? = null
     private val binding get() = _binding!!
@@ -80,8 +82,12 @@ class MyCommentFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            listAdapter.submitData(it)
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {commentResult ->
+            when(commentResult){
+                is Result.Error -> errorExit(findNavController())
+                Result.Loading -> {}
+                is Result.Success -> listAdapter.submitData(commentResult.data)
+            }
         }
 
     }

@@ -45,15 +45,15 @@ class MyPostFragment : Fragment(), ErrorHandle {
 
         initView()
 
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {postData ->
-            when(postData){
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {postResult ->
+            when(postResult){
                 is Result.Error -> {
                     errorExit(findNavController())
                 }
                 Result.Loading -> {
                 }
                 is Result.Success -> {
-                    listAdapter.submitData(postData.data)
+                    listAdapter.submitData(postResult.data)
                 }
             }
         }

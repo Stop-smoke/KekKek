@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation.my.comment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.CommentFilter
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
@@ -27,9 +28,6 @@ class MyCommentViewModel @Inject constructor(
     val post = user.flatMapLatest {
         val user = it as User.Registered
         commentRepository.getCommentItems(CommentFilter.User(user.uid))
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
 }
