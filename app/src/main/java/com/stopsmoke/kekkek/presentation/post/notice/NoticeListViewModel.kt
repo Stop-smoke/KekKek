@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
@@ -19,7 +20,7 @@ class NoticeListViewModel @Inject constructor(
     postRepository: PostRepository,
 ) : ViewModel() {
 
-    val noticePosts: Flow<PagingData<CommunityWritingItem>> =
+    val noticePosts =
         postRepository.getPost(category = PostCategory.NOTICE)
             .map { pagingData ->
                 pagingData.map { post ->
@@ -27,5 +28,6 @@ class NoticeListViewModel @Inject constructor(
                 }
             }
             .cachedIn(viewModelScope)
+            .asResult()
 }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.CommentFilter
 import com.stopsmoke.kekkek.core.domain.model.Post
@@ -41,6 +42,9 @@ class PostDetailViewModel @Inject constructor(
     private val addCommentUseCase: AddCommentUseCase,
     private val replyRepository: ReplyRepository,
 ) : ViewModel() {
+    private val _uiState: MutableStateFlow<PostDetailUiState> = MutableStateFlow(PostDetailUiState.init())
+    val uiState = _uiState.asStateFlow()
+
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
     val postId = _postId.asStateFlow()
@@ -53,7 +57,11 @@ class PostDetailViewModel @Inject constructor(
 
     fun deletePost(postId: String) {
         viewModelScope.launch {
-            postRepository.deletePost(postId)
+            try {
+                postRepository.deletePost(postId)
+            }catch (e:Exception){
+                _uiState.emit(PostDetailUiState.ErrorExit)
+            }
         }
     }
 
@@ -65,17 +73,14 @@ class PostDetailViewModel @Inject constructor(
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val post: StateFlow<Post?> = postId.flatMapLatest {
+    val post = postId.flatMapLatest {
         if (it == null) {
             return@flatMapLatest emptyFlow()
         }
         postRepository.getPostItem(it)
-
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .stateIn(
+    }.catch {
+        _uiState.value = PostDetailUiState.ErrorExit
+    }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = null
@@ -178,7 +183,7 @@ class PostDetailViewModel @Inject constructor(
             }
         }
         .catch {
-            it.printStackTrace()
+            _uiState.emit(PostDetailUiState.ErrorExit)
         }
 
     fun addComment(text: String) {
@@ -197,7 +202,7 @@ class PostDetailViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            _uiState.value = PostDetailUiState.ErrorExit
         }
     }
 
@@ -207,7 +212,7 @@ class PostDetailViewModel @Inject constructor(
             commentRepository.deleteCommentItem(post.value!!.id, commentId)
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        _uiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleLikeToPost() = try {
@@ -224,7 +229,7 @@ class PostDetailViewModel @Inject constructor(
             postRepository.deleteLikeToPost(postId)
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        _uiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleBookmark() = try {
@@ -239,7 +244,7 @@ class PostDetailViewModel @Inject constructor(
             postRepository.addBookmark(postId)
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        _uiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleCommentLike(comment: Comment) = viewModelScope.launch {
@@ -251,7 +256,7 @@ class PostDetailViewModel @Inject constructor(
             }
             commentTransferLike.emit(commentTransferLike.value.toggleElement(comment.id))
         } catch (e: Exception) {
-            e.printStackTrace()
+            _uiState.value = PostDetailUiState.ErrorExit
         }
     }
 
@@ -275,7 +280,7 @@ class PostDetailViewModel @Inject constructor(
                 replyId = reply.id
             )
         } catch (e: Exception) {
-            e.printStackTrace()
+            _uiState.value = PostDetailUiState.ErrorExit
         }
     }
 }
