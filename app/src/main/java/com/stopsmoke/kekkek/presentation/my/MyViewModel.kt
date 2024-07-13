@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.my
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Achievement
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -175,9 +173,7 @@ class MyViewModel @Inject constructor(
 
     val currentClearAchievementList =
         currentClearAchievementIdList.flatMapLatest { achievementIdList ->
-            achievementRepository.getAchievementListItem(achievementIdList).catch {
-                _uiState.emit(MyUiState.ErrorExit)
-            }
+            achievementRepository.getAchievementListItem(achievementIdList).asResult()
         }
 
     fun setAchievementIdList(list: List<String>) {
