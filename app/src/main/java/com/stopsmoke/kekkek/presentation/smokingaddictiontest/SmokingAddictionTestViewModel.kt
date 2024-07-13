@@ -2,7 +2,9 @@ package com.stopsmoke.kekkek.presentation.smokingaddictiontest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.usecase.UpdateCigaretteAddictionTestResultUseCase
+import com.stopsmoke.kekkek.presentation.my.MyUiState
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,6 +20,8 @@ import javax.inject.Inject
 class SmokingAddictionTestViewModel @Inject constructor(
     private val updateCigaretteAddictionTestResultUseCase: UpdateCigaretteAddictionTestResultUseCase,
 ) : ViewModel() {
+    private val _uiState: MutableStateFlow<SmokingAddictionTestUiState> = MutableStateFlow(SmokingAddictionTestUiState.NormalUiState)
+    val uiState: StateFlow<SmokingAddictionTestUiState> = _uiState.asStateFlow()
 
     private val _score = MutableStateFlow<Map<Int, Int>>(mapOf()) // pageIndex, result
     val score: StateFlow<Map<Int, Int>> = _score.asStateFlow()
@@ -58,10 +62,14 @@ class SmokingAddictionTestViewModel @Inject constructor(
     }
 
     fun updateCigaretteAddictionTestResult(result: String) {
-        viewModelScope.launch {
-            if (score.value.isNotEmpty()) {
-                updateCigaretteAddictionTestResultUseCase(result)
+        try {
+            viewModelScope.launch {
+                if (score.value.isNotEmpty()) {
+                    updateCigaretteAddictionTestResultUseCase(result)
+                }
             }
+        }catch (e:Exception){
+            _uiState.value = SmokingAddictionTestUiState.ErrorExit
         }
     }
 

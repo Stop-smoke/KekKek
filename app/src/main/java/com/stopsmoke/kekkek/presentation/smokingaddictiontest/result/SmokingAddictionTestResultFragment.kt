@@ -10,10 +10,12 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestResultBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestUiState
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 
-class SmokingAddictionTestResultFragment : Fragment() {
+class SmokingAddictionTestResultFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentSmokingAddictionTestResultBinding? = null
     private val binding get() = _binding!!
@@ -32,6 +34,7 @@ class SmokingAddictionTestResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         collectSmokingResultStateView()
         setupListener()
+        initErrorHandle()
     }
 
     private fun collectSmokingResultStateView() = with(binding) {
@@ -68,6 +71,15 @@ class SmokingAddictionTestResultFragment : Fragment() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
                 findNavController().popBackStack("home", false)
+            }
+        }
+    }
+
+    private fun initErrorHandle(){
+        viewModel.uiState.collectLatestWithLifecycle(lifecycle){uiState->
+            when(uiState){
+                SmokingAddictionTestUiState.ErrorExit -> errorExit(findNavController())
+                SmokingAddictionTestUiState.NormalUiState -> {}
             }
         }
     }
