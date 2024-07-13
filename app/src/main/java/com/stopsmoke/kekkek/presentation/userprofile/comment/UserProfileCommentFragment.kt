@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileCommentBinding
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import com.stopsmoke.kekkek.presentation.userprofile.comment.adapter.UserProfileCommentListAdapter
 import kotlinx.coroutines.launch
 
-class UserProfileCommentFragment : Fragment() {
+class UserProfileCommentFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentUserProfileCommentBinding? = null
     private val binding get() = _binding!!
@@ -46,8 +49,12 @@ class UserProfileCommentFragment : Fragment() {
     }
 
     private fun observeRecyclerViewItem() = lifecycleScope.launch {
-        viewModel.myCommentHistory.collect {
-            commentListAdapter.submitData(it)
+        viewModel.myCommentHistory.collect { commentResult ->
+            when (commentResult) {
+                is Result.Error -> errorExit(findNavController())
+                is Result.Success -> commentListAdapter.submitData(commentResult.data)
+                Result.Loading -> {}
+            }
         }
     }
 

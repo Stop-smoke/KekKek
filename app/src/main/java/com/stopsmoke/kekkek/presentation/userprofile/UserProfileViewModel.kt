@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Achievement
 import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.Comment
@@ -87,29 +88,23 @@ class UserProfileViewModel @Inject constructor(
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val posts: Flow<PagingData<Post>> = uid.flatMapLatest { uid ->
+    val posts = uid.flatMapLatest { uid ->
         if (uid == null) {
             return@flatMapLatest emptyFlow()
         }
 
         postRepository.getPost(uid)
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val myCommentHistory: Flow<PagingData<Comment>> = uid.flatMapLatest { uid ->
+    val myCommentHistory = uid.flatMapLatest { uid ->
         if (uid == null) {
             return@flatMapLatest emptyFlow()
         }
         commentRepository.getCommentItems(CommentFilter.User(uid))
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
 
     private val _postDetailScreenNavigate = MutableSharedFlow<String>()
     val postDetailScreenNavigate = _postDetailScreenNavigate.asSharedFlow()
@@ -153,7 +148,7 @@ class UserProfileViewModel @Inject constructor(
                         }.sortedAchievement()
                     }
                 }
-            }
+            }.asResult()
     }
 
     private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
