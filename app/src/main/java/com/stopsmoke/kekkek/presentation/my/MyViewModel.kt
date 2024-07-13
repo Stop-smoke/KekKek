@@ -61,6 +61,7 @@ class MyViewModel @Inject constructor(
 
     val achievements: Flow<List<AchievementItem>> = currentProgressItem.flatMapLatest { progress ->
         try {
+            if(progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
             achievementRepository.getAchievementItems()
                 .let {
                     when (it) {
@@ -135,16 +136,18 @@ class MyViewModel @Inject constructor(
                             it.userID
                         }
                         val activities =
-                            (activities.value as? Result.Success)?.data ?: emptyActivities()
+                            (activities.value as? Result.Success)?.data
                         val userRank = list.indexOf(userData.uid) + 1
 
-                        _currentProgressItem.value = CurrentProgress(
-                            user = userData.getTotalDay(),
-                            comment = activities.commentCount,
-                            post = activities.postCount,
-                            rank = userRank.toLong(),
-                            achievement = userData.clearAchievementsList.size.toLong()
-                        )
+                        activities?.let {
+                            _currentProgressItem.value = CurrentProgress(
+                                user = userData.getTotalDay(),
+                                comment = activities.commentCount,
+                                post = activities.postCount,
+                                rank = userRank.toLong(),
+                                achievement = userData.clearAchievementsList.size.toLong()
+                            )
+                        }
                     }
 
                     else -> _currentProgressItem.value = emptyCurrentProgress()

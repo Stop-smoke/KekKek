@@ -76,7 +76,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
         }
 
         achievements.collectLatestWithLifecycle(lifecycle) {
-              achievementListAdapter.submitList(it)
+            achievementListAdapter.submitList(it)
         }
 
         user.collectLatestWithLifecycle(lifecycle){
@@ -93,16 +93,6 @@ class AchievementFragment : Fragment(), ErrorHandle {
             "${user.clearAchievementsList.size} / ${maxProgressCount}"
     }
 
-    private fun sortedAchievement(list: List<AchievementItem>): List<AchievementItem>{
-        val clearList = list.filter { it.progress >= 1.0.toBigDecimal() }
-        val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
-
-        val insertClearList = clearList.filter { it.id !in (viewModel.user.value as User.Registered).clearAchievementsList }
-        if(insertClearList.isNotEmpty()) {
-            viewModel.upDateUserAchievementList(insertClearList.map { it.id })
-        }
-        return nonClearList + clearList
-    }
 
     override fun onResume() {
         super.onResume()
