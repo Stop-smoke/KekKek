@@ -40,7 +40,7 @@ interface PostDao {
 
     fun getTopNotice(limit: Long): Flow<List<PostEntity>>
 
-    suspend fun getPopularPostList(): List<PostEntity>
+    suspend fun getPopularPostList(): Flow<List<PostEntity>>
 
     suspend fun getPostForPostId(postId: String): PostEntity
 

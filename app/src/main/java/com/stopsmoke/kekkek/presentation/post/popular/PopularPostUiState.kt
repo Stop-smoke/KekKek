@@ -2,13 +2,14 @@ package com.stopsmoke.kekkek.presentation.post.popular
 
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 
-data class PopularPostUiState (
-    val list: List<CommunityWritingItem>,
-    val isLoading: Boolean =false
-) {
+
+sealed interface PopularPostUiState{
+    data object Init: PopularPostUiState
+
+    data object ErrorExit: PopularPostUiState
+    data object ErrorMissing: PopularPostUiState
+
     companion object {
-        fun init() = PopularPostUiState(
-            list = emptyList()
-        )
+        fun init() = PopularPostUiState.Init
     }
 }
