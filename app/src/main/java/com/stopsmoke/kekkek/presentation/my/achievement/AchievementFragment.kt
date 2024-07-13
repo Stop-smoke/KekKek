@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.my.achievement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +76,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
         }
 
         achievements.collectLatestWithLifecycle(lifecycle) {
-            achievementListAdapter.submitList(sortedAchievement(it))
+              achievementListAdapter.submitList(it)
         }
 
         user.collectLatestWithLifecycle(lifecycle){

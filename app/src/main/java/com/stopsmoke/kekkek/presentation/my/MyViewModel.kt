@@ -68,7 +68,6 @@ class MyViewModel @Inject constructor(
                             it.exception?.printStackTrace()
                             emptyFlow()
                         }
-
                         is Result.Loading -> emptyFlow()
                         is Result.Success -> it.data.map { pagingData ->
                             pagingData.map {
@@ -84,7 +83,7 @@ class MyViewModel @Inject constructor(
                                         }
                                     }
                                 )
-                            }
+                            }.sortedAchievement()
                         }
                     }
                 }
@@ -92,6 +91,17 @@ class MyViewModel @Inject constructor(
             _uiState.emit(MyUiState.ErrorExit)
             emptyFlow()
         }
+    }
+
+    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
+        val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
+        val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
+
+        val insertClearList = clearList.filter { it.id !in (user.value as User.Registered).clearAchievementsList }
+        if(insertClearList.isNotEmpty()) {
+            upDateUserAchievementList(insertClearList.map { it.id })
+        }
+        return nonClearList + clearList
     }
 
     suspend fun getAchievementCount(): Long {
