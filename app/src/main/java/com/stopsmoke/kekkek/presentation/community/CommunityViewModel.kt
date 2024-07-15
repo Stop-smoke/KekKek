@@ -49,12 +49,17 @@ class CommunityViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        postRepository.getPost(postCategory)
-            .map { pagingData ->
-                pagingData.map { post ->
-                    post.toCommunityWritingListItem()
+        try {
+            postRepository.getPost(postCategory)
+                .map { pagingData ->
+                    pagingData.map { post ->
+                        post.toCommunityWritingListItem()
+                    }
                 }
-            }
+        }catch (e: Exception){
+            _uiState.emit(CommunityUiState.ErrorExit)
+            emptyFlow()
+        }
     }
         .cachedIn(viewModelScope)
         .catch {

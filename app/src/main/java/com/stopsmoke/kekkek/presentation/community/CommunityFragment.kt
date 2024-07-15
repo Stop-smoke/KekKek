@@ -180,7 +180,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 .collectLatest { state ->
                     when(state) {
                         is CommunityUiState.CommunityNormalUiState -> onBind(state)
-                        CommunityUiState.ErrorExit -> errorExit(findNavController())
+                        is CommunityUiState.ErrorExit -> errorExit(findNavController())
                     }
                 }
         }
