@@ -6,11 +6,10 @@ import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.domain.usecase.UpdateUserSmokingSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,20 +19,29 @@ class SmokingSettingViewModel @Inject constructor(
     private val updateUserSmokingSettingsUseCase: UpdateUserSmokingSettingsUseCase,
     private val userRepository: UserRepository
 ) : ViewModel() {
+    private val _uiState: MutableStateFlow<SmokingSettingUiState> = MutableStateFlow(SmokingSettingUiState.InitUiState)
+    val uiState: StateFlow<SmokingSettingUiState> get() = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             userRepository.getUserData().collect { user ->
                 when (user) {
                     is User.Registered -> {
-                        _perDay.emit(user.userConfig.dailyCigarettesSmoked.toString())
-                        _perPack.emit(user.userConfig.packCigaretteCount.toString())
-                        _packPrice.emit(user.userConfig.packPrice.toString())
-                        _resultUserSettings.emit(SmokingSettingUiState.Success)
+                        val userConfig = user.userConfig
+                        _uiState.emit(
+                            SmokingSettingUiState.NormalUiState(
+                                SmokingSettingItem(
+                                    dailyCigarettesSmoked = userConfig.dailyCigarettesSmoked,
+                                    packCigaretteCount = userConfig.packCigaretteCount,
+                                    packPrice = userConfig.packPrice
+                                )
+                            )
+                        )
                     }
-
                     else -> {
-                        _resultUserSettings.emit(SmokingSettingUiState.Error(Throwable("유저가 등록되지 않음")))
+                        _uiState.emit(
+                            SmokingSettingUiState.ErrorMissing
+                        )
                     }
                 }
             }
@@ -42,119 +50,20 @@ class SmokingSettingViewModel @Inject constructor(
 
     val user = userRepository.getUserData()
 
-    private val _perDay : MutableStateFlow<String> = MutableStateFlow("") // 하루에 담배 몇개비 피우나요?
-    val perDay = _perDay.asStateFlow()
 
-    fun updateSmokingPerDay(perDay: String) {
-        viewModelScope.launch {
-            _perDay.emit(perDay)
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val perDayUiState: Flow<SmokingSettingUiState> = perDay.mapLatest {
-        try {
-            if (it == "") {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            val day = it.toInt()
-
-            if (day == 0) {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            SmokingSettingUiState.Success
-        } catch (e: Exception) {
-            SmokingSettingUiState.Error(e)
-        }
-    }
-
-    private val _perPack = MutableStateFlow("") // 담배 한 팩에 몇 개비가 들어있나요?
-    val perPack = _perPack.asStateFlow()
-
-    fun updateSmokingPerPack(perPack: String) {
-        viewModelScope.launch {
-            _perPack.emit(perPack)
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val perPackUiState = perPack.mapLatest {
-        try {
-            if (it == "") {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            val pack = it.toInt()
-
-            if (pack == 0) {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            SmokingSettingUiState.Success
-        } catch (e: Exception) {
-            SmokingSettingUiState.Error(e)
-        }
-    }
-
-    private val _packPrice = MutableStateFlow("") // 담배 한 팩 당 가격이 얼마인가요?
-    val packPrice = _packPrice.asStateFlow()
-
-    fun updateSmokingPackPrice(price: String) {
-        viewModelScope.launch {
-            _packPrice.emit(price)
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val packPriceUiState = packPrice.mapLatest {
-        try {
-            if (it == "") {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            val price = it.toInt()
-
-            if (price == 0) {
-                return@mapLatest SmokingSettingUiState.Loading
-            }
-
-            SmokingSettingUiState.Success
-        } catch (e: Exception) {
-            SmokingSettingUiState.Error(e)
-        }
-    }
-
-    private val _resultUserSettings =
-        MutableStateFlow<SmokingSettingUiState>(SmokingSettingUiState.Loading)
-    val resultUserSettings = _resultUserSettings.asStateFlow()
-
-    fun updateUserConfig() {
+    fun updateUserConfig(smokingSettingType: SmokingSettingType, newValue: Int) {
         viewModelScope.launch {
             try {
                 userRepository.updateUserData(
                     mapOf(
-                        "user_config.daily_cigarettes_smoked" to perDay.value.toInt(),
-                        "user_config.pack_cigarette_count" to perPack.value.toInt(),
-                        "user_config.pack_price" to packPrice.value.toInt()
+                        smokingSettingType.toFieldString() to newValue
                     )
                 )
-                _resultUserSettings.emit(SmokingSettingUiState.Success)
             } catch (e: Exception) {
-                e.printStackTrace()
-                _resultUserSettings.emit(SmokingSettingUiState.Error(e))
+                _uiState.emit(
+                    SmokingSettingUiState.ErrorExit
+                )
             }
         }
     }
-}
-
-sealed interface SmokingSettingUiState {
-
-    data object Success : SmokingSettingUiState
-
-    data object Loading : SmokingSettingUiState
-
-    data class Error(val t: Throwable?) : SmokingSettingUiState
-
 }

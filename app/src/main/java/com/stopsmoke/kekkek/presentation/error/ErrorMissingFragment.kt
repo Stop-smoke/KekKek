@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.errorhandler
+package com.stopsmoke.kekkek.presentation.error
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,6 +34,16 @@ class ErrorMissingFragment : Fragment() {
         binding.ivMissingError.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.includeErrorMissingAppBar.ivErrorMissingBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        activity?.invisible()
     }
 
     override fun onDestroyView() {

@@ -131,9 +131,15 @@
         tools:layout="@layout/fragment_reply" />
 
     <fragment
-        android:id="@+id/error"
-        app:route="error"
-        android:name="com.stopsmoke.kekkek.presentation.error.ErrorFragment"
+        android:id="@+id/errorServerEtc"
+        app:route="errorServerEtc"
+        android:name="com.stopsmoke.kekkek.presentation.error.ErrorServerEtcFragment"
         tools:layout="@layout/fragment_error_server_etc" />
+
+    <fragment
+        android:id="@+id/errorMissing"
+        app:route="errorMissing"
+        android:name="com.stopsmoke.kekkek.presentation.error.ErrorMissingFragment"
+        tools:layout="@layout/fragment_error_missing" />
 
 </navigation>
