@@ -68,19 +68,18 @@ class AchievementFragment : Fragment(), ErrorHandle {
             when (it) {
                 is Result.Success -> {
                     viewModel.getCurrentProgress()
+                    bindTopProgress()
                 }
 
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
             }
         }
 
         achievements.collectLatestWithLifecycle(lifecycle) {
             achievementListAdapter.submitList(it)
-        }
-
-        user.collectLatestWithLifecycle(lifecycle){
-            bindTopProgress()
         }
     }
 
