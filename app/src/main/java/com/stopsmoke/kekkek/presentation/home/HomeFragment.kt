@@ -18,8 +18,15 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
+import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.home.center.navigateToHomeCenterScreen
+import com.stopsmoke.kekkek.presentation.home.tip.navigateToHomeTipScreen
+import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
+import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
+import com.stopsmoke.kekkek.presentation.ranking.navigateToRankingScreen
+import com.stopsmoke.kekkek.presentation.smokingaddictiontest.navigateToSmokingAddictionTestGraph
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -66,14 +73,6 @@ class HomeFragment : Fragment(), ErrorHandle {
         viewModel.getAllUserData()
         initToolbar()
 
-        binding.clHomeSavedMoney.setOnClickListener {
-            findNavController().navigate("attainments")
-        }
-
-        binding.ivHomeTest.setOnClickListener {
-            findNavController().navigate("test_page")
-        }
-
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is User.Error -> {
@@ -100,27 +99,27 @@ class HomeFragment : Fragment(), ErrorHandle {
         }
 
         binding.clHomeTip.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_home_tip)
+            findNavController().navigateToHomeTipScreen()
         }
 
         binding.clHomeCenter.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_home_center)
+            findNavController().navigateToHomeCenterScreen()
         }
 
         binding.clHomeRanking.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_rankingList)
+            findNavController().navigateToRankingScreen()
         }
 
         binding.clHomeSavedMoney.setOnClickListener {
-            navigateToAttainmentsFragment()
+            findNavController().navigateToAttainmentsScreen()
         }
 
         binding.ivHomeTest.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_nav_smoking_addiction_test_graph)
+            findNavController().navigateToSmokingAddictionTestGraph()
         }
 
         clHomeNotice.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_notice_list)
+            findNavController().navigateToPostNoticeScreen()
         }
 
         viewModel.updateUserData()
@@ -131,7 +130,7 @@ class HomeFragment : Fragment(), ErrorHandle {
         binding.toolbarHome.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_home_bell -> {
-                    findNavController().navigate("notification")
+                    findNavController().navigateToNotificationScreen()
                 }
             }
             true
@@ -206,11 +205,6 @@ class HomeFragment : Fragment(), ErrorHandle {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun navigateToAttainmentsFragment() {
-        val navController = findNavController()
-        navController.navigate("attainments")
     }
 
     private fun checkNotificationPermission() {

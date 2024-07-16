@@ -21,6 +21,8 @@ import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -66,17 +68,11 @@ class BookmarkFragment : Fragment(), ErrorHandle {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_my_bookmark_screen_to_userProfile,
-                        args = bundleOf("uid" to uid)
-                    )
+                    findNavController().navigateToUserProfileScreen(uid)
                 }
 
                 override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_my_bookmark_screen_to_post_view,
-                        args = bundleOf("post_id" to postId)
-                    )
+                    findNavController().navigateToPostDetailScreen(postId)
                 }
             }
         )

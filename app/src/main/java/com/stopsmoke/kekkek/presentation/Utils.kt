@@ -117,10 +117,13 @@ internal fun<T> Flow<T>.collectLatest(
 
 internal fun<T> Flow<T>.collectLatestWithLifecycle(
     lifecycle: Lifecycle,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     action: suspend (value: T) -> Unit
 ): Job {
     return lifecycle.coroutineScope.launch {
-        this@collectLatestWithLifecycle.flowWithLifecycle(lifecycle).collectLatest(action)
+        this@collectLatestWithLifecycle
+            .flowWithLifecycle(lifecycle = lifecycle, minActiveState = minActiveState)
+            .collectLatest(action)
     }
 }
 

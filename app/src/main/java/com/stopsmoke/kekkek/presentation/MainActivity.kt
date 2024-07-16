@@ -3,15 +3,18 @@ package com.stopsmoke.kekkek.presentation
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
+import com.stopsmoke.kekkek.presentation.utils.defaultNavigationOption
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -84,19 +87,19 @@ class MainActivity : AppCompatActivity() {
                 when (itemLayout.id) {
                     R.id.nav_home -> {
                         if (currentDestinationId != R.id.home) {
-                            navigateWithAnimation("home")
+                            navigateWithAnimation(R.id.home)
                         }
                     }
 
                     R.id.nav_community -> {
                         if (currentDestinationId != R.id.community) {
-                            navigateWithAnimation("community")
+                            navigateWithAnimation(R.id.community)
                         }
                     }
 
                     R.id.nav_mypage -> {
                         if (currentDestinationId != R.id.my_page) {
-                            navigateWithAnimation("my")
+                            navigateWithAnimation(R.id.my_page)
                         }
                     }
                 }
@@ -106,19 +109,8 @@ class MainActivity : AppCompatActivity() {
         selectNavItem(binding.navHome)
     }
 
-    private fun navigateWithAnimation(route: String) {
-        navController.navigate(route) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
-            launchSingleTop = true
-            anim {
-                enter = R.anim.slide_in_from_right_fade_in
-                exit = R.anim.fade_out
-                popEnter = R.anim.slide_in_from_left_fade_in
-                popExit = R.anim.fade_out
-            }
-        }
+    private fun navigateWithAnimation(@IdRes idRes: Int) {
+        navController.navigate(resId = idRes, args = null, navOptions = defaultNavigationOption)
     }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {

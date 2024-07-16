@@ -12,6 +12,7 @@ import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestResultBindin
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestUiState
+import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 
@@ -70,7 +71,7 @@ class SmokingAddictionTestResultFragment : Fragment(), ErrorHandle {
     private fun setupListener() {
         with(binding) {
             btnTestResultOk.setOnClickListener {
-                findNavController().popBackStack("home", false)
+                findNavController().popBackStackInclusiveHome()
             }
         }
     }
