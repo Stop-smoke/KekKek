@@ -1,34 +1,33 @@
 package com.stopsmoke.kekkek.presentation.onboarding
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
-import com.stopsmoke.kekkek.core.data.mapper.emptyHistory
-import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.core.domain.model.UserConfig
-import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.RegisterFcmTokenUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.SignUpUseCase
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val sinUpUseCase: SignUpUseCase,
+    private val finishOnboardingUseCase: FinishOnboardingUseCase,
+    private val registerFcmTokenUseCase: RegisterFcmTokenUseCase,
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val checkNicknameUseCase: CheckNicknameUseCase
 ) : ViewModel() {
 
     private val _uid = MutableStateFlow("")
@@ -48,7 +47,6 @@ class OnboardingViewModel @Inject constructor(
             _userName.emit(name)
         }
     }
-
 
     private val _dailyCigarettePacks: MutableStateFlow<Int> =
         MutableStateFlow(0) // 하루에 담배를 몇 개비 정도 피우시나요?
@@ -79,36 +77,26 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private val _onboardingUiState = MutableStateFlow<OnboardingUiState>(OnboardingUiState.Loading)
-    val onboardingUiState get() = _onboardingUiState.asStateFlow()
+    val onboardingUiState  = _onboardingUiState.asStateFlow()
 
     fun updateUserData() {
         viewModelScope.launch {
-            if (uid.value.isBlank()) {
-                Log.e("OnboardingViewModel", "uid 값이 공백입니다")
-                _onboardingUiState.emit(OnboardingUiState.LoadFail)
-                return@launch
-            }
-
-            val user = User.Registered(
-                uid = uid.value,
-                name = userName.value,
-                location = null,
-                profileImage = ProfileImage.Default,
-                ranking = Long.MAX_VALUE,
-                userConfig = UserConfig(
+            try {
+                sinUpUseCase(
+                    uid = uid.value,
+                    name = userName.value,
                     dailyCigarettesSmoked = dailyCigarettePacks.value,
                     packCigaretteCount = cigarettesPerPack.value,
                     packPrice = cigarettePricePerPack.value,
-                    birthDate = LocalDateTime.now()
-                ),
-                history = emptyHistory()
-            )
-            userRepository.setUserData(user)
-            userRepository.setOnboardingComplete(true)
-            syncFcmToken()
-
-            delay(1300)
-            _onboardingUiState.emit(OnboardingUiState.Success)
+                )
+                finishOnboardingUseCase()
+                registerFcmTokenUseCase()
+                delay(1300)
+                _onboardingUiState.emit(OnboardingUiState.Success)
+            } catch (e: Exception) {
+                _onboardingUiState.emit(OnboardingUiState.LoadFail(e))
+                e.printStackTrace()
+            }
         }
     }
 
@@ -116,7 +104,7 @@ class OnboardingViewModel @Inject constructor(
     val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
 
     fun nameDuplicateInspection(name: String) = viewModelScope.launch {
-        val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
+        val nameDuplicationInspectionResult = checkNicknameUseCase(name)
         _nameDuplicationInspectionResult.emit(nameDuplicationInspectionResult)
     }
 
@@ -124,35 +112,36 @@ class OnboardingViewModel @Inject constructor(
         _nameDuplicationInspectionResult.emit(setBool)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val isRegisteredUser: Flow<AuthenticationUiState> =
-        userRepository.getUserData().flatMapLatest { user ->
-            when (user) {
-                is User.Error -> AuthenticationUiState.Error(user.t)
-                is User.Guest -> AuthenticationUiState.Guest
-                is User.Registered -> {
-                    if (uid.value.isBlank()) {
-                        return@flatMapLatest flowOf(AuthenticationUiState.Init)
-                    }
+    private val _authenticationUiState = MutableSharedFlow<AuthenticationUiState>()
+    val authenticationUiState = _authenticationUiState.asSharedFlow()
 
-                    if (user.uid.isBlank()) {
-                        return@flatMapLatest flowOf(AuthenticationUiState.NewMember)
-                    }
-                    userRepository.setOnboardingComplete(true)
-                    syncFcmToken()
-                    AuthenticationUiState.AlreadyUser
-                }
-            }
-                .let {
-                    flowOf(it)
-                }
-        }
-
-    private fun syncFcmToken() {
+    fun registeredApp() {
         viewModelScope.launch {
-            userRepository.updateUserData(
-                mapOf("fcm_token" to Firebase.messaging.token.await())
-            )
+            try {
+                require(uid.value.isNotBlank())
+
+                when (val user = getUserDataUseCase().first()) {
+                    is User.Error -> {
+                        user.t?.printStackTrace()
+                        _authenticationUiState.emit(AuthenticationUiState.Error(user.t))
+                    }
+                    is User.Guest -> {
+                        _authenticationUiState.emit(AuthenticationUiState.Guest)
+                    }
+                    is User.Registered -> {
+                        if (user.uid.isBlank()) {
+                            _authenticationUiState.emit(AuthenticationUiState.NewMember)
+                            return@launch
+                        }
+                        finishOnboardingUseCase()
+                        registerFcmTokenUseCase()
+                        _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
+                    }
+                }
+            } catch (e: Exception) {
+                _authenticationUiState.emit(AuthenticationUiState.Error(e))
+                e.printStackTrace()
+            }
         }
     }
 }

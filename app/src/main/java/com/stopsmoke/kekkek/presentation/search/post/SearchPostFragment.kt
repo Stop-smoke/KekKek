@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSearchPostBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.search.SearchViewModel
 
 class SearchPostFragment : Fragment() {
@@ -40,10 +41,7 @@ class SearchPostFragment : Fragment() {
 
     private fun initRecyclerView() {
         postSearchAdapter = SearchPostRecyclerViewAdapter {
-            findNavController().navigate(
-                resId = R.id.action_search_to_post_view,
-                args = bundleOf("post_id" to it.id)
-            )
+            findNavController().navigateToPostDetailScreen(it.id)
         }
         binding.root.adapter = postSearchAdapter
         binding.root.layoutManager = LinearLayoutManager(requireContext())

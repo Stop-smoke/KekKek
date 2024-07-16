@@ -20,6 +20,14 @@ import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
+import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
+import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
+import com.stopsmoke.kekkek.presentation.post.popular.navigateToPostPopularScreen
+import com.stopsmoke.kekkek.presentation.search.navigateToSearchScreen
+import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -83,11 +91,11 @@ class CommunityFragment : Fragment(), ErrorHandle {
 
     private fun setClickListener() = with(binding) {
         floatingActionButtonCommunity.setOnClickListener {
-            findNavController().navigate("post_write")
+            findNavController().navigateToPostEditScreen()
         }
 
         clCommunityNotice.setOnClickListener {
-            findNavController().navigate("notice_list")
+            findNavController().navigateToPostNoticeScreen()
         }
 
 
@@ -100,25 +108,19 @@ class CommunityFragment : Fragment(), ErrorHandle {
             requireActivity().findViewById<ConstraintLayout>(R.id.cl_community_postPopular2)
 
         tvCommunityPopularFullView.setOnClickListener {
-            findNavController().navigate(R.id.action_community_to_popularWritingList)
+            findNavController().navigateToPostPopularScreen()
         }
 
         clCommunityPostPopular1.setOnClickListener {
             val item = viewModel.uiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                findNavController().navigate(
-                    resId = R.id.action_community_to_post_view,
-                    args = bundleOf("post_id" to item.popularItem.postInfo1.postInfo.id)
-                )
+                findNavController().navigateToPostDetailScreen(item.popularItem.postInfo1.postInfo.id)
             }
         }
         clCommunityPostPopular2.setOnClickListener {
             val item = viewModel.uiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                findNavController().navigate(
-                    resId = R.id.action_community_to_post_view,
-                    args = bundleOf("post_id" to item.popularItem.postInfo2.postInfo.id)
-                )
+                findNavController().navigateToPostDetailScreen(item.popularItem.postInfo2.postInfo.id)
             }
         }
 
@@ -126,17 +128,11 @@ class CommunityFragment : Fragment(), ErrorHandle {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_community_to_user_profile_screen,
-                        args = bundleOf("uid" to uid)
-                    )
+                    findNavController().navigateToUserProfileScreen(uid)
                 }
 
                 override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_community_to_post_view,
-                        args = bundleOf("post_id" to postId)
-                    )
+                    findNavController().navigateToPostDetailScreen(postId)
                 }
             }
         )
@@ -162,13 +158,13 @@ class CommunityFragment : Fragment(), ErrorHandle {
     private fun setToolbarMenu() {
         with(binding.includeCommunityAppBar) {
             icCommunityBell.setOnClickListener {
-                findNavController().navigate("notification")
+                findNavController().navigateToNotificationScreen()
             }
             icCommunitySettings.setOnClickListener {
-                findNavController().navigate(R.id.action_community_page_to_nav_settings)
+                findNavController().navigateToSettingsGraph()
             }
             icCommunitySearch.setOnClickListener {
-                findNavController().navigate("search")
+                findNavController().navigateToSearchScreen()
             }
         }
     }

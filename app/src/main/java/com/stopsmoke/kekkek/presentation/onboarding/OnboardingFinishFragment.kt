@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentOnboardingFinishBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.home.navigateToHomeScreenWithClearBackStack
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 
@@ -42,19 +45,15 @@ class OnboardingFinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.onboardingUiState.collectLatestWithLifecycle(lifecycle) {
+        viewModel.onboardingUiState.collectLatestWithLifecycle(lifecycle, Lifecycle.State.CREATED) {
             when (it) {
-                OnboardingUiState.LoadFail -> {
-                    findNavController().popBackStack("authentication_screen", false)
+                is OnboardingUiState.LoadFail -> {
+                    findNavController().popBackStack(R.id.authentication, false)
                     Toast.makeText(requireContext(), "유저 설정 과정에서 문제가 발생했어요!", Toast.LENGTH_LONG).show()
                 }
-                OnboardingUiState.Loading -> {  }
-                OnboardingUiState.Success -> {
-                    findNavController().navigate("home") {
-                        popUpTo(findNavController().graph.id) {
-                            inclusive = true
-                        }
-                    }
+                is OnboardingUiState.Loading -> {  }
+                is OnboardingUiState.Success -> {
+                    findNavController().navigateToHomeScreenWithClearBackStack()
                 }
             }
         }

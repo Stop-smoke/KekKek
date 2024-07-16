@@ -20,6 +20,16 @@ import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.my.achievement.navigateToAchievementScreen
+import com.stopsmoke.kekkek.presentation.my.bookmark.navigateToMyBookmarkScreen
+import com.stopsmoke.kekkek.presentation.my.comment.navigateToMyCommentScreen
+import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
+import com.stopsmoke.kekkek.presentation.my.post.navigateToMyPostScreen
+import com.stopsmoke.kekkek.presentation.my.smokingsetting.navigateToSmokingSettingScreen
+import com.stopsmoke.kekkek.presentation.my.supportcenter.navigateToSupportCenterScreen
+import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
+import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
+import com.stopsmoke.kekkek.presentation.settings.profile.navigateToSettingsProfileScreen
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,16 +60,9 @@ class MyFragment : Fragment(), ErrorHandle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initListener()
+        initUserActivitiesView()
         initViewModel()
-
-        binding.clMyAchievement.setOnClickListener {
-            findNavController().navigate("achievement")
-        }
-        binding.clMyProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_setting_profile)
-        }
+        initButtonListener()
     }
 
     override fun onResume() {
@@ -72,41 +75,46 @@ class MyFragment : Fragment(), ErrorHandle {
         _binding = null
     }
 
-    private fun initListener() = with(binding) {
+    private fun initButtonListener() = with(binding) {
+        clMyAchievement.setOnClickListener {
+            findNavController().navigateToAchievementScreen()
+        }
         includeFragmentMyAppBar.icMyBell.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_notification)
+            findNavController().navigateToNotificationScreen()
         }
         includeFragmentMyAppBar.icMySettings.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_nav_settings)
+            findNavController().navigateToSettingsGraph()
         }
         clMyMypost.setOnClickListener {
-            findNavController().navigate(R.id.action_myPage_to_myWritingList)
+            findNavController().navigateToMyPostScreen()
         }
         clMyMycomment.setOnClickListener {
-            findNavController().navigate(R.id.action_myPage_to_myCommentList)
+            findNavController().navigateToMyCommentScreen()
         }
         clMyMybookmarknum.setOnClickListener {
-            findNavController().navigate(R.id.action_myPage_to_myBookmarkList)
+            findNavController().navigateToMyBookmarkScreen()
         }
         clMyAntiSmokingSetting.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_settings_smoking_setting)
+            findNavController().navigateToSmokingSettingScreen()
         }
         clMyCustomerService.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_my_supportcenter)
+            findNavController().navigateToSupportCenterScreen()
         }
         clMyComplaint.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_my_complaint)
+            findNavController().navigateToMyComplaintScreen()
         }
         clMyProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_my_page_to_setting_profile)
+            findNavController().navigateToSettingsProfileScreen()
         }
+    }
 
+    private fun initUserActivitiesView() = with(binding) {
         viewModel.activities.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 is Result.Success -> {
-                    binding.tvMyWritingNum.text = it.data.postCount.toString()
-                    binding.tvMyCommentNum.text = it.data.commentCount.toString()
-                    binding.tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
+                    tvMyWritingNum.text = it.data.postCount.toString()
+                    tvMyCommentNum.text = it.data.commentCount.toString()
+                    tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
                 }
 
                 else -> {}
