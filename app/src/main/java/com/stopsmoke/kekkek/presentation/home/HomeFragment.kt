@@ -159,7 +159,7 @@ class HomeFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        viewModel.userRankingList.collectLatestWithLifecycle(lifecycle) {
+        viewModel.userList.collectLatestWithLifecycle(lifecycle) {
             viewModel.getMyRank()
         }
 

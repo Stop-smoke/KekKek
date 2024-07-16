@@ -240,8 +240,8 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private val _userRankingList = MutableStateFlow<List<RankingListItem>>(emptyList())
-    val userRankingList get() = _userRankingList.asStateFlow()
+    private val _userList = MutableStateFlow<List<RankingListItem>>(emptyList())
+    val userList get() = _userList.asStateFlow()
 
     private val _myRank = MutableStateFlow<Int?>(null)
     val myRank get() = _myRank.asStateFlow()
@@ -251,12 +251,7 @@ class HomeViewModel @Inject constructor(
             val list = userRepository.getAllUserData().map { user ->
                 (user as User.Registered).toRankingListItem()
             }
-
-            (user as? User.Registered)?.let {
-                _myRank.value = list.indexOf(it.toRankingListItem())
-            }
-
-            _userRankingList.emit(list)
+            _userList.emit(list)
         } catch (e: Exception) {
             _uiState.emit(HomeUiState.ErrorExit)
         }
@@ -265,7 +260,7 @@ class HomeViewModel @Inject constructor(
 
     fun getMyRank() {
         (user.value as? User.Registered)?.let {
-            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem()) + 1
+            _myRank.value = userList.value.filter{it.startTime != null}.sortedBy { it.startTime }.indexOf(it.toRankingListItem()) + 1
         }
     }
 }
