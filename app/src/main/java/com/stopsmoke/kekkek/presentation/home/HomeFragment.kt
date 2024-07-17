@@ -124,6 +124,7 @@ class HomeFragment : Fragment(), ErrorHandle {
         }
 
         viewModel.updateUserData()
+
     }
 
 
@@ -193,6 +194,9 @@ class HomeFragment : Fragment(), ErrorHandle {
         }
 
         initTimerControllerListener()
+
+        val motivationStringList = resources.getStringArray(R.array.home_motivation)
+        tvHomeMotivation.text = motivationStringList.random()
     }
 
     private fun initTimerControllerListener() {
