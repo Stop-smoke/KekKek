@@ -115,6 +115,7 @@ class SettingsViewModel @Inject constructor(
                 userRepository.setProfileImage(inputStream)
                 _profileImageUploadUiState.emit(ProfileImageUploadUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _profileImageUploadUiState.emit(ProfileImageUploadUiState.Error(e))
             }
         }

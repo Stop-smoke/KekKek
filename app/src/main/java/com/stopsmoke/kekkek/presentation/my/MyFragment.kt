@@ -117,7 +117,11 @@ class MyFragment : Fragment(), ErrorHandle {
                     tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
                 }
 
-                else -> {}
+                is Result.Error -> {
+                    it.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
             }
         }
     }
@@ -127,7 +131,7 @@ class MyFragment : Fragment(), ErrorHandle {
             if (user != null)
                 when (user) {
                     is User.Error -> {
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        errorExit(findNavController())
                     }
 
                     is User.Guest -> {
@@ -138,7 +142,6 @@ class MyFragment : Fragment(), ErrorHandle {
                     }
 
                     is User.Registered -> {
-
                         binding.tvMyName.text = user.name
                         binding.tvMyRank.text = "랭킹 ${user.ranking}위"
 
@@ -160,15 +163,24 @@ class MyFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        currentClearAchievementList.collectLatestWithLifecycle(lifecycle){list ->
-            val imageList = listOf(
-                listOf(binding.circleIvMyAchievement1, binding.tvMyAchievement1),
-                listOf(binding.circleIvMyAchievement2, binding.tvMyAchievement2),
-                listOf(binding.circleIvMyAchievement3, binding.tvMyAchievement3)
-                )
-            list.forEachIndexed { index, achievement ->
-                (imageList[index][0] as ImageView).load(achievement.image)
-                (imageList[index][1] as TextView).text = achievement.name
+        currentClearAchievementList.collectLatestWithLifecycle(lifecycle){listResult ->
+            when(listResult){
+                is Result.Error -> {
+                    listResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
+                is Result.Success -> {
+                    val imageList = listOf(
+                        listOf(binding.circleIvMyAchievement1, binding.tvMyAchievement1),
+                        listOf(binding.circleIvMyAchievement2, binding.tvMyAchievement2),
+                        listOf(binding.circleIvMyAchievement3, binding.tvMyAchievement3)
+                    )
+                    listResult.data.forEachIndexed { index, achievement ->
+                        (imageList[index][0] as ImageView).load(achievement.image)
+                        (imageList[index][1] as TextView).text = achievement.name
+                    }
+                }
             }
         }
 

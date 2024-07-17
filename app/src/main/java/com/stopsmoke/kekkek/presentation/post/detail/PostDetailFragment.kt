@@ -25,6 +25,7 @@ import com.stopsmoke.kekkek.databinding.FragmentPostDetailBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
@@ -47,7 +48,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
+class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback, ErrorHandle {
 
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -157,6 +158,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         setupListener()
         autoScrollKeyboardWithRecyclerView()
         collectPreviewCommentItem()
+        initUiStateViewModel()
     }
 
     private fun initCommentRecyclerView() {
@@ -286,6 +288,16 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     private fun dismissPostActionDialog() {
         if (postActionDialog.isInitialized()) {
             postActionDialog.value.dismiss()
+        }
+    }
+
+    private fun initUiStateViewModel() = with(viewModel){
+        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
+            when(uiState){
+                PostDetailUiState.ErrorExit -> errorExit(findNavController())
+                PostDetailUiState.ErrorMissing -> {errorMissing(findNavController())}
+                PostDetailUiState.Init -> {}
+            }
         }
     }
 

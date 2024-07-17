@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
+import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.domain.model.Reply
@@ -37,7 +39,6 @@ class ReplyViewModel @Inject constructor(
     userRepository: UserRepository,
     private val commentRepository: CommentRepository,
 ) : ViewModel() {
-
     val user: StateFlow<User?> = userRepository.getUserData()
         .catch { it.printStackTrace() }
         .stateIn(
@@ -65,7 +66,7 @@ class ReplyViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val comment: StateFlow<Comment?> = postId.zip(commentId) { postId, commentId ->
+    val comment = postId.zip(commentId) { postId, commentId ->
         if (postId.isBlank() || commentId.isBlank()) {
             return@zip emptyList()
         }
@@ -78,9 +79,7 @@ class ReplyViewModel @Inject constructor(
 
             commentRepository.getComment(postId, commentId)
         }
-        .catch {
-            it.printStackTrace()
-        }
+        .asResult()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -88,7 +87,7 @@ class ReplyViewModel @Inject constructor(
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val reply: Flow<PagingData<Reply>> = commentId.flatMapLatest {
+    val reply = commentId.flatMapLatest {
         if (it.isBlank()) {
             return@flatMapLatest emptyFlow()
         }
@@ -101,9 +100,7 @@ class ReplyViewModel @Inject constructor(
             }
         }
         .cachedIn(viewModelScope)
-        .catch {
-            it.printStackTrace()
-        }
+        .asResult()
 
     fun addReply(reply: String) = viewModelScope.launch {
         try {
@@ -128,8 +125,8 @@ class ReplyViewModel @Inject constructor(
                         LocalDateTime.now()
                     ),
                     text = reply,
-                    commentParent = comment.value!!.parent,
-                    replyParent = comment.value!!.id,
+                    commentParent = (comment.value as Result.Success).data.parent,
+                    replyParent = (comment.value as Result.Success).data.id,
                     isLiked = false
                 )
             )

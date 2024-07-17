@@ -33,7 +33,7 @@ interface PostRepository {
 
     fun getTopNotice(limit: Long): Flow<List<Post>>
 
-    suspend fun getPopularPostList(): List<Post>
+    suspend fun getPopularPostList(): Flow<List<Post>>
 
     suspend fun getPostForPostId(postId: String): Post
 

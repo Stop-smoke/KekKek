@@ -9,6 +9,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
@@ -54,7 +55,7 @@ class ReplyAdapter(
         private val binding: ItemCommentBinding
     ) : ViewHolder(binding.root) {
         override fun bind(reply: Reply):Unit = with(binding) {
-            val comment = viewModel.comment.value ?: return@with
+            val comment = (viewModel.comment.value as? Result.Success)?.data ?: return@with
             tvCommentNickname.text = comment.written.name
             tvCommentDescription.text = comment.text
             tvCommentHour.text = comment.elapsedCreatedDateTime.toResourceId(itemView.context)
@@ -68,7 +69,7 @@ class ReplyAdapter(
 
             tvCommentLikeNum.text = comment.likeUser.size.toString()
             val userUid = (viewModel.user.value as? User.Registered)?.uid ?: ""
-            var isLikeUser: Boolean = userUid in viewModel.comment.value!!.likeUser
+            var isLikeUser: Boolean = userUid in comment.likeUser
 
             if (isLikeUser) ivCommentLike.setColorFilter(
                 ContextCompat.getColor(

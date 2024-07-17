@@ -14,8 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentPopularPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
@@ -26,7 +29,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PopularPostFragment : Fragment() {
+class PopularPostFragment : Fragment(),ErrorHandle {
     private var _binding: FragmentPopularPostBinding? = null
     val binding: FragmentPopularPostBinding get() = _binding!!
 
@@ -89,16 +92,19 @@ class PopularPostFragment : Fragment() {
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { post ->
-                    listAdapter.submitList(post)
+                .collectLatest { postResult ->
+                    when(postResult){
+                        is Result.Error -> {
+                            postResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
+                        Result.Loading -> {}
+                        is Result.Success -> listAdapter.submitList(postResult.data.map{it.toCommunityWritingListItem()})
+                    }
                 }
         }
-
     }
 
-    private fun onBind(uiState: PopularPostUiState) = with(binding) {
-        listAdapter.submitList(uiState.list)
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -110,9 +116,6 @@ class PopularPostFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.let { activity ->
-            if (activity.isVisible()) {
-                viewModel.reload()
-            }
             activity.invisible()
         }
     }

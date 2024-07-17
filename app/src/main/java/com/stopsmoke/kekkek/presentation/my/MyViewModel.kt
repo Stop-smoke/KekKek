@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -39,9 +38,6 @@ class MyViewModel @Inject constructor(
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
     val user = userRepository.getUserData()
-        .catch {
-            _uiState.emit(MyUiState.ErrorExit)
-        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -51,9 +47,6 @@ class MyViewModel @Inject constructor(
 
     val activities: StateFlow<Result<Activities>> =
         userRepository.getActivities()
-            .catch {
-                _uiState.emit(MyUiState.ErrorExit)
-            }
             .asResult()
             .stateIn(
                 scope = viewModelScope,
@@ -68,6 +61,7 @@ class MyViewModel @Inject constructor(
 
     val achievements: Flow<List<AchievementItem>> = currentProgressItem.flatMapLatest { progress ->
         try {
+            if(progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
             achievementRepository.getAchievementItems()
                 .let {
                     when (it) {
@@ -75,7 +69,6 @@ class MyViewModel @Inject constructor(
                             it.exception?.printStackTrace()
                             emptyFlow()
                         }
-
                         is Result.Loading -> emptyFlow()
                         is Result.Success -> it.data.map { pagingData ->
                             pagingData.map {
@@ -91,14 +84,26 @@ class MyViewModel @Inject constructor(
                                         }
                                     }
                                 )
-                            }
+                            }.sortedAchievement()
                         }
                     }
                 }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(MyUiState.ErrorExit)
             emptyFlow()
         }
+    }
+
+    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
+        val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
+        val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
+
+        val insertClearList = clearList.filter { it.id !in (user.value as User.Registered).clearAchievementsList }
+        if(insertClearList.isNotEmpty()) {
+            upDateUserAchievementList(insertClearList.map { it.id })
+        }
+        return nonClearList + clearList
     }
 
     suspend fun getAchievementCount(): Long {
@@ -117,6 +122,7 @@ class MyViewModel @Inject constructor(
 
     suspend fun getCurrentProgress() {
         val userData = user.value
+
         when (activities.value) {
             is Result.Success -> {
                 when (userData) {
@@ -131,16 +137,18 @@ class MyViewModel @Inject constructor(
                             it.userID
                         }
                         val activities =
-                            (activities.value as? Result.Success)?.data ?: emptyActivities()
+                            (activities.value as? Result.Success)?.data
                         val userRank = list.indexOf(userData.uid) + 1
 
-                        _currentProgressItem.value = CurrentProgress(
-                            user = userData.getTotalDay(),
-                            comment = activities.commentCount,
-                            post = activities.postCount,
-                            rank = userRank.toLong(),
-                            achievement = userData.clearAchievementsList.size.toLong()
-                        )
+                        activities?.let {
+                            _currentProgressItem.value = CurrentProgress(
+                                user = userData.getTotalDay(),
+                                comment = activities.commentCount,
+                                post = activities.postCount,
+                                rank = userRank.toLong(),
+                                achievement = userData.clearAchievementsList.size.toLong()
+                            )
+                        }
                     }
 
                     else -> _currentProgressItem.value = emptyCurrentProgress()
@@ -170,6 +178,7 @@ class MyViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(MyUiState.ErrorExit)
         }
     }
@@ -179,9 +188,7 @@ class MyViewModel @Inject constructor(
 
     val currentClearAchievementList =
         currentClearAchievementIdList.flatMapLatest { achievementIdList ->
-            achievementRepository.getAchievementListItem(achievementIdList).catch {
-                _uiState.emit(MyUiState.ErrorExit)
-            }
+            achievementRepository.getAchievementListItem(achievementIdList).asResult()
         }
 
     fun setAchievementIdList(list: List<String>) {

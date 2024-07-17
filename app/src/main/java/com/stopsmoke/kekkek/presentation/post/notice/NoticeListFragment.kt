@@ -14,8 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
@@ -26,7 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 
 @AndroidEntryPoint
-class NoticeListFragment : Fragment() {
+class NoticeListFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentNoticeListBinding? = null
     val binding: FragmentNoticeListBinding get() = _binding!!
 
@@ -92,8 +94,15 @@ class NoticeListFragment : Fragment() {
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             noticePosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { noticePosts ->
-                    listAdapter.submitData(noticePosts)
+                .collectLatest { noticePostsResult ->
+                    when(noticePostsResult){
+                        is Result.Error -> {
+                            noticePostsResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
+                        Result.Loading -> {}
+                        is Result.Success -> listAdapter.submitData(noticePostsResult.data)
+                    }
                 }
         }
     }

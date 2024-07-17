@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.toPostCategory
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
@@ -182,23 +183,45 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         //게시글
-        posts.collectLatestWithLifecycle(lifecycle) { posts ->
-            listAdapter.submitData(posts)
+        posts.collectLatestWithLifecycle(lifecycle) { postsResult ->
+            when(postsResult){
+                is Result.Error -> {
+                    postsResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
+                is Result.Success ->  listAdapter.submitData(postsResult.data)
+            }
+
         }
 
         //인기글 배너
         viewLifecycleOwner.lifecycleScope.launch {
             topPopularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { popularPosts ->
-                    bindPopularPosts(popularPosts)
+                .collectLatest { popularPostsResult ->
+                    when(popularPostsResult){
+                        is Result.Error -> {
+                            popularPostsResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
+                        Result.Loading -> {}
+                        is Result.Success ->  bindPopularPosts(popularPostsResult.data)
+                    }
                 }
         }
 
         //공지사항 배너
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { noticePost ->
-                    binding.tvCommunityNoticeTitle.text = noticePost.title
+                .collectLatest { noticePostResult ->
+                    when(noticePostResult){
+                        is Result.Error -> {
+                            noticePostResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
+                        Result.Loading -> {}
+                        is Result.Success -> binding.tvCommunityNoticeTitle.text = noticePostResult.data.title
+                    }
                 }
         }
 

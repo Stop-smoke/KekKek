@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.home.HomeUiState
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.ranking.field.RankingListField
@@ -17,9 +21,11 @@ import com.stopsmoke.kekkek.presentation.ranking.field.RankingListFieldFragment
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RankingListFragment : Fragment(), RankingListCallback {
+class RankingListFragment : Fragment(), RankingListCallback, ErrorHandle {
     private var _binding: FragmentRankingListBinding? = null
     private val binding get() = _binding!!
 
@@ -36,6 +42,7 @@ class RankingListFragment : Fragment(), RankingListCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     private fun initView() = with(binding) {
@@ -43,6 +50,19 @@ class RankingListFragment : Fragment(), RankingListCallback {
         replaceFragment(RankingListFieldFragment.newInstance(RankingListField.Time))
     }
 
+    private fun initViewModel() = with(viewModel){
+        viewLifecycleOwner.lifecycleScope.launch {
+            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { state ->
+                    when (state) {
+                        is HomeUiState.ErrorExit -> {
+                            errorExit(findNavController())
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
     private fun setBackPressed() {
         val ivRankingListBack = binding.includeRankingListAppBar.ivRankingListBack
         ivRankingListBack.setOnClickListener {
