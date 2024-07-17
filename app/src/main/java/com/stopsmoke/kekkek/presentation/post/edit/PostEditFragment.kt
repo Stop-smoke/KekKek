@@ -316,7 +316,6 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity?.visible()
         _binding = null
     }
 

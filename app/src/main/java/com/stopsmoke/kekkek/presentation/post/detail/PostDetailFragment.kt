@@ -266,7 +266,6 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity?.visible()
         _binding = null
         dismissPostDeleteDialog()
         dismissCommentDeleteDialog()
