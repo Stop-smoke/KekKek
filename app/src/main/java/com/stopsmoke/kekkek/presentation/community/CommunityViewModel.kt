@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.toPostCategory
@@ -39,42 +40,26 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
-    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+    val noticeBanner = postRepository.getTopNotice(1)
         .map { post ->
             post.first()
-        }
-        .catch {
-            _uiState.emit(CommunityUiState.ErrorExit)
-        }
+        }.asResult()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val posts: Flow<PagingData<CommunityWritingItem>> = category.flatMapLatest { postCategory ->
-        try {
-            postRepository.getPost(postCategory)
-                .map { pagingData ->
-                    pagingData.map { post ->
-                        post.toCommunityWritingListItem()
-                    }
+    val posts = category.flatMapLatest { postCategory ->
+        postRepository.getPost(postCategory)
+            .map { pagingData ->
+                pagingData.map { post ->
+                    post.toCommunityWritingListItem()
                 }
-        }catch (e: Exception){
-            _uiState.emit(CommunityUiState.ErrorExit)
-            emptyFlow()
-        }
+            }
     }
         .cachedIn(viewModelScope)
-        .catch {
-            _uiState.emit(CommunityUiState.ErrorExit)
-            it.printStackTrace()
-        }
+        .asResult()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val topPopularPosts = posts.flatMapLatest {
-        try {
-            postRepository.getTopPopularItems()
-        } catch (e: Exception) {
-            _uiState.emit(CommunityUiState.ErrorExit)
-            emptyFlow()
-        }
+            postRepository.getTopPopularItems().asResult()
     }
 
     fun bindPopularPosts(popularList: List<Post>) {
