@@ -54,7 +54,10 @@ class UserProfileAchievementFragment : Fragment(),ErrorHandle {
 
         achievements.collectLatestWithLifecycle(lifecycle){achievementResult ->
             when(achievementResult){
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    achievementResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 is Result.Success -> listAdapter.submitList(achievementResult.data)
                 Result.Loading -> {}
             }

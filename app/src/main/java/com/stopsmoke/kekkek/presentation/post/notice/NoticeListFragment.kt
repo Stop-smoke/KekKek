@@ -96,7 +96,10 @@ class NoticeListFragment : Fragment(), ErrorHandle {
             noticePosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePostsResult ->
                     when(noticePostsResult){
-                        is Result.Error -> errorExit(findNavController())
+                        is Result.Error -> {
+                            noticePostsResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
                         Result.Loading -> {}
                         is Result.Success -> listAdapter.submitData(noticePostsResult.data)
                     }

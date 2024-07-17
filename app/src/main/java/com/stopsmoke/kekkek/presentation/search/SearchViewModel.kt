@@ -3,6 +3,7 @@ package com.stopsmoke.kekkek.presentation.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.repository.SearchRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
@@ -49,12 +50,12 @@ class SearchViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val post: Flow<PagingData<Post>> =
+    val post =
         keyword.debounce(500).flatMapLatest {
             if (it.isBlank()) {
                 return@flatMapLatest emptyFlow()
             }
 
             searchRepository.searchPost(it)
-        }
+        }.asResult()
 }

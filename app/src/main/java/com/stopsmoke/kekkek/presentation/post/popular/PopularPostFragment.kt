@@ -94,7 +94,10 @@ class PopularPostFragment : Fragment(),ErrorHandle {
             post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { postResult ->
                     when(postResult){
-                        is Result.Error -> errorExit(findNavController())
+                        is Result.Error -> {
+                            postResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
                         Result.Loading -> {}
                         is Result.Success -> listAdapter.submitList(postResult.data.map{it.toCommunityWritingListItem()})
                     }

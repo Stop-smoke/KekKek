@@ -52,7 +52,10 @@ class UserProfilePostFragment : Fragment(), ErrorHandle {
     private fun observeRecyclerViewItem() = lifecycleScope.launch {
         viewModel.posts.collectLatest { postsResult ->
             when (postsResult) {
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    postsResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success ->  userPostListAdapter.submitData(postsResult.data)
             }

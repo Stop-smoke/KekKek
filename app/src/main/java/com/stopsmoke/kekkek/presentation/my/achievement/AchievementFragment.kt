@@ -72,6 +72,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
                 }
 
                 is Result.Error -> {
+                    it.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
                 Result.Loading -> {}

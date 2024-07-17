@@ -51,7 +51,10 @@ class UserProfileCommentFragment : Fragment(), ErrorHandle {
     private fun observeRecyclerViewItem() = lifecycleScope.launch {
         viewModel.myCommentHistory.collect { commentResult ->
             when (commentResult) {
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    commentResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 is Result.Success -> commentListAdapter.submitData(commentResult.data)
                 Result.Loading -> {}
             }

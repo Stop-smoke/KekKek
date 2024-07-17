@@ -117,7 +117,10 @@ class MyFragment : Fragment(), ErrorHandle {
                     tvMyBookmarkNum.text = it.data.bookmarkCount.toString()
                 }
 
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    it.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
             }
         }
@@ -162,7 +165,10 @@ class MyFragment : Fragment(), ErrorHandle {
 
         currentClearAchievementList.collectLatestWithLifecycle(lifecycle){listResult ->
             when(listResult){
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    listResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success -> {
                     val imageList = listOf(

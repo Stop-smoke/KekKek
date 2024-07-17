@@ -89,6 +89,7 @@ class MyViewModel @Inject constructor(
                     }
                 }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(MyUiState.ErrorExit)
             emptyFlow()
         }
@@ -177,6 +178,7 @@ class MyViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(MyUiState.ErrorExit)
         }
     }

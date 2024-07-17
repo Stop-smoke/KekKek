@@ -81,7 +81,10 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
     private fun initViewModel() = with(viewModel) {
         reply.collectLatestWithLifecycle(lifecycle) {replyResult ->
             when(replyResult){
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    replyResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success -> replyAdapter.submitData(replyResult.data)
             }
@@ -89,7 +92,10 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
         comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {commentResult ->
             when(commentResult){
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    commentResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success -> replyAdapter.updateComment()
                 null -> {}

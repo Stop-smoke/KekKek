@@ -83,7 +83,10 @@ class MyCommentFragment : Fragment(), ErrorHandle {
     private fun initViewModel() {
         viewModel.post.collectLatestWithLifecycle(lifecycle) {commentResult ->
             when(commentResult){
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    commentResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success -> listAdapter.submitData(commentResult.data)
             }

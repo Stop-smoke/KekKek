@@ -88,7 +88,10 @@ class BookmarkFragment : Fragment(), ErrorHandle {
     private fun updateRecyclerViewItem() {
         viewModel.post.collectLatestWithLifecycle(lifecycle) { bookmarkResult ->
             when (bookmarkResult) {
-                is Result.Error -> errorExit(findNavController())
+                is Result.Error -> {
+                    bookmarkResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
                 Result.Loading -> {}
                 is Result.Success -> listAdapter.submitData(bookmarkResult.data.map { pagingData -> pagingData.toCommunityWritingListItem() })
             }

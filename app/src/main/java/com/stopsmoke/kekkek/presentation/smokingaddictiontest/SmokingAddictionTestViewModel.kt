@@ -2,9 +2,7 @@ package com.stopsmoke.kekkek.presentation.smokingaddictiontest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.usecase.UpdateCigaretteAddictionTestResultUseCase
-import com.stopsmoke.kekkek.presentation.my.MyUiState
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +34,6 @@ class SmokingAddictionTestViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val result: Flow<SmokingQuestionnaireUiState> = score.mapLatest { scoreList ->
-
         when (scoreList.values.sum()) {
             in 0..13 -> {
                 SmokingQuestionnaireUiState.Low
@@ -69,6 +66,7 @@ class SmokingAddictionTestViewModel @Inject constructor(
                 }
             }
         }catch (e:Exception){
+            e.printStackTrace()
             _uiState.value = SmokingAddictionTestUiState.ErrorExit
         }
     }

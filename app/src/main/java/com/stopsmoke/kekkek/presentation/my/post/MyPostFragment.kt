@@ -49,6 +49,7 @@ class MyPostFragment : Fragment(), ErrorHandle {
         viewModel.post.collectLatestWithLifecycle(lifecycle) {postResult ->
             when(postResult){
                 is Result.Error -> {
+                    postResult.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
                 Result.Loading -> {
