@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.data.utils.BitmapCompressor
@@ -190,7 +191,6 @@ class PostEditFragment : Fragment(), ErrorHandle {
     private fun deleteImage() = with(binding) {
         ivPostWriteImage.setImageBitmap(null)
         cvPostWriteImage.visibility = View.GONE
-        cvPostWriteImage.visibility = View.GONE
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -227,6 +227,11 @@ class PostEditFragment : Fragment(), ErrorHandle {
         includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
 
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
+
+        if(post.imagesUrl.isNotEmpty()){
+            ivPostWriteImage.load(post.imagesUrl[0])
+            cvPostWriteImage.visibility = View.VISIBLE
+        }
     }
 
     private fun insertImage(url: Uri) {

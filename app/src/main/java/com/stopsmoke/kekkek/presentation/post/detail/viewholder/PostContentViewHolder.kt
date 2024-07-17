@@ -74,6 +74,7 @@ class PostContentViewHolder(
         initWrittenProfileImage(post.written.profileImage)
         binding.tvPostCommentNum.text = post.commentCount.toString()
 
+
         if (post.imagesUrl.isNotEmpty()) {
             binding.ivPostViewImage.load(post.imagesUrl[0])
             binding.cvPostViewImage.visibility = View.VISIBLE
