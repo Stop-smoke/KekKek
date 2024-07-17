@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.HistoryTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.User
@@ -52,13 +53,10 @@ class HomeViewModel @Inject constructor(
         initialValue = null
     )
 
-    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+    val noticeBanner = postRepository.getTopNotice(1)
         .map { post ->
             post.first()
-        }
-        .catch {
-            _uiState.emit(HomeUiState.ErrorExit)
-        }
+        }.asResult()
 
     fun updateUserData() = viewModelScope.launch {
         try {
@@ -94,6 +92,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -148,6 +147,7 @@ class HomeViewModel @Inject constructor(
                 updateUserData()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -177,6 +177,7 @@ class HomeViewModel @Inject constructor(
                 updateUserData()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -201,6 +202,7 @@ class HomeViewModel @Inject constructor(
                 userRepository.setUserData(user.copy(history = updatedUserHistory))
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -253,6 +255,7 @@ class HomeViewModel @Inject constructor(
             }
             _userList.emit(list)
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 

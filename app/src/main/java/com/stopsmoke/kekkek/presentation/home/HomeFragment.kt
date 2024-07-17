@@ -16,6 +16,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
@@ -153,8 +154,16 @@ class HomeFragment : Fragment(), ErrorHandle {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { noticePost ->
-                    binding.tvHomeNoticeTitle.text = noticePost.title
+                .collectLatest { noticePostResult ->
+                    when(noticePostResult){
+                        is Result.Error -> {
+                            noticePostResult.exception?.printStackTrace()
+                            errorExit(findNavController())
+                        }
+                        Result.Loading -> {}
+                        is Result.Success -> binding.tvHomeNoticeTitle.text = noticePostResult.data.title
+                    }
+
                 }
         }
 
