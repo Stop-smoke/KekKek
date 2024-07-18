@@ -7,7 +7,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.presentation.utils.defaultNavigationOption
 
 private const val POST_ID_ARGUMENT = "post_id"
-private const val COMMENT_ID_ARGUMENT = "post_id"
+private const val COMMENT_ID_ARGUMENT = "comment_id"
 
 internal fun NavController.navigateToReplyScreen(
     postId: String,

@@ -17,4 +17,14 @@
         <item>금연 실패 후기</item>
         <item>금연 다짐</item>
     </string-array>
+
+    <string-array name="home_motivation">
+        <item>담배, 그거 독약입니다.</item>
+        <item>이제 나는 간다.\n여러분에게 당부하는데 결코 흡연하지 말라.\n무슨 일이 있어도 절대 흡연하지 말라.</item>
+        <item>금연은 마라톤과도 같다.\n죽을 때까지 참아야 한다.</item>
+        <item>담배는 사랑의 무덤이다.</item>
+        <item>담배는 악마로부터 나온 더러운 잡초.\n당신의 지갑을 비게 하고, 옷을 태운다.\n코를 굴뚝으로 만들고 생명을 태운다.</item>
+        <item>많은 사람들이\n담배가 스트레스를 해소하고\n신경질을 덜 부리게 한다고 믿는다.\n그러나 사실은 흡연이 스트레스의 원인이다.</item>
+        <item>담배를 피워도 괴롭고,\n끊어도 괴롭다면,\n 어떤 괴로움을 선택하겠는가?</item>
+    </string-array>
 </resources>
