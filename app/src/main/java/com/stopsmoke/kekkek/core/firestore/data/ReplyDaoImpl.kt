@@ -10,6 +10,7 @@ import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.REPLY_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.ReplyDao
+import com.stopsmoke.kekkek.core.firestore.mapper.toInit
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
@@ -26,9 +27,11 @@ class ReplyDaoImpl @Inject constructor(
             .document(replyEntity.replyParent!!)
             .collection(REPLY_COLLECTION)
             .document().let { documentReference ->
-                documentReference.set(
-                    replyEntity.copy(id = documentReference.id)
+                val entity = replyEntity.copy(
+                    id = documentReference.id,
                 )
+                    .toInit()
+                documentReference.set(entity)
             }
             .await()
 
@@ -76,7 +79,7 @@ class ReplyDaoImpl @Inject constructor(
         commentId: String,
         replyId: String,
         field: String,
-        items: List<Any>
+        items: List<Any>,
     ) {
         firestore.collection(POST_COLLECTION)
             .document(postId)
@@ -93,7 +96,7 @@ class ReplyDaoImpl @Inject constructor(
         commentId: String,
         replyId: String,
         field: String,
-        items: List<Any>
+        items: List<Any>,
     ) {
         firestore.collection(POST_COLLECTION)
             .document(postId)
