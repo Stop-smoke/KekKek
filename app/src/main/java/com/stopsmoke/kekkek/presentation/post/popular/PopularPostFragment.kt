@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentPopularPostBinding
+import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.community.CommunityUiState
+import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
@@ -37,7 +41,7 @@ class PopularPostFragment : Fragment(),ErrorHandle {
         PopularPostListAdapter()
     }
 
-    private val viewModel: PopularPostViewModel by viewModels()
+    private val  viewModel: CommunityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,21 +94,19 @@ class PopularPostFragment : Fragment(),ErrorHandle {
     }
 
     private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            post.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest { postResult ->
-                    when(postResult){
-                        is Result.Error -> {
-                            postResult.exception?.printStackTrace()
-                            errorExit(findNavController())
-                        }
-                        Result.Loading -> {}
-                        is Result.Success -> listAdapter.submitList(postResult.data.map{it.toCommunityWritingListItem()})
-                    }
-                }
+        uiState.collectLatestWithLifecycle(lifecycle){ state ->
+            when(state) {
+                is CommunityUiState.CommunityNormalUiState -> onBind(state)
+                is CommunityUiState.ErrorExit -> errorExit(findNavController())
+            }
         }
     }
 
+    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) {
+        val popularItem = if(communityUiState.popularPeriod) communityUiState.popularItem else communityUiState.popularItemNonPeriod
+
+        listAdapter.submitList(popularItem)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

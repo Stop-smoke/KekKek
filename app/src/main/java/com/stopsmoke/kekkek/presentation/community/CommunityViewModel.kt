@@ -78,18 +78,13 @@ class CommunityViewModel @Inject constructor(
                 when (period) {
                     true -> {
                         (it as CommunityUiState.CommunityNormalUiState).copy(
-                            popularItem = CommunityPopularItem(
-                                postInfo1 = if (popularList.isNotEmpty()) popularList[0].toCommunityWritingListItem() else emptyCommunityWritingListItem(),
-                                postInfo2 = if (popularList.size > 1) popularList[1].toCommunityWritingListItem() else emptyCommunityWritingListItem()
-                            ), popularPeriod = if(popularList.size < 2) false else true
+                            popularItem = popularList.map { it.toCommunityWritingListItem() },
+                            popularPeriod = if (popularList.size < 2) false else true
                         )
                     }
 
                     false -> (it as CommunityUiState.CommunityNormalUiState).copy(
-                        popularItemNonPeriod = CommunityPopularItem(
-                            postInfo1 = if (popularList.isNotEmpty()) popularList[0].toCommunityWritingListItem() else emptyCommunityWritingListItem(),
-                            postInfo2 = if (popularList.size > 1) popularList[1].toCommunityWritingListItem() else emptyCommunityWritingListItem()
-                        )
+                        popularItemNonPeriod = popularList.map { it.toCommunityWritingListItem() },
                     )
                 }
             }
