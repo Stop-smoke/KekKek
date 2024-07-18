@@ -11,6 +11,7 @@ import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
+import com.stopsmoke.kekkek.presentation.getRelativeTime
 
 class PopularPostListViewHolder(
     private val binding: ItemPostBinding,
@@ -68,19 +69,6 @@ class PopularPostListViewHolder(
         }
     }
 
-    private fun getRelativeTime(pastTime: ElapsedDateTime): String {
-        val timeType = when (pastTime.elapsedDateTime) {
-            DateTimeUnit.YEAR -> "년"
-            DateTimeUnit.MONTH -> "달"
-            DateTimeUnit.DAY -> "일"
-            DateTimeUnit.WEEK -> "주"
-            DateTimeUnit.HOUR -> "시간"
-            DateTimeUnit.MINUTE -> "분"
-            DateTimeUnit.SECOND -> "초"
-        }
-
-        return "${pastTime.number} ${timeType} 전"
-    }
 
 
     private fun setMarginEnd(view: TextView, end: Int) {

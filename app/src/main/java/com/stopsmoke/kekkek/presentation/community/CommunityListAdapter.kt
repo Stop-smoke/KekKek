@@ -12,6 +12,7 @@ import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
+import com.stopsmoke.kekkek.presentation.getRelativeTime
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class CommunityListAdapter :
@@ -79,19 +80,6 @@ class CommunityListAdapter :
             }
         }
 
-        private fun getRelativeTime(pastTime: ElapsedDateTime): String {
-            val timeType = when (pastTime.elapsedDateTime) {
-                DateTimeUnit.YEAR -> "년"
-                DateTimeUnit.MONTH -> "달"
-                DateTimeUnit.DAY -> "일"
-                DateTimeUnit.WEEK -> "주"
-                DateTimeUnit.HOUR -> "시간"
-                DateTimeUnit.MINUTE -> "분"
-                DateTimeUnit.SECOND -> "초"
-            }
-
-            return "${pastTime.number} $timeType 전"
-        }
 
         private fun setMarginEnd(view: TextView, end: Int) {
             val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
