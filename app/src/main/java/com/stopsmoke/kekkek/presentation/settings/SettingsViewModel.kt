@@ -7,9 +7,11 @@ import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -69,14 +71,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private val _exitAppUiState = MutableStateFlow<ExitAppUiState>(ExitAppUiState.Loading)
-    val exitAppUiState = _exitAppUiState.asStateFlow()
+    private val _exitAppUiState = MutableSharedFlow<ExitAppUiState>()
+    val exitAppUiState = _exitAppUiState.asSharedFlow()
 
     fun logout() {
         viewModelScope.launch {
             try {
                 userRepository.logout()
-                _exitAppUiState.emit(ExitAppUiState.Success)
+                _exitAppUiState.emit(ExitAppUiState.Logout)
             } catch (e: Exception) {
                 _exitAppUiState.emit(ExitAppUiState.Failure(e))
                 e.printStackTrace()
@@ -88,7 +90,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 userRepository.withdraw()
-                _exitAppUiState.emit(ExitAppUiState.Success)
+                _exitAppUiState.emit(ExitAppUiState.Withdraw)
             } catch (e: Exception) {
                 _exitAppUiState.emit(ExitAppUiState.Failure(e))
                 e.printStackTrace()
@@ -113,6 +115,7 @@ class SettingsViewModel @Inject constructor(
                 userRepository.setProfileImage(inputStream)
                 _profileImageUploadUiState.emit(ProfileImageUploadUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _profileImageUploadUiState.emit(ProfileImageUploadUiState.Error(e))
             }
         }

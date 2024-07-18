@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.HistoryTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.User
@@ -52,13 +53,10 @@ class HomeViewModel @Inject constructor(
         initialValue = null
     )
 
-    val noticeBanner: Flow<Post> = postRepository.getTopNotice(1)
+    val noticeBanner = postRepository.getTopNotice(1)
         .map { post ->
             post.first()
-        }
-        .catch {
-            _uiState.emit(HomeUiState.ErrorExit)
-        }
+        }.asResult()
 
     fun updateUserData() = viewModelScope.launch {
         try {
@@ -94,6 +92,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -148,6 +147,7 @@ class HomeViewModel @Inject constructor(
                 updateUserData()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
     }
@@ -177,6 +177,7 @@ class HomeViewModel @Inject constructor(
                 updateUserData()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -201,6 +202,7 @@ class HomeViewModel @Inject constructor(
                 userRepository.setUserData(user.copy(history = updatedUserHistory))
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -240,8 +242,8 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private val _userRankingList = MutableStateFlow<List<RankingListItem>>(emptyList())
-    val userRankingList get() = _userRankingList.asStateFlow()
+    private val _userList = MutableStateFlow<List<RankingListItem>>(emptyList())
+    val userList get() = _userList.asStateFlow()
 
     private val _myRank = MutableStateFlow<Int?>(null)
     val myRank get() = _myRank.asStateFlow()
@@ -251,13 +253,9 @@ class HomeViewModel @Inject constructor(
             val list = userRepository.getAllUserData().map { user ->
                 (user as User.Registered).toRankingListItem()
             }
-
-            (user as? User.Registered)?.let {
-                _myRank.value = list.indexOf(it.toRankingListItem())
-            }
-
-            _userRankingList.emit(list)
+            _userList.emit(list)
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiState.emit(HomeUiState.ErrorExit)
         }
 
@@ -265,7 +263,7 @@ class HomeViewModel @Inject constructor(
 
     fun getMyRank() {
         (user.value as? User.Registered)?.let {
-            _myRank.value = userRankingList.value.indexOf(it.toRankingListItem()) + 1
+            _myRank.value = userList.value.filter{it.startTime != null}.sortedBy { it.startTime }.indexOf(it.toRankingListItem()) + 1
         }
     }
 }

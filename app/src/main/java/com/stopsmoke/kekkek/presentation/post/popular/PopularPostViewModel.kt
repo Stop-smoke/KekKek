@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.post.popular
 
 import androidx.lifecycle.ViewModel
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,17 +23,8 @@ class PopularPostViewModel @Inject constructor(
     val uiState: StateFlow<PopularPostUiState> = _uiState.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val post = uiState.flatMapLatest { popularWritingListUiState ->
-        _uiState.update { prev->
-            prev.copy(isLoading = false)
-        }
-        flowOf( postRepository.getPopularPostList().map { it.toCommunityWritingListItem() })
+    val post = uiState.flatMapLatest {
+        postRepository.getPopularPostList().asResult()
     }
 
-
-    fun reload(){
-        _uiState.update { prev ->
-            prev.copy(isLoading = true)
-        }
-    }
 }

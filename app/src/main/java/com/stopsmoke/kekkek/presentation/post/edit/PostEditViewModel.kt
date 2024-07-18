@@ -39,6 +39,7 @@ class PostEditViewModel @Inject constructor(
                 postRepository.addPost(post)
                 _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
@@ -50,6 +51,7 @@ class PostEditViewModel @Inject constructor(
                 postRepository.addPost(post, inputStream)
                 _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
@@ -68,6 +70,7 @@ class PostEditViewModel @Inject constructor(
                 editPost?.let { postRepository.editPost(editPost) }
                 _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
@@ -86,6 +89,7 @@ class PostEditViewModel @Inject constructor(
                 editPost?.let { postRepository.editPost(editPost, inputStream) }
                 _uiState.emit(PostEditUiState.Success)
             } catch (e: Exception) {
+                e.printStackTrace()
                 _uiState.emit(PostEditUiState.ErrorExit)
             }
         }
@@ -109,6 +113,7 @@ class PostEditViewModel @Inject constructor(
                     path = "post/${post.value!!.id}/post_image.jpeg"
                 )
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

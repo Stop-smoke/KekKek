@@ -60,6 +60,7 @@ class SmokingSettingViewModel @Inject constructor(
                     )
                 )
             } catch (e: Exception) {
+                e.printStackTrace()
                 _uiState.emit(
                     SmokingSettingUiState.ErrorExit
                 )

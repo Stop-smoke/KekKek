@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
+import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 
 class SmokingAddictionTestExitDialogFragment : DialogFragment() {
@@ -43,7 +44,7 @@ class SmokingAddictionTestExitDialogFragment : DialogFragment() {
             dismiss()
         }
         binding.btnDialogFinish.setOnClickListener {
-            findNavController().popBackStack("home", false)
+            findNavController().popBackStackInclusiveHome()
             viewModel.clear()
         }
     }

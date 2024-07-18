@@ -153,7 +153,7 @@ class RankingListFieldFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel) {
-        userRankingList.collectLatestWithLifecycle(lifecycle) {
+        userList.collectLatestWithLifecycle(lifecycle) {
             binding.tvRankingListTotalUserNum.text = "전체 ${it.size}명"
 
             when (field) {

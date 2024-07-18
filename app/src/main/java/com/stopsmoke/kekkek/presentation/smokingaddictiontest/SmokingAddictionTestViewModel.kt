@@ -18,6 +18,8 @@ import javax.inject.Inject
 class SmokingAddictionTestViewModel @Inject constructor(
     private val updateCigaretteAddictionTestResultUseCase: UpdateCigaretteAddictionTestResultUseCase,
 ) : ViewModel() {
+    private val _uiState: MutableStateFlow<SmokingAddictionTestUiState> = MutableStateFlow(SmokingAddictionTestUiState.NormalUiState)
+    val uiState: StateFlow<SmokingAddictionTestUiState> = _uiState.asStateFlow()
 
     private val _score = MutableStateFlow<Map<Int, Int>>(mapOf()) // pageIndex, result
     val score: StateFlow<Map<Int, Int>> = _score.asStateFlow()
@@ -32,7 +34,6 @@ class SmokingAddictionTestViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val result: Flow<SmokingQuestionnaireUiState> = score.mapLatest { scoreList ->
-
         when (scoreList.values.sum()) {
             in 0..13 -> {
                 SmokingQuestionnaireUiState.Low
@@ -58,10 +59,15 @@ class SmokingAddictionTestViewModel @Inject constructor(
     }
 
     fun updateCigaretteAddictionTestResult(result: String) {
-        viewModelScope.launch {
-            if (score.value.isNotEmpty()) {
-                updateCigaretteAddictionTestResultUseCase(result)
+        try {
+            viewModelScope.launch {
+                if (score.value.isNotEmpty()) {
+                    updateCigaretteAddictionTestResultUseCase(result)
+                }
             }
+        }catch (e:Exception){
+            e.printStackTrace()
+            _uiState.value = SmokingAddictionTestUiState.ErrorExit
         }
     }
 

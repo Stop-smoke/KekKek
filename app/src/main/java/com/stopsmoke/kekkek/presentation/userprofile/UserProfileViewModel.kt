@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Achievement
 import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.Comment
@@ -30,10 +31,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -87,29 +88,23 @@ class UserProfileViewModel @Inject constructor(
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val posts: Flow<PagingData<Post>> = uid.flatMapLatest { uid ->
+    val posts = uid.flatMapLatest { uid ->
         if (uid == null) {
             return@flatMapLatest emptyFlow()
         }
 
         postRepository.getPost(uid)
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val myCommentHistory: Flow<PagingData<Comment>> = uid.flatMapLatest { uid ->
+    val myCommentHistory = uid.flatMapLatest { uid ->
         if (uid == null) {
             return@flatMapLatest emptyFlow()
         }
         commentRepository.getCommentItems(CommentFilter.User(uid))
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .cachedIn(viewModelScope)
+    }.cachedIn(viewModelScope)
+        .asResult()
 
     private val _postDetailScreenNavigate = MutableSharedFlow<String>()
     val postDetailScreenNavigate = _postDetailScreenNavigate.asSharedFlow()
@@ -120,59 +115,13 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val activities: StateFlow<Activities> = uid.flatMapLatest { uid ->
-        try {
-            userRepository.getActivities(uid!!)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyFlow()
-        }
-    }
-        .catch {
-            it.printStackTrace()
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyActivities()
-        )
-
 
     //achievement
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val currentProgress = activities.flatMapLatest { activities ->
-        when (val userData = user.value) {
-            is User.Registered -> {
-                val list = userRepository.getAllUserData().map { user ->
-                    (user as User.Registered).toRankingListItem()
-                }.filter { item ->
-                    item.startTime != null
-                }.sortedBy { item ->
-                    item.startTime!!
-                }.map {
-                    it.userID
-                }
-                val userRank = list.indexOf(userData.uid) + 1
+    private val _currentProgressItem = MutableStateFlow<CurrentProgress>(emptyCurrentProgress())
+    val currentProgressItem: StateFlow<CurrentProgress> = _currentProgressItem.asStateFlow()
 
-                CurrentProgress(
-                    user = userData.getTotalDay(),
-                    comment = activities.commentCount,
-                    post = activities.postCount,
-                    rank = userRank.toLong(),
-                    achievement = userData.clearAchievementsList.size.toLong()
-                )
-            }
-
-            else -> emptyCurrentProgress()
-        }
-            .let {
-                flowOf(it)
-            }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val achievements = currentProgress.flatMapLatest { progress ->
+    val achievements = currentProgressItem.flatMapLatest { progress ->
+        if(progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
         achievementRepository.getAchievementItems()
             .let {
                 when (it) {
@@ -196,14 +145,18 @@ class UserProfileViewModel @Inject constructor(
                                     }
                                 }
                             )
-                        }
+                        }.sortedAchievement()
                     }
                 }
-            }
+            }.asResult()
     }
-        .catch {
-            it.printStackTrace()
-        }
+
+    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
+        val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
+        val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
+
+        return nonClearList + clearList
+    }
 
     private fun Achievement.getItem() = AchievementItem(
         id = id,
@@ -214,4 +167,44 @@ class UserProfileViewModel @Inject constructor(
         maxProgress = maxProgress,
         requestCode = requestCode
     )
+
+    val activities: StateFlow<Activities> = uid.flatMapLatest { uid ->
+        try {
+            userRepository.getActivities(uid!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyFlow()
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyActivities()
+    )
+
+    suspend fun getCurrentProgress(activities: Activities) {
+        when (val userData = user.value) {
+            is User.Registered -> {
+                val list = userRepository.getAllUserData().map{user->
+                    (user as User.Registered).toRankingListItem()
+                }.filter { item->
+                    item.startTime != null
+                }.sortedBy {item ->
+                    item.startTime!!
+                }.map {
+                    it.userID
+                }
+                val userRank = list.indexOf(userData.uid)+1
+
+                _currentProgressItem.value = CurrentProgress(
+                    user = userData.getTotalDay(),
+                    comment = activities.commentCount,
+                    post = activities.postCount,
+                    rank = userRank.toLong(),
+                    achievement = userData.clearAchievementsList.size.toLong()
+                )
+            }
+
+            else -> _currentProgressItem.value = emptyCurrentProgress()
+        }
+    }
 }

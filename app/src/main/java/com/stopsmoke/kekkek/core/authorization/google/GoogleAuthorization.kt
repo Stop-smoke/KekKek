@@ -12,11 +12,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.stopsmoke.kekkek.BuildConfig
+import com.stopsmoke.kekkek.core.authorization.FirebaseAuthorizationEvent
 
 class GoogleAuthorization(
     private val fragment: Fragment,
 ) {
-    private var callback: GoogleAuthorizationCallbackListener? = null
+    private var callback: FirebaseAuthorizationEvent? = null
 
     private lateinit var googleSighInClient: GoogleSignInClient
 
@@ -29,12 +30,8 @@ class GoogleAuthorization(
                     val account = task.getResult(ApiException::class.java)!!
                     Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                     firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException) {
-                    // Google Sign In failed, update UI appropriately
-                    Log.w(TAG, "Google sign in failed", e)
-                    e.printStackTrace()
-                    callback?.onFailure(e)
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     callback?.onFailure(e)
                 }
             }
@@ -63,6 +60,9 @@ class GoogleAuthorization(
                 callback?.onFailure(it)
                 it.printStackTrace()
             }
+            .addOnCanceledListener {
+                callback?.onFailure(null)
+            }
     }
 
     fun launchGoogleAuthActivity() {
@@ -77,7 +77,7 @@ class GoogleAuthorization(
         googleLoginResult.launch(googleSighInClient.signInIntent)
     }
 
-    fun registerCallbackListener(callback: GoogleAuthorizationCallbackListener) {
+    fun registerCallbackListener(callback: FirebaseAuthorizationEvent) {
         this.callback = callback
     }
 

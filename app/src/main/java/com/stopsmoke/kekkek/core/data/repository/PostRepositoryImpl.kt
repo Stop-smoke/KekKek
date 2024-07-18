@@ -143,9 +143,9 @@ internal class PostRepositoryImpl @Inject constructor(
             posts.map { it.asExternalModel() }
         }
 
-    override suspend fun getPopularPostList(): List<Post> =
-        postDao.getPopularPostList().map {
-            it.asExternalModel()
+    override suspend fun getPopularPostList(): Flow<List<Post>> =
+        postDao.getPopularPostList().map {list ->
+            list.map { it.asExternalModel() }
         }
 
     override suspend fun getPostForPostId(postId: String): Post {
