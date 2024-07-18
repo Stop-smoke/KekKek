@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
+import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
 
 class PostDetailActionBottomSheetDialog: DialogFragment() {
 
@@ -28,13 +29,12 @@ class PostDetailActionBottomSheetDialog: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvEditPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_detail_screen_to_post_edit)
             dismiss()
         }
 
         binding.tvReportPost.setOnClickListener {
             Toast.makeText(requireContext(), "게시물 신고를 작성해주세요.", Toast.LENGTH_SHORT).show()
-            findNavController().navigate("my_complaint")
+            findNavController().navigateToMyComplaintScreen()
             dismiss()
         }
     }

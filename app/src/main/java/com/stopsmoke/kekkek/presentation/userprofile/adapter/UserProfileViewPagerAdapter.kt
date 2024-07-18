@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.presentation.userprofile.post.UserProfilePostFragmen
 
 class UserProfileViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    private val fragments = listOf(
+    private val fragments:List<Fragment> = listOf(
         UserProfilePostFragment(),
         UserProfileCommentFragment(),
         UserProfileAchievementFragment()

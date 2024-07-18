@@ -25,8 +25,10 @@ import com.stopsmoke.kekkek.databinding.FragmentPostDetailBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PostDetailAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PreviewCommentAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
@@ -34,7 +36,10 @@ import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentDialogC
 import com.stopsmoke.kekkek.presentation.post.detail.dialog.DeleteDialogType
 import com.stopsmoke.kekkek.presentation.post.detail.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
+import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
 import com.stopsmoke.kekkek.presentation.putNavigationResult
+import com.stopsmoke.kekkek.presentation.reply.navigateToReplyScreen
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +48,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback {
+class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback, ErrorHandle {
 
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -77,7 +82,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         bottomSheetDialog.setContentView(bottomsheetDialogBinding.root)
 
         bottomsheetDialogBinding.tvReportPost.setOnClickListener {
-            findNavController().navigate(R.id.action_post_detail_screen_to_my_complaint)
+            findNavController().navigateToMyComplaintScreen()
             bottomSheetDialog.dismiss()
         }
 
@@ -90,11 +95,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
 
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
-
-            findNavController().navigate(
-                resId = R.id.action_post_detail_screen_to_post_edit,
-                args = bundleOf("post_id" to viewModel.postId.value)
-            )
+            findNavController().navigateToPostEditScreen(viewModel.postId.value ?: return@setOnClickListener)
             bottomSheetDialog.dismiss()
         }
 
@@ -157,6 +158,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         setupListener()
         autoScrollKeyboardWithRecyclerView()
         collectPreviewCommentItem()
+        initUiStateViewModel()
     }
 
     private fun initCommentRecyclerView() {
@@ -289,6 +291,16 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         }
     }
 
+    private fun initUiStateViewModel() = with(viewModel){
+        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
+            when(uiState){
+                PostDetailUiState.ErrorExit -> errorExit(findNavController())
+                PostDetailUiState.ErrorMissing -> {errorMissing(findNavController())}
+                PostDetailUiState.Init -> {}
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         postDetailAdapter.unregisterCallback()
@@ -304,10 +316,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     }
 
     override fun navigateToUserProfile(uid: String) {
-        findNavController().navigate(
-            resId = R.id.action_post_detail_screen_to_user_profile,
-            args = bundleOf("uid" to uid)
-        )
+        findNavController().navigateToUserProfileScreen(uid)
     }
 
     override fun commentLikeClick(comment: Comment) {
@@ -323,12 +332,9 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     }
 
     override fun navigateToReply(comment: Comment) {
-        findNavController().navigate(
-            resId = R.id.action_post_detail_screen_to_reply,
-            args = bundleOf(
-                "post_id" to comment.parent.postId,
-                "comment_id" to comment.id
-            )
+        findNavController().navigateToReplyScreen(
+            postId = comment.parent.postId,
+            commentId = comment.id
         )
     }
 

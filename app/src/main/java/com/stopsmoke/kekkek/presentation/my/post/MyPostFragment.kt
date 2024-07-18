@@ -11,16 +11,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentMyPostBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPostFragment : Fragment() {
+class MyPostFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentMyPostBinding? = null
     private val binding: FragmentMyPostBinding get() = _binding!!
 
@@ -43,8 +46,18 @@ class MyPostFragment : Fragment() {
 
         initView()
 
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            listAdapter.submitData(it)
+        viewModel.post.collectLatestWithLifecycle(lifecycle) {postResult ->
+            when(postResult){
+                is Result.Error -> {
+                    postResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {
+                }
+                is Result.Success -> {
+                    listAdapter.submitData(postResult.data)
+                }
+            }
         }
     }
 
@@ -64,10 +77,7 @@ class MyPostFragment : Fragment() {
                 }
 
                 override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_my_post_screen_to_post_view,
-                        args = bundleOf("post_id" to postId)
-                    )
+                    findNavController().navigateToPostDetailScreen(postId)
                 }
             }
         )

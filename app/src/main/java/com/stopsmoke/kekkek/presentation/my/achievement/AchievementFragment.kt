@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.presentation.my.achievement
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
 import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
@@ -19,7 +21,7 @@ import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AchievementFragment : Fragment() {
+class AchievementFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentAchievementBinding? = null
     private val binding: FragmentAchievementBinding get() = _binding!!
@@ -66,17 +68,19 @@ class AchievementFragment : Fragment() {
             when (it) {
                 is Result.Success -> {
                     viewModel.getCurrentProgress()
+                    bindTopProgress()
                 }
-                else -> {}
+
+                is Result.Error -> {
+                    it.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
             }
         }
 
         achievements.collectLatestWithLifecycle(lifecycle) {
-            achievementListAdapter.submitList(sortedAchievement(it))
-        }
-
-        user.collectLatestWithLifecycle(lifecycle){
-            bindTopProgress()
+            achievementListAdapter.submitList(it)
         }
     }
 
@@ -89,16 +93,6 @@ class AchievementFragment : Fragment() {
             "${user.clearAchievementsList.size} / ${maxProgressCount}"
     }
 
-    private fun sortedAchievement(list: List<AchievementItem>): List<AchievementItem>{
-        val clearList = list.filter { it.progress >= 1.0.toBigDecimal() }
-        val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
-
-        val insertClearList = clearList.filter { it.id !in (viewModel.user.value as User.Registered).clearAchievementsList }
-        if(insertClearList.isNotEmpty()) {
-            viewModel.upDateUserAchievementList(insertClearList.map { it.id })
-        }
-        return nonClearList + clearList
-    }
 
     override fun onResume() {
         super.onResume()

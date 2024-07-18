@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfilePostBinding
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import com.stopsmoke.kekkek.presentation.userprofile.post.adapter.UserPostListAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class UserProfilePostFragment : Fragment() {
+class UserProfilePostFragment : Fragment(), ErrorHandle {
 
     private var _binding: FragmentUserProfilePostBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +50,15 @@ class UserProfilePostFragment : Fragment() {
     }
 
     private fun observeRecyclerViewItem() = lifecycleScope.launch {
-        viewModel.posts.collectLatest {
-            userPostListAdapter.submitData(it)
+        viewModel.posts.collectLatest { postsResult ->
+            when (postsResult) {
+                is Result.Error -> {
+                    postsResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
+                is Result.Success ->  userPostListAdapter.submitData(postsResult.data)
+            }
         }
     }
 

@@ -1,8 +1,8 @@
-package com.stopsmoke.kekkek.core.authorization.google
+package com.stopsmoke.kekkek.core.authorization
 
 import com.google.firebase.auth.FirebaseUser
 
-interface GoogleAuthorizationCallbackListener {
+interface FirebaseAuthorizationEvent {
 
     fun onSuccess(user: FirebaseUser)
 

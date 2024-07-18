@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestBinding
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
+import com.stopsmoke.kekkek.presentation.smokingaddictiontest.navigateToSmokingAddictionTestResultScreen
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -64,7 +65,7 @@ class SmokingAddictionTestFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.pageIndex.collectLatest { pageIndex ->
                     if (smokingAddictionTestAdapter.itemCount == pageIndex) {
-                        findNavController().navigate(R.id.action_smoking_addiction_test_screen_to_smoking_questionnaire_result_screen)
+                        findNavController().navigateToSmokingAddictionTestResultScreen()
                         return@collectLatest
                     }
 

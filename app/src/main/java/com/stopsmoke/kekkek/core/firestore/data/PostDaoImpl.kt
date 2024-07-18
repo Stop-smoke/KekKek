@@ -250,8 +250,7 @@ internal class PostDaoImpl @Inject constructor(
             .dataObjects<PostEntity>()
     }
 
-    override suspend fun getPopularPostList(): List<PostEntity> {
-        return try {
+    override suspend fun getPopularPostList(): Flow<List<PostEntity>> {
             // 현재 시간에서 7일 전 시간 계산
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -7)
@@ -261,18 +260,9 @@ internal class PostDaoImpl @Inject constructor(
                 .whereGreaterThan("date_time.created", sevenDaysAgo)
                 .orderBy("views", Query.Direction.DESCENDING)
                 .limit(10)
-                .get()
-                .await()
 
             // Firestore 쿼리 결과를 PostEntity 리스트로 변환
-            query.documents.mapNotNull { document ->
-                document.toObject<PostEntity>()
-            }
-        } catch (e: Exception) {
-            // 예외가 발생하면 빈 리스트 반환
-            e.printStackTrace()
-            emptyList()
-        }
+            return query.dataObjects<PostEntity>()
     }
 
     override suspend fun getPostForPostId(postId: String): PostEntity {

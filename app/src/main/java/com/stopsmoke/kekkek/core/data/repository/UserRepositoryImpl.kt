@@ -14,9 +14,11 @@ import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
 import com.stopsmoke.kekkek.core.firestore.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -166,15 +168,18 @@ internal class UserRepositoryImpl @Inject constructor(
         return userDao.nameDuplicateInspection(name)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getActivities(): Flow<Activities> {
-        return userDao.getActivities((user.value as User.Registered).uid)
-            .map {
-                Activities(
-                    it.postCount,
-                    it.commentCount,
-                    it.bookmarkCount
-                )
-            }
+        return user.flatMapLatest { user ->
+            userDao.getActivities((user as User.Registered).uid)
+                .map {
+                    Activities(
+                        it.postCount,
+                        it.commentCount,
+                        it.bookmarkCount
+                    )
+                }
+        }
     }
 
     override fun getActivities(userID: String): Flow<Activities> {

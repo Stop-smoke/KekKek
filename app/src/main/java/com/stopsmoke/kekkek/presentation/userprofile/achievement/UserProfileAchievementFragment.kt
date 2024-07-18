@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileAchievementBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserProfileAchievementFragment : Fragment() {
+class UserProfileAchievementFragment : Fragment(),ErrorHandle {
     private var _binding: FragmentUserProfileAchievementBinding? = null
     private val binding get() = _binding!!
 
@@ -49,18 +52,17 @@ class UserProfileAchievementFragment : Fragment() {
             getCurrentProgress(it)
         }
 
-        achievements.collectLatestWithLifecycle(lifecycle){
-            listAdapter.submitList(sortedAchievement(it))
+        achievements.collectLatestWithLifecycle(lifecycle){achievementResult ->
+            when(achievementResult){
+                is Result.Error -> {
+                    achievementResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                is Result.Success -> listAdapter.submitList(achievementResult.data)
+                Result.Loading -> {}
+            }
         }
     }
-
-    private fun sortedAchievement(list: List<AchievementItem>): List<AchievementItem>{
-        val clearList = list.filter { it.progress >= 1.0.toBigDecimal() }
-        val nonClearList = list.filter { it !in clearList }.sortedByDescending { it.progress }
-
-        return nonClearList + clearList
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -12,19 +12,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
+import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
+import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class BookmarkFragment : Fragment() {
+class BookmarkFragment : Fragment(), ErrorHandle {
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -64,17 +68,11 @@ class BookmarkFragment : Fragment() {
         listAdapter.registerCallbackListener(
             object : CommunityCallbackListener {
                 override fun navigateToUserProfile(uid: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_my_bookmark_screen_to_userProfile,
-                        args = bundleOf("uid" to uid)
-                    )
+                    findNavController().navigateToUserProfileScreen(uid)
                 }
 
                 override fun navigateToPost(postId: String) {
-                    findNavController().navigate(
-                        resId = R.id.action_my_bookmark_screen_to_post_view,
-                        args = bundleOf("post_id" to postId)
-                    )
+                    findNavController().navigateToPostDetailScreen(postId)
                 }
             }
         )
@@ -88,8 +86,15 @@ class BookmarkFragment : Fragment() {
     }
 
     private fun updateRecyclerViewItem() {
-        viewModel.post.collectLatestWithLifecycle(lifecycle) {
-            listAdapter.submitData(it.map { pagingData -> pagingData.toCommunityWritingListItem() })
+        viewModel.post.collectLatestWithLifecycle(lifecycle) { bookmarkResult ->
+            when (bookmarkResult) {
+                is Result.Error -> {
+                    bookmarkResult.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
+                is Result.Success -> listAdapter.submitData(bookmarkResult.data.map { pagingData -> pagingData.toCommunityWritingListItem() })
+            }
         }
     }
 
