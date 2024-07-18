@@ -56,6 +56,57 @@ class CommunityFragment : Fragment(), ErrorHandle {
         initView()
         initViewModel()
         setClickListener()
+
+        // RecyclerView 스크롤 이벤트 처리
+        // 포지션 리스너 달아보기
+        binding.rvCommunityList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val HIDE_THRESHOLD = 20 // FAB를 숨기기 시작하는 스크롤 거리 임계값
+            private var scrolledDistance = 0
+            private var controlsVisible = true
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // 스크롤 방향에 따라 FAB를 제어
+                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible && dy > 0) {
+                    controlsVisible = false
+                    binding.fabScrollToTop.hide()
+                    scrolledDistance = 0
+                } else if (!controlsVisible && dy < 0) {
+                    controlsVisible = true
+                    binding.fabScrollToTop.show()
+                    scrolledDistance = 0
+                }
+
+                // 스크롤 거리 누적
+                if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
+                    scrolledDistance += dy
+                }
+            }
+        })
+
+        // FAB 클릭 이벤트 처리
+        binding.fabScrollToTop.setOnClickListener {
+            // CommunityFragment의 맨 위로 스크롤
+            view.scrollTo(0, 0)
+        }
+
+//        // 스크롤 이벤트 처리
+//        binding.rvCommunityList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                if (dy > 0 && binding.fabScrollToTop.visibility == View.GONE) {
+//                    binding.fabScrollToTop.show()
+//                } else if (dy < 0 && binding.fabScrollToTop.visibility == View.VISIBLE) {
+//                    binding.fabScrollToTop.hide()
+//                }
+//            }
+//        })
+//
+//        // 상단으로 스크롤
+//        binding.fabScrollToTop.setOnClickListener {
+//            binding.rvCommunityList.smoothScrollToPosition(0) //        }
+
     }
 
     override fun onResume() {

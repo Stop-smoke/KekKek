@@ -18,7 +18,8 @@
         android:background="@drawable/btn_circle"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="6dp">
+        android:elevation="6dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="20dp"
@@ -193,6 +194,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabScrollToTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="16dp"
+            android:src="@drawable/bg_achievement_item_checked"
+            app:backgroundTint="@color/white"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
