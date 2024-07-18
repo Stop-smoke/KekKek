@@ -41,7 +41,8 @@
         android:background="@drawable/btn_circle_white"
         android:clickable="true"
         android:elevation="6dp"
-        android:focusable="true">
+        android:focusable="true"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="24dp"
