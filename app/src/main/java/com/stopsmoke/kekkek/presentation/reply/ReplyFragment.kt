@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -54,7 +53,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentReplyBinding.inflate(inflater, container, false)
         return binding.root
@@ -79,23 +78,25 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
     }
 
     private fun initViewModel() = with(viewModel) {
-        reply.collectLatestWithLifecycle(lifecycle) {replyResult ->
-            when(replyResult){
+        reply.collectLatestWithLifecycle(lifecycle) { replyResult ->
+            when (replyResult) {
                 is Result.Error -> {
                     replyResult.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
+
                 Result.Loading -> {}
                 is Result.Success -> replyAdapter.submitData(replyResult.data)
             }
         }
 
-        comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) {commentResult ->
-            when(commentResult){
+        comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) { commentResult ->
+            when (commentResult) {
                 is Result.Error -> {
                     commentResult.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
+
                 Result.Loading -> {}
                 is Result.Success -> replyAdapter.updateComment()
                 null -> {}
@@ -127,7 +128,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
         }
     }
 
-    private fun setBackBtn(){
+    private fun setBackBtn() {
         binding.includeFragmentReplyAppBar.ivPostCommentBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -181,7 +182,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
     }
 
     private fun showDeleteDialog(reply: Reply) {
-       val replyDeleteDialog = ReplyDeleteDialogFragment(this@ReplyFragment, reply)
+        val replyDeleteDialog = ReplyDeleteDialogFragment(this@ReplyFragment, reply)
         replyDeleteDialog.show(childFragmentManager, "replyDeleteDialog")
     }
 
