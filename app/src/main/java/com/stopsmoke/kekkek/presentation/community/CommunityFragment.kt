@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -65,6 +66,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
         initView()
         initViewModel()
         setClickListener()
+        setScrollToTop()
     }
 
     override fun onResume() {
@@ -137,6 +139,47 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 }
             }
         )
+    }
+
+    private fun setScrollToTop() {
+        binding.floatingActionButtonScrollToTop.setOnClickListener {
+            binding.rvCommunityList.smoothScrollToPosition(0)
+        }
+
+        binding.rvCommunityList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private var lastScrollY = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // dy > 0 : 스크롤을 아래로 내리는 경우
+                // dy < 0 : 스크롤을 위로 올리는 경우
+                if (dy > 0 && binding.floatingActionButtonScrollToTop.visibility == View.VISIBLE) {
+                    binding.floatingActionButtonScrollToTop.hideWithAnimation()
+                } else if (dy < 0 && binding.floatingActionButtonScrollToTop.visibility == View.GONE) {
+                    binding.floatingActionButtonScrollToTop.showWithAnimation()
+                }
+
+                // 현재 스크롤 위치 저장
+                lastScrollY = recyclerView.computeVerticalScrollOffset()
+            }
+        })    }
+
+    private fun View.hideWithAnimation() {
+        this.animate()
+            .alpha(0f)
+            .setDuration(150)
+            .withEndAction { this.visibility = View.GONE }
+            .start()
+    }
+
+    private fun View.showWithAnimation() {
+        this.visibility = View.VISIBLE
+        this.alpha = 0f
+        this.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
     }
 
     private fun initCommunityCategory() = with(binding) {
