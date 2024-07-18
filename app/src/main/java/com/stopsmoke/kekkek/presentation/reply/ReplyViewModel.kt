@@ -16,6 +16,7 @@ import com.stopsmoke.kekkek.core.domain.model.emptyReply
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.usecase.AddReplyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -38,6 +39,7 @@ class ReplyViewModel @Inject constructor(
     private val replyRepository: ReplyRepository,
     userRepository: UserRepository,
     private val commentRepository: CommentRepository,
+    private val addReplyUseCase: AddReplyUseCase
 ) : ViewModel() {
     val user: StateFlow<User?> = userRepository.getUserData()
         .catch { it.printStackTrace() }
@@ -104,31 +106,10 @@ class ReplyViewModel @Inject constructor(
 
     fun addReply(reply: String) = viewModelScope.launch {
         try {
-            if (comment.value == null) {
-                return@launch
-            }
-
-            val user = user.value as? User.Registered ?: return@launch
-            replyRepository.addReply(
-                reply = Reply(
-                    id = "",
-                    written = Written(
-                        uid = user.uid,
-                        name = user.name,
-                        profileImage = user.profileImage,
-                        ranking = user.ranking
-                    ),
-                    likeUser = emptyList(),
-                    unlikeUser = emptyList(),
-                    dateTime = DateTime(
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                    ),
-                    text = reply,
-                    commentParent = (comment.value as Result.Success).data.parent,
-                    replyParent = (comment.value as Result.Success).data.id,
-                    isLiked = false
-                )
+            addReplyUseCase(
+                post = (comment.value as Result.Success).data.parent,
+                commentId = (comment.value as Result.Success).data.id,
+                text = reply
             )
         } catch (e: Exception) {
             e.printStackTrace()
