@@ -3,7 +3,8 @@ package com.stopsmoke.kekkek.presentation.community
 sealed interface CommunityUiState {
     data class CommunityNormalUiState(
         val popularItem: CommunityPopularItem,
-        val isLoading: Boolean = false
+        val popularItemNonPeriod: CommunityPopularItem,
+        val popularPeriod: Boolean = true
     ) : CommunityUiState
 
     data object ErrorExit: CommunityUiState
@@ -14,6 +15,10 @@ sealed interface CommunityUiState {
                 postInfo1 = emptyCommunityWritingListItem(),
                 postInfo2 = emptyCommunityWritingListItem()
             ),
+            popularItemNonPeriod = CommunityPopularItem(
+                postInfo1 = emptyCommunityWritingListItem(),
+                postInfo2 = emptyCommunityWritingListItem()
+            )
         )
     }
 }

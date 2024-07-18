@@ -133,11 +133,6 @@ internal class PostRepositoryImpl @Inject constructor(
         postDao.editPost(post.toEntity(), inputStream)
     }
 
-    override suspend fun getTopPopularItems(): Flow<List<Post>> =
-        postDao.getPopularPostItems().map {
-            it.map { it.asExternalModel() }
-        }
-
     override fun getTopNotice(limit: Long): Flow<List<Post>> =
         postDao.getTopNotice(limit).map { posts ->
             posts.map { it.asExternalModel() }
@@ -147,6 +142,12 @@ internal class PostRepositoryImpl @Inject constructor(
         postDao.getPopularPostList().map {list ->
             list.map { it.asExternalModel() }
         }
+
+    override suspend fun getPopularPostListNonPeriod(): Flow<List<Post>> {
+        return postDao.getPopularPostListNonPeriod().map {list ->
+            list.map { it.asExternalModel() }
+        }
+    }
 
     override suspend fun getPostForPostId(postId: String): Post {
         return postDao.getPostForPostId(postId).asExternalModel()

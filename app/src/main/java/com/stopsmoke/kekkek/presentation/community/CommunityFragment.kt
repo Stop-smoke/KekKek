@@ -19,6 +19,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.toPostCategory
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
+import com.stopsmoke.kekkek.databinding.ItemCommunityMainPopularBannerBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
@@ -248,9 +249,20 @@ class CommunityFragment : Fragment(), ErrorHandle {
                             errorExit(findNavController())
                         }
                         Result.Loading -> {}
-                        is Result.Success ->  bindPopularPosts(popularPostsResult.data)
+                        is Result.Success ->  bindPopularPosts(popularPostsResult.data, period = true)
                     }
                 }
+        }
+
+        topPopularPostNonPeriod.collectLatestWithLifecycle(lifecycle){
+            when(it){
+                is Result.Error -> {
+                    it.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+                Result.Loading -> {}
+                is Result.Success ->  bindPopularPosts(it.data, period = false)
+            }
         }
 
         //공지사항 배너
@@ -291,30 +303,9 @@ class CommunityFragment : Fragment(), ErrorHandle {
         )
     }
 
-    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) {
-        val tvCommunityTitle1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_title1)
-        val tvCommunityViewNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum1)
-        val tvCommunityLikeNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum1)
-        val tvCommunityCommentNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum1)
-        val tvCommunityPostType1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_postType1)
-
-        val tvCommunityTitle2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_title2)
-        val tvCommunityViewNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum2)
-        val tvCommunityLikeNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum2)
-        val tvCommunityCommentNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum2)
-        val tvCommunityPostType2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
-
-        communityUiState.popularItem.postInfo1.postInfo.let {
+    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) = with(binding.includeCommunityPopularBanner){
+        val popularItem = if(communityUiState.popularPeriod) communityUiState.popularItem else communityUiState.popularItemNonPeriod
+        popularItem.postInfo1.postInfo.let {
             tvCommunityTitle1.text = it.title
             tvCommunityViewNum1.text = it.view.toString()
             tvCommunityLikeNum1.text = it.like.toString()
@@ -322,7 +313,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
             tvCommunityPostType1.text = it.postType
         }
 
-        communityUiState.popularItem.postInfo2.postInfo.let {
+        popularItem.postInfo2.postInfo.let {
             tvCommunityTitle2.text = it.title
             tvCommunityViewNum2.text = it.view.toString()
             tvCommunityLikeNum2.text = it.like.toString()

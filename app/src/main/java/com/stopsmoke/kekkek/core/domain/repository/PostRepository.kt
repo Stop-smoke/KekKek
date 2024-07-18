@@ -29,11 +29,11 @@ interface PostRepository {
 
     suspend fun editPost(post: Post, inputStream: InputStream)
 
-    suspend fun getTopPopularItems(): Flow<List<Post>>
-
     fun getTopNotice(limit: Long): Flow<List<Post>>
 
     suspend fun getPopularPostList(): Flow<List<Post>>
+
+    suspend fun getPopularPostListNonPeriod(): Flow<List<Post>>
 
     suspend fun getPostForPostId(postId: String): Post
 

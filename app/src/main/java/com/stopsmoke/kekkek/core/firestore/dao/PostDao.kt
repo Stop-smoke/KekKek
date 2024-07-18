@@ -36,11 +36,11 @@ interface PostDao {
 
     suspend fun deletePost(postId: String)
 
-    suspend fun getPopularPostItems(): Flow<List<PostEntity>>
-
     fun getTopNotice(limit: Long): Flow<List<PostEntity>>
 
     suspend fun getPopularPostList(): Flow<List<PostEntity>>
+
+    suspend fun getPopularPostListNonPeriod(): Flow<List<PostEntity>>
 
     suspend fun getPostForPostId(postId: String): PostEntity
 
