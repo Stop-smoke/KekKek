@@ -94,7 +94,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
     private fun View.hideWithAnimation() {
         this.animate()
             .alpha(0f)
-            .setDuration(300)
+            .setDuration(150)
             .withEndAction { this.visibility = View.GONE }
             .start()
     }
