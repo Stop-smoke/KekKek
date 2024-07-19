@@ -3,19 +3,13 @@ package com.stopsmoke.kekkek.presentation.reply
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.databinding.ItemReplyBinding
-import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
-import com.stopsmoke.kekkek.presentation.post.detail.viewholder.RecyclerviewEmptyViewHolder
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.reply.viewholder.ReplyViewHolder
-import com.stopsmoke.kekkek.presentation.utils.diffutil.ReplyUiStateDiffUtil
+import com.stopsmoke.kekkek.presentation.utils.diffutil.ReplyDiffUtil
 
-private enum class PreviewReplyViewType {
-   REPLY, DELETED, ERROR
-}
-
-class PreviewReplyAdapter : ListAdapter<ReplyUiState, RecyclerView.ViewHolder>(ReplyUiStateDiffUtil()) {
+class PreviewReplyAdapter : ListAdapter<Reply, ReplyViewHolder>(ReplyDiffUtil()) {
 
     private var callback: ReplyCallback? = null
 
@@ -27,42 +21,17 @@ class PreviewReplyAdapter : ListAdapter<ReplyUiState, RecyclerView.ViewHolder>(R
         callback = null
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        when (viewType) {
-            PreviewReplyViewType.REPLY.ordinal -> {
-                val view = ItemReplyBinding.inflate(
-                    /* inflater = */ LayoutInflater.from(parent.context),
-                    /* parent = */ parent,
-                    /* attachToParent = */ false
-                )
-                ReplyViewHolder(view, callback)
-            }
-
-            else -> {
-                val view = RecyclerviewEmptyBinding.inflate(
-                    /* inflater = */ LayoutInflater.from(parent.context),
-                    /* parent = */ parent,
-                    /* attachToParent = */ false
-                )
-                RecyclerviewEmptyViewHolder(view)
-            }
-        }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val currentItem = getItem(position) ?: return
-
-        when (holder) {
-            is ReplyViewHolder -> {
-                holder.bind((currentItem as ReplyUiState.ReplyType).data)
-            }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyViewHolder {
+        val view = ItemReplyBinding.inflate(
+            /* inflater = */ LayoutInflater.from(parent.context),
+            /* parent = */ parent,
+            /* attachToParent = */ false
+        )
+        return ReplyViewHolder(view, callback)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is ReplyUiState.ReplyType -> PreviewReplyViewType.REPLY.ordinal
-            is ReplyUiState.ItemDeleted -> PreviewReplyViewType.DELETED.ordinal
-            null -> PreviewReplyViewType.ERROR.ordinal
-        }
+    override fun onBindViewHolder(holder: ReplyViewHolder, position: Int) {
+        val currentItem = getItem(position) ?: return
+        holder.bind(currentItem)
     }
 }

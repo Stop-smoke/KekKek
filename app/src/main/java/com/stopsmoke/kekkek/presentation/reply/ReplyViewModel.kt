@@ -126,33 +126,8 @@ class ReplyViewModel @Inject constructor(
         }
         .catch { it.printStackTrace() }
 
-    private val _previewReply = MutableStateFlow<List<ReplyUiState>>(emptyList())
-    val previewReply: StateFlow<List<ReplyUiState>> = _previewReply
-        .combine(replyDeleteItemsId) { uiStates, id ->
-            uiStates.map { uiState ->
-                if (uiState is ReplyUiState.ReplyType && id.contains(uiState.data.id)) {
-                    return@map ReplyUiState.ItemDeleted
-                }
-                uiState
-            }
-        }
-        .combine(reverseReplyLikeId) { pagingData, id ->
-            pagingData.map { reply ->
-                if (reply is ReplyUiState.ReplyType && id.contains(reply.data.id)) {
-                    val newReply = reply.data.copy(
-                        isLiked = !reply.data.isLiked,
-                        likeUser = reply.data.likeUser.toggleElement((user.value as User.Registered).uid)
-                    )
-                    return@map reply.copy(newReply)
-                }
-                reply
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
-        )
+    private val _previewReply = MutableStateFlow<List<Reply>>(emptyList())
+    val previewReply: StateFlow<List<Reply>> = _previewReply.asStateFlow()
 
     fun addReply(reply: String) = viewModelScope.launch {
         try {
@@ -164,7 +139,7 @@ class ReplyViewModel @Inject constructor(
 
             val newReply = replyRepository.getReply(postId.value, commentId.value, replyId)
             _previewReply.update {
-                it.toMutableList().apply { add(ReplyUiState.ReplyType(newReply.first())) }
+                it.toMutableList().apply { add(newReply.first()) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -173,8 +148,15 @@ class ReplyViewModel @Inject constructor(
 
     fun deleteReply(reply: Reply) = viewModelScope.launch {
         try {
+            val previewItem = previewReply.value.find { it.id == reply.id }
+
+            if (previewItem == null) {
+                replyDeleteItemsId.update { it.toggleElement(reply.id) }
+            } else {
+                _previewReply.update { it.toMutableList().apply { remove(reply) } }
+            }
+
             replyRepository.deleteReply(reply)
-            replyDeleteItemsId.emit(replyDeleteItemsId.value.toggleElement(reply.id))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -194,12 +176,28 @@ class ReplyViewModel @Inject constructor(
 
     fun setReplyLike(replyId: String, like: Boolean) = viewModelScope.launch {
         try {
-            reverseReplyLikeId.emit(reverseReplyLikeId.value.toggleElement(replyId))
+            val previewItem = previewReply.value.find { it.id == replyId }
+
+            if (previewItem != null) {
+                _previewReply.update {
+                    it.toMutableList().apply {
+                        val newItem = previewItem.copy(
+                            isLiked = !previewItem.isLiked,
+                            likeUser = previewItem.likeUser.toggleElement((user.value as User.Registered).uid)
+                        )
+                        set(indexOf(previewItem), newItem)
+                    }
+                }
+            } else {
+                reverseReplyLikeId.emit(reverseReplyLikeId.value.toggleElement(replyId))
+            }
+
             if (like) {
                 replyRepository.appendReplyLike(postId.value, commentId.value, replyId)
                 return@launch
             }
             replyRepository.removeReplyLike(postId.value, commentId.value, replyId)
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
