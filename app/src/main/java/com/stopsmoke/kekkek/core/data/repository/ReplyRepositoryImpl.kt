@@ -19,13 +19,9 @@ class ReplyRepositoryImpl @Inject constructor(
     private val replyDao: ReplyDao,
     private val userRepository: UserRepository
 ) : ReplyRepository {
-    override suspend fun addReply(reply: Reply): Result<Unit> {
-        return try {
-            replyDao.addReply(reply.toEntity())
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+
+    override suspend fun addReply(reply: Reply): String {
+        return replyDao.addReply(reply.toEntity())
     }
 
     override suspend fun getReply(commentId: String): Flow<PagingData<Reply>> {

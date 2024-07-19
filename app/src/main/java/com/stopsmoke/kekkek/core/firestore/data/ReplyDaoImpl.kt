@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.REPLY_COLLECTION
@@ -14,19 +15,23 @@ import com.stopsmoke.kekkek.core.firestore.mapper.toInit
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class ReplyDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : ReplyDao {
-    override suspend fun addReply(replyEntity: ReplyEntity) {
+    override suspend fun addReply(replyEntity: ReplyEntity): String {
+        var replyId: String
+
         firestore.collection(POST_COLLECTION)
             .document(replyEntity.commentParent!!.postId!!)
             .collection(COMMENT_COLLECTION)
             .document(replyEntity.replyParent!!)
             .collection(REPLY_COLLECTION)
             .document().let { documentReference ->
+                replyId = documentReference.id
                 val entity = replyEntity.copy(
                     id = documentReference.id,
                 )
@@ -34,6 +39,8 @@ class ReplyDaoImpl @Inject constructor(
                 documentReference.set(entity)
             }
             .await()
+        return replyId
+    }
 
     }
 
