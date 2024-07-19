@@ -20,10 +20,10 @@ class AddReplyUseCase @Inject constructor(
         post: CommentParent,
         commentId: String,
         text: String,
-    ) {
+    ) : String{
         val user = userRepository.getUserData().first() as User.Registered
 
-        replyRepository.addReply(
+        return replyRepository.addReply(
             reply = Reply(
                 id = "",
                 written = Written(
@@ -34,7 +34,7 @@ class AddReplyUseCase @Inject constructor(
                 ),
                 likeUser = emptyList(),
                 unlikeUser = emptyList(),
-                dateTime = LocalDateTime.MIN.let { DateTime(it, it) },
+                dateTime = LocalDateTime.now().let { DateTime(it, it) },
                 text = text,
                 commentParent = post,
                 replyParent = commentId,
