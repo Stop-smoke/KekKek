@@ -28,10 +28,7 @@ fun PostEntity.asExternalModel(): Post =
         ),
         title = title ?: "null",
         text = text ?: "null",
-        dateTime = DateTime(
-            created = dateTime?.created?.toLocalDateTime() ?: LocalDateTime.MIN,
-            modified = dateTime?.modified?.toLocalDateTime() ?: LocalDateTime.MIN
-        ),
+        dateTime = dateTime.asExternalModel(),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
         category = when (category) {
