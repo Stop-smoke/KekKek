@@ -2,36 +2,35 @@ package com.stopsmoke.kekkek.presentation.reply
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
+import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
-import com.stopsmoke.kekkek.core.domain.model.Comment
-import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.core.domain.model.Written
 import com.stopsmoke.kekkek.core.domain.model.emptyReply
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.domain.usecase.AddReplyUseCase
+import com.stopsmoke.kekkek.presentation.toggleElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,7 +38,7 @@ class ReplyViewModel @Inject constructor(
     private val replyRepository: ReplyRepository,
     userRepository: UserRepository,
     private val commentRepository: CommentRepository,
-    private val addReplyUseCase: AddReplyUseCase
+    private val addReplyUseCase: AddReplyUseCase,
 ) : ViewModel() {
     val user: StateFlow<User?> = userRepository.getUserData()
         .catch { it.printStackTrace() }
@@ -84,9 +83,12 @@ class ReplyViewModel @Inject constructor(
         .asResult()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = null
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = Result.Loading
         )
+
+    private val replyDeleteItemsId = MutableStateFlow<Set<String>>(emptySet())
+    private val reverseReplyLikeId = MutableStateFlow<Set<String>>(emptySet())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reply = commentId.flatMapLatest {
@@ -102,15 +104,68 @@ class ReplyViewModel @Inject constructor(
             }
         }
         .cachedIn(viewModelScope)
-        .asResult()
+        .combine(replyDeleteItemsId) { pagingData, id ->
+            pagingData.map { reply ->
+                if (id.contains(reply.id)) {
+                    return@map ReplyUiState.ItemDeleted
+                }
+                ReplyUiState.ReplyType(reply)
+            }
+        }
+        .combine(reverseReplyLikeId) { pagingData, id ->
+            pagingData.map { reply ->
+                if (reply is ReplyUiState.ReplyType && id.contains(reply.data.id)) {
+                    val newReply = reply.data.copy(
+                        isLiked = !reply.data.isLiked,
+                        likeUser = reply.data.likeUser.toggleElement((user.value as User.Registered).uid)
+                    )
+                    return@map reply.copy(newReply)
+                }
+                reply
+            }
+        }
+        .catch { it.printStackTrace() }
+
+    private val _previewReply = MutableStateFlow<List<ReplyUiState>>(emptyList())
+    val previewReply: StateFlow<List<ReplyUiState>> = _previewReply
+        .combine(replyDeleteItemsId) { uiStates, id ->
+            uiStates.map { uiState ->
+                if (uiState is ReplyUiState.ReplyType && id.contains(uiState.data.id)) {
+                    return@map ReplyUiState.ItemDeleted
+                }
+                uiState
+            }
+        }
+        .combine(reverseReplyLikeId) { pagingData, id ->
+            pagingData.map { reply ->
+                if (reply is ReplyUiState.ReplyType && id.contains(reply.data.id)) {
+                    val newReply = reply.data.copy(
+                        isLiked = !reply.data.isLiked,
+                        likeUser = reply.data.likeUser.toggleElement((user.value as User.Registered).uid)
+                    )
+                    return@map reply.copy(newReply)
+                }
+                reply
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
     fun addReply(reply: String) = viewModelScope.launch {
         try {
-            addReplyUseCase(
+            val replyId = addReplyUseCase(
                 post = (comment.value as Result.Success).data.parent,
                 commentId = (comment.value as Result.Success).data.id,
                 text = reply
             )
+
+            val newReply = replyRepository.getReply(postId.value, commentId.value, replyId)
+            _previewReply.update {
+                it.toMutableList().apply { add(ReplyUiState.ReplyType(newReply.first())) }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -119,22 +174,32 @@ class ReplyViewModel @Inject constructor(
     fun deleteReply(reply: Reply) = viewModelScope.launch {
         try {
             replyRepository.deleteReply(reply)
+            replyDeleteItemsId.emit(replyDeleteItemsId.value.toggleElement(reply.id))
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun commentLikeClick(updateComment: Comment) = viewModelScope.launch {
+    fun setCommentLike(like: Boolean) = viewModelScope.launch {
         try {
-            commentRepository.setCommentItem(updateComment)
+            if (like) {
+                commentRepository.addCommentLike(postId.value, commentId.value)
+                return@launch
+            }
+            commentRepository.removeCommentLike(postId.value, commentId.value)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun updateReply(reply: Reply) = viewModelScope.launch {
+    fun setReplyLike(replyId: String, like: Boolean) = viewModelScope.launch {
         try {
-            replyRepository.updateReply(reply)
+            reverseReplyLikeId.emit(reverseReplyLikeId.value.toggleElement(replyId))
+            if (like) {
+                replyRepository.appendReplyLike(postId.value, commentId.value, replyId)
+                return@launch
+            }
+            replyRepository.removeReplyLike(postId.value, commentId.value, replyId)
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -10,10 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentReplyBinding
@@ -35,9 +35,8 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     private val viewModel: ReplyViewModel by viewModels()
 
-    private val replyAdapter: ReplyAdapter by lazy {
-        ReplyAdapter(viewModel, viewLifecycleOwner)
-    }
+    private val replyAdapter: ReplyAdapter by lazy { ReplyAdapter() }
+    private val previewReplyAdapter: PreviewReplyAdapter by lazy { PreviewReplyAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +60,8 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
+        registerRecyclerViewCallback()
         initViewModel()
         initEditTextListener()
         setBackBtn()
@@ -73,24 +72,24 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
         val color = ContextCompat.getColor(requireContext(), R.color.bg_thin_gray)
         val height = resources.getDimensionPixelSize(R.dimen.divider_height)
         rvReply.addItemDecoration(CustomItemDecoration(color, height))
-        rvReply.adapter = replyAdapter
+        rvReply.adapter = ConcatAdapter(replyAdapter, previewReplyAdapter)
+    }
+
+    private fun registerRecyclerViewCallback() {
         replyAdapter.registerCallback(this@ReplyFragment)
+        previewReplyAdapter.registerCallback(this@ReplyFragment)
     }
 
     private fun initViewModel() = with(viewModel) {
         reply.collectLatestWithLifecycle(lifecycle) { replyResult ->
-            when (replyResult) {
-                is Result.Error -> {
-                    replyResult.exception?.printStackTrace()
-                    errorExit(findNavController())
-                }
-
-                Result.Loading -> {}
-                is Result.Success -> replyAdapter.submitData(replyResult.data)
-            }
+            replyAdapter.submitData(replyResult)
         }
 
-        comment.collectLatestWithLifecycle(viewLifecycleOwner.lifecycle) { commentResult ->
+        previewReply.collectLatestWithLifecycle(lifecycle) {
+            previewReplyAdapter.submitList(it)
+        }
+
+        comment.collectLatestWithLifecycle(lifecycle) { commentResult ->
             when (commentResult) {
                 is Result.Error -> {
                     commentResult.exception?.printStackTrace()
@@ -98,8 +97,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
                 }
 
                 Result.Loading -> {}
-                is Result.Success -> replyAdapter.updateComment()
-                null -> {}
+                is Result.Success -> replyAdapter.updateComment(commentResult.data)
             }
         }
     }
@@ -109,12 +107,12 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
             val reply = etReplyComment.text.toString()
             if (reply.isEmpty()) {
                 Toast.makeText(requireContext(), "댓글을 입력해주세요!", Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.addReply(reply = reply)
-                replyAdapter.refresh()
-                binding.etReplyComment.setText("")
-                binding.root.hideSoftKeyboard()
+                return@setOnClickListener
             }
+
+            viewModel.addReply(reply = reply)
+            binding.etReplyComment.setText("")
+            binding.root.hideSoftKeyboard()
         }
 
         hideEditText()
@@ -150,6 +148,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
         activity?.visible()
         _binding = null
         replyAdapter.unregisterCallback()
+        previewReplyAdapter.unregisterCallback()
     }
 
 
@@ -167,18 +166,16 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
         }
     }
 
-    override fun updateReply(updateReply: Reply) {
-        viewModel.updateReply(updateReply)
-        replyAdapter.refresh()
-    }
-
-    override fun commentLikeClick(comment: Comment) {
-        viewModel.commentLikeClick(comment)
-    }
-
-
     override fun navigateToUserProfile(uid: String) {
         findNavController().navigateToUserProfileScreen(uid)
+    }
+
+    override fun setCommentLike(like: Boolean) {
+        viewModel.setCommentLike(like)
+    }
+
+    override fun setReplyLike(id: String, like: Boolean) {
+        viewModel.setReplyLike(id, like)
     }
 
     private fun showDeleteDialog(reply: Reply) {
@@ -188,6 +185,5 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     override fun deleteReply(reply: Reply) {
         viewModel.deleteReply(reply)
-        replyAdapter.refresh()
     }
 }

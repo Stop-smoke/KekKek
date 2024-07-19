@@ -2,24 +2,20 @@ package com.stopsmoke.kekkek.presentation.reply
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.stopsmoke.kekkek.core.domain.model.Comment
-import com.stopsmoke.kekkek.databinding.ItemCommentBinding
 import com.stopsmoke.kekkek.databinding.ItemReplyBinding
 import com.stopsmoke.kekkek.databinding.RecyclerviewEmptyBinding
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.RecyclerviewEmptyViewHolder
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
-import com.stopsmoke.kekkek.presentation.reply.viewholder.CommentViewHolder
 import com.stopsmoke.kekkek.presentation.reply.viewholder.ReplyViewHolder
 import com.stopsmoke.kekkek.presentation.utils.diffutil.ReplyUiStateDiffUtil
 
-private enum class ReplyViewType {
-    COMMENT, REPLY, DELETED, ERROR
+private enum class PreviewReplyViewType {
+   REPLY, DELETED, ERROR
 }
 
-class ReplyAdapter :
-    PagingDataAdapter<ReplyUiState, RecyclerView.ViewHolder>(ReplyUiStateDiffUtil()) {
+class PreviewReplyAdapter : ListAdapter<ReplyUiState, RecyclerView.ViewHolder>(ReplyUiStateDiffUtil()) {
 
     private var callback: ReplyCallback? = null
 
@@ -31,25 +27,9 @@ class ReplyAdapter :
         callback = null
     }
 
-    private var comment: Comment? = null
-
-    fun updateComment(value: Comment) {
-        comment = value
-        notifyItemChanged(0)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
-            ReplyViewType.COMMENT.ordinal -> {
-                val view = ItemCommentBinding.inflate(
-                    /* inflater = */ LayoutInflater.from(parent.context),
-                    /* parent = */ parent,
-                    /* attachToParent = */ false
-                )
-                CommentViewHolder(view, callback)
-            }
-
-            ReplyViewType.REPLY.ordinal -> {
+            PreviewReplyViewType.REPLY.ordinal -> {
                 val view = ItemReplyBinding.inflate(
                     /* inflater = */ LayoutInflater.from(parent.context),
                     /* parent = */ parent,
@@ -72,26 +52,17 @@ class ReplyAdapter :
         val currentItem = getItem(position) ?: return
 
         when (holder) {
-            is CommentViewHolder -> {
-                comment?.let { holder.bind(it) }
-            }
-
             is ReplyViewHolder -> {
                 holder.bind((currentItem as ReplyUiState.ReplyType).data)
             }
         }
-
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) {
-            return ReplyViewType.COMMENT.ordinal
-        }
-
         return when (getItem(position)) {
-            is ReplyUiState.ReplyType -> ReplyViewType.REPLY.ordinal
-            is ReplyUiState.ItemDeleted -> ReplyViewType.DELETED.ordinal
-            null -> ReplyViewType.ERROR.ordinal
+            is ReplyUiState.ReplyType -> PreviewReplyViewType.REPLY.ordinal
+            is ReplyUiState.ItemDeleted -> PreviewReplyViewType.DELETED.ordinal
+            null -> PreviewReplyViewType.ERROR.ordinal
         }
     }
 }
