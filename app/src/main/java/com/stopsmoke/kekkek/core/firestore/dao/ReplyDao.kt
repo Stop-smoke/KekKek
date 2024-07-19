@@ -12,6 +12,8 @@ interface ReplyDao {
 
     suspend fun addReply(replyEntity: ReplyEntity) : String
 
+    fun getReply(postId: String, commentId: String, replyId: String) : Flow<ReplyEntity>
+
     suspend fun getReply(commentId: String): Flow<PagingData<ReplyEntity>>
 
     suspend fun deleteReply(replyEntity: ReplyEntity)

@@ -11,6 +11,8 @@ interface ReplyRepository {
      */
     suspend fun addReply(reply: Reply): String
 
+    fun getReply(postId: String, commentId: String, replyId: String) : Flow<Reply>
+
     suspend fun getReply(commentId: String): Flow<PagingData<Reply>>
 
     suspend fun deleteReply(reply: Reply)

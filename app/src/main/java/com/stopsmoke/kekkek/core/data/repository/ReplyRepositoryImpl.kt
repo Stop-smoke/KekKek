@@ -11,18 +11,29 @@ import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestore.dao.ReplyDao
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReplyRepositoryImpl @Inject constructor(
     private val replyDao: ReplyDao,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ReplyRepository {
 
     override suspend fun addReply(reply: Reply): String {
         return replyDao.addReply(reply.toEntity())
     }
+
+    override fun getReply(postId: String, commentId: String, replyId: String): Flow<Reply> =
+        combine(
+            userRepository.getUserData(),
+            replyDao.getReply(postId, commentId, replyId)
+        ) { user, reply ->
+            reply.asExternalModel(
+                isLiked = reply.likeUser.contains((user as User.Registered).uid)
+            )
+        }
 
     override suspend fun getReply(commentId: String): Flow<PagingData<Reply>> {
         val user = userRepository.getUserData().first() as? User.Registered

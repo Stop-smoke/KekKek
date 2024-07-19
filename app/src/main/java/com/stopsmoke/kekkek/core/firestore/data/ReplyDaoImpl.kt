@@ -42,6 +42,19 @@ class ReplyDaoImpl @Inject constructor(
         return replyId
     }
 
+    override fun getReply(
+        postId: String,
+        commentId: String,
+        replyId: String,
+    ): Flow<ReplyEntity> {
+        return firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .collection(REPLY_COLLECTION)
+            .document(replyId)
+            .dataObjects<ReplyEntity>()
+            .mapNotNull { it }
     }
 
     override suspend fun getReply(commentId: String): Flow<PagingData<ReplyEntity>> {
