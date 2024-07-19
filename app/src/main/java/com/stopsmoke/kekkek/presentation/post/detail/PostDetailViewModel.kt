@@ -40,7 +40,9 @@ class PostDetailViewModel @Inject constructor(
     private val addCommentUseCase: AddCommentUseCase,
     private val replyRepository: ReplyRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<PostDetailUiState> = MutableStateFlow(PostDetailUiState.init())
+
+    private val _uiState: MutableStateFlow<PostDetailUiState> =
+        MutableStateFlow(PostDetailUiState.init())
     val uiState = _uiState.asStateFlow()
 
 
@@ -57,7 +59,7 @@ class PostDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 postRepository.deletePost(postId)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
                 _uiState.emit(PostDetailUiState.ErrorExit)
             }
@@ -77,10 +79,12 @@ class PostDetailViewModel @Inject constructor(
             return@flatMapLatest emptyFlow()
         }
         postRepository.getPostItem(it)
-    }.catch {
-        it.printStackTrace()
-        _uiState.value = PostDetailUiState.ErrorExit
-    }.stateIn(
+    }
+        .catch {
+            it.printStackTrace()
+            _uiState.value = PostDetailUiState.ErrorExit
+        }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = null
@@ -109,17 +113,18 @@ class PostDetailViewModel @Inject constructor(
         commentRepository.getCommentItems(CommentFilter.Post(it))
     }
         .map { pagingData ->
-            pagingData
-                .map {
-                    PostDetailCommentRecyclerViewUiState.CommentType(it)
-                }
+            pagingData.map {
+                PostDetailCommentRecyclerViewUiState.CommentType(it)
+            }
                 .insertSeparators { before, after ->
                     if (before == null) {
                         return@insertSeparators PostDetailCommentRecyclerViewUiState.Header
                     }
 
                     if (before.item.earliestReply.isNotEmpty()) {
-                        return@insertSeparators PostDetailCommentRecyclerViewUiState.ReplyType(before.item)
+                        return@insertSeparators PostDetailCommentRecyclerViewUiState.ReplyType(
+                            before.item
+                        )
                     }
 
                     null
@@ -131,7 +136,7 @@ class PostDetailViewModel @Inject constructor(
                 if (
                     uiState is PostDetailCommentRecyclerViewUiState.CommentType &&
                     commentDeleteItemId.contains(uiState.item.id)
-                    ) {
+                ) {
                     return@map PostDetailCommentRecyclerViewUiState.Deleted
                 }
                 uiState
@@ -178,6 +183,7 @@ class PostDetailViewModel @Inject constructor(
                         }
                         uiState.copy(uiState.item.copy(earliestReply = replyList))
                     }
+
                     is PostDetailCommentRecyclerViewUiState.Deleted -> uiState
                 }
             }
