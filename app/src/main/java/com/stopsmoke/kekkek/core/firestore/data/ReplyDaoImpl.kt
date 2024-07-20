@@ -6,32 +6,55 @@ import androidx.paging.PagingData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.dataObjects
 import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.REPLY_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.ReplyDao
+import com.stopsmoke.kekkek.core.firestore.mapper.toInit
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class ReplyDaoImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : ReplyDao {
-    override suspend fun addReply(replyEntity: ReplyEntity) {
+    override suspend fun addReply(replyEntity: ReplyEntity): String {
+        var replyId: String
+
         firestore.collection(POST_COLLECTION)
             .document(replyEntity.commentParent!!.postId!!)
             .collection(COMMENT_COLLECTION)
             .document(replyEntity.replyParent!!)
             .collection(REPLY_COLLECTION)
             .document().let { documentReference ->
-                documentReference.set(
-                    replyEntity.copy(id = documentReference.id)
+                replyId = documentReference.id
+                val entity = replyEntity.copy(
+                    id = documentReference.id,
                 )
+                    .toInit()
+                documentReference.set(entity)
             }
             .await()
+        return replyId
+    }
 
+    override fun getReply(
+        postId: String,
+        commentId: String,
+        replyId: String,
+    ): Flow<ReplyEntity> {
+        return firestore.collection(POST_COLLECTION)
+            .document(postId)
+            .collection(COMMENT_COLLECTION)
+            .document(commentId)
+            .collection(REPLY_COLLECTION)
+            .document(replyId)
+            .dataObjects<ReplyEntity>()
+            .mapNotNull { it }
     }
 
     override suspend fun getReply(commentId: String): Flow<PagingData<ReplyEntity>> {
@@ -76,7 +99,7 @@ class ReplyDaoImpl @Inject constructor(
         commentId: String,
         replyId: String,
         field: String,
-        items: List<Any>
+        items: List<Any>,
     ) {
         firestore.collection(POST_COLLECTION)
             .document(postId)
@@ -93,7 +116,7 @@ class ReplyDaoImpl @Inject constructor(
         commentId: String,
         replyId: String,
         field: String,
-        items: List<Any>
+        items: List<Any>,
     ) {
         firestore.collection(POST_COLLECTION)
             .document(postId)
