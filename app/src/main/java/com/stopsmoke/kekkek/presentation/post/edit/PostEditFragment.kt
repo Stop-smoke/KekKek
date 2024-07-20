@@ -40,6 +40,7 @@ import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.post.edit.dialog.PostEditBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.presentation.visible
@@ -89,34 +90,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initViewModel()
         initListener()
-    }
-
-    private fun initView() = with(binding) {
-        initSpinner()
-    }
-
-    private fun initSpinner() = with(binding) {
-        val category = resources.getStringArray(R.array.post_category)
-        val adapter =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
-        includePostWriteAppBar.spinnerPostWrite.adapter = adapter
-        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    binding.tvPostWriteCategory.text = category[position]
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            }
     }
 
     private fun createDialogBuilder() = with(builder) {
@@ -137,11 +112,11 @@ class PostEditFragment : Fragment(), ErrorHandle {
     private fun initListener() = with(binding) {
         initTextEditor()
 
-        includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
+        includePostEditAppBar.tvPostEditCancel.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
+        includePostEditAppBar.tvPostEditRegister.setOnClickListener {
             if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
                 Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
             } else {
@@ -184,7 +159,10 @@ class PostEditFragment : Fragment(), ErrorHandle {
         }
 
         binding.tvPostWriteCategory.setOnClickListener {
-            binding.tvPostWriteCategory.performClick()
+            val categoryBottomSheet = PostEditBottomSheetDialog {selectedCategory ->
+                binding.tvPostWriteCategory.text = selectedCategory
+            }
+            categoryBottomSheet.show(childFragmentManager, categoryBottomSheet.tag)
         }
     }
 
@@ -226,7 +204,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
         tvPostWriteCategory.text = post.category.toStringKR()
 
-        includePostWriteAppBar.tvPostWriteRegister.text = "수정"
+        includePostEditAppBar.tvPostEditRegister.text = "수정"
 
         if(post.imagesUrl.isNotEmpty()){
             ivPostWriteImage.load(post.imagesUrl[0])

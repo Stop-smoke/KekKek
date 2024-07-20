@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/category_free"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:padding="16dp"
+        android:text="자유 게시판"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/category_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:padding="16dp"
+        android:text="금연 보조제 후기"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/category_promise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:padding="16dp"
+        android:text="금연 다짐"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/category_success"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:padding="16dp"
+        android:text="금연 성공 후기"
+        android:textSize="18sp" />
+
+</LinearLayout>

@@ -26,7 +26,7 @@
         android:layout_marginEnd="20dp"
         android:clickable="true"
         android:padding="14dp"
-        android:text="수정"
+        android:text="등록"
         android:textColor="#D0D5DB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
