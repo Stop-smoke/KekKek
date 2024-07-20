@@ -59,7 +59,7 @@ fun getRelativeTime(pastTime: ElapsedDateTime): String {
         DateTimeUnit.WEEK -> "주"
         DateTimeUnit.HOUR -> "시간"
         DateTimeUnit.MINUTE -> "분"
-        DateTimeUnit.SECOND -> "초"
+        DateTimeUnit.SECOND -> return "방금 전"
     }
     return "${pastTime.number} ${timeType} 전"
 }
@@ -102,7 +102,7 @@ internal fun ElapsedDateTime.toResourceId(context: Context): String =
         DateTimeUnit.DAY -> "${number}${context.getString(R.string.notification_elapsed_day)}"
         DateTimeUnit.HOUR -> "${number}${context.getString(R.string.notification_elapsed_hour)}"
         DateTimeUnit.MINUTE -> "${number}${context.getString(R.string.notification_elapsed_minute)}"
-        DateTimeUnit.SECOND -> "${number}${context.getString(R.string.notification_elapsed_second)}"
+        DateTimeUnit.SECOND -> "방금 전"
     }
 
 

@@ -41,6 +41,10 @@ class HomeFragment : Fragment(), ErrorHandle {
 
     private val viewModel: HomeViewModel by activityViewModels()
 
+    private val timerStartDialog: HomeTimerStartDialogFragment by lazy {
+        HomeTimerStartDialogFragment()
+    }
+
     private val timerStopDialog: HomeTimerStopDialogFragment by lazy {
         HomeTimerStopDialogFragment()
     }
@@ -205,7 +209,7 @@ class HomeFragment : Fragment(), ErrorHandle {
             ) {
                 timerStopDialog.show(childFragmentManager, "timerStopDialog")
             } else {
-                viewModel.setStartUserHistory()
+                timerStartDialog.show(childFragmentManager, "timerStartDialog")
             }
         }
     }
