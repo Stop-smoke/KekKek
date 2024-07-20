@@ -5,12 +5,12 @@ import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.Reply
-import com.stopsmoke.kekkek.core.domain.model.toPostCategory
-import com.stopsmoke.kekkek.core.domain.model.toRequestString
 import com.stopsmoke.kekkek.core.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.core.firestore.model.CommentParentEntity
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
+import com.stopsmoke.kekkek.presentation.toPostCategory
+import com.stopsmoke.kekkek.presentation.toRequestString
 
 internal fun CommentEntity.asExternalModel(
     earliestReply: List<Reply>,

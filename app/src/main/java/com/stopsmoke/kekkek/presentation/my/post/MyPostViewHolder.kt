@@ -8,11 +8,11 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
-import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.toStringKR
 
 class MyPostViewHolder(
     private val binding: ItemPostBinding,
@@ -64,18 +64,7 @@ class MyPostViewHolder(
 //                tvItemWritingRank.text = "랭킹 ${it.rank}위"
 //            }
 
-        tvItemWritingPostType.text = when (item.category) {
-            PostCategory.NOTICE -> "공지사항"
-            PostCategory.QUIT_SMOKING_SUPPORT -> "금연 지원 프로그램 공지"
-            PostCategory.POPULAR -> "인기글"
-            PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
-            PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
-            PostCategory.GENERAL_DISCUSSION -> "자유 게시판"
-            PostCategory.FAILURE_STORIES -> "금연 실패 후기"
-            PostCategory.RESOLUTIONS -> "금연 다짐"
-            PostCategory.UNKNOWN -> ""
-            PostCategory.ALL -> ""
-        }
+        tvItemWritingPostType.text = item.category.toStringKR()
     }
 
     private fun getRelativeTime(pastTime: ElapsedDateTime): String {

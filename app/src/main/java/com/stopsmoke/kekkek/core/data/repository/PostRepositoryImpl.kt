@@ -10,11 +10,11 @@ import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.Written
-import com.stopsmoke.kekkek.core.domain.model.toRequestString
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
+import com.stopsmoke.kekkek.presentation.toRequestString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

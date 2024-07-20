@@ -33,8 +33,6 @@ import com.stopsmoke.kekkek.core.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
-import com.stopsmoke.kekkek.core.domain.model.toPostWriteCategory
-import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -42,7 +40,8 @@ import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.putNavigationResult
-import com.stopsmoke.kekkek.presentation.visible
+import com.stopsmoke.kekkek.presentation.toPostWriteCategory
+import com.stopsmoke.kekkek.presentation.toStringKR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -153,7 +152,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
                     var inputStream: InputStream? = null
                     (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                         inputStream =
-                            BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile().inputStream()
+                            BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile()
+                                .inputStream()
                     }
 
                     val post = PostEdit(
@@ -202,8 +202,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle){
-            when(it){
+        uiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
                 PostEditUiState.InitUiState -> {}
                 PostEditUiState.Success -> {
                     findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
@@ -228,7 +228,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
 
-        if(post.imagesUrl.isNotEmpty()){
+        if (post.imagesUrl.isNotEmpty()) {
             ivPostWriteImage.load(post.imagesUrl[0])
             cvPostWriteImage.visibility = View.VISIBLE
         }

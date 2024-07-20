@@ -8,11 +8,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.getRelativeTime
+import com.stopsmoke.kekkek.presentation.toStringKR
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class CommunityListAdapter :
@@ -59,7 +57,7 @@ class CommunityListAdapter :
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
             }
 
-            item.postImage.let{
+            item.postImage.let {
                 if (it.isNotBlank()) {
                     ivItemWritingPostImage.load(it) {
                         crossfade(true)
