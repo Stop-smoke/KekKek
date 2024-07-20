@@ -74,14 +74,15 @@ class ReplyDaoImpl @Inject constructor(
             .flow
     }
 
-    override suspend fun deleteReply(replyEntity: ReplyEntity) {
+    override suspend fun deleteReply(postId: String, commentId: String, replyId: String) {
         firestore.collection(POST_COLLECTION)
-            .document(replyEntity.commentParent!!.postId!!)
+            .document(postId)
             .collection(COMMENT_COLLECTION)
-            .document(replyEntity.replyParent!!)
+            .document(commentId)
             .collection(REPLY_COLLECTION)
-            .document(replyEntity.id!!)
+            .document(replyId)
             .delete()
+            .await()
     }
 
     override suspend fun updateReply(replyEntity: ReplyEntity) {
