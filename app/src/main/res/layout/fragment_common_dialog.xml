@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_smoking_addication_test_exit_dialog"
     android:padding="20dp">
 
@@ -11,34 +11,34 @@
         android:id="@+id/tv_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="테스트를 종료하시겠습니까?"
+        android:layout_marginStart="4dp"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/iv_dialog_icon"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="4dp"/>
+        tools:text="테스트를 종료하시겠습니까?" />
 
     <ImageView
         android:id="@+id/iv_dialog_icon"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_dialog_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_dialog_title"
-        app:layout_constraintBottom_toBottomOf="@id/tv_dialog_title"
-        tools:src="@drawable/ic_timer"
-        android:visibility="gone"/>
+        tools:src="@drawable/ic_timer" />
 
     <TextView
         android:id="@+id/tv_dialog_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="종료하기를 누르면 테스트를 종료할게요.\n진행중인 내용은 저장되지 않아요."
         android:textColor="@color/gray_gray1"
         android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/iv_dialog_icon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title"
+        tools:text="종료하기를 누르면 테스트를 종료할게요.\n진행중인 내용은 저장되지 않아요." />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_cancel"
@@ -47,11 +47,11 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_test_dialog"
         android:minHeight="10dp"
-        android:text="취소"
         android:textColor="@color/tv_notice"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_dialog_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_content" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_content"
+        tools:text="취소" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_finish"
@@ -60,10 +60,10 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_text_button"
         android:minHeight="10dp"
-        android:text="종료하기"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/btn_dialog_cancel"
         app:layout_constraintStart_toEndOf="@+id/btn_dialog_cancel"
-        app:layout_constraintTop_toTopOf="@+id/btn_dialog_cancel" />
+        app:layout_constraintTop_toTopOf="@+id/btn_dialog_cancel"
+        tools:text="종료하기" />
 </androidx.constraintlayout.widget.ConstraintLayout>
