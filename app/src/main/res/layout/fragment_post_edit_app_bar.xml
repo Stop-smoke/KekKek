@@ -20,29 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_post_edit_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:fontFamily="@font/pretendard_bold"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="글 카테고리" />
-
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_edit_write"
-        android:layout_width="10dp"
-        android:layout_height="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/ic_category"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_post_edit_type"
-        app:layout_constraintStart_toEndOf="@+id/tv_post_edit_type"
-        app:layout_constraintTop_toTopOf="@+id/tv_post_edit_type" />
-
-    <TextView
         android:id="@+id/tv_post_edit_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

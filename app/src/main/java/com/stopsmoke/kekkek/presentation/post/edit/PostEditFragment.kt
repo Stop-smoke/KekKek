@@ -111,7 +111,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
                     position: Int,
                     id: Long
                 ) {
-                    includePostWriteAppBar.tvPostWriteType.text = category[position]
+                    binding.tvPostWriteCategory.text = category[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -163,7 +163,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
                             created = viewModel.post.value?.dateTime?.created
                                 ?: LocalDateTime.now(), modified = LocalDateTime.now()
                         ),
-                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
+                        category = binding.tvPostWriteCategory.text.toString()
                             .trim()
                             .toPostWriteCategory()
                     )
@@ -183,8 +183,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
             deleteImage()
         }
 
-        includePostWriteAppBar.tvPostWriteType.setOnClickListener {
-            includePostWriteAppBar.spinnerPostWrite.performClick()
+        binding.tvPostWriteCategory.setOnClickListener {
+            binding.tvPostWriteCategory.performClick()
         }
     }
 
@@ -224,7 +224,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
         etPostWriteContent.setText(post.text)
         etPostWriteTitle.setText(post.title)
 
-        includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
+        tvPostWriteCategory.text = post.category.toStringKR()
 
         includePostWriteAppBar.tvPostWriteRegister.text = "수정"
 
