@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -55,10 +56,10 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun deletePost(postId: String) {
+    fun deletePost() {
         viewModelScope.launch {
             try {
-                postRepository.deletePost(postId)
+                postRepository.deletePost(postId.value!!)
             } catch (e: Exception) {
                 e.printStackTrace()
                 _uiState.emit(PostDetailUiState.ErrorExit)
@@ -91,19 +92,12 @@ class PostDetailViewModel @Inject constructor(
         )
 
     private val _previewCommentItem: MutableStateFlow<List<Comment>> = MutableStateFlow(emptyList())
-    val previewCommentItem get() = _previewCommentItem.asStateFlow()
-
-    fun updatePreviewCommentItem(comment: Comment) {
-        viewModelScope.launch {
-            val newComment = previewCommentItem.value.toMutableList()
-            newComment.add(comment)
-            _previewCommentItem.emit(newComment)
-        }
-    }
+    val previewCommentItem = _previewCommentItem.asStateFlow()
 
     private val commentTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
     private val replyTransferLike: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
     private val commentDeleteSet: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
+    private val replyDeleteIdSet: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val comment = postId.flatMapLatest {
@@ -188,40 +182,66 @@ class PostDetailViewModel @Inject constructor(
                 }
             }
         }
+        .combine(replyDeleteIdSet) { pagingData, replyDeleteIdSet ->
+            pagingData.map { uiState ->
+                when (uiState) {
+                    is PostDetailCommentRecyclerViewUiState.CommentType -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Deleted -> uiState
+                    is PostDetailCommentRecyclerViewUiState.Header -> uiState
+                    is PostDetailCommentRecyclerViewUiState.ReplyType -> {
+                        val earliestReply = uiState.item.earliestReply.mapNotNull { reply ->
+                            if (replyDeleteIdSet.contains(reply.id)) {
+                                return@mapNotNull null
+                            }
+                            reply
+                        }
+                        return@map uiState.copy(uiState.item.copy(earliestReply = earliestReply))
+                    }
+                }
+            }
+        }
         .catch {
             it.printStackTrace()
             _uiState.emit(PostDetailUiState.ErrorExit)
         }
 
-    fun addComment(text: String) {
+    fun addComment(text: String) = viewModelScope.launch {
         try {
-            viewModelScope.launch {
-                if (post.value == null) return@launch
-                val newCommentDocId = addCommentUseCase(
-                    postId = post.value!!.id,
-                    postTitle = post.value!!.title,
-                    postType = post.value!!.category,
-                    text = text
-                )
+            if (post.value == null) return@launch
 
-                updatePreviewCommentItem(
-                    commentRepository.getComment(postId.value!!, newCommentDocId).first()
-                )
+            val newCommentId = addCommentUseCase(
+                postId = post.value!!.id,
+                postTitle = post.value!!.title,
+                postType = post.value!!.category,
+                text = text
+            )
+            val newComment = commentRepository.getComment(postId.value!!, newCommentId)
+
+            _previewCommentItem.update {
+                it.toMutableList().apply { add(newComment.first()) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.value = PostDetailUiState.ErrorExit
+            _uiState.emit(PostDetailUiState.ErrorExit)
         }
     }
 
-    fun deleteComment(commentId: String) = try {
-        viewModelScope.launch {
-            commentDeleteSet.emit(commentDeleteSet.value.toggleElement(commentId))
+    fun deleteComment(commentId: String) = viewModelScope.launch {
+        try {
+            val previewComment = previewCommentItem.value.find { it.id == commentId }
+
+            if (previewComment == null) {
+                commentDeleteSet.emit(commentDeleteSet.value.toggleElement(commentId))
+            } else {
+                _previewCommentItem.update {
+                    it.toMutableList().apply { remove(previewComment) }
+                }
+            }
             commentRepository.deleteCommentItem(post.value!!.id, commentId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _uiState.emit(PostDetailUiState.ErrorExit)
         }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        _uiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleLikeToPost() = try {
@@ -260,12 +280,27 @@ class PostDetailViewModel @Inject constructor(
 
     fun toggleCommentLike(comment: Comment) = viewModelScope.launch {
         try {
+            val previewComment = previewCommentItem.value.find { it.id == comment.id }
+
+            if (previewComment == null) {
+                commentTransferLike.emit(commentTransferLike.value.toggleElement(comment.id))
+            } else {
+                _previewCommentItem.update { comments ->
+                    comments.toMutableList().apply {
+                        val newComment = previewComment.copy(
+                            isLiked = !previewComment.isLiked,
+                            likeUser = previewComment.likeUser.toggleElement((user.value as User.Registered).uid)
+                        )
+                        set(indexOf(previewComment), newComment)
+                    }
+                }
+            }
+
             if (comment.isLiked) {
                 commentRepository.removeCommentLike(post.value!!.id, comment.id)
             } else {
                 commentRepository.addCommentLike(post.value!!.id, comment.id)
             }
-            commentTransferLike.emit(commentTransferLike.value.toggleElement(comment.id))
         } catch (e: Exception) {
             e.printStackTrace()
             _uiState.value = PostDetailUiState.ErrorExit
@@ -294,6 +329,15 @@ class PostDetailViewModel @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             _uiState.value = PostDetailUiState.ErrorExit
+        }
+    }
+
+    fun deleteReply(commentId: String, replyId: String) = viewModelScope.launch {
+        try {
+            replyDeleteIdSet.update { it.toMutableSet().apply { add(replyId) } }
+            replyRepository.deleteReply(postId.value!!, commentId, replyId)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

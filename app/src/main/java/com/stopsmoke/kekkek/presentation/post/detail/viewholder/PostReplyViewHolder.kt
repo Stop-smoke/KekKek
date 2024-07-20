@@ -22,6 +22,19 @@ class PostReplyViewHolder(
         initFirstReplyItem(item.earliestReply.getOrNull(0))
         initSecondReplyItem(item.earliestReply.getOrNull(1))
         initThirdReplyItem(item.earliestReply.getOrNull(2))
+
+        binding.includeReply1.root.setOnLongClickListener {
+            callback?.deleteReply(commentId = item.id, item.earliestReply[0].id)
+            true
+        }
+        binding.includeReply2.root.setOnLongClickListener {
+            callback?.deleteReply(commentId = item.id, item.earliestReply[1].id)
+            true
+        }
+        binding.includeReply3.root.setOnLongClickListener {
+            callback?.deleteReply(commentId = item.id, item.earliestReply[2].id)
+            true
+        }
     }
 
     private fun initReplyMoreView(comment: Comment) {
