@@ -7,6 +7,8 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.core.domain.model.toRequestString
+import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
@@ -63,6 +65,7 @@ class PostContentViewHolder(
         if (post == null) return@with
 
         tvPostPosterNickname.text = post.written.name
+        tvPostPosterPostType.text = post.category.toStringKR()
         tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
         tvPostHour.text = post.modifiedElapsedDateTime.toResourceId(itemView.context)
 
