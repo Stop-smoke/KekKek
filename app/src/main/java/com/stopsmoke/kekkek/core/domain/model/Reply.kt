@@ -17,7 +17,7 @@ data class Reply(
     var replyParent: String,
     val isLiked: Boolean
 ) {
-    val elapsedCreatedDateTime = dateTime.created.toFirebaseTimestamp().toLocalDateTime().getElapsedDateTime()
+    val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
 }
 
 fun emptyReply()= ReplyEntity().asExternalModel(false)
