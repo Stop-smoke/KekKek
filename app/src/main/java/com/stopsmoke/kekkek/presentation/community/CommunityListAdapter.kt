@@ -51,22 +51,24 @@ class CommunityListAdapter :
             tvItemWritingTimeStamp.text = getRelativeTime(item.postTime)
 
             item.userInfo.let {
-                if (item.postImage != "") {
-                    ivItemWritingPostImage.load(it.profileImage) {
-                        crossfade(true)
-//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
-//                    error(R.drawable.error) 오류시 띄우나?
-                    }
-                } else {
-                    ivItemWritingPostImage.visibility = View.GONE
-                    setMarginEnd(tvItemWritingTitle, 16)
-                }
                 it.profileImage.let { imgUrl ->
                     if (imgUrl.isNullOrBlank()) circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
                     else circleIvItemWritingProfile.load(imgUrl)
                 }
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
+            }
+
+            item.postImage.let{
+                if (it.isNotBlank()) {
+                    ivItemWritingPostImage.load(it) {
+                        crossfade(true)
+                    }
+                    ivItemWritingPostImage.visibility = View.VISIBLE
+                } else {
+                    ivItemWritingPostImage.visibility = View.GONE
+                    setMarginEnd(tvItemWritingTitle, 16)
+                }
             }
 
             tvItemWritingPostType.text = item.postType.toStringKR() ?: ""
