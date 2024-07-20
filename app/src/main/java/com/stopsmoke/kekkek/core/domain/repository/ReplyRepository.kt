@@ -5,7 +5,13 @@ import com.stopsmoke.kekkek.core.domain.model.Reply
 import kotlinx.coroutines.flow.Flow
 
 interface ReplyRepository {
-    suspend fun addReply(reply: Reply): Result<Unit>
+
+    /**
+     * reply id 값을 리턴함
+     */
+    suspend fun addReply(reply: Reply): String
+
+    fun getReply(postId: String, commentId: String, replyId: String) : Flow<Reply>
 
     suspend fun getReply(commentId: String): Flow<PagingData<Reply>>
 

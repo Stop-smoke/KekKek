@@ -13,7 +13,7 @@ import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostDetailCommentRecyclerViewUiState
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostCommentViewHolder
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostContentViewHolder
-import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostDeletedItemAdapter
+import com.stopsmoke.kekkek.presentation.post.detail.viewholder.RecyclerviewEmptyViewHolder
 import com.stopsmoke.kekkek.presentation.post.detail.viewholder.PostReplyViewHolder
 import com.stopsmoke.kekkek.presentation.utils.diffutil.PostDetailCommentRecyclerViewUiStateDiffUtil
 
@@ -78,7 +78,7 @@ class PostDetailAdapter :
                     parent,
                     false
                 )
-                PostDeletedItemAdapter(view)
+                RecyclerviewEmptyViewHolder(view)
             }
 
             else -> throw IllegalStateException()
