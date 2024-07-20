@@ -11,36 +11,54 @@
         android:id="@+id/include_post_edit_app_bar"
         layout="@layout/fragment_post_edit_app_bar" />
 
-    <TextView
-        android:id="@+id/tv_post_write_category"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_post_write_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="카테고리 선택"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include_post_edit_app_bar" />
+        app:layout_constraintTop_toBottomOf="@id/include_post_edit_app_bar">
+
+        <TextView
+            android:id="@+id/tv_post_write_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="카테고리 선택"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_dropdown"
+            android:tint="@color/gray_lightgray2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/grayline_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@color/bg_thin_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_post_write_category" />
+        app:layout_constraintTop_toBottomOf="@id/cl_post_write_category" />
 
     <EditText
         android:id="@+id/et_post_write_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
@@ -124,9 +142,9 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/bg_thin_gray"
+        app:layout_constraintBottom_toTopOf="@id/cl_postWrite_editor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_postWrite_editor" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_postWrite_editor"
@@ -134,9 +152,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/iv_post_write_link"

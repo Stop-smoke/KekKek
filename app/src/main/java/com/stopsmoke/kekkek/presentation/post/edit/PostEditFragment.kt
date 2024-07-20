@@ -94,7 +94,6 @@ class PostEditFragment : Fragment(), ErrorHandle {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initListener()
-        observeKeyboardVisibility()
     }
 
 
@@ -171,21 +170,11 @@ class PostEditFragment : Fragment(), ErrorHandle {
             deleteImage()
         }
 
-        binding.tvPostWriteCategory.setOnClickListener {
+        binding.clPostWriteCategory.setOnClickListener {
             val categoryBottomSheet = PostEditBottomSheetDialog {selectedCategory ->
                 binding.tvPostWriteCategory.text = selectedCategory
             }
             categoryBottomSheet.show(childFragmentManager, categoryBottomSheet.tag)
-        }
-    }
-
-    private fun observeKeyboardVisibility() {
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            binding.root.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = binding.root.height
-            val keypadHeight = screenHeight - rect.bottom
-            isKeyboardVisible = keypadHeight > screenHeight * 0.15
         }
     }
 
