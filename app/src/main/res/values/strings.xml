@@ -128,7 +128,7 @@
     <string name="post_write_cancel">취소</string>
     <string name="post_write_register">등록</string>
     <string name="post_write_title">제목을 입력해 주세요.</string>
-    <string name="post_write_content">내용을 입력해 주세요.\n에티켓을 준수해 유용한 공간을 만들어요😊</string>
+    <string name="post_write_content">내용을 입력해 주세요.</string>
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>
