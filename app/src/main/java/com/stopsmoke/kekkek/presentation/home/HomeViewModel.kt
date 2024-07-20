@@ -147,7 +147,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setStartUserHistory() = viewModelScope.launch {
+    fun setStartUserHistory(startedDateTime: LocalDateTime) = viewModelScope.launch {
         try {
             if (currentUserState.value is User.Registered) {
                 val user = currentUserState.value as User.Registered
@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
                 } else updatedHistoryTimeList = mutableListOf()
 
                 val lastItem = HistoryTime(
-                    quitSmokingStartDateTime = LocalDateTime.now(),
+                    quitSmokingStartDateTime = startedDateTime,
                     quitSmokingStopDateTime = null
                 )
                 updatedHistoryTimeList.add(lastItem)

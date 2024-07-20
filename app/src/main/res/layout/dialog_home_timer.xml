@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="20dp">
+
+    <TextView
+        android:id="@+id/tv_homeTimerDialog_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="날짜를 선택해주세요."
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="20sp"
+        android:fontFamily="@font/pretendard_semi_bold"/>
+
+    <DatePicker
+        android:id="@+id/datePicker_homeTimerDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        app:layout_constraintTop_toBottomOf="@id/tv_homeTimerDialog_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"
+        android:datePickerMode="spinner"/>
+
+    <TimePicker
+        android:id="@+id/timePicker_homeTimerDailog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        app:layout_constraintTop_toBottomOf="@id/datePicker_homeTimerDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="12dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_homeTimerDialog_cancel"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_test_dialog"
+        android:minHeight="10dp"
+        android:text="취소"
+        android:textColor="@color/tv_notice"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timePicker_homeTimerDailog"
+        app:layout_constraintEnd_toStartOf="@id/btn_homeTimerDialog_finish"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_homeTimerDialog_finish"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_text_button"
+        android:minHeight="10dp"
+        android:text="시작하기"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_homeTimerDialog_cancel"
+        app:layout_constraintStart_toEndOf="@+id/btn_homeTimerDialog_cancel"
+        app:layout_constraintTop_toTopOf="@+id/btn_homeTimerDialog_cancel"
+        app:layout_constraintEnd_toEndOf="parent"/>
+        
+</androidx.constraintlayout.widget.ConstraintLayout>
