@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.core.domain.model
 
+import com.stopsmoke.kekkek.core.data.mapper.toFirebaseTimestamp
+import com.stopsmoke.kekkek.core.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.core.domain.getElapsedDateTime
 
 data class Comment(
@@ -14,5 +16,5 @@ data class Comment(
     val replyCount: Long,
     val isLiked: Boolean
 ) {
-    val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
+    val elapsedCreatedDateTime = dateTime.created.toFirebaseTimestamp().toLocalDateTime().getElapsedDateTime()
 }
