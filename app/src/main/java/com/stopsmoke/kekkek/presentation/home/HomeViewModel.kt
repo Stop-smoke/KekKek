@@ -65,11 +65,6 @@ class HomeViewModel @Inject constructor(
                 _currentUserState.value = user
                 when (user) {
                     is User.Registered -> {
-
-                        if (user.history.historyTimeList.isEmpty()) {
-                            setEmptyStartUserHistory()
-                        }
-
                         val totalMinutesTime = user.history.getTotalMinutesTime()
                         timeString = formatElapsedTime(totalMinutesTime)
                         calculateSavedValues(user.userConfig)
@@ -152,7 +147,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setStartUserHistory() = viewModelScope.launch {
+    fun setStartUserHistory(startedDateTime: LocalDateTime) = viewModelScope.launch {
         try {
             if (currentUserState.value is User.Registered) {
                 val user = currentUserState.value as User.Registered
@@ -164,7 +159,7 @@ class HomeViewModel @Inject constructor(
                 } else updatedHistoryTimeList = mutableListOf()
 
                 val lastItem = HistoryTime(
-                    quitSmokingStartDateTime = LocalDateTime.now(),
+                    quitSmokingStartDateTime = startedDateTime,
                     quitSmokingStopDateTime = null
                 )
                 updatedHistoryTimeList.add(lastItem)
@@ -175,31 +170,6 @@ class HomeViewModel @Inject constructor(
                 userRepository.setUserData(user.copy(history = updatedUserHistory))
 
                 updateUserData()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
-        }
-
-    }
-
-
-    private fun setEmptyStartUserHistory() = viewModelScope.launch {
-        try {
-            if (currentUserState.value is User.Registered) {
-                val user = currentUserState.value as User.Registered
-
-                var updatedHistoryTimeList: MutableList<HistoryTime> = mutableListOf()
-                val lastItem = HistoryTime(
-                    quitSmokingStartDateTime = LocalDateTime.now(),
-                    quitSmokingStopDateTime = null
-                )
-                updatedHistoryTimeList.add(lastItem)
-
-                val updatedUserHistory =
-                    user.history.copy(historyTimeList = updatedHistoryTimeList)
-
-                userRepository.setUserData(user.copy(history = updatedUserHistory))
             }
         } catch (e: Exception) {
             e.printStackTrace()

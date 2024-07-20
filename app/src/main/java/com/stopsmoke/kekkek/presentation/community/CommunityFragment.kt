@@ -1,15 +1,14 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -41,7 +40,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 
-    private val viewModel: CommunityViewModel by viewModels()
+    private val viewModel: CommunityViewModel by activityViewModels()
 
     private val listAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -117,13 +116,15 @@ class CommunityFragment : Fragment(), ErrorHandle {
         clCommunityPostPopular1.setOnClickListener {
             val item = viewModel.uiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                findNavController().navigateToPostDetailScreen(item.popularItem.postInfo1.postInfo.id)
+                val id = if(item.popularPeriod) item.popularItem[0].postInfo.id else item.popularItemNonPeriod[0].postInfo.id
+                findNavController().navigateToPostDetailScreen(id)
             }
         }
         clCommunityPostPopular2.setOnClickListener {
             val item = viewModel.uiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                findNavController().navigateToPostDetailScreen(item.popularItem.postInfo2.postInfo.id)
+                val id = if(item.popularPeriod) item.popularItem[1].postInfo.id else item.popularItemNonPeriod[1].postInfo.id
+                findNavController().navigateToPostDetailScreen(id)
             }
         }
 
@@ -163,7 +164,8 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 // 현재 스크롤 위치 저장
                 lastScrollY = recyclerView.computeVerticalScrollOffset()
             }
-        })    }
+        })
+    }
 
     private fun View.hideWithAnimation() {
         this.animate()
@@ -214,11 +216,10 @@ class CommunityFragment : Fragment(), ErrorHandle {
     }
 
     private fun initViewModel() = with(viewModel) {
-
         viewLifecycleOwner.lifecycleScope.launch {
             uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
-                    when(state) {
+                    when (state) {
                         is CommunityUiState.CommunityNormalUiState -> onBind(state)
                         is CommunityUiState.ErrorExit -> errorExit(findNavController())
                     }
@@ -227,13 +228,14 @@ class CommunityFragment : Fragment(), ErrorHandle {
 
         //게시글
         posts.collectLatestWithLifecycle(lifecycle) { postsResult ->
-            when(postsResult){
+            when (postsResult) {
                 is Result.Error -> {
                     postsResult.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
+
                 Result.Loading -> {}
-                is Result.Success ->  listAdapter.submitData(postsResult.data)
+                is Result.Success -> listAdapter.submitData(postsResult.data)
             }
 
         }
@@ -242,28 +244,46 @@ class CommunityFragment : Fragment(), ErrorHandle {
         viewLifecycleOwner.lifecycleScope.launch {
             topPopularPosts.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { popularPostsResult ->
-                    when(popularPostsResult){
+                    when (popularPostsResult) {
                         is Result.Error -> {
                             popularPostsResult.exception?.printStackTrace()
                             errorExit(findNavController())
                         }
+
                         Result.Loading -> {}
-                        is Result.Success ->  bindPopularPosts(popularPostsResult.data)
+                        is Result.Success -> bindPopularPosts(
+                            popularPostsResult.data,
+                            period = true
+                        )
                     }
                 }
+        }
+
+        topPopularPostNonPeriod.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
+                is Result.Error -> {
+                    it.exception?.printStackTrace()
+                    errorExit(findNavController())
+                }
+
+                Result.Loading -> {}
+                is Result.Success -> bindPopularPosts(it.data, period = false)
+            }
         }
 
         //공지사항 배너
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePostResult ->
-                    when(noticePostResult){
+                    when (noticePostResult) {
                         is Result.Error -> {
                             noticePostResult.exception?.printStackTrace()
                             errorExit(findNavController())
                         }
+
                         Result.Loading -> {}
-                        is Result.Success -> binding.tvCommunityNoticeTitle.text = noticePostResult.data.title
+                        is Result.Success -> binding.tvCommunityNoticeTitle.text =
+                            noticePostResult.data.title
                     }
                 }
         }
@@ -291,43 +311,27 @@ class CommunityFragment : Fragment(), ErrorHandle {
         )
     }
 
-    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) {
-        val tvCommunityTitle1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_title1)
-        val tvCommunityViewNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum1)
-        val tvCommunityLikeNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum1)
-        val tvCommunityCommentNum1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum1)
-        val tvCommunityPostType1 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_postType1)
+    private fun onBind(communityUiState: CommunityUiState.CommunityNormalUiState) =
+        with(binding.includeCommunityPopularBanner) {
+            val popularItem =
+                if (communityUiState.popularPeriod) communityUiState.popularItem else communityUiState.popularItemNonPeriod
 
-        val tvCommunityTitle2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_title2)
-        val tvCommunityViewNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_viewNum2)
-        val tvCommunityLikeNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_likeNum2)
-        val tvCommunityCommentNum2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_commentNum2)
-        val tvCommunityPostType2 =
-            requireActivity().findViewById<TextView>(R.id.tv_community_postType2)
+            if (popularItem.isNotEmpty()) {
+                popularItem.getOrNull(0)?.postInfo?.let {
+                    tvCommunityTitle1.text = it.title
+                    tvCommunityViewNum1.text = it.view.toString()
+                    tvCommunityLikeNum1.text = it.like.toString()
+                    tvCommunityCommentNum1.text = it.comment.toString()
+                    tvCommunityPostType1.text = it.postType
+                }
 
-        communityUiState.popularItem.postInfo1.postInfo.let {
-            tvCommunityTitle1.text = it.title
-            tvCommunityViewNum1.text = it.view.toString()
-            tvCommunityLikeNum1.text = it.like.toString()
-            tvCommunityCommentNum1.text = it.comment.toString()
-            tvCommunityPostType1.text = it.postType
+                popularItem.getOrNull(1)?.postInfo?.let {
+                    tvCommunityTitle2.text = it.title
+                    tvCommunityViewNum2.text = it.view.toString()
+                    tvCommunityLikeNum2.text = it.like.toString()
+                    tvCommunityCommentNum2.text = it.comment.toString()
+                    tvCommunityPostType2.text = it.postType
+                }
+            }
         }
-
-        communityUiState.popularItem.postInfo2.postInfo.let {
-            tvCommunityTitle2.text = it.title
-            tvCommunityViewNum2.text = it.view.toString()
-            tvCommunityLikeNum2.text = it.like.toString()
-            tvCommunityCommentNum2.text = it.comment.toString()
-            tvCommunityPostType2.text = it.postType
-        }
-    }
 }

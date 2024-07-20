@@ -228,20 +228,6 @@ internal class PostDaoImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun getPopularPostItems(): Flow<List<PostEntity>> {
-        // 현재 시간에서 7일 전 시간 계산
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, -7)
-        val sevenDaysAgo = Timestamp(calendar.time)
-
-        val query = firestore.collection(POST_COLLECTION)
-            .whereGreaterThan("date_time.created", sevenDaysAgo)
-            .orderBy("views", Query.Direction.DESCENDING)
-            .limit(2)
-
-        return query.dataObjects<PostEntity>()
-    }
-
     override fun getTopNotice(limit: Long): Flow<List<PostEntity>> {
         return firestore.collection(POST_COLLECTION)
             .whereEqualTo("category", "notice")
@@ -263,6 +249,14 @@ internal class PostDaoImpl @Inject constructor(
 
             // Firestore 쿼리 결과를 PostEntity 리스트로 변환
             return query.dataObjects<PostEntity>()
+    }
+
+    override suspend fun getPopularPostListNonPeriod(): Flow<List<PostEntity>> {
+        val query = firestore.collection(POST_COLLECTION)
+            .orderBy("views", Query.Direction.DESCENDING)
+            .limit(10)
+
+        return query.dataObjects<PostEntity>()
     }
 
     override suspend fun getPostForPostId(postId: String): PostEntity {

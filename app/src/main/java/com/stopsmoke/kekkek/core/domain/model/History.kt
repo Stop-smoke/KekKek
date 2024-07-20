@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.core.domain.model
 
+import com.stopsmoke.kekkek.core.data.mapper.toFirebaseTimestamp
+import com.stopsmoke.kekkek.core.data.mapper.toLocalDateTime
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -23,7 +25,7 @@ fun History.getTotalMinutesTime(): Long {
         if (lastQuitSmokingStopDateTime == null) {
             totalMinutesTime += Duration.between(
                 lastHistoryTime.quitSmokingStartDateTime,
-                LocalDateTime.now()
+                LocalDateTime.now().toFirebaseTimestamp().toLocalDateTime()
             ).toMinutes()
         }
     }

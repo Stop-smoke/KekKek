@@ -145,7 +145,6 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     override fun onDestroy() {
         super.onDestroy()
-        activity?.visible()
         _binding = null
         replyAdapter.unregisterCallback()
         previewReplyAdapter.unregisterCallback()

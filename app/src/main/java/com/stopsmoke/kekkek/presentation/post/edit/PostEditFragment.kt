@@ -242,8 +242,9 @@ class PostEditFragment : Fragment(), ErrorHandle {
                 rotateBitmap(bitmap, orientation)
             }
 
-        val width = resources.getDimensionPixelSize(R.dimen.post_image_width)
+        val aspectRatio = rotatedBitmap.width.toFloat() / rotatedBitmap.height.toFloat()
         val height = resources.getDimensionPixelSize(R.dimen.post_image_height)
+        val width = (height * aspectRatio).toInt()
         val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, width, height, true)
 
         val roundedBitmap = getRoundedCornerBitmap(scaledBitmap, 20f)

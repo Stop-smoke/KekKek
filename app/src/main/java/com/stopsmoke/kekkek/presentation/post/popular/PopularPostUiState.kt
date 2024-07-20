@@ -4,12 +4,17 @@ import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 
 
 sealed interface PopularPostUiState{
-    data object Init: PopularPostUiState
+    data class NormalUiState(
+        val popularPostList: List<CommunityWritingItem>,
+        val period: Boolean = true
+    ): PopularPostUiState
 
     data object ErrorExit: PopularPostUiState
     data object ErrorMissing: PopularPostUiState
 
     companion object {
-        fun init() = PopularPostUiState.Init
+        fun init() = PopularPostUiState.NormalUiState(
+            popularPostList = emptyList()
+        )
     }
 }
