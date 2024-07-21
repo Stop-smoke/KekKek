@@ -16,8 +16,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
@@ -40,6 +38,7 @@ import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.post.edit.dialog.PostEditBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.putNavigationResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,6 +68,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
         AlertDialog.Builder(requireContext())
     }
 
+    private var isKeyboardVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,35 +89,10 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initViewModel()
         initListener()
     }
 
-    private fun initView() = with(binding) {
-        initSpinner()
-    }
-
-    private fun initSpinner() = with(binding) {
-        val category = resources.getStringArray(R.array.post_category)
-        val adapter =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, category)
-        includePostWriteAppBar.spinnerPostWrite.adapter = adapter
-        includePostWriteAppBar.spinnerPostWrite.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    includePostWriteAppBar.tvPostWriteType.text = category[position]
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            }
-    }
 
     private fun createDialogBuilder() = with(builder) {
         if (viewModel.post.value == null) {
@@ -136,44 +112,53 @@ class PostEditFragment : Fragment(), ErrorHandle {
     private fun initListener() = with(binding) {
         initTextEditor()
 
-        includePostWriteAppBar.tvPostWriteCancel.setOnClickListener {
+        includePostEditAppBar.tvPostEditCancel.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        includePostWriteAppBar.tvPostWriteRegister.setOnClickListener {
-            if (binding.etPostWriteTitle.text.isEmpty() || binding.etPostWriteContent.text.isEmpty()) {
-                Snackbar.make(binding.root, "제목 또는 내용을 입력해주세요!", Snackbar.LENGTH_SHORT).show()
-            } else {
-                val dialog = builder.create()
-                dialog.show()
+        includePostEditAppBar.tvPostEditRegister.setOnClickListener {
+            when {
+                binding.etPostWriteTitle.text.isEmpty() -> {
+                    showSnackbar("제목을 입력해주세요!")
+                }
+                binding.etPostWriteContent.text.isEmpty() -> {
+                    showSnackbar("내용을 입력해주세요!")
+                }
+                binding.tvPostWriteCategory.text == "카테고리 선택" -> {
+                    showSnackbar("카테고리를 설정해주세요!")
+                }
+                else -> {
+                    val dialog = builder.create()
+                    dialog.show()
 
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    viewModel.setLoading()
-                    var inputStream: InputStream? = null
-                    (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
-                        inputStream =
-                            BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile().inputStream()
-                    }
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        viewModel.setLoading()
+                        var inputStream: InputStream? = null
+                        (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
+                            inputStream =
+                                BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile().inputStream()
+                        }
 
-                    val post = PostEdit(
-                        title = etPostWriteTitle.text.toString(),
-                        text = etPostWriteContent.text.toString(),
-                        dateTime = DateTime(
-                            created = viewModel.post.value?.dateTime?.created
-                                ?: LocalDateTime.now(), modified = LocalDateTime.now()
-                        ),
-                        category = binding.includePostWriteAppBar.tvPostWriteType.text.toString()
-                            .trim()
-                            .toPostWriteCategory()
-                    )
-                    if (viewModel.post.value == null) {
-                        if (inputStream != null) viewModel.addPost(post, inputStream!!)
-                        else viewModel.addPost(post)
-                    } else {
-                        if (inputStream != null) viewModel.editPost(post, inputStream!!)
-                        else viewModel.editPost(post)
+                        val post = PostEdit(
+                            title = etPostWriteTitle.text.toString(),
+                            text = etPostWriteContent.text.toString(),
+                            dateTime = DateTime(
+                                created = viewModel.post.value?.dateTime?.created
+                                    ?: LocalDateTime.now(), modified = LocalDateTime.now()
+                            ),
+                            category = binding.tvPostWriteCategory.text.toString()
+                                .trim()
+                                .toPostWriteCategory()
+                        )
+                        if (viewModel.post.value == null) {
+                            if (inputStream != null) viewModel.addPost(post, inputStream!!)
+                            else viewModel.addPost(post)
+                        } else {
+                            if (inputStream != null) viewModel.editPost(post, inputStream!!)
+                            else viewModel.editPost(post)
+                        }
+                        dialog.dismiss()
                     }
-                    dialog.dismiss()
                 }
             }
         }
@@ -182,9 +167,20 @@ class PostEditFragment : Fragment(), ErrorHandle {
             deleteImage()
         }
 
-        includePostWriteAppBar.tvPostWriteType.setOnClickListener {
-            includePostWriteAppBar.spinnerPostWrite.performClick()
+        binding.clPostWriteCategory.setOnClickListener {
+            val categoryBottomSheet = PostEditBottomSheetDialog {selectedCategory ->
+                binding.tvPostWriteCategory.text = selectedCategory
+            }
+            categoryBottomSheet.show(childFragmentManager, categoryBottomSheet.tag)
         }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
+            if (isKeyboardVisible) {
+                anchorView = binding.etPostWriteContent
+            }
+        }.show()
     }
 
     private fun deleteImage() = with(binding) {
@@ -223,9 +219,9 @@ class PostEditFragment : Fragment(), ErrorHandle {
         etPostWriteContent.setText(post.text)
         etPostWriteTitle.setText(post.title)
 
-        includePostWriteAppBar.tvPostWriteType.text = post.category.toStringKR()
+        tvPostWriteCategory.text = post.category.toStringKR()
 
-        includePostWriteAppBar.tvPostWriteRegister.text = "수정"
+        includePostEditAppBar.tvPostEditRegister.text = "수정"
 
         if(post.imagesUrl.isNotEmpty()){
             ivPostWriteImage.load(post.imagesUrl[0])
