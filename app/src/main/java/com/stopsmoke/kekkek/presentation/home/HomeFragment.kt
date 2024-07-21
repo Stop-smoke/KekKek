@@ -23,6 +23,8 @@ import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.home.center.navigateToHomeCenterScreen
+import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStartDialogFragment
+import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStopDialogFragment
 import com.stopsmoke.kekkek.presentation.home.tip.navigateToHomeTipScreen
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen

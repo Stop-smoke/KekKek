@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home
+package com.stopsmoke.kekkek.presentation.home.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.stopsmoke.kekkek.databinding.DialogHomeTimerBinding
+import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import java.time.LocalDateTime
 
 class HomeTimerStartDialogFragment:DialogFragment() {

@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home
+package com.stopsmoke.kekkek.presentation.home.dialog
 
 import android.app.Dialog
 import android.graphics.Color
@@ -9,9 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.databinding.FragmentCommonDialogBinding
 import com.stopsmoke.kekkek.databinding.FragmentHomeStopDialogBinding
+import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 
 class HomeTimerStopDialogFragment:DialogFragment() {
     private var _binding:FragmentHomeStopDialogBinding? = null
