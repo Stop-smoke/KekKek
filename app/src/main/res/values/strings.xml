@@ -200,4 +200,23 @@
     <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 
     <string name="settings_user_profile_with_draw_fail_message">정보를 처리하는 과정에서 오류가 발생하였습니다.</string>
+
+    <!--  PostDetail Post Delete Dialog  -->
+    <string name="post_detail_post_delete_title">게시글 삭제</string>
+    <string name="post_detail_post_delete_description">게시글을 삭제하겠습니까?</string>
+    <string name="post_detail_post_delete_positive">삭제</string>
+    <string name="post_detail_post_delete_negative">취소</string>
+    <string name="post_detail_post_delete_toast">게시글이 삭제되었습니다.</string>
+
+    <!--  PostDetail Comment Delete Dialog  -->
+    <string name="post_detail_comment_delete_title">댓글 삭제</string>
+    <string name="post_detail_comment_delete_description">댓글을 삭제하겠습니까?</string>
+    <string name="post_detail_comment_delete_positive">삭제</string>
+    <string name="post_detail_comment_delete_negative">취소</string>
+
+    <!--  PostDetail Reply Delete Dialog  -->
+    <string name="post_detail_reply_delete_title">대댓글 삭제</string>
+    <string name="post_detail_reply_delete_description">대댓글을 삭제하겠습니까?</string>
+    <string name="post_detail_reply_delete_positive">삭제</string>
+    <string name="post_detail_reply_delete_negative">취소</string>
 </resources>

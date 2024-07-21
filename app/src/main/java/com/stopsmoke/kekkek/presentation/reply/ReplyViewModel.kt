@@ -156,7 +156,7 @@ class ReplyViewModel @Inject constructor(
                 _previewReply.update { it.toMutableList().apply { remove(reply) } }
             }
 
-            replyRepository.deleteReply(reply)
+            replyRepository.deleteReply(postId.value, commentId.value, reply.id)
         } catch (e: Exception) {
             e.printStackTrace()
         }

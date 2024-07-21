@@ -25,7 +25,7 @@ import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
 import com.stopsmoke.kekkek.presentation.authentication.navigateToAuthenticationScreenWithBackStackClear
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.progress.CircularProgressDialogFragment
+import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.settings.SettingsViewModel
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
