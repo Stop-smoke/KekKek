@@ -193,13 +193,13 @@ class HomeFragment : Fragment(), ErrorHandle {
         }
 
         if (uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
+//            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
             viewModel.startTimer()
             binding.tvHomeTimer.text = "금연한 지"
             tvHomeTimerNum.text = uiState.homeItem.timeString
 
         } else if (!uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
+//            ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
             binding.tvHomeTimer.text = "금연 정보를"
             viewModel.stopTimer()
         }
@@ -211,7 +211,7 @@ class HomeFragment : Fragment(), ErrorHandle {
     }
 
     private fun initTimerControllerListener() {
-        binding.ivHomeTimerController.setOnClickListener {
+        binding.clHomeToptext.setOnClickListener {
             if ((viewModel.uiState.value as HomeUiState.NormalUiState).startTimerSate
             ) {
                 timerStopDialog.show(childFragmentManager, "timerStopDialog")
