@@ -160,13 +160,15 @@ class HomeFragment : Fragment(), ErrorHandle {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePostResult ->
-                    when(noticePostResult){
+                    when (noticePostResult) {
                         is Result.Error -> {
                             noticePostResult.exception?.printStackTrace()
                             errorExit(findNavController())
                         }
+
                         Result.Loading -> {}
-                        is Result.Success -> binding.tvHomeNoticeTitle.text = noticePostResult.data.title
+                        is Result.Success -> binding.tvHomeNoticeTitle.text =
+                            noticePostResult.data.title
                     }
 
                 }
@@ -186,14 +188,19 @@ class HomeFragment : Fragment(), ErrorHandle {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
 //            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
 //            tvHomeRankNum.text = "${it.rank} 위"
-            tvHomeTimerNum.text = it.timeString
+//            tvHomeTimerNum.text = it.timeString
+            tvHomeTimerNum.text = "설정해주세요"
         }
 
         if (uiState.startTimerSate) {
             ivHomeTimerController.setImageResource(R.drawable.ic_stop)
             viewModel.startTimer()
+            binding.tvHomeTimer.text = "금연한 지"
+            tvHomeTimerNum.text = uiState.homeItem.timeString
+
         } else if (!uiState.startTimerSate) {
             ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
+            binding.tvHomeTimer.text = "금연 정보를"
             viewModel.stopTimer()
         }
 

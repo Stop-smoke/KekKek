@@ -10,7 +10,7 @@ sealed interface HomeUiState{
         companion object {
             fun init() = NormalUiState(
                 homeItem = HomeItem(
-                    timeString = "0분",
+                    timeString = "설정해주세요.",
                     savedMoney = 0.0,
                     savedLife = 0.0,
                     rank = 10000,
