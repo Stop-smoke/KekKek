@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="설정하기 : 하루에 피는 담배 개비 수"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/pretendard_bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
