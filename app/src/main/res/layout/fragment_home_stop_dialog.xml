@@ -11,47 +11,50 @@
         android:id="@+id/tv_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:textSize="18sp"
         android:fontFamily="@font/pretendard_bold"
-        app:layout_constraintStart_toEndOf="@id/iv_dialog_icon"
+        android:textColor="@color/gray_gray1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="테스트를 종료하시겠습니까?" />
+        android:text="금연 시간을 리셋하시겠습니까?" />
 
     <ImageView
-        android:id="@+id/iv_dialog_icon"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/tv_dialog_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_dialog_title"
-        tools:src="@drawable/ic_timer" />
+        android:id="@+id/iv_home_stop_description"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_home_stop_mountaineer"
+        app:layout_constraintEnd_toEndOf="@+id/tv_dialog_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_dialog_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title" />
 
     <TextView
         android:id="@+id/tv_dialog_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="@string/home_reset_description"
         android:textColor="@color/gray_gray1"
         android:textSize="14sp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        app:layout_constraintStart_toStartOf="@+id/iv_dialog_icon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_title"
-        tools:text="종료하기를 누르면 테스트를 종료할게요.\n진행중인 내용은 저장되지 않아요." />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_home_stop_description" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_cancel"
         android:layout_width="125dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bg_test_dialog"
         android:minHeight="10dp"
+        android:text="취소"
         android:textColor="@color/tv_notice"
-        android:fontFamily="@font/pretendard_semi_bold"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_dialog_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_content"
-        tools:text="취소" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_dialog_content" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_finish"
@@ -61,9 +64,9 @@
         android:background="@drawable/bg_text_button"
         android:minHeight="10dp"
         android:textColor="@color/white"
-        android:fontFamily="@font/pretendard_semi_bold"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/btn_dialog_cancel"
         app:layout_constraintStart_toEndOf="@+id/btn_dialog_cancel"
         app:layout_constraintTop_toTopOf="@+id/btn_dialog_cancel"
-        tools:text="종료하기" />
+        android:text="리셋하기" />
 </androidx.constraintlayout.widget.ConstraintLayout>

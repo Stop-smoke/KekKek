@@ -20,6 +20,7 @@
     <string name="menu_home">홈</string>
     <string name="menu_community">커뮤니티</string>
     <string name="menu_mypage">마이페이지</string>
+    <string name="home_reset_description">지금 당장은 실패했더라도, 지금까지 인내해왔던 이 시간들이 수포로 돌아가는 것이 아닙니다. 끝까지 포기하지 않는다면 끝내 금연에 성공하게 되실 것입니다.\n\n후회란 실패로부터 오는 것이 아니다. \n후회란 포기함으로 인해서 오는 것이다.\n- Mel Robbins -\n\n다시 돌아오실 날을 기다립니다.</string>
 
     <!--  my fragment  -->
     <string name="popular_post">인기 포스트</string>

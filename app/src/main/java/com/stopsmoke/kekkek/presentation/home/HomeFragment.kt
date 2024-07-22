@@ -23,6 +23,8 @@ import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.home.center.navigateToHomeCenterScreen
+import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStartDialogFragment
+import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStopDialogFragment
 import com.stopsmoke.kekkek.presentation.home.tip.navigateToHomeTipScreen
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
@@ -160,13 +162,15 @@ class HomeFragment : Fragment(), ErrorHandle {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.noticeBanner.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { noticePostResult ->
-                    when(noticePostResult){
+                    when (noticePostResult) {
                         is Result.Error -> {
                             noticePostResult.exception?.printStackTrace()
                             errorExit(findNavController())
                         }
+
                         Result.Loading -> {}
-                        is Result.Success -> binding.tvHomeNoticeTitle.text = noticePostResult.data.title
+                        is Result.Success -> binding.tvHomeNoticeTitle.text =
+                            noticePostResult.data.title
                     }
 
                 }
@@ -186,14 +190,19 @@ class HomeFragment : Fragment(), ErrorHandle {
             tvHomeSavedMoneyNum.text = it.savedMoney.toLong().toString() + " 원"
 //            tvHomeSavedLifeNum.text = formatToOneDecimalPlace(it.savedLife) + " 일"
 //            tvHomeRankNum.text = "${it.rank} 위"
-            tvHomeTimerNum.text = it.timeString
+//            tvHomeTimerNum.text = it.timeString
+            tvHomeTimerNum.text = "설정해주세요"
         }
 
         if (uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
+//            ivHomeTimerController.setImageResource(R.drawable.ic_stop)
             viewModel.startTimer()
+            binding.tvHomeTimer.text = "금연한 지"
+            tvHomeTimerNum.text = uiState.homeItem.timeString
+
         } else if (!uiState.startTimerSate) {
-            ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
+//            ivHomeTimerController.setImageResource(R.drawable.ic_home_start)
+            binding.tvHomeTimer.text = "금연 정보를"
             viewModel.stopTimer()
         }
 
@@ -204,7 +213,7 @@ class HomeFragment : Fragment(), ErrorHandle {
     }
 
     private fun initTimerControllerListener() {
-        binding.ivHomeTimerController.setOnClickListener {
+        binding.clHomeToptext.setOnClickListener {
             if ((viewModel.uiState.value as HomeUiState.NormalUiState).startTimerSate
             ) {
                 timerStopDialog.show(childFragmentManager, "timerStopDialog")
