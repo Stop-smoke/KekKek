@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.core.domain
 
-import com.stopsmoke.kekkek.core.data.mapper.toFirebaseTimestamp
-import com.stopsmoke.kekkek.core.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import java.time.Duration
@@ -10,7 +8,7 @@ import java.time.Period
 
 
 internal fun LocalDateTime.getElapsedDateTime(): ElapsedDateTime {
-    val currentDateTime = LocalDateTime.now().toFirebaseTimestamp().toLocalDateTime()
+    val currentDateTime = LocalDateTime.now()
     val period = Period.between(this.toLocalDate(), currentDateTime.toLocalDate())
 
     if (period.years > 0) {

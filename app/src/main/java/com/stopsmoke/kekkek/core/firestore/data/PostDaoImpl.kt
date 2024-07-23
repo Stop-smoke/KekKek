@@ -155,6 +155,10 @@ internal class PostDaoImpl @Inject constructor(
         firestore.collection(POST_COLLECTION).document().let { document ->
             document.set(postEntity.copy(id = document.id))
                 .await()
+            document.update("date_time.created", FieldValue.serverTimestamp())
+                .await()
+            document.update("date_time.modified", FieldValue.serverTimestamp())
+                .await()
         }
     }
 
