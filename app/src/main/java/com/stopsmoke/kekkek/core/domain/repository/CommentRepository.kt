@@ -12,19 +12,11 @@ interface CommentRepository {
 
     suspend fun addCommentItem(comment: Comment): String
 
-    fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>>
+    suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit>
 
-    suspend fun setCommentItem(comment: Comment):Result<Unit>
+    fun getComment(postId: String, commentId: String): Flow<Comment>
 
-    suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit>
+    suspend fun addCommentLike(postId: String, commentId: String)
 
-   suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit>
-
-   fun getCommentCount(postId: String): Flow<Long>
-
-   fun getComment(postId: String, commentId: String): Flow<Comment>
-
-   suspend fun addCommentLike(postId: String, commentId: String)
-
-   suspend fun removeCommentLike(postId: String, commentId: String)
+    suspend fun removeCommentLike(postId: String, commentId: String)
 }
