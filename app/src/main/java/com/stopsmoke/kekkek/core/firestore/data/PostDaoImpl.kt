@@ -39,7 +39,7 @@ internal class PostDaoImpl @Inject constructor(
     override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(POST_COLLECTION)
             .whereNotNullEqualTo("category", category)
-            .orderBy("date_time", Query.Direction.DESCENDING)
+            .orderBy("date_time.created", Query.Direction.DESCENDING)
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)
@@ -57,7 +57,7 @@ internal class PostDaoImpl @Inject constructor(
         return try {
             val query = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("written.uid", writtenUid)
-                .orderBy("date_time", Query.Direction.DESCENDING)
+                .orderBy("date_time.created", Query.Direction.DESCENDING)
                 .limit(10)
 
             return Pager(
