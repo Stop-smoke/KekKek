@@ -199,4 +199,11 @@ internal class UserDaoImpl @Inject constructor(
             .add(mapOf("uid" to uid))
             .await()
     }
+
+    override suspend fun updatePushServiceToken(uid: String, token: String) {
+        firestore.collection(USER_COLLECTION)
+            .document(uid)
+            .update(mapOf("fcm_token" to token))
+            .await()
+    }
 }
