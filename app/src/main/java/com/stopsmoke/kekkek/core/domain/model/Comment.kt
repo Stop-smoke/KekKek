@@ -1,7 +1,5 @@
 package com.stopsmoke.kekkek.core.domain.model
 
-import com.stopsmoke.kekkek.core.data.mapper.toFirebaseTimestamp
-import com.stopsmoke.kekkek.core.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.core.domain.getElapsedDateTime
 
 data class Comment(

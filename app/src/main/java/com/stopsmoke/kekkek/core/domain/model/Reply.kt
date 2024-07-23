@@ -1,8 +1,6 @@
 package com.stopsmoke.kekkek.core.domain.model
 
 import com.stopsmoke.kekkek.core.data.mapper.asExternalModel
-import com.stopsmoke.kekkek.core.data.mapper.toFirebaseTimestamp
-import com.stopsmoke.kekkek.core.data.mapper.toLocalDateTime
 import com.stopsmoke.kekkek.core.domain.getElapsedDateTime
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 
