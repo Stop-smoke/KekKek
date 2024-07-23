@@ -5,7 +5,6 @@ import com.google.firebase.Timestamp
 import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.firestore.model.DateTimeEntity
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.Date
 
@@ -26,8 +25,8 @@ internal fun Timestamp.toLocalDateTime(): LocalDateTime =
 
 fun LocalDateTime.toFirebaseTimestamp(): Timestamp {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        Timestamp(toInstant(ZoneOffset.UTC))
+        Timestamp(toInstant(ZonedDateTime.now().offset))
     } else {
-        Timestamp(Date.from(toInstant(ZoneOffset.UTC)))
+        Timestamp(Date.from(toInstant(ZonedDateTime.now().offset)))
     }
 }
