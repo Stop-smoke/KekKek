@@ -7,7 +7,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.kakao.sdk.common.util.Utility
 import com.stopsmoke.kekkek.BuildConfig
@@ -15,6 +14,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.databinding.ActivityMainBinding
 import com.stopsmoke.kekkek.presentation.utils.defaultNavigationOption
+import com.stopsmoke.kekkek.presentation.utils.newBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -80,6 +80,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        navController.currentBackStackEntryFlow.collectLatestWithLifecycle(lifecycle) { backStackEntry ->
+            when (backStackEntry.destination.route) {
+                "home_screen" -> {
+                    selectNavItem(navItems[0].first)
+                }
+
+                "community_screen" -> {
+                    selectNavItem(navItems[1].first)
+                }
+
+                "my_screen" -> {
+                    selectNavItem(navItems[2].first)
+                }
+            }
+        }
+
+
         navItems.forEach { (itemLayout, _) ->
             itemLayout.setOnClickListener {
                 val currentDestinationId = navController.currentDestination?.id
@@ -103,14 +120,21 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                selectNavItem(itemLayout)
             }
         }
-        selectNavItem(binding.navHome)
     }
 
     private fun navigateWithAnimation(@IdRes idRes: Int) {
-        navController.navigate(resId = idRes, args = null, navOptions = defaultNavigationOption)
+        val navigationOptions = defaultNavigationOption.newBuilder()
+            .setPopUpTo(destinationId = idRes, inclusive = true, saveState = true)
+            .setLaunchSingleTop(true)
+            .build()
+
+        navController.navigate(
+            resId = idRes,
+            args = null,
+            navOptions = navigationOptions
+        )
     }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {
