@@ -8,7 +8,6 @@ import com.stopsmoke.kekkek.core.data.mapper.toEntity
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.Written
 import com.stopsmoke.kekkek.core.domain.model.toRequestString
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
@@ -82,24 +81,19 @@ internal class PostRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun addPost(post: PostEdit): Result<Unit> =
-        try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            val written = Written(
-                uid = user.uid,
-                name = user.name,
-                profileImage = user.profileImage,
-                ranking = user.ranking
-            )
-            postDao.addPost(post.toEntity(written))
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.Error(e)
-        }
+    override suspend fun addPost(post: PostEdit) {
+        val user = userRepository.getUserData().first()
+        val written = Written(
+            uid = user.uid,
+            name = user.name,
+            profileImage = user.profileImage,
+            ranking = user.ranking
+        )
+        postDao.addPost(post.toEntity(written))
+    }
 
     override suspend fun addPost(post: PostEdit, inputStream: InputStream) {
-        val user = (userRepository.getUserData().first() as User.Registered)
+        val user = userRepository.getUserData().first()
         val written = Written(
             uid = user.uid,
             name = user.name,
@@ -154,44 +148,28 @@ internal class PostRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun addViews(postId: String): Result<Unit> {
-        return postDao.addViews(postId)
+    override suspend fun addViews(postId: String) {
+        postDao.addViews(postId)
     }
 
-    override suspend fun addLikeToPost(postId: String): Result<Unit> {
-        return try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            postDao.addLike(postId, user.uid)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun addLikeToPost(postId: String) {
+        val user = userRepository.getUserData().first()
+        postDao.addLike(postId, user.uid)
     }
 
-    override suspend fun deleteLikeToPost(postId: String): Result<Unit> {
-        return try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            postDao.deleteLike(postId, user.uid)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun deleteLikeToPost(postId: String) {
+        val user = userRepository.getUserData().first()
+        postDao.deleteLike(postId, user.uid)
     }
 
-    override suspend fun addBookmark(postId: String): Result<Unit> {
-        return try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            postDao.addBookmark(postId, user.uid)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun addBookmark(postId: String) {
+        val user = userRepository.getUserData().first()
+        postDao.addBookmark(postId, user.uid)
     }
 
-    override suspend fun deleteBookmark(postId: String): Result<Unit> {
-        return try {
-            val user = (userRepository.getUserData().first() as User.Registered)
-            postDao.deleteBookmark(postId, user.uid)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun deleteBookmark(postId: String) {
+        val user = userRepository.getUserData().first()
+        postDao.deleteBookmark(postId, user.uid)
     }
 
     override suspend fun setImage(inputStream: InputStream, path: String) {

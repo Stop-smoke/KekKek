@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -26,6 +25,7 @@ import com.stopsmoke.kekkek.presentation.home.center.navigateToHomeCenterScreen
 import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStartDialogFragment
 import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStopDialogFragment
 import com.stopsmoke.kekkek.presentation.home.tip.navigateToHomeTipScreen
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
 import com.stopsmoke.kekkek.presentation.ranking.navigateToRankingScreen
@@ -82,20 +82,19 @@ class HomeFragment : Fragment(), ErrorHandle {
 
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
             when (it) {
-                is User.Error -> {
+                is UserUiState.Error -> {
                     Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
 
-                is User.Guest -> {
-                }
+                is UserUiState.Guest -> {}
 
-                is User.Registered -> {
+                is UserUiState.Registered -> {
                     viewModel.getMyRank()
-                    if (it.cigaretteAddictionTestResult == null) {
+                    if (it.data.cigaretteAddictionTestResult == null) {
                         tvHomeTestDegree.text = "테스트 필요"
                         ivHomeTest.text = "검사하기"
                     } else {
-                        tvHomeTestDegree.text = it.cigaretteAddictionTestResult
+                        tvHomeTestDegree.text = it.data.cigaretteAddictionTestResult
                         ivHomeTest.text = "다시 검사하기"
 
                     }

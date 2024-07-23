@@ -143,21 +143,21 @@ class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
         }
 
         bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
-            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+            if (viewModel.user.value == null) return@setOnClickListener
 
             postDeleteDialog.value.show(childFragmentManager, "postDeleteDialog")
             bottomSheetDialog.dismiss()
         }
 
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
-            if (viewModel.user.value !is User.Registered) return@setOnClickListener
+            if (viewModel.user.value == null) return@setOnClickListener
             findNavController().navigateToPostEditScreen(
                 viewModel.postId.value ?: return@setOnClickListener
             )
             bottomSheetDialog.dismiss()
         }
 
-        (viewModel.user.value as? User.Registered)?.let { user ->
+        viewModel.user.value?.let { user ->
             if (viewModel.post.value?.written?.uid == user.uid) {
                 bottomsheetDialogBinding.tvEditPost.visibility = View.VISIBLE
                 bottomsheetDialogBinding.tvDeletePost.visibility = View.VISIBLE
@@ -223,7 +223,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
                 val headerItem = PostContentItem(user, post)
                 postDetailAdapter.updatePostHeader(headerItem)
 
-                if (user !is User.Registered || post?.id == "null" || post?.id.isNullOrBlank()) {
+                if (user == null || post?.id == "null" || post?.id.isNullOrBlank()) {
                     binding.clPostAddComment.visibility = View.GONE
                     return@combine
                 }
@@ -369,7 +369,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
     }
 
     override fun deleteItem(comment: Comment) {
-        val user = viewModel.user.value as? User.Registered ?: return
+        val user = viewModel.user.value ?: return
 
         if (comment.written.uid == user.uid) {
             commentDeleteId = comment.id

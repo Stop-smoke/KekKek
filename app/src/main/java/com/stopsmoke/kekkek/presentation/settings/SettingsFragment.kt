@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,7 +19,6 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.stopsmoke.kekkek.BuildConfig
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentSettingsBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.invisible
@@ -66,32 +64,22 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
 
     private fun observeUserInformation() {
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
-            if (it != null)
-                when (it) {
-                    is User.Error -> {
-                        Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+            if (it == null) {
+                return@collectLatestWithLifecycle
+            }
 
-                    is User.Guest -> {
-                        binding.includeSettingsProfile.tvSettingUsername.text = "로그인이 필요합니다."
-                    }
-
-                    is User.Registered -> {
-                        binding.includeSettingsProfile.tvSettingUsername.text = it.name
-                        when (it.profileImage) {
-                            ProfileImage.Default -> {
-                                binding.includeSettingsProfile.circleIvSettingProfile
-                                    .setImageResource(R.drawable.ic_user_profile_test)
-                            }
-
-                            is ProfileImage.Web -> {
-                                binding.includeSettingsProfile.circleIvSettingProfile
-                                    .load((it.profileImage as? ProfileImage.Web)?.url)
-                            }
-                        }
-                    }
+            binding.includeSettingsProfile.tvSettingUsername.text = it.name
+            when (it.profileImage) {
+                ProfileImage.Default -> {
+                    binding.includeSettingsProfile.circleIvSettingProfile
+                        .setImageResource(R.drawable.ic_user_profile_test)
                 }
+
+                is ProfileImage.Web -> {
+                    binding.includeSettingsProfile.circleIvSettingProfile
+                        .load((it.profileImage as? ProfileImage.Web)?.url)
+                }
+            }
         }
     }
 

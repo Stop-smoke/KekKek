@@ -8,13 +8,11 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
     fun getUser(uid: String): Flow<UserEntity>
 
-    suspend fun getUserDataFormatUser(uid: String): UserEntity?
-
     suspend fun setUser(userEntity: UserEntity)
 
-    suspend fun setUserDataForName(userEntity: UserEntity, name: String)
+    suspend fun setUserName(uid: String, name: String)
 
-    suspend fun setUserDataForIntroduction(userEntity: UserEntity, introduction: String)
+    suspend fun setUserIntroduction(uid: String, introduction: String)
 
     suspend fun updateUser(uid: String, map: Map<String, Any>)
 

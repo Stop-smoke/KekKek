@@ -11,10 +11,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.ranking.RankingListAdapter
 import com.stopsmoke.kekkek.presentation.ranking.RankingListCallback
 import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
@@ -57,7 +57,7 @@ class RankingListFieldFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentRankingListFieldBinding.inflate(inflater, container, false)
         return binding.root
@@ -91,7 +91,7 @@ class RankingListFieldFragment : Fragment() {
             .subscribe { interval ->
                 progressList.forEachIndexed { index, progressBar ->
                     progressBar.progress = initialProgress[index] + interval.toInt()
-                    if(progressBar.progress == 100){
+                    if (progressBar.progress == 100) {
                         profileList[index].visibility = View.VISIBLE
                     }
                 }
@@ -163,27 +163,28 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    (viewModel.user.value as? User.Registered)?.toRankingListItem()?.let { user ->
-                        binding.includeRankingListMyRank.apply {
-                            tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
-                            tvRankStateItem.text = user.introduction
-                            tvRankStateItemUserName.text = user.name
+                    (viewModel.user.value as? UserUiState.Registered)?.data?.toRankingListItem()
+                        ?.let { user ->
+                            binding.includeRankingListMyRank.apply {
+                                tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
+                                tvRankStateItem.text = user.introduction
+                                tvRankStateItemUserName.text = user.name
 
-                            if (user.profileImage.isNullOrEmpty()) {
-                                circleIvRankStateItemProfile.setImageResource(
-                                    R.drawable.img_defaultprofile
-                                )
-                            } else {
-                                circleIvRankStateItemProfile.load(user.profileImage)
-                            }
+                                if (user.profileImage.isNullOrEmpty()) {
+                                    circleIvRankStateItemProfile.setImageResource(
+                                        R.drawable.img_defaultprofile
+                                    )
+                                } else {
+                                    circleIvRankStateItemProfile.load(user.profileImage)
+                                }
 
-                            tvRankingListTime.text = getRankingTime(user.startTime!!)
+                                tvRankingListTime.text = getRankingTime(user.startTime!!)
 
-                            circleIvRankStateItemProfile.setOnClickListener {
-                                callback?.navigationToUserProfile(user.userID)
+                                circleIvRankStateItemProfile.setOnClickListener {
+                                    callback?.navigationToUserProfile(user.userID)
+                                }
                             }
                         }
-                    }
                 }
 
                 RankingListField.Achievement -> {
@@ -192,27 +193,28 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    (viewModel.user.value as? User.Registered)?.toRankingListItem()?.let { user ->
-                        binding.includeRankingListMyRank.apply {
-                            tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
-                            tvRankStateItem.text = user.introduction
-                            tvRankStateItemUserName.text = user.name
+                    (viewModel.user.value as? UserUiState.Registered)?.data?.toRankingListItem()
+                        ?.let { user ->
+                            binding.includeRankingListMyRank.apply {
+                                tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
+                                tvRankStateItem.text = user.introduction
+                                tvRankStateItemUserName.text = user.name
 
-                            if (user.profileImage.isNullOrEmpty()) {
-                                circleIvRankStateItemProfile.setImageResource(
-                                    R.drawable.img_defaultprofile
-                                )
-                            } else {
-                                circleIvRankStateItemProfile.load(user.profileImage)
-                            }
+                                if (user.profileImage.isNullOrEmpty()) {
+                                    circleIvRankStateItemProfile.setImageResource(
+                                        R.drawable.img_defaultprofile
+                                    )
+                                } else {
+                                    circleIvRankStateItemProfile.load(user.profileImage)
+                                }
 
-                            tvRankingListTime.text = user.clearAchievementInt.toString() + "개"
+                                tvRankingListTime.text = user.clearAchievementInt.toString() + "개"
 
-                            circleIvRankStateItemProfile.setOnClickListener {
-                                callback?.navigationToUserProfile(user.userID)
+                                circleIvRankStateItemProfile.setOnClickListener {
+                                    callback?.navigationToUserProfile(user.userID)
+                                }
                             }
                         }
-                    }
                 }
 
                 null -> {}

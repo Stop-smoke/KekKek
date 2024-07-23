@@ -10,7 +10,6 @@ import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
-import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
 
 class PostContentViewHolder(
@@ -43,19 +42,10 @@ class PostContentViewHolder(
             return
         }
 
-        when (user) {
-            is User.Error -> {
-                itemView.snackbarLongShow("유저 정보 에러")
-            }
-
-            is User.Guest -> {}
-            is User.Registered -> {
-                if (post.likeUser.contains(user.uid)) {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
-                } else {
-                    binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
-                }
-            }
+        if (post.likeUser.contains(user.uid)) {
+            binding.ivPostHeart.setImageResource(R.drawable.ic_heart_filled)
+        } else {
+            binding.ivPostHeart.setImageResource(R.drawable.ic_heart)
         }
     }
 

@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.stopsmoke.kekkek.core.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.core.domain.model.Post
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
@@ -22,7 +21,7 @@ class BookmarkRepositoryImpl @Inject constructor(
     override fun getBookmarkItems(): Flow<PagingData<Post>> =
         userRepository.getUserData()
             .flatMapLatest { user ->
-                postDao.getBookmarkItems((user as User.Registered).uid)
+                postDao.getBookmarkItems(user.uid)
                     .map { pagingData ->
                         pagingData.map { it.asExternalModel() }
                     }

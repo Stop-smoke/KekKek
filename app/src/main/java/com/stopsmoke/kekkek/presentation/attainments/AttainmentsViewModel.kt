@@ -2,12 +2,12 @@ package com.stopsmoke.kekkek.presentation.attainments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.UserConfig
 import com.stopsmoke.kekkek.core.domain.model.getStartTimerState
 import com.stopsmoke.kekkek.core.domain.model.getTotalMinutesTime
 import com.stopsmoke.kekkek.core.domain.model.getTotalSecondsTime
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +25,7 @@ class AttainmentsViewModel @Inject constructor(
         MutableStateFlow(AttainmentsItem.init())
     val uiState: StateFlow<AttainmentsItem> = _uiState.asStateFlow()
 
-    private var _currentUserState = MutableStateFlow<User>(
-        User.Guest)
+    private var _currentUserState = MutableStateFlow<UserUiState>(UserUiState.Guest)
     val currentUserState = _currentUserState.asStateFlow()
 
     private var timeString: String = ""
@@ -38,29 +37,23 @@ class AttainmentsViewModel @Inject constructor(
     fun updateUserData() = viewModelScope.launch {
         val userData = userRepository.getUserData()
         userData.collect { user ->
-            when (user) {
-                is User.Registered -> {
-                    _currentUserState.value = user
+            _currentUserState.value = UserUiState.Registered(user)
 
-                    val totalMinutesTime = user.history.getTotalMinutesTime()
-                    val totalSecondsTime = user.history.getTotalSecondsTime()
-                    timeString = formatElapsedTime(totalMinutesTime)
-                    calculateSavedValues(user.userConfig)
-                    _uiState.emit(
-                        AttainmentsItem(
-                            history = user.history,
-                            savedDate = savedDatePerMinute,
-                            savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                            savedLife = getLifeWithCigarette(savedCigarettePerMinute * totalMinutesTime),
-                            savedCigarette = savedCigarettePerMinute * totalMinutesTime,
-                            timeString = formatElapsedTime(totalSecondsTime)
-                        )
-                    )
-                    if (user.history.getStartTimerState()) startTimer()
-                }
-
-                else -> {}
-            }
+            val totalMinutesTime = user.history.getTotalMinutesTime()
+            val totalSecondsTime = user.history.getTotalSecondsTime()
+            timeString = formatElapsedTime(totalMinutesTime)
+            calculateSavedValues(user.userConfig)
+            _uiState.emit(
+                AttainmentsItem(
+                    history = user.history,
+                    savedDate = savedDatePerMinute,
+                    savedMoney = savedMoneyPerMinute * totalMinutesTime,
+                    savedLife = getLifeWithCigarette(savedCigarettePerMinute * totalMinutesTime),
+                    savedCigarette = savedCigarettePerMinute * totalMinutesTime,
+                    timeString = formatElapsedTime(totalSecondsTime)
+                )
+            )
+            if (user.history.getStartTimerState()) startTimer()
         }
     }
 
@@ -69,11 +62,11 @@ class AttainmentsViewModel @Inject constructor(
         while (true) {
             timeString =
                 formatElapsedTime(
-                    (currentUserState.value as? User.Registered)?.history?.getTotalSecondsTime()
+                    (currentUserState.value as? UserUiState.Registered)?.data?.history?.getTotalSecondsTime()
                         ?: 0
                 )
             val currentMinutes =
-                (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime() ?: 0
+                (currentUserState.value as? UserUiState.Registered)?.data?.history?.getTotalMinutesTime() ?: 0
 
             _uiState.update { prev ->
                 prev.copy(

@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.Achievement
 import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
-import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.core.domain.model.emptyActivities
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.getTotalDay
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
 import com.stopsmoke.kekkek.presentation.my.achievement.CurrentProgress
 import com.stopsmoke.kekkek.presentation.my.achievement.emptyCurrentProgress
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -34,14 +35,28 @@ class MyViewModel @Inject constructor(
     private val achievementRepository: AchievementRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(User.Guest))
+    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(UserUiState.Guest))
     val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
     val user = userRepository.getUserData()
+        .catch { it.printStackTrace() }
+        .asResult()
+        .map {
+            when(it) {
+                is Result.Error -> {
+                    if (it.exception is GuestModeException) {
+                        return@map UserUiState.Guest
+                    }
+                    UserUiState.Error(it.exception)
+                }
+                is Result.Loading -> UserUiState.Loading
+                is Result.Success -> UserUiState.Registered(it.data)
+            }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = null
+            initialValue = UserUiState.Loading
         )
 
 
@@ -99,7 +114,7 @@ class MyViewModel @Inject constructor(
         val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
         val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
 
-        val insertClearList = clearList.filter { it.id !in (user.value as User.Registered).clearAchievementsList }
+        val insertClearList = clearList.filter { it.id !in (user.value as UserUiState.Registered).data.clearAchievementsList }
         if(insertClearList.isNotEmpty()) {
             upDateUserAchievementList(insertClearList.map { it.id })
         }
@@ -126,9 +141,9 @@ class MyViewModel @Inject constructor(
         when (activities.value) {
             is Result.Success -> {
                 when (userData) {
-                    is User.Registered -> {
+                    is UserUiState.Registered -> {
                         val list = userRepository.getAllUserData().map { user ->
-                            (user as User.Registered).toRankingListItem()
+                            user.toRankingListItem()
                         }.filter { item ->
                             item.startTime != null
                         }.sortedBy { item ->
@@ -138,15 +153,15 @@ class MyViewModel @Inject constructor(
                         }
                         val activities =
                             (activities.value as? Result.Success)?.data
-                        val userRank = list.indexOf(userData.uid) + 1
+                        val userRank = list.indexOf(userData.data.uid) + 1
 
                         activities?.let {
                             _currentProgressItem.value = CurrentProgress(
-                                user = userData.getTotalDay(),
+                                user = userData.data.getTotalDay(),
                                 comment = activities.commentCount,
                                 post = activities.postCount,
                                 rank = userRank.toLong(),
-                                achievement = userData.clearAchievementsList.size.toLong()
+                                achievement = userData.data.clearAchievementsList.size.toLong()
                             )
                         }
                     }
@@ -167,16 +182,14 @@ class MyViewModel @Inject constructor(
 
     fun upDateUserAchievementList(achievementIdList: List<String>) = viewModelScope.launch {
         try {
-            val userData = user.value
-            if (userData is User.Registered) {
-                val updateList =
-                    (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
-                userRepository.setUserData(
-                    userData.copy(
-                        clearAchievementsList = updateList
-                    )
+            val userData = (user.value as UserUiState.Registered).data
+            val updateList =
+                (userData.clearAchievementsList.toSet() + achievementIdList.toSet()).toList()
+            userRepository.setUserData(
+                userData.copy(
+                    clearAchievementsList = updateList
                 )
-            }
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             _uiState.emit(MyUiState.ErrorExit)

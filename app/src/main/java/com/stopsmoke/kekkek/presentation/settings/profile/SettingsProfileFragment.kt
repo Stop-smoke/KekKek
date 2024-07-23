@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentSettingsProfileBinding
@@ -203,7 +204,7 @@ class SettingsProfileFragment : Fragment() {
         ivSettingEditNickname.setOnClickListener {
             val fragmentManager = parentFragmentManager
             val addDialog =
-                EditNameDialogFragment((viewModel.user.value as? User.Registered)?.name ?: "")
+                EditNameDialogFragment(viewModel.user.value?.name ?: "")
             addDialog.show(fragmentManager, "edit name")
         }
 
@@ -213,7 +214,7 @@ class SettingsProfileFragment : Fragment() {
         ivSettingEditIntroduction.setOnClickListener {
             val fragmentManager = parentFragmentManager
             val addDialog = EditIntroductionDialogFragment(
-                (viewModel.user.value as? User.Registered)?.introduction ?: ""
+                viewModel.user.value?.introduction ?: ""
             )
             addDialog.show(fragmentManager, "edit introduction")
         }
@@ -221,37 +222,32 @@ class SettingsProfileFragment : Fragment() {
     }
 
     private fun initViewModel() = with(viewModel) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            user.collectLatest { user ->
-                onBind(user)
+        lifecycleScope.launch {
+            try {
+                user.collectLatest { user ->
+                    onBind(user)
+                }
+            } catch (e: GuestModeException) {
+                Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
             }
         }
     }
 
     private fun onBind(user: User?) = with(binding) {
-        if (user != null)
-            when (user) {
-                is User.Error -> {
-                    Toast.makeText(requireContext(), "Error user profile", Toast.LENGTH_SHORT)
-                        .show()
-                }
+        if (user != null) {
+            binding.tvSettingProfileNicknameDetail.text = user.name
+            binding.tvSettingProfileIntroductionDetail.text = user.introduction
 
-                is User.Guest -> {
-                    Toast.makeText(requireContext(), "게스트 모드", Toast.LENGTH_SHORT).show()
-                }
-
-                is User.Registered -> {
-                    binding.tvSettingProfileNicknameDetail.text = user.name
-                    binding.tvSettingProfileIntroductionDetail.text = user.introduction
-
-                    when (user.profileImage) {
-                        is ProfileImage.Default -> {}
-                        is ProfileImage.Web -> {
-                            circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
-                        }
-                    }
+            when (user.profileImage) {
+                is ProfileImage.Default -> {}
+                is ProfileImage.Web -> {
+                    circleIvProfile.load((user.profileImage as ProfileImage.Web).url)
                 }
             }
+        }
     }
 
     override fun onDestroyView() {

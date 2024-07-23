@@ -2,7 +2,7 @@ package com.stopsmoke.kekkek.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
@@ -120,24 +120,17 @@ class OnboardingViewModel @Inject constructor(
             try {
                 require(uid.value.isNotBlank())
 
-                when (val user = getUserDataUseCase().first()) {
-                    is User.Error -> {
-                        user.t?.printStackTrace()
-                        _authenticationUiState.emit(AuthenticationUiState.Error(user.t))
-                    }
-                    is User.Guest -> {
-                        _authenticationUiState.emit(AuthenticationUiState.Guest)
-                    }
-                    is User.Registered -> {
-                        if (user.uid.isBlank()) {
-                            _authenticationUiState.emit(AuthenticationUiState.NewMember)
-                            return@launch
-                        }
-                        finishOnboardingUseCase()
-                        registerFcmTokenUseCase()
-                        _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
-                    }
+                val user = getUserDataUseCase().first()
+
+                if (user.uid.isBlank()) {
+                    _authenticationUiState.emit(AuthenticationUiState.NewMember)
+                    return@launch
                 }
+                finishOnboardingUseCase()
+                registerFcmTokenUseCase()
+                _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
+            } catch (e: GuestModeException) {
+                _authenticationUiState.emit(AuthenticationUiState.Guest)
             } catch (e: Exception) {
                 _authenticationUiState.emit(AuthenticationUiState.Error(e))
                 e.printStackTrace()
