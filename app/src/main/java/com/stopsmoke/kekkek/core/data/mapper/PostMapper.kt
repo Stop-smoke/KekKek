@@ -9,8 +9,7 @@ import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.Written
 import com.stopsmoke.kekkek.core.firestore.model.PostEntity
 import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
-import com.stopsmoke.kekkek.presentation.toPostCategory
-import com.stopsmoke.kekkek.presentation.toRequestString
+import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset

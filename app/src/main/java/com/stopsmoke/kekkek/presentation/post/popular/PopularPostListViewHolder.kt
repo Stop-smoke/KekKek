@@ -10,7 +10,7 @@ import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getRelativeTime
-import com.stopsmoke.kekkek.presentation.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class PopularPostListViewHolder(
     private val binding: ItemPostBinding,

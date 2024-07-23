@@ -26,7 +26,7 @@ import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
 import com.stopsmoke.kekkek.presentation.post.popular.navigateToPostPopularScreen
 import com.stopsmoke.kekkek.presentation.search.navigateToSearchScreen
 import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
-import com.stopsmoke.kekkek.presentation.toPostCategory
+import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint

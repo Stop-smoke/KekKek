@@ -37,10 +37,10 @@ import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.mapper.toPostWriteCategory
 import com.stopsmoke.kekkek.presentation.post.edit.dialog.PostEditBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.putNavigationResult
-import com.stopsmoke.kekkek.presentation.toPostWriteCategory
-import com.stopsmoke.kekkek.presentation.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

@@ -12,7 +12,7 @@ import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallbac
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
-import com.stopsmoke.kekkek.presentation.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,

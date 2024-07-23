@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
-import com.stopsmoke.kekkek.presentation.toPostCategory
+import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -12,7 +12,7 @@ import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.toResourceId
-import com.stopsmoke.kekkek.presentation.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class MyPostViewHolder(
     private val binding: ItemPostBinding,

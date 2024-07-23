@@ -5,6 +5,7 @@ import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.core.data.mapper.toEntity
+import com.stopsmoke.kekkek.core.data.mapper.toRequestString
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
@@ -14,7 +15,6 @@ import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
-import com.stopsmoke.kekkek.presentation.toRequestString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

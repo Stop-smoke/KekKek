@@ -8,7 +8,7 @@ import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.databinding.RecyclerviewMyCommentItemBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.getResourceString
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommentDiffUtil
 
 class MyCommentListAdapter

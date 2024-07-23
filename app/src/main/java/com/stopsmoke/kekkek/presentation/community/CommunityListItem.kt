@@ -6,7 +6,7 @@ import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
-import com.stopsmoke.kekkek.presentation.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
