@@ -1,4 +1,4 @@
-package com.stopsmoke.kekkek.presentation.home
+package com.stopsmoke.kekkek.presentation.home.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.stopsmoke.kekkek.databinding.DialogHomeTimerBinding
+import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import java.time.LocalDateTime
 
 class HomeTimerStartDialogFragment:DialogFragment() {
@@ -54,7 +55,7 @@ class HomeTimerStartDialogFragment:DialogFragment() {
 
             val selectDateTime = LocalDateTime.of(year, month, day, hour, minute)
             if(LocalDateTime.now() < selectDateTime){
-                Toast.makeText(requireContext(), "현재 시간보다 앞서나갔습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "현재 시간보다 앞선 경우 설정 불가합니다.", Toast.LENGTH_SHORT).show()
             }else {
                 viewModel.setStartUserHistory(selectDateTime)
                 dismiss()

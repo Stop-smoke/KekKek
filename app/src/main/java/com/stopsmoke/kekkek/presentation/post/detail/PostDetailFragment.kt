@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -25,6 +23,8 @@ import com.stopsmoke.kekkek.databinding.FragmentPostDetailBinding
 import com.stopsmoke.kekkek.databinding.FragmentPostViewBottomsheetDialogBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.dialog.CommonDialogFragment
+import com.stopsmoke.kekkek.presentation.dialog.CommonDialogListener
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.invisible
@@ -32,23 +32,19 @@ import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScree
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PostDetailAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.adapter.PreviewCommentAdapter
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
-import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentDialogCallback
-import com.stopsmoke.kekkek.presentation.post.detail.dialog.DeleteDialogType
-import com.stopsmoke.kekkek.presentation.post.detail.dialog.PostCommentDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
 import com.stopsmoke.kekkek.presentation.putNavigationResult
 import com.stopsmoke.kekkek.presentation.reply.navigateToReplyScreen
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
-import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCallback, ErrorHandle {
+class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
 
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -59,20 +55,80 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
     private lateinit var previewCommentAdapter: PreviewCommentAdapter
     private lateinit var postConcatAdapter: ConcatAdapter
 
+    private lateinit var commentDeleteId: String
+    private lateinit var replyDeleteId: String
+
     private val postDeleteDialog = lazy {
-        AlertDialog.Builder(requireContext())
-            .setTitle("게시글 삭제")
-            .setMessage("게시글을 삭제하시겠습니까?")
-            .setPositiveButton("삭제") { dialog, _ ->
-                viewModel.post.value?.id?.let { postId ->
-                    deletePost(postId)
+        CommonDialogFragment.newInstance(
+            title = getString(R.string.post_detail_post_delete_title),
+            description = getString(R.string.post_detail_post_delete_description),
+            positiveText = getString(R.string.post_detail_post_delete_positive),
+            negativeText = getString(R.string.post_detail_post_delete_negative)
+        )
+            .apply {
+                val commentDeleteDialogListener = object : CommonDialogListener {
+                    override fun onPositive() {
+                        viewModel.deletePost()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.post_detail_post_delete_toast),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
+                        findNavController().popBackStack()
+                        dismiss()
+                    }
+
+                    override fun onNegative() {
+                        dismiss()
+                    }
                 }
-                dialog.dismiss()
+                registerCallbackListener(commentDeleteDialogListener)
             }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
+    }
+
+    private val commentDeleteDialog = lazy {
+        CommonDialogFragment.newInstance(
+            title = getString(R.string.post_detail_comment_delete_title),
+            description = getString(R.string.post_detail_comment_delete_description),
+            positiveText = getString(R.string.post_detail_comment_delete_positive),
+            negativeText = getString(R.string.post_detail_comment_delete_negative)
+        )
+            .apply {
+                val commentDeleteDialogListener = object : CommonDialogListener {
+                    override fun onPositive() {
+                        viewModel.deleteComment(commentDeleteId)
+                        dismiss()
+                    }
+
+                    override fun onNegative() {
+                        dismiss()
+                    }
+                }
+                registerCallbackListener(commentDeleteDialogListener)
             }
-            .create()
+    }
+
+    private val replyDeleteDialog = lazy {
+        CommonDialogFragment.newInstance(
+            title = getString(R.string.post_detail_comment_delete_title),
+            description = getString(R.string.post_detail_comment_delete_description),
+            positiveText = getString(R.string.post_detail_comment_delete_positive),
+            negativeText = getString(R.string.post_detail_comment_delete_negative)
+        )
+            .apply {
+                val commentDeleteDialogListener = object : CommonDialogListener {
+                    override fun onPositive() {
+                        viewModel.deleteReply(commentDeleteId, replyDeleteId)
+                        dismiss()
+                    }
+
+                    override fun onNegative() {
+                        dismiss()
+                    }
+                }
+                registerCallbackListener(commentDeleteDialogListener)
+            }
     }
 
     private val postActionDialog = lazy {
@@ -89,13 +145,15 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         bottomsheetDialogBinding.tvDeletePost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
 
-            postDeleteDialog.value.show()
+            postDeleteDialog.value.show(childFragmentManager, "postDeleteDialog")
             bottomSheetDialog.dismiss()
         }
 
         bottomsheetDialogBinding.tvEditPost.setOnClickListener {
             if (viewModel.user.value !is User.Registered) return@setOnClickListener
-            findNavController().navigateToPostEditScreen(viewModel.postId.value ?: return@setOnClickListener)
+            findNavController().navigateToPostEditScreen(
+                viewModel.postId.value ?: return@setOnClickListener
+            )
             bottomSheetDialog.dismiss()
         }
 
@@ -109,23 +167,6 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
             }
         }
         bottomSheetDialog
-    }
-
-    private lateinit var selectCommentId: String
-
-    private val commentDeleteDialog = lazy {
-        AlertDialog.Builder(requireContext())
-            .setTitle("댓글 삭제")
-            .setMessage("댓글을 삭제하시겠습니까?")
-            .setPositiveButton("예") { dialog, _ ->
-                viewModel.deleteComment(selectCommentId)
-//                postViewAdapter.refresh()
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -206,14 +247,6 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         }
     }
 
-    private fun showCommentDeleteDialog(commentId: String) {
-        val commentDeleteDialog = PostCommentDeleteDialogFragment(
-            this@PostDetailFragment,
-            DeleteDialogType.CommentDeleteDialog(commentId)
-        )
-        commentDeleteDialog.show(childFragmentManager, "commentDeleteDialog")
-    }
-
     private fun autoScrollKeyboardWithRecyclerView() {
         binding.rvPostView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
@@ -257,6 +290,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         }
 
         postDetailAdapter.registerCallback(this@PostDetailFragment)
+        previewCommentAdapter.registerCallback(this@PostDetailFragment)
     }
 
     override fun onResume() {
@@ -269,6 +303,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         _binding = null
         dismissPostDeleteDialog()
         dismissCommentDeleteDialog()
+        dismissReplyDeleteDialog()
         dismissPostActionDialog()
     }
 
@@ -284,33 +319,61 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
         }
     }
 
+    private fun dismissReplyDeleteDialog() {
+        if (replyDeleteDialog.isInitialized()) {
+            replyDeleteDialog.value.dismiss()
+        }
+    }
+
     private fun dismissPostActionDialog() {
         if (postActionDialog.isInitialized()) {
             postActionDialog.value.dismiss()
         }
     }
 
-    private fun initUiStateViewModel() = with(viewModel){
-        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
-            when(uiState){
+    override fun onDestroy() {
+        super.onDestroy()
+        postDetailAdapter.unregisterCallback()
+        previewCommentAdapter.unregisterCallback()
+
+        if (postDeleteDialog.isInitialized()) {
+            postDeleteDialog.value.unregisterCallbackListener()
+        }
+
+        if (commentDeleteDialog.isInitialized()) {
+            commentDeleteDialog.value.unregisterCallbackListener()
+        }
+
+        if (replyDeleteDialog.isInitialized()) {
+            replyDeleteDialog.value.unregisterCallbackListener()
+        }
+    }
+
+    private fun initUiStateViewModel() = with(viewModel) {
+        uiState.collectLatestWithLifecycle(lifecycle) { uiState ->
+            when (uiState) {
                 PostDetailUiState.ErrorExit -> errorExit(findNavController())
-                PostDetailUiState.ErrorMissing -> {errorMissing(findNavController())}
+                PostDetailUiState.ErrorMissing -> {
+                    errorMissing(findNavController())
+                }
+
                 PostDetailUiState.Init -> {}
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        postDetailAdapter.unregisterCallback()
+    override fun deleteReply(commentId: String, replyId: String) {
+        commentDeleteId = commentId
+        replyDeleteId = replyId
+        replyDeleteDialog.value.show(childFragmentManager, "replyDeleteDialog")
     }
 
     override fun deleteItem(comment: Comment) {
         val user = viewModel.user.value as? User.Registered ?: return
 
         if (comment.written.uid == user.uid) {
-            selectCommentId = comment.id
-            showCommentDeleteDialog(comment.id)
+            commentDeleteId = comment.id
+            commentDeleteDialog.value.show(childFragmentManager, "commentDeleteDialog")
         }
     }
 
@@ -335,17 +398,5 @@ class PostDetailFragment : Fragment(), PostCommentCallback, PostCommentDialogCal
             postId = comment.parent.postId,
             commentId = comment.id
         )
-    }
-
-    //PostCommentDialogCallback
-    override fun deleteComment(commentId: String) {
-        viewModel.deleteComment(commentId)
-    }
-
-    override fun deletePost(postId: String) {
-        viewModel.deletePost(postId)
-        Toast.makeText(requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-        findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
-        findNavController().popBackStack()
     }
 }

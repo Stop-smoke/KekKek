@@ -42,12 +42,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_home_toptext"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -73,10 +71,10 @@
 
                 <ImageView
                     android:id="@+id/iv_home_timerController"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/ic_stop"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_right_arrow"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_timerNum"
                     app:layout_constraintStart_toEndOf="@id/tv_home_timerNum"
                     app:layout_constraintTop_toTopOf="@+id/tv_home_timerNum" />

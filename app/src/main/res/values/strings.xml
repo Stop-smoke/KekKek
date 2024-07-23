@@ -20,6 +20,7 @@
     <string name="menu_home">홈</string>
     <string name="menu_community">커뮤니티</string>
     <string name="menu_mypage">마이페이지</string>
+    <string name="home_reset_description">지금 당장은 실패했더라도, 지금까지 인내해왔던 이 시간들이 수포로 돌아가는 것이 아닙니다. 끝까지 포기하지 않는다면 끝내 금연에 성공하게 되실 것입니다.\n\n후회란 실패로부터 오는 것이 아니다. \n후회란 포기함으로 인해서 오는 것이다.\n- Mel Robbins -\n\n다시 돌아오실 날을 기다립니다.</string>
 
     <!--  my fragment  -->
     <string name="popular_post">인기 포스트</string>
@@ -128,7 +129,7 @@
     <string name="post_write_cancel">취소</string>
     <string name="post_write_register">등록</string>
     <string name="post_write_title">제목을 입력해 주세요.</string>
-    <string name="post_write_content">내용을 입력해 주세요.\n에티켓을 준수해 유용한 공간을 만들어요😊</string>
+    <string name="post_write_content">내용을 입력해 주세요.</string>
 
     <!--  notification  -->
     <string name="post_notification_channel_id">게시글 알림</string>
@@ -200,4 +201,23 @@
     <string name="post_view_reply_more">대댓글 %d개 더보기</string>
 
     <string name="settings_user_profile_with_draw_fail_message">정보를 처리하는 과정에서 오류가 발생하였습니다.</string>
+
+    <!--  PostDetail Post Delete Dialog  -->
+    <string name="post_detail_post_delete_title">게시글 삭제</string>
+    <string name="post_detail_post_delete_description">게시글을 삭제하겠습니까?</string>
+    <string name="post_detail_post_delete_positive">삭제</string>
+    <string name="post_detail_post_delete_negative">취소</string>
+    <string name="post_detail_post_delete_toast">게시글이 삭제되었습니다.</string>
+
+    <!--  PostDetail Comment Delete Dialog  -->
+    <string name="post_detail_comment_delete_title">댓글 삭제</string>
+    <string name="post_detail_comment_delete_description">댓글을 삭제하겠습니까?</string>
+    <string name="post_detail_comment_delete_positive">삭제</string>
+    <string name="post_detail_comment_delete_negative">취소</string>
+
+    <!--  PostDetail Reply Delete Dialog  -->
+    <string name="post_detail_reply_delete_title">대댓글 삭제</string>
+    <string name="post_detail_reply_delete_description">대댓글을 삭제하겠습니까?</string>
+    <string name="post_detail_reply_delete_positive">삭제</string>
+    <string name="post_detail_reply_delete_negative">취소</string>
 </resources>

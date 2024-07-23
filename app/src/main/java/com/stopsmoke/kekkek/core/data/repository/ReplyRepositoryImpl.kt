@@ -45,8 +45,8 @@ class ReplyRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteReply(reply: Reply) {
-        replyDao.deleteReply(reply.toEntity())
+    override suspend fun deleteReply(postId: String, commentId: String, replyId: String) {
+        replyDao.deleteReply(postId = postId, commentId = commentId, replyId = replyId)
     }
 
     override suspend fun updateReply(reply: Reply) {

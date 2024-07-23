@@ -5,6 +5,9 @@ import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.Reply
 
 interface PostCommentCallback {
+
+    fun deleteReply(commentId: String, replyId: String)
+
     fun deleteItem(comment: Comment)
     fun navigateToUserProfile(uid: String)
     fun navigateToReply(comment: Comment)
