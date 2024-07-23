@@ -35,7 +35,7 @@ class ReplyDaoImpl @Inject constructor(
                 val entity = replyEntity.copy(
                     id = documentReference.id,
                 )
-//                    .toInit()
+                    .toInit()
                 documentReference.set(entity)
             }
             .await()

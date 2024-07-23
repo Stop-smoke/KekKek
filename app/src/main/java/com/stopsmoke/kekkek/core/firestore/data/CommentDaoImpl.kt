@@ -98,8 +98,8 @@ class CommentDaoImpl @Inject constructor(
                         id = documentReference.id
                     )
                 )
-//                documentReference.update("date_time.created", FieldValue.serverTimestamp())
-//                documentReference.update("date_time.modified", FieldValue.serverTimestamp())
+                documentReference.update("date_time.created", FieldValue.serverTimestamp())
+                documentReference.update("date_time.modified", FieldValue.serverTimestamp())
             }
             .await()
 

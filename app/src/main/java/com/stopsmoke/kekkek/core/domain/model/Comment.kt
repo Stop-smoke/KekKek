@@ -14,5 +14,5 @@ data class Comment(
     val replyCount: Long,
     val isLiked: Boolean
 ) {
-    val elapsedCreatedDateTime = dateTime.created.getElapsedDateTime()
+    val elapsedCreatedDateTime = dateTime.created.toFirebaseTimestamp().toLocalDateTime().getElapsedDateTime()
 }
