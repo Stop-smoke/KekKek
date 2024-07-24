@@ -234,4 +234,8 @@
     <string name="term_complete">동의 완료</string>
 
 
+    <!-- terms site url  -->
+    <string name="term_private_url">https://stopsmoke.notion.site/092910f4d5e242c3b1e99b1099bbb5a1</string>
+    <string name="term_service_url">https://stopsmoke.notion.site/1d6383b2e0134b05845e93f4284c0cfc</string>
+    <string name="term_community_url">https://stopsmoke.notion.site/a120c5cae2ed4981af4ba18e61b448ad</string>
 </resources>

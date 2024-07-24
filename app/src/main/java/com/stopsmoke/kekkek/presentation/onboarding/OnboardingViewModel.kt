@@ -142,4 +142,8 @@ class OnboardingViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetAuthenticationUiState() = viewModelScope.launch{
+        _authenticationUiState.emit(AuthenticationUiState.Init)
+    }
 }
