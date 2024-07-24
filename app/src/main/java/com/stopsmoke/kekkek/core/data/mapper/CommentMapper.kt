@@ -9,7 +9,6 @@ import com.stopsmoke.kekkek.core.firestore.model.CommentEntity
 import com.stopsmoke.kekkek.core.firestore.model.CommentParentEntity
 import com.stopsmoke.kekkek.core.firestore.model.ReplyEntity
 import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
-import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 
 internal fun CommentEntity.asExternalModel(
     earliestReply: List<Reply>,
