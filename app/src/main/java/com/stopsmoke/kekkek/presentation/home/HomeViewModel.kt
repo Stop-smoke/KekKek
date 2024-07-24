@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.core.domain.model.HistoryTime
-import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.UserConfig
 import com.stopsmoke.kekkek.core.domain.model.getStartTimerState
@@ -16,12 +15,10 @@ import com.stopsmoke.kekkek.presentation.ranking.toRankingListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -34,9 +31,9 @@ class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     postRepository: PostRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> =
+    private val _homeUiState: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState.NormalUiState.init())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     private var timerJob: Job? = null
     private var timeString: String = ""
@@ -68,7 +65,7 @@ class HomeViewModel @Inject constructor(
                         val totalMinutesTime = user.history.getTotalMinutesTime()
                         timeString = formatElapsedTime(totalMinutesTime)
                         calculateSavedValues(user.userConfig)
-                        _uiState.emit(
+                        _homeUiState.emit(
                             HomeUiState.NormalUiState(
                                 homeItem = HomeItem(
                                     timeString = timeString,
@@ -88,14 +85,14 @@ class HomeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
     }
 
 
     fun startTimer() {
         timerJob?.cancel()
-        (uiState.value as? HomeUiState.NormalUiState).let {
+        (homeUiState.value as? HomeUiState.NormalUiState).let {
             timerJob = viewModelScope.launch {
                 while (true) {
                     timeString =
@@ -103,7 +100,7 @@ class HomeViewModel @Inject constructor(
                             (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime()
                                 ?: 0
                         )
-                    _uiState.update { prev ->
+                    _homeUiState.update { prev ->
                         (prev as HomeUiState.NormalUiState).copy(
                             homeItem = prev.homeItem.copy(
                                 timeString = timeString
@@ -135,7 +132,7 @@ class HomeViewModel @Inject constructor(
                 val updatedUserHistory =
                     user.history.copy(
                         historyTimeList = updatedHistoryTimeList,
-                        totalMinutesTime = timeStringToMinutes((uiState.value as HomeUiState.NormalUiState).homeItem.timeString)
+                        totalMinutesTime = timeStringToMinutes((homeUiState.value as HomeUiState.NormalUiState).homeItem.timeString)
                     )
                 userRepository.setUserData(user.copy(history = updatedUserHistory))
 
@@ -143,7 +140,7 @@ class HomeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
     }
 
@@ -173,7 +170,7 @@ class HomeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
 
     }
@@ -226,7 +223,7 @@ class HomeViewModel @Inject constructor(
             _userList.emit(list)
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
 
     }

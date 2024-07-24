@@ -148,7 +148,7 @@ class HomeFragment : Fragment(), ErrorHandle {
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            homeUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
                     when (state) {
                         is HomeUiState.NormalUiState -> onBind(state)
@@ -214,7 +214,7 @@ class HomeFragment : Fragment(), ErrorHandle {
 
     private fun initTimerControllerListener() {
         binding.clHomeToptext.setOnClickListener {
-            if ((viewModel.uiState.value as HomeUiState.NormalUiState).startTimerSate
+            if ((viewModel.homeUiState.value as HomeUiState.NormalUiState).startTimerSate
             ) {
                 timerStopDialog.show(childFragmentManager, "timerStopDialog")
             } else {

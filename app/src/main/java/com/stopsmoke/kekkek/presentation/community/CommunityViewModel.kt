@@ -24,9 +24,9 @@ import javax.inject.Inject
 class CommunityViewModel @Inject constructor(
     private val postRepository: PostRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<CommunityUiState> =
+    private val _communityUiState: MutableStateFlow<CommunityUiState> =
         MutableStateFlow(CommunityUiState.init())
-    val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
+    val communityUiState: StateFlow<CommunityUiState> = _communityUiState.asStateFlow()
 
     private val _category = MutableStateFlow(PostCategory.ALL)
     val category get() = _category.asStateFlow()
@@ -65,8 +65,8 @@ class CommunityViewModel @Inject constructor(
     }
 
     fun bindPopularPosts(popularList: List<Post>, period: Boolean) {
-        (uiState.value as? CommunityUiState.CommunityNormalUiState)?.let {
-            _uiState.update {
+        (communityUiState.value as? CommunityUiState.CommunityNormalUiState)?.let {
+            _communityUiState.update {
                 when (period) {
                     true -> {
                         (it as CommunityUiState.CommunityNormalUiState).copy(

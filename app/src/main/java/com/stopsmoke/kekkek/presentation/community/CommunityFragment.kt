@@ -113,7 +113,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         clCommunityPostPopular1.setOnClickListener {
-            val item = viewModel.uiState.value
+            val item = viewModel.communityUiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
                 val id =
                     if (item.popularPeriod) item.popularItem[0].postInfo.id else item.popularItemNonPeriod[0].postInfo.id
@@ -121,7 +121,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
             }
         }
         clCommunityPostPopular2.setOnClickListener {
-            val item = viewModel.uiState.value
+            val item = viewModel.communityUiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
                 val id =
                     if (item.popularPeriod) item.popularItem[1].postInfo.id else item.popularItemNonPeriod[1].postInfo.id
@@ -218,7 +218,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            communityUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
                     when (state) {
                         is CommunityUiState.CommunityNormalUiState -> onBind(state)

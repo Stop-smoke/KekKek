@@ -51,7 +51,7 @@ class AttainmentsFragment : Fragment() {
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            attainmentsUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { item ->
                     onBind(item)
                 }

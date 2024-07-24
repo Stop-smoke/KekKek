@@ -201,7 +201,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle) {
+        postEditUiState.collectLatestWithLifecycle(lifecycle) {
             when (it) {
                 PostEditUiState.InitUiState -> {}
                 PostEditUiState.Success -> {
