@@ -10,9 +10,11 @@ import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firebaseauth.AuthenticationDataSource
+import com.stopsmoke.kekkek.core.firemseeage.FirebaseMessagingDataSource
 import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
 import com.stopsmoke.kekkek.core.firestore.dao.UserDao
+import com.stopsmoke.kekkek.core.firestore.model.UserEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -34,10 +36,12 @@ internal class UserRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     coroutineScope: CoroutineScope,
     private val authDataSource: AuthenticationDataSource,
+    private val messaging: FirebaseMessagingDataSource,
 ) : UserRepository {
 
     private val user: MutableStateFlow<User> = MutableStateFlow(
-        User.Guest)
+        User.Guest
+    )
 
     init {
         coroutineScope.launch {
@@ -55,6 +59,7 @@ internal class UserRepositoryImpl @Inject constructor(
 
         kotlin.runCatching {
             userDao.getUser(uid).collectLatest {
+                checkPushServiceToken(it)
                 user.emit(it.toExternalModel())
             }
         }
@@ -63,8 +68,16 @@ internal class UserRepositoryImpl @Inject constructor(
             }
     }
 
+    private suspend fun checkPushServiceToken(user: UserEntity) {
+        val token = messaging.getToken()
+        if (token == user.fcmToken || user.uid == null) {
+            return
+        }
+        userDao.updatePushServiceToken(user.uid, token)
+    }
+
     override suspend fun setProfileImage(
-        imageInputStream: InputStream
+        imageInputStream: InputStream,
     ) {
         val user = user.value as? User.Registered ?: throw GuestModeException()
 

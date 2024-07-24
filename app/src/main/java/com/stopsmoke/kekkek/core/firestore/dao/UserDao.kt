@@ -29,4 +29,6 @@ interface UserDao {
     suspend fun getAllUserData(): List<UserEntity>
 
     suspend fun withdraw(uid: String)
+
+    suspend fun updatePushServiceToken(uid: String, token: String)
 }

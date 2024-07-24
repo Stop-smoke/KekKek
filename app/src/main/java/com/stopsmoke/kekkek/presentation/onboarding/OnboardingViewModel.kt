@@ -6,7 +6,6 @@ import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
-import com.stopsmoke.kekkek.core.domain.usecase.RegisterFcmTokenUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.SignUpUseCase
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
@@ -25,9 +24,8 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val sinUpUseCase: SignUpUseCase,
     private val finishOnboardingUseCase: FinishOnboardingUseCase,
-    private val registerFcmTokenUseCase: RegisterFcmTokenUseCase,
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val checkNicknameUseCase: CheckNicknameUseCase
+    private val checkNicknameUseCase: CheckNicknameUseCase,
 ) : ViewModel() {
 
     private val _uid = MutableStateFlow("")
@@ -77,7 +75,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private val _onboardingUiState = MutableStateFlow<OnboardingUiState>(OnboardingUiState.Loading)
-    val onboardingUiState  = _onboardingUiState.asStateFlow()
+    val onboardingUiState = _onboardingUiState.asStateFlow()
 
     fun updateUserData() {
         viewModelScope.launch {
@@ -90,7 +88,6 @@ class OnboardingViewModel @Inject constructor(
                     packPrice = cigarettePricePerPack.value,
                 )
                 finishOnboardingUseCase()
-                registerFcmTokenUseCase()
                 delay(1300)
                 _onboardingUiState.emit(OnboardingUiState.Success)
             } catch (e: Exception) {
@@ -125,16 +122,17 @@ class OnboardingViewModel @Inject constructor(
                         user.t?.printStackTrace()
                         _authenticationUiState.emit(AuthenticationUiState.Error(user.t))
                     }
+
                     is User.Guest -> {
                         _authenticationUiState.emit(AuthenticationUiState.Guest)
                     }
+
                     is User.Registered -> {
                         if (user.uid.isBlank()) {
                             _authenticationUiState.emit(AuthenticationUiState.NewMember)
                             return@launch
                         }
                         finishOnboardingUseCase()
-                        registerFcmTokenUseCase()
                         _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
                     }
                 }
