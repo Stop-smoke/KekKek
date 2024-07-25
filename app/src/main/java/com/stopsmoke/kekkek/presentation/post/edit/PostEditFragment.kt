@@ -31,16 +31,16 @@ import com.stopsmoke.kekkek.core.data.utils.BitmapCompressor
 import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
-import com.stopsmoke.kekkek.core.domain.model.toPostWriteCategory
-import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.mapper.toPostWriteCategory
 import com.stopsmoke.kekkek.presentation.post.edit.dialog.PostEditBottomSheetDialog
-import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.putNavigationResult
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -121,12 +121,15 @@ class PostEditFragment : Fragment(), ErrorHandle {
                 binding.etPostWriteTitle.text.isEmpty() -> {
                     showSnackbar("제목을 입력해주세요!")
                 }
+
                 binding.etPostWriteContent.text.isEmpty() -> {
                     showSnackbar("내용을 입력해주세요!")
                 }
+
                 binding.tvPostWriteCategory.text == "카테고리 선택" -> {
                     showSnackbar("카테고리를 설정해주세요!")
                 }
+
                 else -> {
                     val dialog = builder.create()
                     dialog.show()
@@ -136,7 +139,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
                         var inputStream: InputStream? = null
                         (binding.ivPostWriteImage.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
                             inputStream =
-                                BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile().inputStream()
+                                BitmapCompressor(bitmapToInputStream(bitmap)!!).getCompressedFile()
+                                    .inputStream()
                         }
 
                         val post = PostEdit(
@@ -168,7 +172,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
         }
 
         binding.clPostWriteCategory.setOnClickListener {
-            val categoryBottomSheet = PostEditBottomSheetDialog {selectedCategory ->
+            val categoryBottomSheet = PostEditBottomSheetDialog { selectedCategory ->
                 binding.tvPostWriteCategory.text = selectedCategory
             }
             categoryBottomSheet.show(childFragmentManager, categoryBottomSheet.tag)
@@ -197,8 +201,8 @@ class PostEditFragment : Fragment(), ErrorHandle {
                 }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle){
-            when(it){
+        postEditUiState.collectLatestWithLifecycle(lifecycle) {
+            when (it) {
                 PostEditUiState.InitUiState -> {}
                 PostEditUiState.Success -> {
                     findNavController().putNavigationResult(NavigationKey.IS_DELETED_POST, true)
@@ -223,7 +227,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
 
         includePostEditAppBar.tvPostEditRegister.text = "수정"
 
-        if(post.imagesUrl.isNotEmpty()){
+        if (post.imagesUrl.isNotEmpty()) {
             ivPostWriteImage.load(post.imagesUrl[0])
             cvPostWriteImage.visibility = View.VISIBLE
         }

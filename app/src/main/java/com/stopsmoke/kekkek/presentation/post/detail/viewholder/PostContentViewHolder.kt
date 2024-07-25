@@ -14,6 +14,7 @@ import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallbac
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
@@ -75,6 +76,7 @@ class PostContentViewHolder(
         if (post == null) return@with
 
         tvPostPosterNickname.text = post.written.name
+        tvPostPosterPostType.text = post.category.toStringKR()
         tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
         tvPostHour.text = post.modifiedElapsedDateTime.toResourceId(itemView.context)
 

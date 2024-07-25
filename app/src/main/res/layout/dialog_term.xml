@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_term_termTitle"
+        android:layout_width="360dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="@string/term_title"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_term_termSubTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="@string/term_middle_title"
+        android:textColor="@color/gray_gray1"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_term_termTitle" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_term_allAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_term_termSubTitle">
+
+        <CheckBox
+            android:id="@+id/cb_term_allAccept"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/term_checkbox"
+            android:button="@null"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingStart="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/tv_term_allAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="@string/agree"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/cb_term_allAccept" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_term_allAcceptDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="@string/agree_desc"
+        android:textColor="@color/gray_gray1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_term_termSubTitle" />
+
+    <View
+        android:id="@+id/iv_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray_linegray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_term_allAcceptDesc" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_term_age"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_line">
+
+        <CheckBox
+            android:id="@+id/cb_term_age"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/term_checkbox"
+            android:button="@null"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingStart="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/tv_term_age"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="@string/term1"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/cb_term_age" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_term_private"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_term_age">
+
+        <CheckBox
+            android:id="@+id/cb_term_private"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/term_checkbox"
+            android:button="@null"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingStart="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_term_private"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="@string/term3"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/cb_term_private" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tv_term_privateDesc"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:gravity="center"
+        android:text="@string/see"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_term_private"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cl_term_private" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_term_service"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_term_private">
+
+        <CheckBox
+            android:id="@+id/cb_term_service"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/term_checkbox"
+            android:button="@null"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingStart="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_term_service"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="@string/term2"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/cb_term_service" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_term_serviceDesc"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:gravity="center"
+        android:text="@string/see"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_term_service"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cl_term_service" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_term_community"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_term_service">
+
+        <CheckBox
+            android:id="@+id/cb_term_community"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/term_checkbox"
+            android:button="@null"
+            android:fontFamily="@font/pretendard_bold"
+            android:paddingStart="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_term_community"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="@string/term4"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/cb_term_community" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tv_term_communityDesc"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:gravity="center"
+        android:text="@string/see"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cl_term_community"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cl_term_community" />
+
+
+    <Button
+        android:id="@+id/btn_term_accept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/bg_btn_term_state_color"
+        android:enabled="false"
+        android:fontFamily="@font/pretendard_bold"
+        android:padding="16dp"
+        android:text="@string/term_complete"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:cornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/cl_term_community" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_term_accept" />
+</androidx.constraintlayout.widget.ConstraintLayout>

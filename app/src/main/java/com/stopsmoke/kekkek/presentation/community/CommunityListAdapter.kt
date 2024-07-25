@@ -8,11 +8,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.core.domain.model.toStringKR
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.getRelativeTime
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class CommunityListAdapter :
@@ -51,22 +49,24 @@ class CommunityListAdapter :
             tvItemWritingTimeStamp.text = getRelativeTime(item.postTime)
 
             item.userInfo.let {
-                if (item.postImage != "") {
-                    ivItemWritingPostImage.load(it.profileImage) {
-                        crossfade(true)
-//                    placeholder(R.drawable.placeholder) 로딩중 띄우나?
-//                    error(R.drawable.error) 오류시 띄우나?
-                    }
-                } else {
-                    ivItemWritingPostImage.visibility = View.GONE
-                    setMarginEnd(tvItemWritingTitle, 16)
-                }
                 it.profileImage.let { imgUrl ->
                     if (imgUrl.isNullOrBlank()) circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
                     else circleIvItemWritingProfile.load(imgUrl)
                 }
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
+            }
+
+            item.postImage.let {
+                if (it.isNotBlank()) {
+                    ivItemWritingPostImage.load(it) {
+                        crossfade(true)
+                    }
+                    ivItemWritingPostImage.visibility = View.VISIBLE
+                } else {
+                    ivItemWritingPostImage.visibility = View.GONE
+                    setMarginEnd(tvItemWritingTitle, 16)
+                }
             }
 
             tvItemWritingPostType.text = item.postType.toStringKR() ?: ""

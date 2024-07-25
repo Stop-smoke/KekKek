@@ -18,8 +18,8 @@ import javax.inject.Inject
 class SmokingAddictionTestViewModel @Inject constructor(
     private val updateCigaretteAddictionTestResultUseCase: UpdateCigaretteAddictionTestResultUseCase,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<SmokingAddictionTestUiState> = MutableStateFlow(SmokingAddictionTestUiState.NormalUiState)
-    val uiState: StateFlow<SmokingAddictionTestUiState> = _uiState.asStateFlow()
+    private val _smokingAddictionTestUiState: MutableStateFlow<SmokingAddictionTestUiState> = MutableStateFlow(SmokingAddictionTestUiState.NormalUiState)
+    val smokingAddictionTestUiState: StateFlow<SmokingAddictionTestUiState> = _smokingAddictionTestUiState.asStateFlow()
 
     private val _score = MutableStateFlow<Map<Int, Int>>(mapOf()) // pageIndex, result
     val score: StateFlow<Map<Int, Int>> = _score.asStateFlow()
@@ -67,7 +67,7 @@ class SmokingAddictionTestViewModel @Inject constructor(
             }
         }catch (e:Exception){
             e.printStackTrace()
-            _uiState.value = SmokingAddictionTestUiState.ErrorExit
+            _smokingAddictionTestUiState.value = SmokingAddictionTestUiState.ErrorExit
         }
     }
 

@@ -21,9 +21,9 @@ import javax.inject.Inject
 class AttainmentsViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<AttainmentsItem> =
+    private val _attainmentsUiState: MutableStateFlow<AttainmentsItem> =
         MutableStateFlow(AttainmentsItem.init())
-    val uiState: StateFlow<AttainmentsItem> = _uiState.asStateFlow()
+    val attainmentsUiState: StateFlow<AttainmentsItem> = _attainmentsUiState.asStateFlow()
 
     private var _currentUserState = MutableStateFlow<User>(
         User.Guest)
@@ -46,7 +46,7 @@ class AttainmentsViewModel @Inject constructor(
                     val totalSecondsTime = user.history.getTotalSecondsTime()
                     timeString = formatElapsedTime(totalMinutesTime)
                     calculateSavedValues(user.userConfig)
-                    _uiState.emit(
+                    _attainmentsUiState.emit(
                         AttainmentsItem(
                             history = user.history,
                             savedDate = savedDatePerMinute,
@@ -75,14 +75,14 @@ class AttainmentsViewModel @Inject constructor(
             val currentMinutes =
                 (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime() ?: 0
 
-            _uiState.update { prev ->
+            _attainmentsUiState.update { prev ->
                 prev.copy(
                     timeString = timeString
                 )
             }
 
             if (prevMinutes != currentMinutes) {
-                _uiState.update { prev ->
+                _attainmentsUiState.update { prev ->
                     prev.copy(
                         savedDate = savedDatePerMinute,
                         savedMoney = savedMoneyPerMinute * currentMinutes,

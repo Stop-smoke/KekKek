@@ -140,7 +140,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
                 version = null
             ),
             SettingsItem(
-                settingTitle = "개인 정보 보호 및 보안 안내",
+                settingTitle = "개인 정보 처리 방침 및 약관",
                 cardViewType = SettingsMultiViewEnum.LIST,
                 profileInfo = null,
                 version = null
@@ -231,7 +231,7 @@ class SettingsFragment : Fragment(), SettingsOnClickListener {
                 OssLicensesMenuActivity.setActivityTitle(getString(R.string.custom_license_title))
             }
 
-            "개인 정보 보호 및 보안 안내" -> {
+            "개인 정보 처리 방침 및 약관" -> {
                 findNavController().navigate(R.id.action_setting_to_setting_privatepolicy)
             }
 

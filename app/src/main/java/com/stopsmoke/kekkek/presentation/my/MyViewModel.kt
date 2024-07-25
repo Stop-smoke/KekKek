@@ -8,7 +8,6 @@ import com.stopsmoke.kekkek.core.domain.model.Achievement
 import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.core.domain.model.User
-import com.stopsmoke.kekkek.core.domain.model.emptyActivities
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.getTotalDay
@@ -34,8 +33,8 @@ class MyViewModel @Inject constructor(
     private val achievementRepository: AchievementRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(User.Guest))
-    val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
+    private val _myUiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(User.Guest))
+    val myUiState: StateFlow<MyUiState> = _myUiState.asStateFlow()
 
     val user = userRepository.getUserData()
         .stateIn(
@@ -90,7 +89,7 @@ class MyViewModel @Inject constructor(
                 }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(MyUiState.ErrorExit)
+            _myUiState.emit(MyUiState.ErrorExit)
             emptyFlow()
         }
     }
@@ -156,7 +155,7 @@ class MyViewModel @Inject constructor(
             }
 
             else -> {
-                _uiState.emit(MyUiState.ErrorExit)
+                _myUiState.emit(MyUiState.ErrorExit)
             }
         }
     }
@@ -179,7 +178,7 @@ class MyViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(MyUiState.ErrorExit)
+            _myUiState.emit(MyUiState.ErrorExit)
         }
     }
 

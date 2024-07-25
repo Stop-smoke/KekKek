@@ -42,9 +42,9 @@ class PostDetailViewModel @Inject constructor(
     private val replyRepository: ReplyRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<PostDetailUiState> =
+    private val _postDetailUiState: MutableStateFlow<PostDetailUiState> =
         MutableStateFlow(PostDetailUiState.init())
-    val uiState = _uiState.asStateFlow()
+    val postDetailUiState = _postDetailUiState.asStateFlow()
 
 
     private val _postId: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -62,7 +62,7 @@ class PostDetailViewModel @Inject constructor(
                 postRepository.deletePost(postId.value!!)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiState.emit(PostDetailUiState.ErrorExit)
+                _postDetailUiState.emit(PostDetailUiState.ErrorExit)
             }
         }
     }
@@ -83,7 +83,7 @@ class PostDetailViewModel @Inject constructor(
     }
         .catch {
             it.printStackTrace()
-            _uiState.value = PostDetailUiState.ErrorExit
+            _postDetailUiState.value = PostDetailUiState.ErrorExit
         }
         .stateIn(
             scope = viewModelScope,
@@ -202,7 +202,7 @@ class PostDetailViewModel @Inject constructor(
         }
         .catch {
             it.printStackTrace()
-            _uiState.emit(PostDetailUiState.ErrorExit)
+            _postDetailUiState.emit(PostDetailUiState.ErrorExit)
         }
 
     fun addComment(text: String) = viewModelScope.launch {
@@ -222,7 +222,7 @@ class PostDetailViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(PostDetailUiState.ErrorExit)
+            _postDetailUiState.emit(PostDetailUiState.ErrorExit)
         }
     }
 
@@ -240,7 +240,7 @@ class PostDetailViewModel @Inject constructor(
             commentRepository.deleteCommentItem(post.value!!.id, commentId)
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(PostDetailUiState.ErrorExit)
+            _postDetailUiState.emit(PostDetailUiState.ErrorExit)
         }
     }
 
@@ -259,7 +259,7 @@ class PostDetailViewModel @Inject constructor(
         }
     } catch (e: Exception) {
         e.printStackTrace()
-        _uiState.value = PostDetailUiState.ErrorExit
+        _postDetailUiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleBookmark() = try {
@@ -275,7 +275,7 @@ class PostDetailViewModel @Inject constructor(
         }
     } catch (e: Exception) {
         e.printStackTrace()
-        _uiState.value = PostDetailUiState.ErrorExit
+        _postDetailUiState.value = PostDetailUiState.ErrorExit
     }
 
     fun toggleCommentLike(comment: Comment) = viewModelScope.launch {
@@ -303,7 +303,7 @@ class PostDetailViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.value = PostDetailUiState.ErrorExit
+            _postDetailUiState.value = PostDetailUiState.ErrorExit
         }
     }
 
@@ -328,7 +328,7 @@ class PostDetailViewModel @Inject constructor(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.value = PostDetailUiState.ErrorExit
+            _postDetailUiState.value = PostDetailUiState.ErrorExit
         }
     }
 
