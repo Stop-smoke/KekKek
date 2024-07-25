@@ -86,6 +86,28 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     ),
     postImage = imagesUrl.getOrNull(0) ?: "",
     post = text,
+    postTime = createdElapsedDateTime,
+    postType = category
+)
+
+
+fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long) = CommunityWritingItem(
+    userInfo = UserInfo(
+        name = written.name,
+        rank = written.ranking,
+        profileImage = if (written.profileImage is ProfileImage.Web) written.profileImage.url else "",
+        uid = written.uid
+    ),
+    postInfo = PostInfo(
+        title = title,
+        postType = category.toStringKR() ?: "",
+        view = views,
+        like = likeUser.size.toLong(),
+        comment = commentNumber,
+        id = id
+    ),
+    postImage = "",
+    post = text,
     postTime = modifiedElapsedDateTime,
     postType = category
 )
