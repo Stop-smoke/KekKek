@@ -7,15 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.DialogTermBinding
+import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.onboarding.navigateToOnboardingGraph
 
 class TermBottomSheetDialog : BottomSheetDialogFragment() {
     private var _binding: DialogTermBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: OnboardingViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +35,7 @@ class TermBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListner()
         allTermCheck()
+        viewModel.resetAuthenticationUiState()
     }
 
     private fun allTermCheck() {
@@ -72,10 +77,24 @@ class TermBottomSheetDialog : BottomSheetDialogFragment() {
         with(binding) {
             val cbList = listOf(cbTermAge, cbTermPrivate, cbTermService, cbTermCommunity)
 
+            val clToCbList = listOf(
+                clTermAllAccept to cbTermAllAccept,
+                clTermAge to cbTermAge,
+                clTermPrivate to cbTermPrivate,
+                clTermService to cbTermService,
+                clTermCommunity to cbTermCommunity
+            )
+
             cbTermAllAccept.setOnCheckedChangeListener(null)
             cbTermAllAccept.isChecked = cbList.all { it.isChecked }
             cbTermAllAccept.setOnCheckedChangeListener { _, isChecked ->
                 setAllCheckbox(isChecked)
+            }
+
+            clToCbList.forEach {(constraintLayout, checkBox) ->
+                constraintLayout.setOnClickListener {
+                    checkBox.isChecked = !checkBox.isChecked
+                }
             }
 
             tvTermPrivateDesc.setOnClickListener {
@@ -106,9 +125,6 @@ class TermBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     private fun showTermDetail(termType: TermType) {
-//        val termDetailDialog = TermDetailBottomSheetDialog(termType)
-//        termDetailDialog.show(parentFragmentManager, termDetailDialog.tag)
-
         val termUrlMapList = listOf(
             TermType.PRIVATE to requireContext().getString(R.string.term_private_url),
             TermType.SERVICE to requireContext().getString(R.string.term_service_url),

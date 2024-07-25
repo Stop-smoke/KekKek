@@ -114,7 +114,6 @@ class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
                         is AuthenticationUiState.NewMember -> {
                             val termDialog = TermBottomSheetDialog()
                             termDialog.show(childFragmentManager, termDialog.tag)
-                            viewModel.resetAuthenticationUiState()
                         }
 
                         is AuthenticationUiState.Error -> {
