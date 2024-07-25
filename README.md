@@ -3,25 +3,9 @@
 
 <br><br>
 
-# 🙂 STOPSMOKE TEAM을 소개합니다!
+
 <br><br><br>
 <div align="center">
-  <table>
-    <tbody>
-      <tr>
-        <td align="center"><a href="https://github.com/agvber"><img src="https://github.com/Stop-smoke/KekKek/assets/141006937/76f7a481-28e0-4d02-b142-46b56de33009" width="100px;"><br /><sub><b>김민준</b></sub></a><br /></a></td>
-        <td align="center"><a href="https://github.com/xeejin"><img src="https://github.com/Stop-smoke/KekKek/assets/141006937/0b7eb0cc-c1bf-489f-a2ad-f59f69850809" width="100px;"><br /><sub><b>임희진</b></sub></a><br /></a></td>
-        <td align="center"><a href="https://github.com/dongwonyang"><img src="https://github.com/Stop-smoke/KekKek/assets/141006937/302fdacf-42cb-478d-a956-c365d316c393" width="100px;"><br /><sub><b>양동원</b></sub></a><br /></a></td>
-        <td align="center"><a href=""><img src="https://github.com/Stop-smoke/KekKek/assets/141006937/bbaab4a7-24c4-4627-bd55-f185c5c6fdc7" width="100px;"><br /><sub><b>박세영</b></sub></a><br /></a></td>
-      </tr>
-      <tr>
-        <td align="center"><p>Leader<br>Core-Dev<br>Test(Unit)<br>기술적 의사결정</p></td>
-        <td align="center"><p>Sub-Leader<br>TF/일정관리<br>개발<br>UI/UX/Design</p>기술적 의사결정(중재)</td>
-        <td align="center"><p>member<br>Core-Dev<br>Test(Unit)<br>기술적 의사결정</p></td>
-        <td align="center"><p>member<br>QA<br>Test(Product)<br>개발<br>배포</p></td>
-      </tr>
-    </tbody>
-  </table>
 </div>
 <br>
 <br><br><br><br>
