@@ -3,6 +3,8 @@ package com.stopsmoke.kekkek.presentation.post.detail.viewholder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
@@ -17,6 +19,11 @@ class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
     private val callback: PostCommentCallback?
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        initAdmob()
+    }
+
     fun bind(headerItem: PostContentItem) {
         initUserProfileView(headerItem.user, headerItem.post)
         initPostView(headerItem.post)
@@ -27,6 +34,11 @@ class PostContentViewHolder(
                 callback?.navigateToUserProfile(post.written.uid)
             }
         }
+    }
+
+    private fun initAdmob() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adviewPost.loadAd(adRequest)
     }
 
     private fun clickPostLike(post: Post?) {
