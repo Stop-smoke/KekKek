@@ -177,7 +177,7 @@ class RankingListFieldFragment : Fragment() {
                                 circleIvRankStateItemProfile.load(user.profileImage)
                             }
 
-                            tvRankingListTime.text = getRankingTime(user.startTime!!)
+                            tvRankingListTime.text = getRankingTime(user.startTime ?: LocalDateTime.now())
 
                             circleIvRankStateItemProfile.setOnClickListener {
                                 callback?.navigationToUserProfile(user.userID)
@@ -253,7 +253,6 @@ class RankingListFieldFragment : Fragment() {
 
         val days = duration.toDays()
         val hours = duration.toHours() % 24
-
 
         return "${days}일 ${hours}시간"
     }
