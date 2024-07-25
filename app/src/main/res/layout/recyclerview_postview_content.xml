@@ -255,13 +255,9 @@
     <com.google.android.gms.ads.AdView
         android:id="@+id/adview_post"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:visibility="gone"
+        android:layout_height="60dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-9360439257056668~3215355425"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:adUnitId="ca-app-pub-3940256099942544/9214589741"
         app:layout_constraintTop_toBottomOf="@+id/cl_post_view_information" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
