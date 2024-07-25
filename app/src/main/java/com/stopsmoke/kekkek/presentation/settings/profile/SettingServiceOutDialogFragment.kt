@@ -48,6 +48,7 @@ class SettingServiceOutDialogFragment : DialogFragment() {
     private fun initView() = with(binding) {
         tvDialogTitle.text = "서비스 계정을 탈퇴하시겠습니까?"
         tvDialogContent.text = "탈퇴하기를 누르시면 지금까지 작성한 글과 댓글이 사라지며 계정을 복구할 수 없습니다. 그래도 정말 탈퇴하시겠습니까?"
+        btnDialogCancel.text = "취소하기"
         btnDialogFinish.text = "탈퇴하기"
     }
 
