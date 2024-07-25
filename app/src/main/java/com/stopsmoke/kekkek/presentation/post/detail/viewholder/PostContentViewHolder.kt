@@ -37,7 +37,6 @@ class PostContentViewHolder(
     }
 
     private fun initAdmob() {
-        MobileAds.initialize(binding.root.context)
         val adRequest = AdRequest.Builder().build()
         binding.adviewPost.loadAd(adRequest)
     }
