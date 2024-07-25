@@ -119,14 +119,8 @@ internal class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun editPost(post: Post): Result<Unit> {
-        return try {
-            postDao.editPost(post.toEntity())
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.Error(e)
-        }
+    override suspend fun editPost(post: Post) {
+        postDao.editPost(post.toEntity())
     }
 
     override suspend fun editPost(post: Post, inputStream: InputStream) {

@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class CommentRepositoryImpl @Inject constructor(
     private val commentDao: CommentDao,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : CommentRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getCommentItems(commentFilter: CommentFilter): Flow<PagingData<Comment>> {
@@ -56,49 +56,9 @@ class CommentRepositoryImpl @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCommentItems(commentIdList: List<String>): Result<Flow<PagingData<Comment>>> =
-        try {
-            userRepository.getUserData().flatMapLatest { user ->
-                commentDao.getCommentItems(commentIdList)
-                    .map { pagingData ->
-                        pagingData.map {
-                            val earliest = it.earliestReply.map { reply ->
-                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
-                            }
-                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
-                            it.asExternalModel(earliest, isLiked)
-                        }
-                    }
-            }
-                .let {
-                    Result.Success(it)
-                }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.Error(e)
-        }
-
 
     override suspend fun addCommentItem(comment: Comment): String {
         return commentDao.addComment(comment.toEntity())
-    }
-
-    override suspend fun setCommentItem(comment: Comment): Result<Unit> {
-        return try {
-            commentDao.setCommentItem(comment.toEntity())
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-
-    override suspend fun insertOrReplaceCommentItem(comment: Comment): Result<Unit> {
-        return try {
-            Result.Success(commentDao.updateOrInsertComment(comment.toEntity()))
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
     }
 
     override suspend fun deleteCommentItem(postId: String, commentId: String): Result<Unit> {
@@ -107,10 +67,6 @@ class CommentRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.Error(e)
         }
-    }
-
-    override fun getCommentCount(postId: String): Flow<Long> {
-        return commentDao.getCommentCount(postId)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -135,7 +91,7 @@ class CommentRepositoryImpl @Inject constructor(
             commentId = commentId,
             field = "like_user",
             items = user.uid
-            )
+        )
     }
 
     override suspend fun removeCommentLike(postId: String, commentId: String) {

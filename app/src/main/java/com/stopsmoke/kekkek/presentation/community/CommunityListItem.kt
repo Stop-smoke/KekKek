@@ -96,7 +96,7 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     ),
     postImage = "",
     post = text,
-    postTime = modifiedElapsedDateTime,
+    postTime = createdElapsedDateTime,
     postType = category
 )
 
