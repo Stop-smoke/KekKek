@@ -132,9 +132,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("com.google.android.material:material:1.12.0") // for Tablayout
 
-    //admob
-    implementation("com.google.android.gms:play-services-ads-lite:23.1.0")
-
     // PAGING
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
     testImplementation("androidx.paging:paging-common-ktx:3.3.0")
@@ -175,4 +172,7 @@ dependencies {
     //rxjava
     implementation("io.reactivex.rxjava3:rxjava:3.0.13")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+
+    //admob
+    implementation("com.google.android.gms:play-services-ads:23.2.0")
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
@@ -33,6 +34,9 @@ import com.stopsmoke.kekkek.presentation.settings.profile.navigateToSettingsProf
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -63,6 +67,14 @@ class MyFragment : Fragment(), ErrorHandle {
         initUserActivitiesView()
         initViewModel()
         initButtonListener()
+        initAdmob()
+    }
+
+    private fun initAdmob() {
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            MobileAds.initialize(requireContext())
+        }
     }
 
     override fun onResume() {
