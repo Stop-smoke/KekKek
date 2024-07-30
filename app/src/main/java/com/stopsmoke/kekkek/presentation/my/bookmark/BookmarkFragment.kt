@@ -93,7 +93,7 @@ class BookmarkFragment : Fragment(), ErrorHandle {
                     errorExit(findNavController())
                 }
                 Result.Loading -> {}
-                is Result.Success -> listAdapter.submitData(bookmarkResult.data.map { pagingData -> pagingData.toCommunityWritingListItem() })
+                is Result.Success -> listAdapter.submitData(bookmarkResult.data.map { pagingData -> pagingData.toCommunityWritingListItem(requireContext()) })
             }
         }
     }

@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
@@ -236,7 +237,12 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 }
 
                 Result.Loading -> {}
-                is Result.Success -> listAdapter.submitData(postsResult.data)
+                is Result.Success -> {
+                    val data = postsResult.data.map{
+                        it.toCommunityWritingListItem(requireContext())
+                    }
+                    listAdapter.submitData(data)
+                }
             }
 
         }
@@ -254,7 +260,8 @@ class CommunityFragment : Fragment(), ErrorHandle {
                         Result.Loading -> {}
                         is Result.Success -> bindPopularPosts(
                             popularPostsResult.data,
-                            period = true
+                            period = true,
+                            context = requireContext()
                         )
                     }
                 }
@@ -268,7 +275,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 }
 
                 Result.Loading -> {}
-                is Result.Success -> bindPopularPosts(it.data, period = false)
+                is Result.Success -> bindPopularPosts(it.data, period = false, context = requireContext())
             }
         }
 

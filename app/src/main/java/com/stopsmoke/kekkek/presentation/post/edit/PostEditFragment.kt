@@ -37,10 +37,10 @@ import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.mapper.toPostWriteCategory
 import com.stopsmoke.kekkek.presentation.post.edit.dialog.PostEditBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.putNavigationResult
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -223,7 +223,7 @@ class PostEditFragment : Fragment(), ErrorHandle {
         etPostWriteContent.setText(post.text)
         etPostWriteTitle.setText(post.title)
 
-        tvPostWriteCategory.text = post.category.toStringKR()
+        tvPostWriteCategory.text = post.category.getResourceString(requireContext())
 
         includePostEditAppBar.tvPostEditRegister.text = "수정"
 

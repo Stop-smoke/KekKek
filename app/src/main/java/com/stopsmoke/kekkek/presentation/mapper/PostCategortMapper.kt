@@ -40,13 +40,3 @@ internal fun PostCategory.getResourceString(context: Context) = when(this) {
     PostCategory.UNKNOWN -> context.getString(R.string.community_category_unknown)
     PostCategory.ALL -> context.getString(R.string.community_category_all)
 }
-
-fun PostCategory.toStringKR(): String? = when (this) {
-    PostCategory.NOTICE -> "공지사항"
-    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
-    PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
-    PostCategory.GENERAL_DISCUSSION -> "자유 게시판"
-    PostCategory.RESOLUTIONS -> "금연 다짐"
-    PostCategory.UNKNOWN -> null
-    PostCategory.ALL -> "커뮤니티 홈"
-}

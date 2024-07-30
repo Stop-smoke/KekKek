@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -45,11 +46,6 @@ class CommunityViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val posts = category.flatMapLatest { postCategory ->
         postRepository.getPost(postCategory)
-            .map { pagingData ->
-                pagingData.map { post ->
-                    post.toCommunityWritingListItem()
-                }
-            }
     }
         .cachedIn(viewModelScope)
         .asResult()
@@ -64,19 +60,19 @@ class CommunityViewModel @Inject constructor(
         postRepository.getPopularPostListNonPeriod().asResult()
     }
 
-    fun bindPopularPosts(popularList: List<Post>, period: Boolean) {
+    fun bindPopularPosts(popularList: List<Post>, period: Boolean, context: Context) {
         (communityUiState.value as? CommunityUiState.CommunityNormalUiState)?.let {
             _communityUiState.update {
                 when (period) {
                     true -> {
                         (it as CommunityUiState.CommunityNormalUiState).copy(
-                            popularItem = popularList.map { it.toCommunityWritingListItem() },
+                            popularItem = popularList.map { it.toCommunityWritingListItem(context) },
                             popularPeriod = if (popularList.size < 2) false else true
                         )
                     }
 
                     false -> (it as CommunityUiState.CommunityNormalUiState).copy(
-                        popularItemNonPeriod = popularList.map { it.toCommunityWritingListItem() },
+                        popularItemNonPeriod = popularList.map { it.toCommunityWritingListItem(context) },
                     )
                 }
             }

@@ -7,14 +7,11 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
-import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
-import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getRelativeTime
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class NoticeListAdapter
@@ -66,7 +63,7 @@ class NoticeListAdapter
                 circleIvItemWritingProfile.load(it.profileImage)
             }
 
-            tvItemWritingPostType.text = item.postType.toStringKR()
+            tvItemWritingPostType.text = item.postType.getResourceString(binding.root.context)
 
             binding.root.setOnClickListener {
                 callback?.navigateToPost(item.postInfo.id)

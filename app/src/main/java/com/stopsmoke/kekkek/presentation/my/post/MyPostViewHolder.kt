@@ -11,8 +11,8 @@ import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.toResourceId
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class MyPostViewHolder(
     private val binding: ItemPostBinding,
@@ -64,7 +64,7 @@ class MyPostViewHolder(
 //                tvItemWritingRank.text = "랭킹 ${it.rank}위"
 //            }
 
-        tvItemWritingPostType.text = item.category.toStringKR()
+        tvItemWritingPostType.text = item.category.getResourceString(binding.root.context)
     }
 
     private fun getRelativeTime(pastTime: ElapsedDateTime): String {
