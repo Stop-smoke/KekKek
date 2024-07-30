@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListBinding
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.home.HomeUiState
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
 import com.stopsmoke.kekkek.presentation.invisible
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RankingListFragment : Fragment(), RankingListCallback, ErrorHandle {
+class RankingListFragment : Fragment(), RankingListCallback {
     private var _binding: FragmentRankingListBinding? = null
     private val binding get() = _binding!!
 

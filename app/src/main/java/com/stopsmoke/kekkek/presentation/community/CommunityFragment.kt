@@ -19,7 +19,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class CommunityFragment : Fragment(), ErrorHandle {
+class CommunityFragment : Fragment() {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 

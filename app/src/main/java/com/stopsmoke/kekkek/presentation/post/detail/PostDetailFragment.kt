@@ -25,7 +25,8 @@ import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.dialog.CommonDialogFragment
 import com.stopsmoke.kekkek.presentation.dialog.CommonDialogListener
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
+import com.stopsmoke.kekkek.presentation.error.errorMissing
 import com.stopsmoke.kekkek.presentation.hideSoftKeyboard
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.my.complaint.navigateToMyComplaintScreen
@@ -44,7 +45,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
+class PostDetailFragment : Fragment(), PostCommentCallback {
 
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!

@@ -21,7 +21,7 @@ import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentHomeBinding
 import com.stopsmoke.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.home.center.navigateToHomeCenterScreen
 import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStartDialogFragment
 import com.stopsmoke.kekkek.presentation.home.dialog.HomeTimerStopDialogFragment
@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), ErrorHandle {
+class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!

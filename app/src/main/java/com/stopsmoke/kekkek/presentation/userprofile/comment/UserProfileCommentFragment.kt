@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfileCommentBinding
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import com.stopsmoke.kekkek.presentation.userprofile.comment.adapter.UserProfileCommentListAdapter
 import kotlinx.coroutines.launch
 
-class UserProfileCommentFragment : Fragment(), ErrorHandle {
+class UserProfileCommentFragment : Fragment() {
 
     private var _binding: FragmentUserProfileCommentBinding? = null
     private val binding get() = _binding!!

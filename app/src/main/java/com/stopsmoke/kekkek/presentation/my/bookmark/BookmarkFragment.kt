@@ -18,7 +18,7 @@ import com.stopsmoke.kekkek.databinding.FragmentBookmarkBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class BookmarkFragment : Fragment(), ErrorHandle {
+class BookmarkFragment : Fragment() {
 
     @Inject
     lateinit var userRepository: UserRepository

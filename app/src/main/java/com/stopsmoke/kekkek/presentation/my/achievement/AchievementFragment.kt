@@ -13,7 +13,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
 import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
@@ -21,7 +21,7 @@ import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AchievementFragment : Fragment(), ErrorHandle {
+class AchievementFragment : Fragment() {
 
     private var _binding: FragmentAchievementBinding? = null
     private val binding: FragmentAchievementBinding get() = _binding!!

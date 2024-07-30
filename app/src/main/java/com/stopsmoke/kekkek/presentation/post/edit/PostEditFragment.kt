@@ -35,7 +35,7 @@ import com.stopsmoke.kekkek.databinding.FragmentPostEditBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.dialog.CircularProgressDialogFragment
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.mapper.toPostWriteCategory
@@ -50,7 +50,7 @@ import java.io.InputStream
 import java.time.LocalDateTime
 
 @AndroidEntryPoint
-class PostEditFragment : Fragment(), ErrorHandle {
+class PostEditFragment : Fragment() {
 
     private var _binding: FragmentPostEditBinding? = null
     private val binding get() = _binding!!

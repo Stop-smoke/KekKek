@@ -19,7 +19,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 
 @AndroidEntryPoint
-class NoticeListFragment : Fragment(), ErrorHandle {
+class NoticeListFragment : Fragment() {
     private var _binding: FragmentNoticeListBinding? = null
     val binding: FragmentNoticeListBinding get() = _binding!!
 
