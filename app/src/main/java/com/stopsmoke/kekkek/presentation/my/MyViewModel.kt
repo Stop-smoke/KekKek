@@ -144,7 +144,7 @@ class MyViewModel @Inject constructor(
                                 user = userData.getTotalDay(),
                                 comment = activities.commentCount,
                                 post = activities.postCount,
-                                rank = userRank.toLong(),
+                                rank = if(userRank.toLong() == 0L) 9999 else userRank.toLong(),
                                 achievement = userData.clearAchievementsList.size.toLong()
                             )
                         }
