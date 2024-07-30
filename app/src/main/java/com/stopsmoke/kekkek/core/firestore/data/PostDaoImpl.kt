@@ -180,6 +180,7 @@ internal class PostDaoImpl @Inject constructor(
             "title" to postEntity.title,
             "text" to postEntity.text,
             "date_time.modified" to FieldValue.serverTimestamp(),
+            "images_url" to emptyList<String>()
         )
         firestore.collection(POST_COLLECTION)
             .document(postEntity.id!!)
