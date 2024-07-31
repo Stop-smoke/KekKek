@@ -41,7 +41,8 @@ class HomeViewModel @Inject constructor(
     private var savedLifePerMinute: Double = 0.0
 
     private var _currentUserState = MutableStateFlow<User>(
-        User.Guest)
+        User.Guest
+    )
     val currentUserState = _currentUserState.asStateFlow()
 
     val user = userRepository.getUserData().stateIn(
@@ -230,7 +231,24 @@ class HomeViewModel @Inject constructor(
 
     fun getMyRank() {
         (user.value as? User.Registered)?.let {
-            _myRank.value = userList.value.filter{it.startTime != null}.sortedBy { it.startTime }.indexOf(it.toRankingListItem()) + 1
+            _myRank.value = userList.value.filter { it.startTime != null }.sortedBy { it.startTime }
+                .indexOf(it.toRankingListItem()) + 1
+        }
+    }
+
+    private val _rankingProgress = MutableStateFlow<Int>(0)
+    val rankingProgress get() = _rankingProgress.asStateFlow()
+
+    fun resetRankingProgress() = viewModelScope.launch {
+        _rankingProgress.emit(0)
+    }
+
+    fun proceedProgress() = viewModelScope.launch{
+        viewModelScope.launch {
+            while (_rankingProgress.value < 100) {
+                _rankingProgress.emit(_rankingProgress.value + 1)
+                delay(5)
+            }
         }
     }
 }
