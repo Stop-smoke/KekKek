@@ -175,6 +175,8 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun editPost(postEntity: PostEntity) {
+        storageDao.deleteFile("posts/${postEntity.id}")
+
         val updateMap = mapOf(
             "category" to postEntity.category,
             "title" to postEntity.title,

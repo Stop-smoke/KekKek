@@ -38,7 +38,6 @@ internal class StorageDaoImpl @Inject constructor(
         reference.child(path).delete().apply {
             addOnSuccessListener(successListener)
             addOnFailureListener(failureListener)
-            await()
         }
 
         awaitClose()
