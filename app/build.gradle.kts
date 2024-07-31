@@ -176,4 +176,7 @@ dependencies {
     //admob
     implementation("com.google.android.gms:play-services-ads:23.2.0")
     implementation("com.google.firebase:firebase-ads:18.0.0")
+
+    //widget
+    implementation ("androidx.glance:glance-appwidget:1.0.0")
 }
