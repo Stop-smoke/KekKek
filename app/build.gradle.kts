@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.activity)
     api("org.wordpress:aztec:v1.6.2")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.androidx.hilt.common)
 
     // TEST
     testImplementation(libs.junit)
@@ -179,4 +180,9 @@ dependencies {
 
     //widget
     implementation ("androidx.glance:glance-appwidget:1.0.0")
+
+    //workmanager
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    implementation("androidx.hilt:hilt-compiler:1.0.0")
 }

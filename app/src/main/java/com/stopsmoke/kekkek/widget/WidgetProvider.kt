@@ -9,6 +9,7 @@ import android.content.Intent
 import android.widget.RemoteViews
 import com.google.firebase.firestore.FirebaseFirestore
 import com.stopsmoke.kekkek.R
+import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.presentation.MainActivity
 
 class WidgetProvider : AppWidgetProvider() {
