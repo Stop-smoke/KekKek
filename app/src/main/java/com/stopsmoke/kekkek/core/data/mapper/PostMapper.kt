@@ -7,9 +7,9 @@ import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.Written
-import com.stopsmoke.kekkek.core.domain.model.toRequestString
 import com.stopsmoke.kekkek.core.firestore.model.PostEntity
 import com.stopsmoke.kekkek.core.firestore.model.WrittenEntity
+import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -31,17 +31,7 @@ fun PostEntity.asExternalModel(): Post =
         dateTime = dateTime.asExternalModel(),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
-        category = when (category) {
-            "notice" -> PostCategory.NOTICE
-            "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
-            "popular" -> PostCategory.POPULAR
-            "quit_smoking_aids_reviews" -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
-            "success_stories" -> PostCategory.SUCCESS_STORIES
-            "general_discussion" -> PostCategory.GENERAL_DISCUSSION
-            "failure_stories" -> PostCategory.FAILURE_STORIES
-            "resolutions" -> PostCategory.RESOLUTIONS
-            else -> PostCategory.UNKNOWN
-        },
+        category = category?.toPostCategory() ?: PostCategory.UNKNOWN,
         views = views ?: 0,
         commentCount = commentCount ?: 0,
         bookmarkUser = bookmarkUser,
@@ -114,17 +104,7 @@ internal fun SearchPostEntity.asExternalModel(): Post =
         ),
         likeUser = likeUser,
         unlikeUser = unlikeUser,
-        category = when (category) {
-            "notice" -> PostCategory.NOTICE
-            "quit_smoking_support" -> PostCategory.QUIT_SMOKING_SUPPORT
-            "popular" -> PostCategory.POPULAR
-            "quit_smoking_aids_reviews" -> PostCategory.QUIT_SMOKING_AIDS_REVIEWS
-            "success_stories" -> PostCategory.SUCCESS_STORIES
-            "general_discussion" -> PostCategory.GENERAL_DISCUSSION
-            "failure_stories" -> PostCategory.FAILURE_STORIES
-            "resolutions" -> PostCategory.RESOLUTIONS
-            else -> PostCategory.UNKNOWN
-        },
+        category = category?.toPostCategory() ?: PostCategory.UNKNOWN,
         views = views ?: 0,
         commentCount = commentCount ?: 0,
         bookmarkUser = bookmarkUser,

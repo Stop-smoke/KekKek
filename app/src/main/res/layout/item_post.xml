@@ -72,17 +72,17 @@
         android:id="@+id/tv_itemWriting_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="example Title"
-        app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
-        app:layout_constraintTop_toBottomOf="@id/circleIv_itemWriting_profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="110dp"
         android:layout_marginTop="12dp"
-        android:textSize="14sp"
+        android:layout_marginRight="20dp"
+        android:ellipsize="end"
         android:fontFamily="@font/pretendard_semi_bold"
-        android:textStyle="bold"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:text="example Title"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/iv_itemWriting_postImage"
+        app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
+        app:layout_constraintTop_toBottomOf="@id/circleIv_itemWriting_profile" />
 
     <TextView
         android:id="@+id/tv_itemWriting_post"
@@ -90,27 +90,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/pretendard_regular"
         android:maxLines="2"
         android:minLines="2"
-        android:textSize="13sp"
-        android:fontFamily="@font/pretendard_regular"
         android:text="sample text sample text sample textsample textsample textsample textsample textsample textsample textsample textsample text"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="@id/tv_itemWriting_title"
+        app:layout_constraintEnd_toStartOf="@+id/iv_itemWriting_postImage"
         app:layout_constraintStart_toStartOf="@id/circleIv_itemWriting_profile"
-        app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_title"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_itemWriting_title" />
 
     <ImageView
         android:id="@+id/iv_itemWriting_postImage"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_post"
-        android:src="@drawable/bg_home"
-        android:clipToOutline="true"
-        android:visibility="gone"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/bg_post_image"
+        android:clipToOutline="true"
         android:scaleType="centerCrop"
-        android:layout_marginEnd="20dp"/>
+        android:src="@drawable/bg_home"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_itemWriting_post"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/view_itemWriting_div"

@@ -14,7 +14,6 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
-import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.ranking.RankingListAdapter
 import com.stopsmoke.kekkek.presentation.ranking.RankingListCallback
 import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
@@ -163,28 +162,28 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    (viewModel.user.value as? UserUiState.Registered)?.data?.toRankingListItem()
-                        ?.let { user ->
-                            binding.includeRankingListMyRank.apply {
-                                tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
-                                tvRankStateItem.text = user.introduction
-                                tvRankStateItemUserName.text = user.name
+                    user.value?.toRankingListItem()?.let { user ->
+                        binding.includeRankingListMyRank.apply {
+                            tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
+                            tvRankStateItem.text = user.introduction
+                            tvRankStateItemUserName.text = user.name
 
-                                if (user.profileImage.isNullOrEmpty()) {
-                                    circleIvRankStateItemProfile.setImageResource(
-                                        R.drawable.img_defaultprofile
-                                    )
-                                } else {
-                                    circleIvRankStateItemProfile.load(user.profileImage)
-                                }
+                            if (user.profileImage.isNullOrEmpty()) {
+                                circleIvRankStateItemProfile.setImageResource(
+                                    R.drawable.img_defaultprofile
+                                )
+                            } else {
+                                circleIvRankStateItemProfile.load(user.profileImage)
+                            }
 
-                                tvRankingListTime.text = getRankingTime(user.startTime!!)
+                            tvRankingListTime.text =
+                                getRankingTime(user.startTime ?: LocalDateTime.now())
 
-                                circleIvRankStateItemProfile.setOnClickListener {
-                                    callback?.navigationToUserProfile(user.userID)
-                                }
+                            circleIvRankStateItemProfile.setOnClickListener {
+                                callback?.navigationToUserProfile(user.userID)
                             }
                         }
+                    }
                 }
 
                 RankingListField.Achievement -> {
@@ -193,28 +192,27 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    (viewModel.user.value as? UserUiState.Registered)?.data?.toRankingListItem()
-                        ?.let { user ->
-                            binding.includeRankingListMyRank.apply {
-                                tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
-                                tvRankStateItem.text = user.introduction
-                                tvRankStateItemUserName.text = user.name
+                    viewModel.user.value?.toRankingListItem()?.let { user ->
+                        binding.includeRankingListMyRank.apply {
+                            tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
+                            tvRankStateItem.text = user.introduction
+                            tvRankStateItemUserName.text = user.name
 
-                                if (user.profileImage.isNullOrEmpty()) {
-                                    circleIvRankStateItemProfile.setImageResource(
-                                        R.drawable.img_defaultprofile
-                                    )
-                                } else {
-                                    circleIvRankStateItemProfile.load(user.profileImage)
-                                }
+                            if (user.profileImage.isNullOrEmpty()) {
+                                circleIvRankStateItemProfile.setImageResource(
+                                    R.drawable.img_defaultprofile
+                                )
+                            } else {
+                                circleIvRankStateItemProfile.load(user.profileImage)
+                            }
 
-                                tvRankingListTime.text = user.clearAchievementInt.toString() + "개"
+                            tvRankingListTime.text = user.clearAchievementInt.toString() + "개"
 
-                                circleIvRankStateItemProfile.setOnClickListener {
-                                    callback?.navigationToUserProfile(user.userID)
-                                }
+                            circleIvRankStateItemProfile.setOnClickListener {
+                                callback?.navigationToUserProfile(user.userID)
                             }
                         }
+                    }
                 }
 
                 null -> {}
@@ -255,7 +253,6 @@ class RankingListFieldFragment : Fragment() {
 
         val days = duration.toDays()
         val hours = duration.toHours() % 24
-
 
         return "${days}일 ${hours}시간"
     }

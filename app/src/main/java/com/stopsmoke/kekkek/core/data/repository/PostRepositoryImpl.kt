@@ -5,11 +5,11 @@ import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.core.data.mapper.toEntity
+import com.stopsmoke.kekkek.core.data.mapper.toRequestString
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.PostEdit
 import com.stopsmoke.kekkek.core.domain.model.Written
-import com.stopsmoke.kekkek.core.domain.model.toRequestString
 import com.stopsmoke.kekkek.core.domain.repository.PostRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestorage.dao.StorageDao
@@ -113,14 +113,8 @@ internal class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun editPost(post: Post): Result<Unit> {
-        return try {
-            postDao.editPost(post.toEntity())
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.Error(e)
-        }
+    override suspend fun editPost(post: Post) {
+        postDao.editPost(post.toEntity())
     }
 
     override suspend fun editPost(post: Post, inputStream: InputStream) {

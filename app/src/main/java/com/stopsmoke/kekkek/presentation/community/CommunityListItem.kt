@@ -6,6 +6,7 @@ import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -77,26 +78,15 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     ),
     postInfo = PostInfo(
         title = title,
-        postType = when (category) {
-            PostCategory.NOTICE -> "공지사항"
-            PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
-            PostCategory.POPULAR -> "인기글"
-            PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
-            PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
-            PostCategory.GENERAL_DISCUSSION -> "자유 게시판"
-            PostCategory.FAILURE_STORIES -> "금연 실패 후기"
-            PostCategory.RESOLUTIONS -> "금연 다짐"
-            PostCategory.UNKNOWN -> ""
-            PostCategory.ALL -> ""
-        },
+        postType = category.toStringKR() ?: "",
         view = views,
         like = likeUser.size.toLong(),
         comment = commentCount,
         id = id
     ),
-    postImage = "",
+    postImage = imagesUrl.getOrNull(0) ?: "",
     post = text,
-    postTime = modifiedElapsedDateTime,
+    postTime = createdElapsedDateTime,
     postType = category
 )
 
@@ -110,18 +100,7 @@ fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long) = Communit
     ),
     postInfo = PostInfo(
         title = title,
-        postType = when (category) {
-            PostCategory.NOTICE -> "공지사항"
-            PostCategory.QUIT_SMOKING_SUPPORT -> " 금연 지원 프로그램 공지"
-            PostCategory.POPULAR -> "인기글"
-            PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> "금연 보조제 후기"
-            PostCategory.SUCCESS_STORIES -> "금연 성공 후기"
-            PostCategory.GENERAL_DISCUSSION -> "자유 게시판"
-            PostCategory.FAILURE_STORIES -> "금연 실패 후기"
-            PostCategory.RESOLUTIONS -> "금연 다짐"
-            PostCategory.UNKNOWN -> ""
-            PostCategory.ALL -> ""
-        },
+        postType = category.toStringKR() ?: "",
         view = views,
         like = likeUser.size.toLong(),
         comment = commentNumber,

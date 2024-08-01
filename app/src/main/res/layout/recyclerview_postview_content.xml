@@ -23,17 +23,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_post_poster_nickname"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_post_poster_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textStyle="bold"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_post_poster_ranking"
             app:layout_constraintStart_toEndOf="@+id/iv_post_poster"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="단짠단짠" />
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <TextView
+                android:id="@+id/tv_post_poster_postType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:textColor="#777777"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="자유 게시판" />
+
+            <TextView
+                android:id="@+id/tv_post_poster_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:text="단짠단짠"
+                android:maxLines="1"
+                android:maxWidth="200dp"
+                android:ellipsize="end"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_poster_postType" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_post_poster_ranking"
@@ -255,13 +279,9 @@
     <com.google.android.gms.ads.AdView
         android:id="@+id/adview_post"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:visibility="gone"
+        android:layout_height="60dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-9360439257056668~3215355425"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:adUnitId="ca-app-pub-4804854250950532/1119809547"
         app:layout_constraintTop_toBottomOf="@+id/cl_post_view_information" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import com.stopsmoke.kekkek.core.domain.model.Activities
 import com.stopsmoke.kekkek.core.domain.model.DatabaseCategory
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
 import com.stopsmoke.kekkek.presentation.getTotalDay
 import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.my.achievement.AchievementItem
@@ -22,7 +23,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -33,22 +33,25 @@ import javax.inject.Inject
 @HiltViewModel
 class MyViewModel @Inject constructor(
     private val achievementRepository: AchievementRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    getUserDataUseCase: GetUserDataUseCase,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<MyUiState> = MutableStateFlow(MyUiState.LoggedUiState(UserUiState.Guest))
-    val uiState: StateFlow<MyUiState> = _uiState.asStateFlow()
 
-    val user = userRepository.getUserData()
-        .catch { it.printStackTrace() }
+    private val _myUiState: MutableStateFlow<MyUiState> =
+        MutableStateFlow(MyUiState.LoggedUiState(UserUiState.Guest))
+    val myUiState: StateFlow<MyUiState> = _myUiState.asStateFlow()
+
+    val user = getUserDataUseCase()
         .asResult()
         .map {
-            when(it) {
+            when (it) {
                 is Result.Error -> {
                     if (it.exception is GuestModeException) {
                         return@map UserUiState.Guest
                     }
                     UserUiState.Error(it.exception)
                 }
+
                 is Result.Loading -> UserUiState.Loading
                 is Result.Success -> UserUiState.Registered(it.data)
             }
@@ -76,7 +79,7 @@ class MyViewModel @Inject constructor(
 
     val achievements: Flow<List<AchievementItem>> = currentProgressItem.flatMapLatest { progress ->
         try {
-            if(progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
+            if (progress == emptyCurrentProgress()) return@flatMapLatest emptyFlow()
             achievementRepository.getAchievementItems()
                 .let {
                     when (it) {
@@ -84,6 +87,7 @@ class MyViewModel @Inject constructor(
                             it.exception?.printStackTrace()
                             emptyFlow()
                         }
+
                         is Result.Loading -> emptyFlow()
                         is Result.Success -> it.data.map { pagingData ->
                             pagingData.map {
@@ -105,17 +109,18 @@ class MyViewModel @Inject constructor(
                 }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(MyUiState.ErrorExit)
+            _myUiState.emit(MyUiState.ErrorExit)
             emptyFlow()
         }
     }
 
-    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem>{
+    private fun List<AchievementItem>.sortedAchievement(): List<AchievementItem> {
         val clearList = this.filter { it.progress >= 1.0.toBigDecimal() }
         val nonClearList = this.filter { it !in clearList }.sortedByDescending { it.progress }
 
-        val insertClearList = clearList.filter { it.id !in (user.value as UserUiState.Registered).data.clearAchievementsList }
-        if(insertClearList.isNotEmpty()) {
+        val insertClearList =
+            clearList.filter { it.id !in (user.value as UserUiState.Registered).data.clearAchievementsList }
+        if (insertClearList.isNotEmpty()) {
             upDateUserAchievementList(insertClearList.map { it.id })
         }
         return nonClearList + clearList
@@ -171,7 +176,7 @@ class MyViewModel @Inject constructor(
             }
 
             else -> {
-                _uiState.emit(MyUiState.ErrorExit)
+                _myUiState.emit(MyUiState.ErrorExit)
             }
         }
     }
@@ -192,7 +197,7 @@ class MyViewModel @Inject constructor(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(MyUiState.ErrorExit)
+            _myUiState.emit(MyUiState.ErrorExit)
         }
     }
 

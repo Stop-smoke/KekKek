@@ -350,7 +350,7 @@ class PostDetailFragment : Fragment(), PostCommentCallback, ErrorHandle {
     }
 
     private fun initUiStateViewModel() = with(viewModel) {
-        uiState.collectLatestWithLifecycle(lifecycle) { uiState ->
+        postDetailUiState.collectLatestWithLifecycle(lifecycle) { uiState ->
             when (uiState) {
                 PostDetailUiState.ErrorExit -> errorExit(findNavController())
                 PostDetailUiState.ErrorMissing -> {

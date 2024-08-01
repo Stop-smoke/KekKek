@@ -43,10 +43,9 @@
             android:resource="@color/primary_blue" />
 
         <!-- 에드몹 -->
-        <!-- adMpb, 추후 출시 applicationId 추가, kakaoApi 역시 hash key에 릴리즈키 등록해야한다는데.. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-4804854250950532~9445022123" />
 
         <!-- google app api key -->
         <meta-data

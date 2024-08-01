@@ -25,7 +25,7 @@ interface PostRepository {
 
     suspend fun deletePost(postId: String): Result<Unit>
 
-    suspend fun editPost(post: Post): Result<Unit>
+    suspend fun editPost(post: Post)
 
     suspend fun editPost(post: Post, inputStream: InputStream)
 

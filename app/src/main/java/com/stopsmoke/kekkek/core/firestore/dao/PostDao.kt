@@ -27,7 +27,7 @@ interface PostDao {
 
     suspend fun addPost(postEntity: PostEntity, inputStream: InputStream)
 
-    suspend fun editPost(postEntity: PostEntity): Result<Unit>
+    suspend fun editPost(postEntity: PostEntity)
 
     suspend fun editPost(postEntity: PostEntity, inputStream: InputStream)
 

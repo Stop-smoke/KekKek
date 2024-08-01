@@ -3,6 +3,8 @@ package com.stopsmoke.kekkek.presentation.post.detail.viewholder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
@@ -11,11 +13,17 @@ import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.toResourceId
+import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
     private val callback: PostCommentCallback?
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        initAdmob()
+    }
+
     fun bind(headerItem: PostContentItem) {
         initUserProfileView(headerItem.user, headerItem.post)
         initPostView(headerItem.post)
@@ -26,6 +34,11 @@ class PostContentViewHolder(
                 callback?.navigateToUserProfile(post.written.uid)
             }
         }
+    }
+
+    private fun initAdmob() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adviewPost.loadAd(adRequest)
     }
 
     private fun clickPostLike(post: Post?) {
@@ -53,6 +66,7 @@ class PostContentViewHolder(
         if (post == null) return@with
 
         tvPostPosterNickname.text = post.written.name
+        tvPostPosterPostType.text = post.category.toStringKR()
         tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
         tvPostHour.text = post.modifiedElapsedDateTime.toResourceId(itemView.context)
 

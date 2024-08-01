@@ -38,7 +38,7 @@ internal class PostDaoImpl @Inject constructor(
     override fun getPost(category: String?): Flow<PagingData<PostEntity>> {
         val query = firestore.collection(POST_COLLECTION)
             .whereNotNullEqualTo("category", category)
-            .orderBy("date_time", Query.Direction.DESCENDING)
+            .orderBy("date_time.created", Query.Direction.DESCENDING)
 
         return Pager(
             config = PagingConfig(PAGE_LIMIT)
@@ -56,7 +56,7 @@ internal class PostDaoImpl @Inject constructor(
         return try {
             val query = firestore.collection(POST_COLLECTION)
                 .whereEqualTo("written.uid", writtenUid)
-                .orderBy("date_time", Query.Direction.DESCENDING)
+                .orderBy("date_time.created", Query.Direction.DESCENDING)
                 .limit(10)
 
             return Pager(
@@ -173,22 +173,17 @@ internal class PostDaoImpl @Inject constructor(
 
     }
 
-    override suspend fun editPost(postEntity: PostEntity): Result<Unit> {
-        return try {
-            val updateMap = mapOf(
-                "category" to postEntity.category,
-                "title" to postEntity.title,
-                "text" to postEntity.text,
-                "date_time" to postEntity.dateTime
-            )
-            firestore.collection(POST_COLLECTION)
-                .document(postEntity.id ?: return Result.Error(NullPointerException()))
-                .update(updateMap)
-                .await()
-            Result.Success(Unit)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun editPost(postEntity: PostEntity) {
+        val updateMap = mapOf(
+            "category" to postEntity.category,
+            "title" to postEntity.title,
+            "text" to postEntity.text,
+            "date_time.modified" to FieldValue.serverTimestamp(),
+        )
+        firestore.collection(POST_COLLECTION)
+            .document(postEntity.id!!)
+            .update(updateMap)
+            .await()
     }
 
     override suspend fun editPost(postEntity: PostEntity, inputStream: InputStream) {
@@ -198,10 +193,9 @@ internal class PostDaoImpl @Inject constructor(
             "category" to postEntity.category,
             "title" to postEntity.title,
             "text" to postEntity.text,
-            "date_time" to postEntity.dateTime,
+            "date_time.modified" to FieldValue.serverTimestamp(),
             "images_url" to listOf(uploadUrl)
         )
-
 
         firestore.collection(POST_COLLECTION)
             .document(postEntity.id!!)

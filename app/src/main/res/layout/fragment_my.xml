@@ -213,10 +213,9 @@
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView_my"
             android:layout_width="match_parent"
-            android:layout_height="92dp"
-            android:visibility="gone"
+            android:layout_height="60dp"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-3940256099942544~3347511713"
+            app:adUnitId="ca-app-pub-4804854250950532/1119809547"
             app:layout_constraintTop_toBottomOf="@id/cl_my_activity" />
 
         <View

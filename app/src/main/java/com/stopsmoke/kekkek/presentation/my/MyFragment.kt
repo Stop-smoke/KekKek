@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
@@ -32,6 +34,9 @@ import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
 import com.stopsmoke.kekkek.presentation.settings.profile.navigateToSettingsProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -62,6 +67,7 @@ class MyFragment : Fragment(), ErrorHandle {
         initUserActivitiesView()
         initViewModel()
         initButtonListener()
+        initAdmob()
     }
 
     override fun onResume() {
@@ -105,6 +111,12 @@ class MyFragment : Fragment(), ErrorHandle {
         clMyProfile.setOnClickListener {
             findNavController().navigateToSettingsProfileScreen()
         }
+    }
+
+    private fun initAdmob() {
+        MobileAds.initialize(requireContext())
+        val adRequest = AdRequest.Builder().build()
+        binding.adViewMy.loadAd(adRequest)
     }
 
     private fun initUserActivitiesView() = with(binding) {
@@ -182,7 +194,7 @@ class MyFragment : Fragment(), ErrorHandle {
             }
         }
 
-        uiState.collectLatestWithLifecycle(lifecycle){uiState ->
+        myUiState.collectLatestWithLifecycle(lifecycle){ uiState ->
             when(uiState){
                 MyUiState.ErrorExit -> {
                     errorExit(findNavController())

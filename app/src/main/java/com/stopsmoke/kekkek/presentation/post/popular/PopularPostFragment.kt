@@ -6,31 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentPopularPostBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityUiState
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
-import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularPostFragment : Fragment(),ErrorHandle {
@@ -94,7 +85,7 @@ class PopularPostFragment : Fragment(),ErrorHandle {
     }
 
     private fun initViewModel() = with(viewModel) {
-        uiState.collectLatestWithLifecycle(lifecycle){ state ->
+        communityUiState.collectLatestWithLifecycle(lifecycle){ state ->
             when(state) {
                 is CommunityUiState.CommunityNormalUiState -> onBind(state)
                 is CommunityUiState.ErrorExit -> errorExit(findNavController())

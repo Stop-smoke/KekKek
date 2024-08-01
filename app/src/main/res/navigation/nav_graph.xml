@@ -17,6 +17,7 @@
 
     <fragment
         android:id="@+id/home"
+        app:route="home_screen"
         android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
@@ -32,11 +33,13 @@
 
     <fragment
         android:id="@+id/community"
+        app:route="community_screen"
         android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
         tools:layout="@layout/fragment_community" />
 
     <fragment
         android:id="@+id/my_page"
+        app:route="my_screen"
         android:name="com.stopsmoke.kekkek.presentation.my.MyFragment"
         tools:layout="@layout/fragment_my" />
 

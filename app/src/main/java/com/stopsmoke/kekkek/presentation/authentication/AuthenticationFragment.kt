@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import com.stopsmoke.kekkek.core.authorization.FirebaseAuthorizationEvent
 import com.stopsmoke.kekkek.core.authorization.google.GoogleAuthorization
 import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
+import com.stopsmoke.kekkek.presentation.authentication.dialog.TermBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.navigateToHomeScreenWithClearBackStack
 import com.stopsmoke.kekkek.presentation.invisible
@@ -110,7 +112,8 @@ class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
                         }
 
                         is AuthenticationUiState.NewMember -> {
-                            findNavController().navigateToOnboardingGraph()
+                            val termDialog = TermBottomSheetDialog()
+                            termDialog.show(childFragmentManager, termDialog.tag)
                         }
 
                         is AuthenticationUiState.Error -> {

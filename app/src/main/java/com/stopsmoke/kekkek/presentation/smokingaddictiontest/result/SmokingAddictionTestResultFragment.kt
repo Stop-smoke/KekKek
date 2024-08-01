@@ -77,7 +77,7 @@ class SmokingAddictionTestResultFragment : Fragment(), ErrorHandle {
     }
 
     private fun initErrorHandle(){
-        viewModel.uiState.collectLatestWithLifecycle(lifecycle){uiState->
+        viewModel.smokingAddictionTestUiState.collectLatestWithLifecycle(lifecycle){ uiState->
             when(uiState){
                 SmokingAddictionTestUiState.ErrorExit -> errorExit(findNavController())
                 SmokingAddictionTestUiState.NormalUiState -> {}

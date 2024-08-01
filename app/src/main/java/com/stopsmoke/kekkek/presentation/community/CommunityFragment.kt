@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.presentation.community
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.core.domain.model.toPostCategory
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
@@ -28,6 +26,7 @@ import com.stopsmoke.kekkek.presentation.post.notice.navigateToPostNoticeScreen
 import com.stopsmoke.kekkek.presentation.post.popular.navigateToPostPopularScreen
 import com.stopsmoke.kekkek.presentation.search.navigateToSearchScreen
 import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
+import com.stopsmoke.kekkek.presentation.mapper.toPostCategory
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -114,16 +113,18 @@ class CommunityFragment : Fragment(), ErrorHandle {
         }
 
         clCommunityPostPopular1.setOnClickListener {
-            val item = viewModel.uiState.value
+            val item = viewModel.communityUiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                val id = if(item.popularPeriod) item.popularItem[0].postInfo.id else item.popularItemNonPeriod[0].postInfo.id
+                val id =
+                    if (item.popularPeriod) item.popularItem[0].postInfo.id else item.popularItemNonPeriod[0].postInfo.id
                 findNavController().navigateToPostDetailScreen(id)
             }
         }
         clCommunityPostPopular2.setOnClickListener {
-            val item = viewModel.uiState.value
+            val item = viewModel.communityUiState.value
             if (item is CommunityUiState.CommunityNormalUiState) {
-                val id = if(item.popularPeriod) item.popularItem[1].postInfo.id else item.popularItemNonPeriod[1].postInfo.id
+                val id =
+                    if (item.popularPeriod) item.popularItem[1].postInfo.id else item.popularItemNonPeriod[1].postInfo.id
                 findNavController().navigateToPostDetailScreen(id)
             }
         }
@@ -217,7 +218,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
 
     private fun initViewModel() = with(viewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
-            uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            communityUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest { state ->
                     when (state) {
                         is CommunityUiState.CommunityNormalUiState -> onBind(state)

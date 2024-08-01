@@ -220,4 +220,22 @@
     <string name="post_detail_reply_delete_description">대댓글을 삭제하겠습니까?</string>
     <string name="post_detail_reply_delete_positive">삭제</string>
     <string name="post_detail_reply_delete_negative">취소</string>
+
+    <!-- terms -->
+    <string name="term_title">약관에 동의해주세요</string>
+    <string name="term_middle_title">개인정보 이용 및 서비스 이용관리에 동의해주세요</string>
+    <string name="agree">모두 동의</string>
+    <string name="agree_desc">서비스 이용을 위해 아래 약관에 모두 동의합니다</string>
+    <string name="term1">(필수) 만 14세 이상입니다</string>
+    <string name="term2">(필수) 서비스 이용약관 동의</string>
+    <string name="term3">(필수) 개인정보 처리방침 동의</string>
+    <string name="term4">(필수) 커뮤니티 이용약관 동의</string>
+    <string name="see">보기</string>
+    <string name="term_complete">동의 완료</string>
+
+
+    <!-- terms site url  -->
+    <string name="term_private_url">https://stopsmoke.notion.site/092910f4d5e242c3b1e99b1099bbb5a1</string>
+    <string name="term_service_url">https://stopsmoke.notion.site/1d6383b2e0134b05845e93f4284c0cfc</string>
+    <string name="term_community_url">https://stopsmoke.notion.site/a120c5cae2ed4981af4ba18e61b448ad</string>
 </resources>

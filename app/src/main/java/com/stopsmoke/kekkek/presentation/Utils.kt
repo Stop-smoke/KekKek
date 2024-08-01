@@ -23,6 +23,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
+import com.stopsmoke.kekkek.core.domain.model.PostWriteCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import kotlinx.coroutines.Job
@@ -134,19 +135,6 @@ internal fun<T> Bundle.getParcelableAndroidVersionSupport(key: String, clazz: Cl
         getParcelable(key)
     }
 
-internal fun PostCategory.getResourceString(context: Context) = when(this) {
-    PostCategory.NOTICE -> context.getString(R.string.community_category_notice)
-    PostCategory.QUIT_SMOKING_SUPPORT -> context.getString(R.string.community_category_quit_smoking_support)
-    PostCategory.POPULAR -> context.getString(R.string.community_category_popular)
-    PostCategory.QUIT_SMOKING_AIDS_REVIEWS -> context.getString(R.string.community_category_quit_smoking_aids_reviews)
-    PostCategory.SUCCESS_STORIES -> context.getString(R.string.community_category_success_stories)
-    PostCategory.GENERAL_DISCUSSION -> context.getString(R.string.community_category_general_discussion)
-    PostCategory.FAILURE_STORIES -> context.getString(R.string.community_category_failure_stories)
-    PostCategory.RESOLUTIONS -> context.getString(R.string.community_category_resolutions)
-    PostCategory.UNKNOWN -> context.getString(R.string.community_category_unknown)
-    PostCategory.ALL -> context.getString(R.string.community_category_all)
-}
-
 fun isNetworkAvailable(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -185,3 +173,7 @@ internal fun View.hideSoftKeyboard() {
 internal fun<T> NavController.putNavigationResult(key: String, value: T) {
     previousBackStackEntry?.savedStateHandle?.set(key, value)
 }
+
+
+
+

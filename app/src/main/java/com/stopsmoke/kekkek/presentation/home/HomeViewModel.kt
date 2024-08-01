@@ -2,7 +2,6 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.HistoryTime
@@ -33,34 +32,23 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     postRepository: PostRepository,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<HomeUiState> =
+    private val _homeUiState: MutableStateFlow<HomeUiState> =
         MutableStateFlow(HomeUiState.NormalUiState.init())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     private var timerJob: Job? = null
     private var timeString: String = ""
     private var savedMoneyPerMinute: Double = 0.0
     private var savedLifePerMinute: Double = 0.0
 
-    private var _currentUserState = MutableStateFlow<UserUiState>(UserUiState.Guest)
+    private var _currentUserState = MutableStateFlow<UserUiState>(
+        UserUiState.Guest
+    )
     val currentUserState = _currentUserState.asStateFlow()
 
-    val user = userRepository.getUserData()
-        .asResult()
-        .map {
-            when (it) {
-                is Result.Error -> {
-                    if (it.exception is GuestModeException) {
-                        return@map UserUiState.Guest
-                    }
-                    UserUiState.Error(it.exception)
-                }
-                is Result.Loading -> UserUiState.Loading
-                is Result.Success -> UserUiState.Registered(it.data)
-            }
-        }
+    val user = getUserDataUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -81,7 +69,7 @@ class HomeViewModel @Inject constructor(
                 val totalMinutesTime = user.history.getTotalMinutesTime()
                 timeString = formatElapsedTime(totalMinutesTime)
                 calculateSavedValues(user.userConfig)
-                _uiState.emit(
+                _homeUiState.emit(
                     HomeUiState.NormalUiState(
                         homeItem = HomeItem(
                             timeString = timeString,
@@ -95,16 +83,18 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             }
+        } catch (e: GuestModeException) {
+            _currentUserState.emit(UserUiState.Guest)
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
     }
 
 
     fun startTimer() {
         timerJob?.cancel()
-        (uiState.value as? HomeUiState.NormalUiState).let {
+        (homeUiState.value as? HomeUiState.NormalUiState).let {
             timerJob = viewModelScope.launch {
                 while (true) {
                     timeString =
@@ -112,7 +102,7 @@ class HomeViewModel @Inject constructor(
                             (currentUserState.value as? UserUiState.Registered)?.data?.history?.getTotalMinutesTime()
                                 ?: 0
                         )
-                    _uiState.update { prev ->
+                    _homeUiState.update { prev ->
                         (prev as HomeUiState.NormalUiState).copy(
                             homeItem = prev.homeItem.copy(
                                 timeString = timeString
@@ -132,9 +122,9 @@ class HomeViewModel @Inject constructor(
 
     fun setStopUserHistory() = viewModelScope.launch {
         try {
-            val currentUser = currentUserState.value
-            if (currentUser is UserUiState.Registered) {
-                val updatedHistoryTimeList = currentUser.data.history.historyTimeList.toMutableList()
+            if (currentUserState.value is UserUiState.Registered) {
+                val user = (currentUserState.value as UserUiState.Registered).data
+                val updatedHistoryTimeList = user.history.historyTimeList.toMutableList()
                 val lastItem = updatedHistoryTimeList.last().copy(
                     quitSmokingStopDateTime = LocalDateTime.now()
                 )
@@ -142,17 +132,17 @@ class HomeViewModel @Inject constructor(
                 updatedHistoryTimeList[updatedHistoryTimeList.size - 1] = lastItem
 
                 val updatedUserHistory =
-                    currentUser.data.history.copy(
+                    user.history.copy(
                         historyTimeList = updatedHistoryTimeList,
-                        totalMinutesTime = timeStringToMinutes((uiState.value as HomeUiState.NormalUiState).homeItem.timeString)
+                        totalMinutesTime = timeStringToMinutes((homeUiState.value as HomeUiState.NormalUiState).homeItem.timeString)
                     )
-                userRepository.setUserData(currentUser.data.copy(history = updatedUserHistory))
+                userRepository.setUserData(user.copy(history = updatedUserHistory))
 
                 updateUserData()
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
     }
 
@@ -182,7 +172,7 @@ class HomeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
 
     }
@@ -235,15 +225,17 @@ class HomeViewModel @Inject constructor(
             _userList.emit(list)
         } catch (e: Exception) {
             e.printStackTrace()
-            _uiState.emit(HomeUiState.ErrorExit)
+            _homeUiState.emit(HomeUiState.ErrorExit)
         }
-
     }
 
     fun getMyRank() {
         try {
-            (user.value as UserUiState.Registered).data.let {
-                _myRank.value = userList.value.filter{it.startTime != null}.sortedBy { it.startTime }.indexOf(it.toRankingListItem()) + 1
+            user.value?.let {
+                _myRank.value = userList.value
+                    .filter { it.startTime != null }
+                    .sortedBy { it.startTime }
+                    .indexOf(it.toRankingListItem()) + 1
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -6,7 +6,6 @@ import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
-import com.stopsmoke.kekkek.core.domain.usecase.RegisterFcmTokenUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.SignUpUseCase
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
@@ -25,9 +24,8 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val sinUpUseCase: SignUpUseCase,
     private val finishOnboardingUseCase: FinishOnboardingUseCase,
-    private val registerFcmTokenUseCase: RegisterFcmTokenUseCase,
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val checkNicknameUseCase: CheckNicknameUseCase
+    private val checkNicknameUseCase: CheckNicknameUseCase,
 ) : ViewModel() {
 
     private val _uid = MutableStateFlow("")
@@ -77,7 +75,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private val _onboardingUiState = MutableStateFlow<OnboardingUiState>(OnboardingUiState.Loading)
-    val onboardingUiState  = _onboardingUiState.asStateFlow()
+    val onboardingUiState = _onboardingUiState.asStateFlow()
 
     fun updateUserData() {
         viewModelScope.launch {
@@ -90,7 +88,6 @@ class OnboardingViewModel @Inject constructor(
                     packPrice = cigarettePricePerPack.value,
                 )
                 finishOnboardingUseCase()
-                registerFcmTokenUseCase()
                 delay(1300)
                 _onboardingUiState.emit(OnboardingUiState.Success)
             } catch (e: Exception) {
@@ -127,7 +124,6 @@ class OnboardingViewModel @Inject constructor(
                     return@launch
                 }
                 finishOnboardingUseCase()
-                registerFcmTokenUseCase()
                 _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
             } catch (e: GuestModeException) {
                 _authenticationUiState.emit(AuthenticationUiState.Guest)
@@ -136,5 +132,9 @@ class OnboardingViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
+    }
+
+    fun resetAuthenticationUiState() = viewModelScope.launch{
+        _authenticationUiState.emit(AuthenticationUiState.Init)
     }
 }
