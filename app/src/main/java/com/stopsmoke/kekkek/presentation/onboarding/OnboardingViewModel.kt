@@ -10,13 +10,19 @@ import com.stopsmoke.kekkek.core.domain.usecase.SignUpUseCase
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -109,41 +115,47 @@ class OnboardingViewModel @Inject constructor(
         _nameDuplicationInspectionResult.emit(setBool)
     }
 
-    private val _authenticationUiState = MutableSharedFlow<AuthenticationUiState>()
-    val authenticationUiState = _authenticationUiState.asSharedFlow()
+    private val registerEventListener = MutableSharedFlow<Unit>()
 
-    fun registeredApp() {
-        viewModelScope.launch {
-            try {
-                require(uid.value.isNotBlank())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val authenticationUiState: SharedFlow<AuthenticationUiState> =
+        registerEventListener.flatMapLatest {
+            if (uid.value.isBlank()) {
+                return@flatMapLatest flowOf(AuthenticationUiState.Error(NullPointerException()))
+            }
 
-                when (val user = getUserDataUseCase().first()) {
+            getUserDataUseCase().mapLatest { user ->
+                when (user) {
                     is User.Error -> {
                         user.t?.printStackTrace()
-                        _authenticationUiState.emit(AuthenticationUiState.Error(user.t))
+                        AuthenticationUiState.Error(user.t)
                     }
 
                     is User.Guest -> {
-                        _authenticationUiState.emit(AuthenticationUiState.Guest)
+                        AuthenticationUiState.Guest
                     }
 
                     is User.Registered -> {
                         if (user.uid.isBlank()) {
-                            _authenticationUiState.emit(AuthenticationUiState.NewMember)
-                            return@launch
+                            return@mapLatest AuthenticationUiState.NewMember
                         }
                         finishOnboardingUseCase()
-                        _authenticationUiState.emit(AuthenticationUiState.AlreadyUser)
+                        AuthenticationUiState.AlreadyUser
                     }
                 }
-            } catch (e: Exception) {
-                _authenticationUiState.emit(AuthenticationUiState.Error(e))
-                e.printStackTrace()
             }
         }
-    }
+            .catch {
+                emit(AuthenticationUiState.Error(it))
+            }
+            .shareIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000)
+            )
 
-    fun resetAuthenticationUiState() = viewModelScope.launch{
-        _authenticationUiState.emit(AuthenticationUiState.Init)
+    fun registeredApp() {
+        viewModelScope.launch {
+            registerEventListener.emit(Unit)
+        }
     }
 }
