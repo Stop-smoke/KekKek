@@ -46,7 +46,9 @@ internal class UserRepositoryImpl @Inject constructor(
         coroutineScope.launch {
             try {
                 authDataSource.getUid().collectLatest {
-                    handleUserData(it!!)
+                    if (it != null) {
+                        handleUserData(it)
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -152,7 +154,7 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     private suspend fun clearApp() {
-        user.emit(null)
+//        user.emit(null)
         preferencesDataSource.clearAll()
     }
 

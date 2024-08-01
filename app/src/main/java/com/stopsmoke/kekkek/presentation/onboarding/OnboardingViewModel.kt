@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -131,6 +132,12 @@ class OnboardingViewModel @Inject constructor(
                 finishOnboardingUseCase()
                 AuthenticationUiState.AlreadyUser
             }
+                .retry(1) {
+                    (it is GuestModeException).also {
+                        delay(500)
+                        registerEventListener.emit(Unit)
+                    }
+                }
         }
             .catch {
                 if (it is GuestModeException) {
