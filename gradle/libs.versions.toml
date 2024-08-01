@@ -34,6 +34,7 @@ googleOssLicenses = "17.0.1"
 activityVersion = "1.8.0"
 
 kotlinPluginSerialization = "1.6.10"
+hiltCommon = "1.2.0"
 
 
 [libraries]
@@ -72,6 +73,7 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 
 android-gms-oos-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "googleOssLicenses" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activityVersion" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 
 
 [plugins]
