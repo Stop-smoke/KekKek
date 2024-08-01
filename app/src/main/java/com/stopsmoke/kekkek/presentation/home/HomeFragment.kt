@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -82,12 +81,6 @@ class HomeFragment : Fragment(), ErrorHandle {
 
         viewModel.user.collectLatestWithLifecycle(lifecycle) {
             when (it) {
-                is UserUiState.Error -> {
-                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                }
-
-                is UserUiState.Guest -> {}
-
                 is UserUiState.Registered -> {
                     viewModel.getMyRank()
                     if (it.data.cigaretteAddictionTestResult == null) {
@@ -99,8 +92,6 @@ class HomeFragment : Fragment(), ErrorHandle {
 
                     }
                 }
-
-                else -> {}
             }
         }
 

@@ -14,6 +14,7 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentRankingListFieldBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.HomeViewModel
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.ranking.RankingListAdapter
 import com.stopsmoke.kekkek.presentation.ranking.RankingListCallback
 import com.stopsmoke.kekkek.presentation.ranking.RankingListItem
@@ -162,7 +163,7 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    user.value?.toRankingListItem()?.let { user ->
+                    (user.value as? UserUiState.Registered)?.data?.toRankingListItem()?.let { user ->
                         binding.includeRankingListMyRank.apply {
                             tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
                             tvRankStateItem.text = user.introduction
@@ -192,7 +193,7 @@ class RankingListFieldFragment : Fragment() {
 
                     initTopRank(list)
 
-                    viewModel.user.value?.toRankingListItem()?.let { user ->
+                    (user.value as? UserUiState.Registered)?.data?.toRankingListItem()?.let { user ->
                         binding.includeRankingListMyRank.apply {
                             tvRankStateItemRankNum.text = (list.indexOf(user) + 1).toString()
                             tvRankStateItem.text = user.introduction

@@ -2,6 +2,7 @@ package com.stopsmoke.kekkek.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
 import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.HistoryTime
@@ -48,17 +49,34 @@ class HomeViewModel @Inject constructor(
     )
     val currentUserState = _currentUserState.asStateFlow()
 
-    val user = getUserDataUseCase()
+    val user: StateFlow<UserUiState> = getUserDataUseCase()
+        .asResult()
+        .map {
+            when(it) {
+                is Result.Error -> {
+                    if (it.exception is GuestModeException) {
+                        return@map UserUiState.Guest
+                    }
+                    UserUiState.Error(it.exception)
+                }
+                is Result.Loading -> UserUiState.Loading
+                is Result.Success -> UserUiState.Registered(it.data)
+            }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = null
+            initialValue = UserUiState.Loading
         )
 
     val noticeBanner = postRepository.getTopNotice(1)
         .map { post ->
             post.first()
         }.asResult()
+
+    // TODO: Refactor
+    // TODO: user, currentUser, updateUserData 코드 병합 가능
+    // TODO: delay 제거
 
     fun updateUserData() = viewModelScope.launch {
         try {
@@ -231,7 +249,7 @@ class HomeViewModel @Inject constructor(
 
     fun getMyRank() {
         try {
-            user.value?.let {
+            (user.value as? UserUiState.Registered)?.data?.let {
                 _myRank.value = userList.value
                     .filter { it.startTime != null }
                     .sortedBy { it.startTime }
