@@ -22,11 +22,6 @@ class NoticeListViewModel @Inject constructor(
 
     val noticePosts =
         postRepository.getPost(category = PostCategory.NOTICE)
-            .map { pagingData ->
-                pagingData.map { post ->
-                    post.toCommunityWritingListItem()
-                }
-            }
             .cachedIn(viewModelScope)
             .asResult()
 }

@@ -4,17 +4,16 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.RecyclerviewPostviewContentBinding
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.post.detail.callback.PostCommentCallback
 import com.stopsmoke.kekkek.presentation.post.detail.model.PostContentItem
 import com.stopsmoke.kekkek.presentation.snackbarLongShow
 import com.stopsmoke.kekkek.presentation.toResourceId
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
 
 class PostContentViewHolder(
     private val binding: RecyclerviewPostviewContentBinding,
@@ -76,7 +75,7 @@ class PostContentViewHolder(
         if (post == null) return@with
 
         tvPostPosterNickname.text = post.written.name
-        tvPostPosterPostType.text = post.category.toStringKR()
+        tvPostPosterPostType.text = post.category.getResourceString(binding.root.context)
         tvPostPosterRanking.text = "랭킹 ${post.written.ranking}위"
         tvPostHour.text = post.modifiedElapsedDateTime.toResourceId(itemView.context)
 

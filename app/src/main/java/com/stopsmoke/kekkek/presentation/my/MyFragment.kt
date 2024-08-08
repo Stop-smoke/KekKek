@@ -31,7 +31,7 @@ import com.stopsmoke.kekkek.presentation.my.supportcenter.navigateToSupportCente
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
 import com.stopsmoke.kekkek.presentation.settings.profile.navigateToSettingsProfileScreen
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class MyFragment : Fragment(), ErrorHandle {
+class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding: FragmentMyBinding get() = _binding!!
 

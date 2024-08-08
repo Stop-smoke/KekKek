@@ -10,13 +10,13 @@ import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.FragmentSmokingAddictionTestResultBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestUiState
 import com.stopsmoke.kekkek.presentation.home.popBackStackInclusiveHome
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.SmokingAddictionTestViewModel
 import com.stopsmoke.kekkek.presentation.smokingaddictiontest.model.SmokingQuestionnaireUiState
 
-class SmokingAddictionTestResultFragment : Fragment(), ErrorHandle {
+class SmokingAddictionTestResultFragment : Fragment() {
 
     private var _binding: FragmentSmokingAddictionTestResultBinding? = null
     private val binding get() = _binding!!

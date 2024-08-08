@@ -11,13 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentUserProfilePostBinding
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.userprofile.UserProfileViewModel
 import com.stopsmoke.kekkek.presentation.userprofile.post.adapter.UserPostListAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class UserProfilePostFragment : Fragment(), ErrorHandle {
+class UserProfilePostFragment : Fragment() {
 
     private var _binding: FragmentUserProfilePostBinding? = null
     private val binding get() = _binding!!

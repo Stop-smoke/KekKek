@@ -7,10 +7,11 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.bumptech.glide.Glide
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.getRelativeTime
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import com.stopsmoke.kekkek.presentation.utils.diffutil.CommunityWritingItemDiffUtil
 
 class CommunityListAdapter :
@@ -49,9 +50,16 @@ class CommunityListAdapter :
             tvItemWritingTimeStamp.text = getRelativeTime(item.postTime)
 
             item.userInfo.let {
-                it.profileImage.let { imgUrl ->
-                    if (imgUrl.isNullOrBlank()) circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
-                    else circleIvItemWritingProfile.load(imgUrl)
+                it.profileImage?.let { imgUrl ->
+                    if (imgUrl.isNullOrBlank()) {
+                        circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
+                    } else {
+                        Glide.with(itemView.context)
+                            .load(imgUrl)
+                            .into(circleIvItemWritingProfile)
+                    }
+                } ?: run {
+                    circleIvItemWritingProfile.setImageResource(R.drawable.ic_user_profile_test)
                 }
                 tvItemWritingName.text = it.name
                 tvItemWritingRank.text = "랭킹 ${it.rank}위"
@@ -69,7 +77,7 @@ class CommunityListAdapter :
                 }
             }
 
-            tvItemWritingPostType.text = item.postType.toStringKR() ?: ""
+            tvItemWritingPostType.text = item.postType.getResourceString(binding.root.context) ?: ""
 
             binding.circleIvItemWritingProfile.setOnClickListener {
                 callback?.navigateToUserProfile(item.userInfo.uid)

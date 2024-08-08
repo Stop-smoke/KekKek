@@ -18,7 +18,7 @@ import com.stopsmoke.kekkek.core.domain.model.Reply
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentReplyBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
@@ -29,7 +29,7 @@ import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandle {
+class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback {
     private var _binding: FragmentReplyBinding? = null
     private val binding get() = _binding!!
 

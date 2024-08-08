@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stopsmoke.kekkek.R
@@ -18,7 +19,7 @@ import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentCommunityBinding
 import com.stopsmoke.kekkek.presentation.NavigationKey
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.post.edit.navigateToPostEditScreen
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class CommunityFragment : Fragment(), ErrorHandle {
+class CommunityFragment : Fragment() {
     private var _binding: FragmentCommunityBinding? = null
     private val binding: FragmentCommunityBinding get() = _binding!!
 
@@ -236,7 +237,12 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 }
 
                 Result.Loading -> {}
-                is Result.Success -> listAdapter.submitData(postsResult.data)
+                is Result.Success -> {
+                    val data = postsResult.data.map{
+                        it.toCommunityWritingListItem(requireContext())
+                    }
+                    listAdapter.submitData(data)
+                }
             }
 
         }
@@ -254,7 +260,8 @@ class CommunityFragment : Fragment(), ErrorHandle {
                         Result.Loading -> {}
                         is Result.Success -> bindPopularPosts(
                             popularPostsResult.data,
-                            period = true
+                            period = true,
+                            context = requireContext()
                         )
                     }
                 }
@@ -268,7 +275,7 @@ class CommunityFragment : Fragment(), ErrorHandle {
                 }
 
                 Result.Loading -> {}
-                is Result.Success -> bindPopularPosts(it.data, period = false)
+                is Result.Success -> bindPopularPosts(it.data, period = false, context = requireContext())
             }
         }
 

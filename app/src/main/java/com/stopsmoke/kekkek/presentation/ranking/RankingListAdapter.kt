@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.bumptech.glide.Glide
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.RecyclerviewRankinglistRankstateItemBinding
 import com.stopsmoke.kekkek.presentation.ranking.field.RankingListField
@@ -39,7 +40,9 @@ class RankingListAdapter(
                     R.drawable.img_defaultprofile
                 )
             } else {
-                circleIvRankStateItemProfile.load(item.profileImage)
+                Glide.with(itemView.context)
+                    .load(item.profileImage)
+                    .into(circleIvRankStateItemProfile)
             }
 
             tvRankingListTime.text = when(rankingListField) {

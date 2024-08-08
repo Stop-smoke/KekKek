@@ -175,11 +175,14 @@ internal class PostDaoImpl @Inject constructor(
     }
 
     override suspend fun editPost(postEntity: PostEntity) {
+        storageDao.deleteFile("posts/${postEntity.id}")
+
         val updateMap = mapOf(
             "category" to postEntity.category,
             "title" to postEntity.title,
             "text" to postEntity.text,
             "date_time.modified" to FieldValue.serverTimestamp(),
+            "images_url" to emptyList<String>()
         )
         firestore.collection(POST_COLLECTION)
             .document(postEntity.id!!)

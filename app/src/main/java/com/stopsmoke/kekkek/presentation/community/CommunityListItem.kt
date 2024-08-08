@@ -1,12 +1,13 @@
 package com.stopsmoke.kekkek.presentation.community
 
+import android.content.Context
 import android.os.Parcelable
 import com.stopsmoke.kekkek.core.domain.model.DateTimeUnit
 import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -69,7 +70,7 @@ fun emptyCommunityWritingListItem() = CommunityWritingItem(
 )
 
 
-fun Post.toCommunityWritingListItem() = CommunityWritingItem(
+fun Post.toCommunityWritingListItem(context: Context) = CommunityWritingItem(
     userInfo = UserInfo(
         name = written.name,
         rank = written.ranking,
@@ -78,7 +79,7 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
     ),
     postInfo = PostInfo(
         title = title,
-        postType = category.toStringKR() ?: "",
+        postType = category.getResourceString(context) ?: "",
         view = views,
         like = likeUser.size.toLong(),
         comment = commentCount,
@@ -91,23 +92,24 @@ fun Post.toCommunityWritingListItem() = CommunityWritingItem(
 )
 
 
-fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long) = CommunityWritingItem(
-    userInfo = UserInfo(
-        name = written.name,
-        rank = written.ranking,
-        profileImage = if (written.profileImage is ProfileImage.Web) written.profileImage.url else "",
-        uid = written.uid
-    ),
-    postInfo = PostInfo(
-        title = title,
-        postType = category.toStringKR() ?: "",
-        view = views,
-        like = likeUser.size.toLong(),
-        comment = commentNumber,
-        id = id
-    ),
-    postImage = "",
-    post = text,
-    postTime = modifiedElapsedDateTime,
-    postType = category
-)
+fun Post.toCommunityWritingListItem(views: Long, commentNumber: Long, context: Context) =
+    CommunityWritingItem(
+        userInfo = UserInfo(
+            name = written.name,
+            rank = written.ranking,
+            profileImage = if (written.profileImage is ProfileImage.Web) written.profileImage.url else "",
+            uid = written.uid
+        ),
+        postInfo = PostInfo(
+            title = title,
+            postType = category.getResourceString(context) ?: "",
+            view = views,
+            like = likeUser.size.toLong(),
+            comment = commentNumber,
+            id = id
+        ),
+        postImage = "",
+        post = text,
+        postTime = modifiedElapsedDateTime,
+        postType = category
+    )

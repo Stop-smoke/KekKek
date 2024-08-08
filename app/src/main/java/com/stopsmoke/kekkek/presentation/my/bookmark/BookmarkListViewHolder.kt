@@ -10,7 +10,7 @@ import com.stopsmoke.kekkek.core.domain.model.ElapsedDateTime
 import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 
 class BookmarkListViewHolder(
     private val binding: ItemPostBinding,
@@ -38,7 +38,7 @@ class BookmarkListViewHolder(
                 ivItemWritingPostImage.visibility = View.GONE
                 setMarginEnd(tvItemWritingTitle, 16)
             }
-            tvItemWritingPostType.text = item.postType.toStringKR()
+            tvItemWritingPostType.text = item.postType.getResourceString(binding.root.context)
             tvItemWritingName.text = it.name
             tvItemWritingRank.text = "랭킹 ${it.rank}위"
 

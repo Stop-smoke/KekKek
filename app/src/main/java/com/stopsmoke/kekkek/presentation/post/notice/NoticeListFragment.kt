@@ -12,12 +12,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentNoticeListBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.community.toCommunityWritingListItem
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.isVisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
@@ -28,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 
 @AndroidEntryPoint
-class NoticeListFragment : Fragment(), ErrorHandle {
+class NoticeListFragment : Fragment() {
     private var _binding: FragmentNoticeListBinding? = null
     val binding: FragmentNoticeListBinding get() = _binding!!
 
@@ -101,7 +103,7 @@ class NoticeListFragment : Fragment(), ErrorHandle {
                             errorExit(findNavController())
                         }
                         Result.Loading -> {}
-                        is Result.Success -> listAdapter.submitData(noticePostsResult.data)
+                        is Result.Success -> listAdapter.submitData(noticePostsResult.data.map{it.toCommunityWritingListItem(requireContext())})
                     }
                 }
         }

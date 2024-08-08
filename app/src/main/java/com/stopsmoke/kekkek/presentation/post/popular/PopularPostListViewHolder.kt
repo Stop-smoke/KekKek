@@ -10,7 +10,7 @@ import com.stopsmoke.kekkek.databinding.ItemPostBinding
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityWritingItem
 import com.stopsmoke.kekkek.presentation.getRelativeTime
-import com.stopsmoke.kekkek.presentation.mapper.toStringKR
+import com.stopsmoke.kekkek.presentation.mapper.getResourceString
 
 class PopularPostListViewHolder(
     private val binding: ItemPostBinding,
@@ -48,7 +48,7 @@ class PopularPostListViewHolder(
             }
         }
 
-        tvItemWritingPostType.text = item.postType.toStringKR()
+        tvItemWritingPostType.text = item.postType.getResourceString(binding.root.context)
 
 
         binding.circleIvItemWritingProfile.setOnClickListener {

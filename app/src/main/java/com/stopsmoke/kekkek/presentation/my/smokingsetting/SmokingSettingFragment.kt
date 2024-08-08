@@ -12,10 +12,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.stopsmoke.kekkek.databinding.FragmentSmokingSettingBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 
-class SmokingSettingFragment : Fragment(), ErrorHandle {
+class SmokingSettingFragment : Fragment() {
 
     private var _binding: FragmentSmokingSettingBinding? = null
     private val binding get() = _binding!!

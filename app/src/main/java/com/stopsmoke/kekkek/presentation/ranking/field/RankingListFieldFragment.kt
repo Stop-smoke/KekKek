@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.stopsmoke.kekkek.R
@@ -68,42 +69,12 @@ class RankingListFieldFragment : Fragment() {
         initView()
         initViewModel()
         initListener()
-        startProgressAnimation()
+        startRankingProgress()
     }
 
-    private fun startProgressAnimation() {
-        val progressList = listOf(
-            binding.progressBarRankingListRank1,
-            binding.progressBarRankingListRank2,
-            binding.progressBarRankingListRank3
-        )
-
-        val profileList = listOf(
-            binding.ivRankingListRank1Profile,
-            binding.ivRankingListRank2Profile,
-            binding.ivRankingListRank3Profile
-        )
-
-        val initialProgress = progressList.map { it.progress }
-
-        getInterval()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { interval ->
-                progressList.forEachIndexed { index, progressBar ->
-                    progressBar.progress = initialProgress[index] + interval.toInt()
-                    if(progressBar.progress == 100){
-                        profileList[index].visibility = View.VISIBLE
-                    }
-                }
-            }
-    }
-
-    private fun getInterval(): Observable<Long> =
-        Observable.interval(7L, TimeUnit.MILLISECONDS)
-            .map { it + 1 }
-            .take(100)
 
     private fun initView() = with(binding) {
+
         when (field) {
             RankingListField.Time -> {
                 tvRankingListTypeTime.apply {
@@ -177,7 +148,8 @@ class RankingListFieldFragment : Fragment() {
                                 circleIvRankStateItemProfile.load(user.profileImage)
                             }
 
-                            tvRankingListTime.text = getRankingTime(user.startTime ?: LocalDateTime.now())
+                            tvRankingListTime.text =
+                                getRankingTime(user.startTime ?: LocalDateTime.now())
 
                             circleIvRankStateItemProfile.setOnClickListener {
                                 callback?.navigationToUserProfile(user.userID)
@@ -218,8 +190,36 @@ class RankingListFieldFragment : Fragment() {
                 null -> {}
             }
         }
+
+        rankingProgress.collectLatestWithLifecycle(lifecycle) { progress ->
+            val progressList = listOf(
+                binding.progressBarRankingListRank1,
+                binding.progressBarRankingListRank2,
+                binding.progressBarRankingListRank3
+            )
+
+            val profileList = listOf(
+                binding.ivRankingListRank1Profile,
+                binding.ivRankingListRank2Profile,
+                binding.ivRankingListRank3Profile
+            )
+
+            if (progress < 100) {
+                progressList.forEach { progressBar ->
+                    progressBar.progress = progress
+                }
+            } else if (progress == 100) {
+                profileList.forEach { imageView ->
+                    imageView.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
+    private fun startRankingProgress(){
+        viewModel.resetRankingProgress()
+        viewModel.proceedProgress()
+    }
     private fun initTopRank(list: List<RankingListItem>) = with(binding) {
         val topRankTextList = listOf(
             listOf(tvRankingListRank1Name, tvRankingListRank1Intro),

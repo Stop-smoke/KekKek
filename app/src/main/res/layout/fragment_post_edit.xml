@@ -36,7 +36,6 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_dropdown"
-            android:tint="@color/gray_lightgray2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +128,6 @@
             android:layout_height="24dp"
             android:layout_margin="8dp"
             android:src="@drawable/ic_delete"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/cv_post_write_image"
             app:layout_constraintTop_toBottomOf="@+id/et_post_write_content"
             tools:visibility="visible" />

@@ -16,7 +16,7 @@ import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.community.CommunityCallbackListener
 import com.stopsmoke.kekkek.presentation.community.CommunityUiState
 import com.stopsmoke.kekkek.presentation.community.CommunityViewModel
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
@@ -24,7 +24,7 @@ import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PopularPostFragment : Fragment(),ErrorHandle {
+class PopularPostFragment : Fragment() {
     private var _binding: FragmentPopularPostBinding? = null
     val binding: FragmentPopularPostBinding get() = _binding!!
 

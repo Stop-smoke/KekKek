@@ -13,11 +13,11 @@ import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.databinding.FragmentSearchPostBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.error.errorExit
 import com.stopsmoke.kekkek.presentation.post.detail.navigateToPostDetailScreen
 import com.stopsmoke.kekkek.presentation.search.SearchViewModel
 
-class SearchPostFragment : Fragment(), ErrorHandle {
+class SearchPostFragment : Fragment() {
 
     private var _binding: FragmentSearchPostBinding? = null
     private val binding get() = _binding!!
