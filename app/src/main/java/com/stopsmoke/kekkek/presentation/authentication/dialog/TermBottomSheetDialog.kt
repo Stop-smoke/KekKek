@@ -7,24 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.databinding.DialogTermBinding
-import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.onboarding.navigateToOnboardingGraph
 
 class TermBottomSheetDialog : BottomSheetDialogFragment() {
     private var _binding: DialogTermBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: OnboardingViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = DialogTermBinding.inflate(inflater, container, false)
         return binding.root
@@ -35,7 +31,6 @@ class TermBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListner()
         allTermCheck()
-        viewModel.resetAuthenticationUiState()
     }
 
     private fun allTermCheck() {

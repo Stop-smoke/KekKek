@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -23,7 +22,6 @@ import com.stopsmoke.kekkek.presentation.home.navigateToHomeScreenWithClearBackS
 import com.stopsmoke.kekkek.presentation.invisible
 import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
 import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
-import com.stopsmoke.kekkek.presentation.onboarding.navigateToOnboardingGraph
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -117,12 +115,13 @@ class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
                         }
 
                         is AuthenticationUiState.Error -> {
-                            Toast.makeText(requireContext(), "에러가 발생하였습니다", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "에러가 발생하였습니다", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
-                        is AuthenticationUiState.Guest -> {  }
+                        is AuthenticationUiState.Guest -> {}
 
-                        is AuthenticationUiState.Init -> { }
+                        is AuthenticationUiState.Init -> {}
                     }
                 }
         }
