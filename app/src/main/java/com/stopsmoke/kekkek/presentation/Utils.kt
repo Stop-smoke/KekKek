@@ -154,7 +154,7 @@ internal fun ImageView.setDefaultProfileImage(profileImage: ProfileImage) {
 }
 
 
-fun (User.Registered).getTotalDay(): Long{
+fun User.getTotalDay(): Long{
     var totalDay:Long = 0
     this.history.historyTimeList.forEach {
         if(it.quitSmokingStartDateTime !=null){

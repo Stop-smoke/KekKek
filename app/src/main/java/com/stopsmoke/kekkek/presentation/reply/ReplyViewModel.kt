@@ -7,13 +7,15 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.asResult
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.Reply
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.emptyReply
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.ReplyRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.domain.usecase.AddReplyUseCase
+import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.toggleElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,13 +41,28 @@ class ReplyViewModel @Inject constructor(
     userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val addReplyUseCase: AddReplyUseCase,
+    private val getUserDataUseCase: GetUserDataUseCase,
 ) : ViewModel() {
-    val user: StateFlow<User?> = userRepository.getUserData()
-        .catch { it.printStackTrace() }
+
+    val user: StateFlow<UserUiState> = userRepository.getUserData()
+        .asResult()
+        .map {
+            when (it) {
+                is Result.Error -> {
+                    if (it.exception is GuestModeException) {
+                        return@map UserUiState.Guest
+                    }
+                    UserUiState.Error(it.exception)
+                }
+
+                is Result.Loading -> UserUiState.Loading
+                is Result.Success -> UserUiState.Registered(it.data)
+            }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = null
+            initialValue = UserUiState.Loading
         )
 
     private val _postId: MutableStateFlow<String> = MutableStateFlow("")
@@ -117,7 +134,7 @@ class ReplyViewModel @Inject constructor(
                 if (reply is ReplyUiState.ReplyType && id.contains(reply.data.id)) {
                     val newReply = reply.data.copy(
                         isLiked = !reply.data.isLiked,
-                        likeUser = reply.data.likeUser.toggleElement((user.value as User.Registered).uid)
+                        likeUser = reply.data.likeUser.toggleElement(getUserDataUseCase().first().uid)
                     )
                     return@map reply.copy(newReply)
                 }
@@ -183,7 +200,7 @@ class ReplyViewModel @Inject constructor(
                     it.toMutableList().apply {
                         val newItem = previewItem.copy(
                             isLiked = !previewItem.isLiked,
-                            likeUser = previewItem.likeUser.toggleElement((user.value as User.Registered).uid)
+                            likeUser = previewItem.likeUser.toggleElement(getUserDataUseCase().first().uid)
                         )
                         set(indexOf(previewItem), newItem)
                     }

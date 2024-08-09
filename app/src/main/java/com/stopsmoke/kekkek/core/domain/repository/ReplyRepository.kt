@@ -13,7 +13,7 @@ interface ReplyRepository {
 
     fun getReply(postId: String, commentId: String, replyId: String) : Flow<Reply>
 
-    suspend fun getReply(commentId: String): Flow<PagingData<Reply>>
+    fun getReply(commentId: String): Flow<PagingData<Reply>>
 
     suspend fun deleteReply(postId: String, commentId: String, replyId: String)
 

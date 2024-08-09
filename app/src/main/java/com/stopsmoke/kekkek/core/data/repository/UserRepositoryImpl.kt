@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -39,34 +40,33 @@ internal class UserRepositoryImpl @Inject constructor(
     private val messaging: FirebaseMessagingDataSource,
 ) : UserRepository {
 
-    private val user: MutableStateFlow<User> = MutableStateFlow(
-        User.Guest
-    )
+    private val user: MutableStateFlow<User?> = MutableStateFlow(null)
 
     init {
         coroutineScope.launch {
-            authDataSource.getUid().collectLatest {
-                observeUser(it)
+            try {
+                authDataSource.getUid().collectLatest {
+                    if (it != null) {
+                        handleUserData(it)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                user.emit(null)
             }
         }
     }
 
-    private suspend fun observeUser(uid: String?) {
-        if (uid == null) {
-            user.emit(User.Guest)
-            return
-        }
-
+    private suspend fun handleUserData(uid: String) {
         kotlin.runCatching {
             userDao.getUser(uid).collectLatest {
                 checkPushServiceToken(it)
                 user.emit(it.toExternalModel())
             }
         }
-            .onFailure {
-                user.emit(User.Error(it))
-            }
     }
+
+    private fun getUser(): User = user.value ?: throw GuestModeException()
 
     private suspend fun checkPushServiceToken(user: UserEntity) {
         val token = messaging.getToken()
@@ -79,7 +79,7 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun setProfileImage(
         imageInputStream: InputStream,
     ) {
-        val user = user.value as? User.Registered ?: throw GuestModeException()
+        val user = user.value ?: throw GuestModeException()
 
         val bitmap = BitmapCompressor(imageInputStream)
         val uploadUrl = storageDao.uploadFile(
@@ -90,53 +90,33 @@ internal class UserRepositoryImpl @Inject constructor(
         postDao.setProfileImage(user.uid, uploadUrl)
     }
 
-    override fun getUserData(uid: String): Result<Flow<User.Registered>> {
-        return try {
-            userDao.getUser(uid).map { user ->
-                user.toExternalModel()
-            }
-                .let {
-                    Result.Success(it)
-                }
-        } catch (e: Exception) {
-            Result.Error(e)
+    override fun getUserData(uid: String): Flow<User> = try {
+        userDao.getUser(uid).map { user ->
+            user.toExternalModel()
         }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        flow { throw e }
     }
 
     override fun getUserData(): Flow<User> {
-        return user
+        return user.map { it ?: throw GuestModeException() }
     }
 
-    override suspend fun getUserDataFormatUser(uid: String): User {
-        return try {
-            val userEntity = userDao.getUserDataFormatUser(uid)
-            return if (userEntity != null) {
-                userEntity.toExternalModel()
-            } else {
-                User.Guest
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            User.Error(e)
-        }
-    }
-
-    override suspend fun setUserData(user: User.Registered) {
+    override suspend fun setUserData(user: User) {
         userDao.setUser(user.toEntity())
     }
 
-    override suspend fun setUserDataForName(user: User.Registered, name: String) {
-        userDao.setUserDataForName(user.toEntity(), name)
-        postDao.setUserDataForName(user.toEntity(), name)
+    override suspend fun setUserName(name: String) {
+        userDao.setUserName(getUser().uid, name)
     }
 
-    override suspend fun setUserDataForIntroduction(user: User.Registered, introduction: String) {
-        userDao.setUserDataForIntroduction(user.toEntity(), introduction)
+    override suspend fun setUserIntroduction(introduction: String) {
+        userDao.setUserIntroduction(getUser().uid, introduction)
     }
 
     override suspend fun updateUserData(map: Map<String, Any>) {
-        val user = user.value as? User.Registered ?: throw GuestModeException()
-        userDao.updateUser(user.uid, map)
+        userDao.updateUser(getUser().uid, map)
     }
 
     override suspend fun startQuitSmokingTimer(): Result<Unit> {
@@ -165,15 +145,16 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun logout() {
         authDataSource.logout()
-        user.emit(User.Guest)
-        preferencesDataSource.clearAll()
+        clearApp()
     }
 
     override suspend fun withdraw() {
-        (user.value as? User.Registered)?.let {
-            userDao.withdraw(it.uid)
-        }
-        user.emit(User.Guest)
+        userDao.withdraw(getUser().uid)
+        clearApp()
+    }
+
+    private suspend fun clearApp() {
+//        user.emit(null)
         preferencesDataSource.clearAll()
     }
 
@@ -184,7 +165,11 @@ internal class UserRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getActivities(): Flow<Activities> {
         return user.flatMapLatest { user ->
-            userDao.getActivities((user as User.Registered).uid)
+            if (user == null) {
+                throw GuestModeException()
+            }
+
+            userDao.getActivities(user.uid)
                 .map {
                     Activities(
                         it.postCount,

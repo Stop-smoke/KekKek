@@ -1,20 +1,17 @@
 package com.stopsmoke.kekkek.core.data.mapper
 
-import com.google.firebase.Timestamp
-import com.stopsmoke.kekkek.core.domain.model.Location
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.UserConfig
-import com.stopsmoke.kekkek.core.firestore.model.LocationEntity
+import com.stopsmoke.kekkek.core.domain.model.UserRole
 import com.stopsmoke.kekkek.core.firestore.model.UserConfigEntity
 import com.stopsmoke.kekkek.core.firestore.model.UserEntity
 import java.time.LocalDateTime
 
-internal fun User.Registered.toEntity(): UserEntity =
+internal fun User.toEntity(): UserEntity =
     UserEntity(
         uid = uid,
         name = name,
-        location = location?.run { LocationEntity(latitude, longitude, region) },
         profileImageUrl = (profileImage as? ProfileImage.Web)?.url,
         userConfig = UserConfigEntity(
             dailyCigarettesSmoked = userConfig.dailyCigarettesSmoked,
@@ -23,27 +20,19 @@ internal fun User.Registered.toEntity(): UserEntity =
             birthDate = userConfig.birthDate.toFirebaseTimestamp()
         ),
         clearAchievementsList = clearAchievementsList,
-        commentMy = commentMy,
-        postMy = postMy,
         history = history.toEntity(),
         cigaretteAddictionTestResult = cigaretteAddictionTestResult,
         introduction = introduction
     )
 
-internal fun UserEntity.toExternalModel(): User.Registered =
-    User.Registered(
+internal fun UserEntity.toExternalModel(): User =
+    User(
         uid = uid ?: "",
         name = name ?: "",
-        location = location?.toExternalModel(),
         profileImage = if (profileImageUrl != null) ProfileImage.Web(url = profileImageUrl!!) else ProfileImage.Default,
-        nickname = nickname,
-        gender = gender,
-        age = age,
         phoneNumber = phoneNumber,
         introduction = introduction,
         ranking = ranking ?: 0,
-        postBookmark = postBookmark ?: emptyList(),
-        postLike = postLike ?: emptyList(),
         startTime = start_time?.toLocalDateTime(),
         userConfig = UserConfig(
             dailyCigarettesSmoked = userConfig?.dailyCigarettesSmoked ?: 0,
@@ -52,14 +41,7 @@ internal fun UserEntity.toExternalModel(): User.Registered =
             birthDate = userConfig?.birthDate?.toLocalDateTime() ?: LocalDateTime.now()
         ),
         clearAchievementsList = clearAchievementsList ?: emptyList(),
-        commentMy = commentMy ?: emptyList(),
-        postMy = postMy ?: emptyList(),
         history = history?.asExternalModel() ?: emptyHistory(),
-        cigaretteAddictionTestResult = cigaretteAddictionTestResult
+        cigaretteAddictionTestResult = cigaretteAddictionTestResult,
+        role = UserRole.USER
     )
-
-internal fun LocationEntity.toExternalModel() = Location(
-    latitude = latitude ?: 0,
-    longitude = longitude ?: 0,
-    region = region ?: ""
-)

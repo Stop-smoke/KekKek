@@ -14,19 +14,18 @@ interface UserRepository {
      * 다른 유저 정보를 가져옴
      */
 
-    fun getUserData(uid: String): Result<Flow<User.Registered>>
+    fun getUserData(uid: String): Flow<User>
 
     /**
      * 자신의 유저 정보를 가져옴
      */
     fun getUserData(): Flow<User>
 
-    suspend fun getUserDataFormatUser(uid: String): User
-    suspend fun setUserData(user: User.Registered)
+    suspend fun setUserData(user: User)
 
-    suspend fun setUserDataForName(user: User.Registered, name: String)
+    suspend fun setUserName(name: String)
 
-    suspend fun setUserDataForIntroduction(user: User.Registered, introduction: String)
+    suspend fun setUserIntroduction(introduction: String)
 
     /**
      *  금연을 시작 했을때 서버에 시간을 저장 하는 함수

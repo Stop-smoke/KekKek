@@ -1,5 +1,6 @@
 package com.stopsmoke.kekkek.presentation.search.keyword
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.common.Result
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.databinding.FragmentSearchKeywordBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.search.SearchViewModel
@@ -39,18 +41,20 @@ class SearchKeywordFragment : Fragment() {
         observeRecyclerViewItem()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initUser() = viewModel.user.collectLatestWithLifecycle(lifecycle) {
         when (it) {
-            is User.Error -> {
+            is Result.Error -> {
+                if (it.exception is GuestModeException) {
+                    binding.tvSearchRecommend.text = getString(R.string.search_recommend_keyword)
+                    return@collectLatestWithLifecycle
+                }
+
                 view?.snackbarLongShow("user 에러")
             }
-
-            is User.Guest -> {
-                binding.tvSearchRecommend.text = getString(R.string.search_recommend_keyword)
-            }
-
-            is User.Registered -> {
-                binding.tvSearchRecommend.text = it.name + getString(R.string.search_recommend_keyword)
+            is Result.Loading -> {}
+            is Result.Success -> {
+                binding.tvSearchRecommend.text = it.data.name + getString(R.string.search_recommend_keyword)
             }
         }
     }

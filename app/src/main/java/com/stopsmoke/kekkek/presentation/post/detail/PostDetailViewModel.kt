@@ -68,9 +68,12 @@ class PostDetailViewModel @Inject constructor(
     }
 
     val user: StateFlow<User?> = userRepository.getUserData()
+        .catch {
+            it.printStackTrace()
+        }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Eagerly,
             initialValue = null
         )
 
@@ -142,7 +145,7 @@ class PostDetailViewModel @Inject constructor(
                     is PostDetailCommentRecyclerViewUiState.CommentType -> {
                         if (commentLikeList.contains(uiState.item.id)) {
                             val likeUser =
-                                uiState.item.likeUser.toggleElement((user.value as User.Registered).uid)
+                                uiState.item.likeUser.toggleElement(user.value!!.uid)
                             return@map uiState.copy(
                                 uiState.item.copy(
                                     likeUser = likeUser,
@@ -169,7 +172,7 @@ class PostDetailViewModel @Inject constructor(
                             if (replyLikeList.contains(reply.id)) {
                                 reply.copy(
                                     isLiked = !reply.isLiked,
-                                    likeUser = reply.likeUser.toggleElement((user.value as User.Registered).uid)
+                                    likeUser = reply.likeUser.toggleElement(user.value!!.uid)
                                 )
                             } else {
                                 reply
@@ -246,7 +249,7 @@ class PostDetailViewModel @Inject constructor(
 
     fun toggleLikeToPost() = try {
         viewModelScope.launch {
-            val user = user.first() as? User.Registered ?: return@launch
+            val user = user.value ?: return@launch
             val postId = postId.value ?: return@launch
             val currentPost = post.value ?: return@launch
 
@@ -264,7 +267,7 @@ class PostDetailViewModel @Inject constructor(
 
     fun toggleBookmark() = try {
         viewModelScope.launch {
-            val user = user.first() as? User.Registered ?: return@launch
+            val user = user.value ?: return@launch
             val postId = postId.value ?: return@launch
 
             if (post.value?.bookmarkUser?.contains(user.uid) == true) {
@@ -289,7 +292,7 @@ class PostDetailViewModel @Inject constructor(
                     comments.toMutableList().apply {
                         val newComment = previewComment.copy(
                             isLiked = !previewComment.isLiked,
-                            likeUser = previewComment.likeUser.toggleElement((user.value as User.Registered).uid)
+                            likeUser = previewComment.likeUser.toggleElement(user.value!!.uid)
                         )
                         set(indexOf(previewComment), newComment)
                     }

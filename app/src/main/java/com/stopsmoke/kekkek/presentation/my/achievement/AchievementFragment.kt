@@ -1,7 +1,6 @@
 package com.stopsmoke.kekkek.presentation.my.achievement
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentAchievementBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.my.MyViewModel
 import com.stopsmoke.kekkek.presentation.my.achievement.adapter.AchievementListAdapter
 import com.stopsmoke.kekkek.presentation.visible
@@ -75,6 +74,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
                     it.exception?.printStackTrace()
                     errorExit(findNavController())
                 }
+
                 Result.Loading -> {}
             }
         }
@@ -86,7 +86,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
 
     private suspend fun bindTopProgress() = with(binding) {
         val progress = viewModel.getCurrentItem()
-        val user = viewModel.user.value as User.Registered
+        val user = (viewModel.user.value as UserUiState.Registered).data
         val maxProgressCount = viewModel.getAchievementCount()
         icludeAchievementTop.tvAchievementQuitSmokingDayCount.text = "${progress.user} 일"
         icludeAchievementTop.tvAchievementQuitSmokingCount.text =
@@ -98,6 +98,7 @@ class AchievementFragment : Fragment(), ErrorHandle {
         super.onResume()
         activity?.invisible()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

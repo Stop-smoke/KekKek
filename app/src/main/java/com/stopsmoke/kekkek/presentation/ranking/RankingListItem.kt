@@ -16,7 +16,7 @@ data class RankingListItem(
     val introduction: String?
 ):Parcelable
 
-fun (User.Registered).toRankingListItem() = RankingListItem(
+fun User.toRankingListItem() = RankingListItem(
     userID = uid,
     name = name,
     startTime = if (history.historyTimeList.isNotEmpty()

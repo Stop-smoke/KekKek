@@ -25,17 +25,19 @@ class SettingsProfileViewModel @Inject constructor(
 
     //name
     fun nameDuplicateInspection(name: String) = viewModelScope.launch {
-        if (name.isNullOrBlank()) _nameDuplicationInspectionResult.emit(EditNameState.Empty)
-        else {
+        if (name.isBlank()) {
+            _nameDuplicationInspectionResult.emit(EditNameState.Empty)
+        } else {
             val nameDuplicationInspectionResult = userRepository.nameDuplicateInspection(name)
             _nameDuplicationInspectionResult.emit(if (nameDuplicationInspectionResult) EditNameState.Success else EditNameState.Duplication)
         }
     }
 
-    fun setUserDataForName(name: String, onComplete: () -> Unit) = viewModelScope.launch {
-        user.collect { user ->
-            if (user is User.Registered) userRepository.setUserDataForName(user, name)
-            onComplete()
+    fun setUserDataForName(name: String) = viewModelScope.launch {
+        try {
+            userRepository.setUserName(name)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -43,21 +45,13 @@ class SettingsProfileViewModel @Inject constructor(
         _nameDuplicationInspectionResult.emit(editNameState)
     }
 
-
     //introduction
-    fun setUserDataForIntroduction(introduction: String, onComplete: () -> Unit) =
+    fun setUserDataForIntroduction(introduction: String) =
         viewModelScope.launch {
-            user.collect { user ->
-                when (user) {
-                    is User.Registered -> {
-                        val newUserData = user.copy(introduction = introduction)
-                        userRepository.setUserData(newUserData)
-                        onComplete()
-                    }
-
-                    is User.Error -> {}
-                    User.Guest -> {}
-                }
+            try {
+                userRepository.setUserIntroduction(introduction)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 }

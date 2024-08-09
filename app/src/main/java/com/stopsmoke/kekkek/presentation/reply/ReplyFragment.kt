@@ -15,17 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.Reply
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentReplyBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.invisible
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyCallback
 import com.stopsmoke.kekkek.presentation.reply.callback.ReplyDialogCallback
 import com.stopsmoke.kekkek.presentation.reply.dialog.ReplyDeleteDialogFragment
 import com.stopsmoke.kekkek.presentation.userprofile.navigateToUserProfileScreen
 import com.stopsmoke.kekkek.presentation.utils.CustomItemDecoration
-import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -120,7 +119,7 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
     private fun hideEditText() {
         viewModel.user.collectLatestWithLifecycle(lifecycle) { user ->
-            if (user is User.Guest) {
+            if (user is UserUiState.Guest) {
                 binding.clReplyComment.visibility = View.GONE
             }
         }
@@ -152,16 +151,12 @@ class ReplyFragment : Fragment(), ReplyCallback, ReplyDialogCallback, ErrorHandl
 
 
     override fun deleteItem(reply: Reply) {
-        when (viewModel.user.value) {
-            is User.Error -> {}
-            User.Guest -> {}
-            is User.Registered -> {
-                if ((viewModel.user.value as User.Registered).uid == reply.written.uid) {
+        when (val user = viewModel.user.value) {
+            is UserUiState.Registered -> {
+                if (user.data.uid == reply.written.uid) {
                     showDeleteDialog(reply)
                 }
             }
-
-            null -> {}
         }
     }
 
