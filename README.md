@@ -12,7 +12,7 @@
         <td align="center"><a href="https://github.com/agvber"><img src="https://avatars.githubusercontent.com/u/60022205?v=4" width="100px;"><br /><sub><b>김민준</b></sub></a><br /></a></td>
         <td align="center"><a href="https://github.com/xeejin"><img src="https://avatars.githubusercontent.com/u/141006937?v=4" width="100px;"><br /><sub><b>임희진</b></sub></a><br /></a></td>
         <td align="center"><a href="https://github.com/dongwonyang"><img src="https://avatars.githubusercontent.com/u/121853823?v=4" width="100px;"><br /><sub><b>양동원</b></sub></a><br /></a></td>
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/115936076?v=4" width="100px;"><br /><sub><b>박세영</b></sub></a><br /></a></td>
+        <td align="center"><a href="https://github.com/se05503"><img src="https://avatars.githubusercontent.com/u/115936076?v=4" width="100px;"><br /><sub><b>박세영</b></sub></a><br /></a></td>
       </tr>
       <tr>
         <td align="center"><p>Leader<br>Core-Dev<br>Test(Unit)<br>기술적 의사결정</p></td>
