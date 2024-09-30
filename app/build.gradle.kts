@@ -26,14 +26,14 @@ fun ApplicationDefaultConfig.addManifestPlaceholdersAndBuildConfig(key: String) 
 }
 
 android {
-    namespace = "com.stopsmoke.kekkek"
+    namespace = "com.agvber.kekkek"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.stopsmoke.kekkek"
+        applicationId = "com.agvber.kekkek"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
+        versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

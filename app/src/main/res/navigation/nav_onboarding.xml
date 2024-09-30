@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/onboarding_introduce"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingIntroduceFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingIntroduceFragment"
         tools:layout="@layout/fragment_onboarding_introduce">
         <action
             android:id="@+id/action_onboarding_introduce_to_onboarding_name"
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/onboarding_name"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingNameFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingNameFragment"
         tools:layout="@layout/fragment_onboarding_name">
         <action
             android:id="@+id/action_onboarding_name_to_onboarding_perday"
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/onboarding_perday"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPerdayFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingPerdayFragment"
         tools:layout="@layout/fragment_onboarding_perday">
         <action
             android:id="@+id/action_onboarding_perday_to_onboarding_perpack"
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/onboarding_perpack"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPerpackFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingPerpackFragment"
         tools:layout="@layout/fragment_onboarding_perpack">
         <action
             android:id="@+id/action_onboarding_perpack_to_onboarding_price"
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/onboarding_price"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingPriceFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingPriceFragment"
         tools:layout="@layout/fragment_onboarding_price">
         <action
             android:id="@+id/action_onboarding_price_to_onboarding_finish"
@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/onboarding_finish"
-        android:name="com.stopsmoke.kekkek.presentation.onboarding.OnboardingFinishFragment"
+        android:name="com.agvber.kekkek.presentation.onboarding.OnboardingFinishFragment"
         tools:layout="@layout/fragment_onboarding_finish">
 
         <action
