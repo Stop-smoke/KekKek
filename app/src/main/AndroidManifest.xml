@@ -19,6 +19,17 @@
         android:theme="@style/Theme.KekKek"
         tools:targetApi="31">
 
+        <!-- 위젯 브로드캐스트 리시버 -->
+        <receiver android:name=".widget.WidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
         <service
             android:name=".core.firemseeage.MessageService"
             android:enabled="true"
@@ -27,17 +38,21 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
      See README(https://goo.gl/l4GJaQ) for more.
         -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_white" />
+
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/primary_blue" />
@@ -72,6 +87,7 @@
             android:exported="true"
             android:windowSoftInputMode="adjustUnspecified">
         </activity>
+
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -86,6 +102,7 @@
                     android:scheme="kakao ${KAKAO_NATIVE_API_KEY}" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:label="오픈소스 라이선스" />
