@@ -4,7 +4,6 @@ import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.CommentParent
 import com.stopsmoke.kekkek.core.domain.model.DateTime
 import com.stopsmoke.kekkek.core.domain.model.PostCategory
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.model.Written
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 class AddCommentUseCase @Inject constructor(
     private val commentRepository: CommentRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
 
     suspend operator fun invoke(
@@ -22,8 +21,8 @@ class AddCommentUseCase @Inject constructor(
         postTitle: String,
         postType: PostCategory,
         text: String,
-    ): String{
-        val user = userRepository.getUserData().first() as User.Registered
+    ): String {
+        val user = userRepository.getUserData().first()
 
         val comment = Comment(
             id = "",

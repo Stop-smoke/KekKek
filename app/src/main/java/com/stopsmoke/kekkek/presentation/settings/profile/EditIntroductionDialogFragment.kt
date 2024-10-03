@@ -47,10 +47,8 @@ class EditIntroductionDialogFragment(private val introduction: String) : DialogF
                 tvIntroductionDescription.visibility = View.VISIBLE
                 tvIntroductionDescription.text = "50글자를 초과하시면 안됩니다!"
             } else {
-                viewModel.setUserDataForIntroduction(etEditIntroduction.text.toString(),
-                    onComplete = {
-                        dismiss()
-                    })
+                viewModel.setUserDataForIntroduction(etEditIntroduction.text.toString())
+                dismiss()
             }
         }
 

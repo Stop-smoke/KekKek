@@ -80,10 +80,8 @@ class EditNameDialogFragment(private val name: String) : DialogFragment() {
                 }
 
                 EditNameState.Success -> {
-                    viewModel.setUserDataForName(etEditName.text.toString(),
-                        onComplete = {
-                            dismiss()
-                        })
+                    viewModel.setUserDataForName(etEditName.text.toString())
+                    dismiss()
                 }
 
                 EditNameState.Empty -> {

@@ -18,7 +18,6 @@ import com.stopsmoke.kekkek.core.firestore.COMMENT_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.POST_COLLECTION
 import com.stopsmoke.kekkek.core.firestore.dao.PostDao
 import com.stopsmoke.kekkek.core.firestore.model.PostEntity
-import com.stopsmoke.kekkek.core.firestore.model.UserEntity
 import com.stopsmoke.kekkek.core.firestore.pager.FireStorePagingSource
 import com.stopsmoke.kekkek.core.firestore.whereNotNullEqualTo
 import kotlinx.coroutines.CancellationException
@@ -348,31 +347,6 @@ internal class PostDaoImpl @Inject constructor(
             val postList = getQuery.documents.mapNotNull { document ->
                 document.toObject<PostEntity>()?.apply {
                     written?.profileImage = imgUrl
-                }
-            }
-
-            postList.forEach { post ->
-                firestore.collection(POST_COLLECTION)
-                    .document(post.id!!)
-                    .set(post)
-                    .await()
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override suspend fun setUserDataForName(userEntity: UserEntity, name: String) {
-        try {
-            val getQuery = firestore.collection(POST_COLLECTION)
-                .whereEqualTo("written.uid", userEntity.uid!!)
-                .get()
-                .await()
-
-            val postList = getQuery.documents.mapNotNull { document ->
-                document.toObject<PostEntity>()?.apply {
-                    written?.name = name
                 }
             }
 

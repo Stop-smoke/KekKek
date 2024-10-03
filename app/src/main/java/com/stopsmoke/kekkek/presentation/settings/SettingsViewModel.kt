@@ -24,11 +24,13 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val user: StateFlow<User?> = userRepository.getUserData().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = null
-    )
+
+    val user: StateFlow<User?> = userRepository.getUserData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
     val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
@@ -47,15 +49,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setUserData(name: String) = viewModelScope.launch {
-        user.collect { user ->
-            if (user is User.Registered) userRepository.setUserDataForName(user, name)
-        }
+        userRepository.setUserName(name)
     }
 
     fun updateBirthDate(date: LocalDateTime) {
         viewModelScope.launch {
             val registeredUser =
-                (userRepository.getUserData().first() as? User.Registered) ?: return@launch
+                (userRepository.getUserData().first() as? User) ?: return@launch
             val userConfig =
                 registeredUser.copy(userConfig = registeredUser.userConfig.copy(birthDate = date))
             userRepository.setUserData(userConfig)
@@ -65,7 +65,7 @@ class SettingsViewModel @Inject constructor(
     fun updateIntroduce(introduce: String) {
         viewModelScope.launch {
             val registeredUser =
-                (userRepository.getUserData().first() as? User.Registered) ?: return@launch
+                (userRepository.getUserData().first() as? User) ?: return@launch
 
             userRepository.setUserData(registeredUser.copy(introduction = introduce))
         }

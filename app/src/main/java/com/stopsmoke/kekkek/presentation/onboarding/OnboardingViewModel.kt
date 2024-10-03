@@ -2,7 +2,7 @@ package com.stopsmoke.kekkek.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -125,27 +126,24 @@ class OnboardingViewModel @Inject constructor(
             }
 
             getUserDataUseCase().mapLatest { user ->
-                when (user) {
-                    is User.Error -> {
-                        user.t?.printStackTrace()
-                        AuthenticationUiState.Error(user.t)
-                    }
-
-                    is User.Guest -> {
-                        AuthenticationUiState.Guest
-                    }
-
-                    is User.Registered -> {
-                        if (user.uid.isBlank()) {
-                            return@mapLatest AuthenticationUiState.NewMember
-                        }
-                        finishOnboardingUseCase()
-                        AuthenticationUiState.AlreadyUser
+                if (user.uid.isBlank()) {
+                    return@mapLatest AuthenticationUiState.NewMember
+                }
+                finishOnboardingUseCase()
+                AuthenticationUiState.AlreadyUser
+            }
+                .retry(1) {
+                    (it is GuestModeException).also {
+                        delay(500)
+                        registerEventListener.emit(Unit)
                     }
                 }
-            }
         }
             .catch {
+                if (it is GuestModeException) {
+                    emit(AuthenticationUiState.Guest)
+                    return@catch
+                }
                 emit(AuthenticationUiState.Error(it))
             }
             .shareIn(

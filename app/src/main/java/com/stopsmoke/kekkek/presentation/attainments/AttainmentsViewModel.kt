@@ -2,12 +2,13 @@ package com.stopsmoke.kekkek.presentation.attainments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.core.domain.model.User
+import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.model.UserConfig
 import com.stopsmoke.kekkek.core.domain.model.getStartTimerState
 import com.stopsmoke.kekkek.core.domain.model.getTotalMinutesTime
 import com.stopsmoke.kekkek.core.domain.model.getTotalSecondsTime
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,14 +20,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AttainmentsViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _attainmentsUiState: MutableStateFlow<AttainmentsItem> =
         MutableStateFlow(AttainmentsItem.init())
     val attainmentsUiState: StateFlow<AttainmentsItem> = _attainmentsUiState.asStateFlow()
 
-    private var _currentUserState = MutableStateFlow<User>(
-        User.Guest)
+    private var _currentUserState = MutableStateFlow<UserUiState>(
+        UserUiState.Guest
+    )
     val currentUserState = _currentUserState.asStateFlow()
 
     private var timeString: String = ""
@@ -36,31 +38,33 @@ class AttainmentsViewModel @Inject constructor(
 
 
     fun updateUserData() = viewModelScope.launch {
-        val userData = userRepository.getUserData()
-        userData.collect { user ->
-            when (user) {
-                is User.Registered -> {
-                    _currentUserState.value = user
+        try {
+            val userData = userRepository.getUserData()
+            userData.collect { user ->
+                _currentUserState.value = UserUiState.Registered(user)
 
-                    val totalMinutesTime = user.history.getTotalMinutesTime()
-                    val totalSecondsTime = user.history.getTotalSecondsTime()
-                    timeString = formatElapsedTime(totalMinutesTime)
-                    calculateSavedValues(user.userConfig)
-                    _attainmentsUiState.emit(
-                        AttainmentsItem(
-                            history = user.history,
-                            savedDate = savedDatePerMinute,
-                            savedMoney = savedMoneyPerMinute * totalMinutesTime,
-                            savedLife = getLifeWithCigarette(savedCigarettePerMinute * totalMinutesTime),
-                            savedCigarette = savedCigarettePerMinute * totalMinutesTime,
-                            timeString = formatElapsedTime(totalSecondsTime)
-                        )
+                val totalMinutesTime = user.history.getTotalMinutesTime()
+                val totalSecondsTime = user.history.getTotalSecondsTime()
+                timeString = formatElapsedTime(totalMinutesTime)
+                calculateSavedValues(user.userConfig)
+                _attainmentsUiState.emit(
+                    AttainmentsItem(
+                        history = user.history,
+                        savedDate = savedDatePerMinute,
+                        savedMoney = savedMoneyPerMinute * totalMinutesTime,
+                        savedLife = getLifeWithCigarette(savedCigarettePerMinute * totalMinutesTime),
+                        savedCigarette = savedCigarettePerMinute * totalMinutesTime,
+                        timeString = formatElapsedTime(totalSecondsTime)
                     )
-                    if (user.history.getStartTimerState()) startTimer()
+                )
+                if (user.history.getStartTimerState()) {
+                    startTimer()
                 }
-
-                else -> {}
             }
+        } catch (e: GuestModeException) {
+            _currentUserState.value = UserUiState.Guest
+        } catch (e: Exception) {
+            _currentUserState.value = UserUiState.Error(e)
         }
     }
 
@@ -69,11 +73,12 @@ class AttainmentsViewModel @Inject constructor(
         while (true) {
             timeString =
                 formatElapsedTime(
-                    (currentUserState.value as? User.Registered)?.history?.getTotalSecondsTime()
+                    (currentUserState.value as? UserUiState.Registered)?.data?.history?.getTotalSecondsTime()
                         ?: 0
                 )
             val currentMinutes =
-                (currentUserState.value as? User.Registered)?.history?.getTotalMinutesTime() ?: 0
+                (currentUserState.value as? UserUiState.Registered)?.data?.history?.getTotalMinutesTime()
+                    ?: 0
 
             _attainmentsUiState.update { prev ->
                 prev.copy(
@@ -135,7 +140,7 @@ class AttainmentsViewModel @Inject constructor(
         return "${daysString}일 ${hoursString}:${minutesString}:${secondsString}"
     }
 
-    private fun getLifeWithCigarette(cigarette: Double): Double{ // 1개비에 5분, 시간 단위로 출력
+    private fun getLifeWithCigarette(cigarette: Double): Double { // 1개비에 5분, 시간 단위로 출력
         return (cigarette * 5) / 60
     }
 

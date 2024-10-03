@@ -2,15 +2,12 @@ package com.stopsmoke.kekkek.presentation.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import com.stopsmoke.kekkek.common.asResult
-import com.stopsmoke.kekkek.core.domain.model.Post
 import com.stopsmoke.kekkek.core.domain.repository.SearchRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -28,6 +25,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     val user = userRepository.getUserData()
+        .asResult()
 
     val recommendedKeyword = searchRepository.getRecommendedKeyword()
 

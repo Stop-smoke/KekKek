@@ -19,7 +19,7 @@ interface PostRepository {
 
     fun getPostItem(postId: String): Flow<Post>
 
-    suspend fun addPost(post: PostEdit): Result<Unit>
+    suspend fun addPost(post: PostEdit)
 
     suspend fun addPost(post: PostEdit, inputStream: InputStream)
 
@@ -37,15 +37,15 @@ interface PostRepository {
 
     suspend fun getPostForPostId(postId: String): Post
 
-    suspend fun addViews(postId: String): Result<Unit>
+    suspend fun addViews(postId: String)
 
-    suspend fun addLikeToPost(postId: String): Result<Unit>
+    suspend fun addLikeToPost(postId: String)
 
-    suspend fun deleteLikeToPost(postId: String): Result<Unit>
+    suspend fun deleteLikeToPost(postId: String)
 
-    suspend fun addBookmark(postId: String): Result<Unit>
+    suspend fun addBookmark(postId: String)
 
-    suspend fun deleteBookmark(postId: String): Result<Unit>
+    suspend fun deleteBookmark(postId: String)
 
     suspend fun setImage(inputStream: InputStream, path: String)
 }

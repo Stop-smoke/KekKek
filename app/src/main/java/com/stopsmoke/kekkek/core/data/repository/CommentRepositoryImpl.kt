@@ -3,12 +3,10 @@ package com.stopsmoke.kekkek.core.data.repository
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.stopsmoke.kekkek.common.Result
-import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.data.mapper.asExternalModel
 import com.stopsmoke.kekkek.core.data.mapper.toEntity
 import com.stopsmoke.kekkek.core.domain.model.Comment
 import com.stopsmoke.kekkek.core.domain.model.CommentFilter
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
 import com.stopsmoke.kekkek.core.firestore.dao.CommentDao
@@ -31,9 +29,9 @@ class CommentRepositoryImpl @Inject constructor(
                     commentDao.getComment(commentFilter.postId).map { pagingData ->
                         pagingData.map {
                             val earliest = it.earliestReply.map { reply ->
-                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                                reply.asExternalModel(reply.likeUser.contains(user.uid))
                             }
-                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            val isLiked = it.likeUser.contains(user.uid)
                             it.asExternalModel(earliest, isLiked)
                         }
                     }
@@ -45,9 +43,9 @@ class CommentRepositoryImpl @Inject constructor(
                     commentDao.getMyCommentItems(commentFilter.uid).map { pagingData ->
                         pagingData.map {
                             val earliest = it.earliestReply.map { reply ->
-                                reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                                reply.asExternalModel(reply.likeUser.contains(user.uid))
                             }
-                            val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                            val isLiked = it.likeUser.contains(user.uid)
                             it.asExternalModel(earliest, isLiked)
                         }
                     }
@@ -74,17 +72,16 @@ class CommentRepositoryImpl @Inject constructor(
         return userRepository.getUserData().flatMapLatest { user ->
             commentDao.getComment(postId, commentId).map {
                 val earliest = it.earliestReply.map { reply ->
-                    reply.asExternalModel(reply.likeUser.contains((user as? User.Registered)?.uid))
+                    reply.asExternalModel(reply.likeUser.contains(user.uid))
                 }
-                val isLiked = it.likeUser.contains((user as? User.Registered)?.uid)
+                val isLiked = it.likeUser.contains(user.uid)
                 it.asExternalModel(earliest, isLiked)
             }
         }
     }
 
     override suspend fun addCommentLike(postId: String, commentId: String) {
-        val user = userRepository.getUserData().first() as? User.Registered
-            ?: throw GuestModeException()
+        val user = userRepository.getUserData().first()
 
         commentDao.appendItemList(
             postId = postId,
@@ -95,8 +92,7 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeCommentLike(postId: String, commentId: String) {
-        val user = userRepository.getUserData().first() as? User.Registered
-            ?: throw GuestModeException()
+        val user = userRepository.getUserData().first()
 
         commentDao.removeItemList(
             postId = postId,

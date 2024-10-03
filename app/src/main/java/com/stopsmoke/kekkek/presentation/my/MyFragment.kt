@@ -18,9 +18,10 @@ import com.google.android.gms.ads.MobileAds
 import com.stopsmoke.kekkek.R
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.core.domain.model.ProfileImage
-import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.databinding.FragmentMyBinding
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
+import com.stopsmoke.kekkek.presentation.error.ErrorHandle
+import com.stopsmoke.kekkek.presentation.model.UserUiState
 import com.stopsmoke.kekkek.presentation.my.achievement.navigateToAchievementScreen
 import com.stopsmoke.kekkek.presentation.my.bookmark.navigateToMyBookmarkScreen
 import com.stopsmoke.kekkek.presentation.my.comment.navigateToMyCommentScreen
@@ -31,7 +32,6 @@ import com.stopsmoke.kekkek.presentation.my.supportcenter.navigateToSupportCente
 import com.stopsmoke.kekkek.presentation.notification.navigateToNotificationScreen
 import com.stopsmoke.kekkek.presentation.settings.navigateToSettingsGraph
 import com.stopsmoke.kekkek.presentation.settings.profile.navigateToSettingsProfileScreen
-import com.stopsmoke.kekkek.presentation.error.ErrorHandle
 import com.stopsmoke.kekkek.presentation.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -139,39 +139,38 @@ class MyFragment : Fragment(), ErrorHandle {
 
     private fun initViewModel() = with(viewModel) {
         user.collectLatestWithLifecycle(lifecycle) { user ->
-            if (user != null)
-                when (user) {
-                    is User.Error -> {
-                        errorExit(findNavController())
-                    }
+            when (user) {
+                is UserUiState.Error -> {
+                    errorExit(findNavController())
+                }
 
-                    is User.Guest -> {
-                        binding.tvMyName.text = "로그인이 필요합니다."
-                        binding.tvMyWritingNum.text = "?"
-                        binding.tvMyCommentNum.text = "?"
-                        binding.tvMyBookmarkNum.text = "?"
-                    }
+                is UserUiState.Guest -> {
+                    binding.tvMyName.text = "로그인이 필요합니다."
+                    binding.tvMyWritingNum.text = "?"
+                    binding.tvMyCommentNum.text = "?"
+                    binding.tvMyBookmarkNum.text = "?"
+                }
 
-                    is User.Registered -> {
-                        binding.tvMyName.text = user.name
-                        binding.tvMyRank.text = "랭킹 ${user.ranking}위"
+                is UserUiState.Registered -> {
+                    binding.tvMyName.text = user.data.name
+                    binding.tvMyRank.text = "랭킹 ${user.data.ranking}위"
 
-                        when (user.profileImage) {
-                            is ProfileImage.Default -> {
-                                binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
-                            }
-
-                            is ProfileImage.Web -> {
-                                binding.ivMyProfile.load((user.profileImage as ProfileImage.Web).url) {
-                                    crossfade(true)
-                                }
-                            }
+                    when (user.data.profileImage) {
+                        is ProfileImage.Default -> {
+                            binding.ivMyProfile.setImageResource(R.drawable.ic_user_profile_test)
                         }
 
-                        viewModel.setAchievementIdList(user.clearAchievementsList.takeLast(3))
-//                    binding.itvMyAchievementNum.text = "${myItem.achievementNum} / 83"
+                        is ProfileImage.Web -> {
+                            binding.ivMyProfile.load((user.data.profileImage as ProfileImage.Web).url) {
+                                crossfade(true)
+                            }
+                        }
                     }
+
+                    viewModel.setAchievementIdList(user.data.clearAchievementsList.takeLast(3))
+//                    binding.itvMyAchievementNum.text = "${myItem.achievementNum} / 83"
                 }
+            }
         }
 
         currentClearAchievementList.collectLatestWithLifecycle(lifecycle){listResult ->
