@@ -1,5 +1,7 @@
 package com.stopsmoke.kekkek.core.data.repository
 
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.stopsmoke.kekkek.common.Result
 import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.data.mapper.toEntity
@@ -104,7 +106,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setUserData(user: User) {
-        userDao.setUser(user.toEntity())
+        val userEntity = user.toEntity().copy(uid = Firebase.auth.uid!!)
+        userDao.setUser(userEntity)
     }
 
     override suspend fun setUserName(name: String) {

@@ -14,16 +14,13 @@ class SignUpUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        uid: String,
         name: String,
         dailyCigarettesSmoked: Int,
         packCigaretteCount: Int,
         packPrice: Int
     ) {
-        require(uid.isNotBlank())
-
         val user = User(
-            uid = uid,
+            uid = "",
             name = name,
             profileImage = ProfileImage.Default,
             ranking = Long.MAX_VALUE,

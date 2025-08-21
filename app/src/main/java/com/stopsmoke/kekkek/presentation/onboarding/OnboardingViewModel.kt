@@ -21,15 +21,6 @@ class OnboardingViewModel @Inject constructor(
     private val checkNicknameUseCase: CheckNicknameUseCase,
 ) : ViewModel() {
 
-    private val _uid = MutableStateFlow("")
-    val uid = _uid.asStateFlow()
-
-    fun updateUid(uid: String) {
-        viewModelScope.launch {
-            _uid.emit(uid)
-        }
-    }
-
     private val _userName = MutableStateFlow("")
     val userName = _userName.asStateFlow()
 
@@ -70,25 +61,23 @@ class OnboardingViewModel @Inject constructor(
     private val _onboardingUiState = MutableStateFlow<OnboardingUiState>(OnboardingUiState.Loading)
     val onboardingUiState = _onboardingUiState.asStateFlow()
 
-    fun updateUserData() {
-        viewModelScope.launch {
-            try {
-                sinUpUseCase(
-                    uid = uid.value,
-                    name = userName.value,
-                    dailyCigarettesSmoked = dailyCigarettePacks.value,
-                    packCigaretteCount = cigarettesPerPack.value,
-                    packPrice = cigarettePricePerPack.value,
-                )
-                finishOnboardingUseCase()
-                delay(1300)
-                _onboardingUiState.emit(OnboardingUiState.Success)
-            } catch (e: Exception) {
-                _onboardingUiState.emit(OnboardingUiState.LoadFail(e))
-                e.printStackTrace()
-            }
+    fun updateUserData() = viewModelScope.launch {
+        try {
+            sinUpUseCase(
+                name = userName.value,
+                dailyCigarettesSmoked = dailyCigarettePacks.value,
+                packCigaretteCount = cigarettesPerPack.value,
+                packPrice = cigarettePricePerPack.value,
+            )
+            finishOnboardingUseCase()
+            delay(1300)
+            _onboardingUiState.emit(OnboardingUiState.Success)
+        } catch (e: Exception) {
+            _onboardingUiState.emit(OnboardingUiState.LoadFail(e))
+            e.printStackTrace()
         }
     }
+
 
     private val _nameDuplicationInspectionResult = MutableStateFlow<Boolean?>(null)
     val nameDuplicationInspectionResult: StateFlow<Boolean?> get() = _nameDuplicationInspectionResult
