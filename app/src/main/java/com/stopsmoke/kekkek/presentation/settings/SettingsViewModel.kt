@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stopsmoke.kekkek.core.domain.model.User
 import com.stopsmoke.kekkek.core.domain.repository.UserRepository
+import com.stopsmoke.kekkek.core.domain.usecase.WithdrawAppUseCase
 import com.stopsmoke.kekkek.presentation.settings.model.ProfileImageUploadUiState
 import com.stopsmoke.kekkek.presentation.settings.profile.model.ExitAppUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val withdrawAppUseCase: WithdrawAppUseCase
 ) : ViewModel() {
 
     val user: StateFlow<User?> = userRepository.getUserData()
@@ -89,7 +91,7 @@ class SettingsViewModel @Inject constructor(
     fun withdraw() {
         viewModelScope.launch {
             try {
-                userRepository.withdraw()
+                withdrawAppUseCase()
                 _exitAppUiState.emit(ExitAppUiState.Withdraw)
             } catch (e: Exception) {
                 _exitAppUiState.emit(ExitAppUiState.Failure(e))
