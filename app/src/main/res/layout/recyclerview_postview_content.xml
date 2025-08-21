@@ -69,7 +69,6 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_post_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_poster_nickname"
             tools:text="랭킹 1924위" />
 
         <TextView

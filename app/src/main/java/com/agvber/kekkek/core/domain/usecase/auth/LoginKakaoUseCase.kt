@@ -1,0 +1,16 @@
+package com.agvber.kekkek.core.domain.usecase.auth
+
+import com.agvber.kekkek.core.domain.repository.AuthenticationRepository
+import com.agvber.kekkek.core.domain.repository.UserRepository
+import javax.inject.Inject
+
+class LoginKakaoUseCase @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository,
+    private val userRepository: UserRepository
+) {
+
+    suspend operator fun invoke() {
+        authenticationRepository.loginKakao()
+        userRepository.setOnboardingComplete(true)
+    }
+}

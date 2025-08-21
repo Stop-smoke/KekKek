@@ -28,15 +28,15 @@ fun ApplicationDefaultConfig.addManifestPlaceholdersAndBuildConfig(key: String) 
 }
 
 android {
-    namespace = "com.stopsmoke.kekkek"
+    namespace = "com.agvber.kekkek"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.stopsmoke.kekkek"
+        applicationId = "com.agvber.kekkek"
         minSdk = 24
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0"
+        versionCode = 6
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -48,11 +48,13 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 

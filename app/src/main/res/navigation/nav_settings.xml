@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.stopsmoke.kekkek.presentation.settings.SettingsFragment"
+        android:name="com.agvber.kekkek.presentation.settings.SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_setting_to_setting_support"
@@ -31,22 +31,22 @@
 
     <fragment
         android:id="@+id/setting_support"
-        android:name="com.stopsmoke.kekkek.presentation.settings.support.SettingsSupportFragment"
+        android:name="com.agvber.kekkek.presentation.settings.support.SettingsSupportFragment"
         tools:layout="@layout/fragment_settings_support" />
 
     <fragment
         android:id="@+id/setting_oss"
-        android:name="com.stopsmoke.kekkek.presentation.settings.opensource.SettingsOpensourceFragment"
+        android:name="com.agvber.kekkek.presentation.settings.opensource.SettingsOpensourceFragment"
         tools:layout="@layout/fragment_settings_opensource" />
 
     <fragment
         android:id="@+id/setting_privatepolicy"
-        android:name="com.stopsmoke.kekkek.presentation.settings.privatepolicy.SettingsPrivatePolicyFragment"
+        android:name="com.agvber.kekkek.presentation.settings.privatepolicy.SettingsPrivatePolicyFragment"
         tools:layout="@layout/fragment_settings_private_policy" />
 
     <fragment
         android:id="@+id/setting_profile"
-        android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
+        android:name="com.agvber.kekkek.presentation.settings.profile.SettingsProfileFragment"
         tools:layout="@layout/fragment_settings_profile">
         <deepLink
             app:uri="settings/setting_profile"/>
@@ -54,12 +54,12 @@
 
     <fragment
         android:id="@+id/setting_notification"
-        android:name="com.stopsmoke.kekkek.presentation.settings.notification.SettingsNotificationFragment"
+        android:name="com.agvber.kekkek.presentation.settings.notification.SettingsNotificationFragment"
         tools:layout="@layout/fragment_settings_notification" />
 
     <fragment
         android:id="@+id/setting_language"
-        android:name="com.stopsmoke.kekkek.presentation.settings.language.SettingsLanguageFragment"
+        android:name="com.agvber.kekkek.presentation.settings.language.SettingsLanguageFragment"
         tools:layout="@layout/fragment_settings_language" />
 
 </navigation>

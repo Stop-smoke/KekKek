@@ -12,137 +12,137 @@
 
     <fragment
         android:id="@+id/authentication"
-        android:name="com.stopsmoke.kekkek.presentation.authentication.AuthenticationFragment"
+        android:name="com.agvber.kekkek.presentation.authentication.AuthenticationFragment"
         tools:layout="@layout/fragment_authentication" />
 
     <fragment
         android:id="@+id/home"
         app:route="home_screen"
-        android:name="com.stopsmoke.kekkek.presentation.home.HomeFragment"
+        android:name="com.agvber.kekkek.presentation.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/home_tip"
-        android:name="com.stopsmoke.kekkek.presentation.home.tip.HomeTipFragment"
+        android:name="com.agvber.kekkek.presentation.home.tip.HomeTipFragment"
         tools:layout="@layout/fragment_home_tip" />
 
     <fragment
         android:id="@+id/home_center"
-        android:name="com.stopsmoke.kekkek.presentation.home.center.HomeCenterFragment"
+        android:name="com.agvber.kekkek.presentation.home.center.HomeCenterFragment"
         tools:layout="@layout/fragment_home_center" />
 
     <fragment
         android:id="@+id/community"
         app:route="community_screen"
-        android:name="com.stopsmoke.kekkek.presentation.community.CommunityFragment"
+        android:name="com.agvber.kekkek.presentation.community.CommunityFragment"
         tools:layout="@layout/fragment_community" />
 
     <fragment
         android:id="@+id/my_page"
         app:route="my_screen"
-        android:name="com.stopsmoke.kekkek.presentation.my.MyFragment"
+        android:name="com.agvber.kekkek.presentation.my.MyFragment"
         tools:layout="@layout/fragment_my" />
 
     <fragment
         android:id="@+id/settings_setting_profile"
-        android:name="com.stopsmoke.kekkek.presentation.settings.profile.SettingsProfileFragment"
+        android:name="com.agvber.kekkek.presentation.settings.profile.SettingsProfileFragment"
         tools:layout="@layout/fragment_settings_profile" />
 
     <fragment
         android:id="@+id/settings_smoking_setting"
-        android:name="com.stopsmoke.kekkek.presentation.my.smokingsetting.SmokingSettingFragment"
+        android:name="com.agvber.kekkek.presentation.my.smokingsetting.SmokingSettingFragment"
         tools:layout="@layout/fragment_smoking_setting" />
 
     <fragment
         android:id="@+id/my_supportcenter"
-        android:name="com.stopsmoke.kekkek.presentation.my.supportcenter.SupportCenterFragment"
+        android:name="com.agvber.kekkek.presentation.my.supportcenter.SupportCenterFragment"
         tools:layout="@layout/fragment_support_center" />
 
     <fragment
         android:id="@+id/my_complaint"
-        android:name="com.stopsmoke.kekkek.presentation.my.complaint.MyComplaintFragment"
+        android:name="com.agvber.kekkek.presentation.my.complaint.MyComplaintFragment"
         tools:layout="@layout/fragment_my_complaint" />
 
     <fragment
         android:id="@+id/notification"
-        android:name="com.stopsmoke.kekkek.presentation.notification.NotificationFragment"
+        android:name="com.agvber.kekkek.presentation.notification.NotificationFragment"
         tools:layout="@layout/fragment_notification" />
 
     <fragment
         android:id="@+id/search"
-        android:name="com.stopsmoke.kekkek.presentation.search.SearchFragment"
+        android:name="com.agvber.kekkek.presentation.search.SearchFragment"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/post_detail_screen"
-        android:name="com.stopsmoke.kekkek.presentation.post.detail.PostDetailFragment"
+        android:name="com.agvber.kekkek.presentation.post.detail.PostDetailFragment"
         tools:layout="@layout/fragment_post_detail" />
 
     <fragment
         android:id="@+id/post_write"
-        android:name="com.stopsmoke.kekkek.presentation.post.edit.PostEditFragment"
+        android:name="com.agvber.kekkek.presentation.post.edit.PostEditFragment"
         tools:layout="@layout/fragment_post_edit" />
 
     <fragment
         android:id="@+id/attainments"
-        android:name="com.stopsmoke.kekkek.presentation.attainments.AttainmentsFragment"
+        android:name="com.agvber.kekkek.presentation.attainments.AttainmentsFragment"
         tools:layout="@layout/fragment_attainments" />
 
     <fragment
         android:id="@+id/my_bookmark_list"
-        android:name="com.stopsmoke.kekkek.presentation.my.bookmark.BookmarkFragment"
+        android:name="com.agvber.kekkek.presentation.my.bookmark.BookmarkFragment"
         tools:layout="@layout/fragment_bookmark" />
 
     <fragment
         android:id="@+id/my_post_screen"
-        android:name="com.stopsmoke.kekkek.presentation.my.post.MyPostFragment"
+        android:name="com.agvber.kekkek.presentation.my.post.MyPostFragment"
         tools:layout="@layout/fragment_my_post" />
 
     <fragment
         android:id="@+id/popular_post_screen"
-        android:name="com.stopsmoke.kekkek.presentation.post.popular.PopularPostFragment"
+        android:name="com.agvber.kekkek.presentation.post.popular.PopularPostFragment"
         tools:layout="@layout/fragment_popular_post" />
 
     <fragment
         android:id="@+id/my_comment_screen"
-        android:name="com.stopsmoke.kekkek.presentation.my.comment.MyCommentFragment"
+        android:name="com.agvber.kekkek.presentation.my.comment.MyCommentFragment"
         tools:layout="@layout/fragment_my_comment" />
 
     <fragment
         android:id="@+id/user_profile"
-        android:name="com.stopsmoke.kekkek.presentation.userprofile.UserProfileFragment"
+        android:name="com.agvber.kekkek.presentation.userprofile.UserProfileFragment"
         tools:layout="@layout/fragment_user_profile" />
 
     <fragment
         android:id="@+id/achievement"
-        android:name="com.stopsmoke.kekkek.presentation.my.achievement.AchievementFragment"
+        android:name="com.agvber.kekkek.presentation.my.achievement.AchievementFragment"
         tools:layout="@layout/fragment_achievement" />
 
     <fragment
         android:id="@+id/ranking_list"
-        android:name="com.stopsmoke.kekkek.presentation.ranking.RankingListFragment"
+        android:name="com.agvber.kekkek.presentation.ranking.RankingListFragment"
         tools:layout="@layout/fragment_ranking_list" />
 
     <fragment
         android:id="@+id/notice_list"
-        android:name="com.stopsmoke.kekkek.presentation.post.notice.NoticeListFragment"
+        android:name="com.agvber.kekkek.presentation.post.notice.NoticeListFragment"
         app:route="notice_list" />
 
     <fragment
         android:id="@+id/reply"
-        android:name="com.stopsmoke.kekkek.presentation.reply.ReplyFragment"
+        android:name="com.agvber.kekkek.presentation.reply.ReplyFragment"
         tools:layout="@layout/fragment_reply" />
 
     <fragment
         android:id="@+id/errorServerEtc"
         app:route="errorServerEtc"
-        android:name="com.stopsmoke.kekkek.presentation.error.ErrorServerEtcFragment"
+        android:name="com.agvber.kekkek.presentation.error.ErrorServerEtcFragment"
         tools:layout="@layout/fragment_error_server_etc" />
 
     <fragment
         android:id="@+id/errorMissing"
         app:route="errorMissing"
-        android:name="com.stopsmoke.kekkek.presentation.error.ErrorMissingFragment"
+        android:name="com.agvber.kekkek.presentation.error.ErrorMissingFragment"
         tools:layout="@layout/fragment_error_missing" />
 
 </navigation>

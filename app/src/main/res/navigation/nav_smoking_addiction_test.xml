@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/smoking_addiction_test_start_screen"
-        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.start.SmokingAddictionTestStartFragment"
+        android:name="com.agvber.kekkek.presentation.smokingaddictiontest.start.SmokingAddictionTestStartFragment"
         tools:layout="@layout/fragment_smoking_addiction_test_start" />
 
     <fragment
         android:id="@+id/smoking_addiction_test_screen"
-        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.assessment.SmokingAddictionTestFragment"
+        android:name="com.agvber.kekkek.presentation.smokingaddictiontest.assessment.SmokingAddictionTestFragment"
         tools:layout="@layout/fragment_smoking_addiction_test" />
 
     <fragment
         android:id="@+id/smoking_addiction_test_result_screen"
-        android:name="com.stopsmoke.kekkek.presentation.smokingaddictiontest.result.SmokingAddictionTestResultFragment"
+        android:name="com.agvber.kekkek.presentation.smokingaddictiontest.result.SmokingAddictionTestResultFragment"
         tools:layout="@layout/fragment_smoking_addiction_test_result" />
 
 </navigation>

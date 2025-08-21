@@ -1,0 +1,18 @@
+package com.agvber.kekkek.presentation.error
+
+import androidx.navigation.NavController
+
+interface ErrorHandle {
+    fun errorExit(navController: NavController) {
+        navController.navigate("errorServerEtc") {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    fun errorMissing(navController: NavController){
+        navController.navigate("errorMissing")
+    }
+}
