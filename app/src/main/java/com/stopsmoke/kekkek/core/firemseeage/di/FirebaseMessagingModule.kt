@@ -1,8 +1,8 @@
 package com.stopsmoke.kekkek.core.firemseeage.di
 
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.messaging.messaging
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -6,50 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseUser
-import com.stopsmoke.kekkek.R
-import com.stopsmoke.kekkek.core.authorization.FirebaseAuthorizationEvent
-import com.stopsmoke.kekkek.core.authorization.google.GoogleAuthorization
-import com.stopsmoke.kekkek.core.authorization.kakao.KakaoAuthorization
 import com.stopsmoke.kekkek.databinding.FragmentAuthenticationBinding
 import com.stopsmoke.kekkek.presentation.authentication.dialog.TermBottomSheetDialog
 import com.stopsmoke.kekkek.presentation.collectLatestWithLifecycle
 import com.stopsmoke.kekkek.presentation.home.navigateToHomeScreenWithClearBackStack
 import com.stopsmoke.kekkek.presentation.invisible
-import com.stopsmoke.kekkek.presentation.onboarding.OnboardingViewModel
-import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
-import kotlinx.coroutines.flow.distinctUntilChanged
+import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationEvent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
+@AndroidEntryPoint
+class AuthenticationFragment : Fragment() {
 
     private var _binding: FragmentAuthenticationBinding? = null
     private val binding: FragmentAuthenticationBinding get() = _binding!!
 
-    private val viewModel: OnboardingViewModel by activityViewModels()
-
-    private var kakaoAuthorization: KakaoAuthorization? = null
-    private var googleAuthorization: GoogleAuthorization? = null
+    private val viewModel: AuthenticationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.invisible()
-        initKakaoAuthorization()
-        initGoogleAuthorization()
-    }
-
-    private fun initKakaoAuthorization() {
-        kakaoAuthorization = KakaoAuthorization()
-        kakaoAuthorization!!.registerCallbackListener(this@AuthenticationFragment)
-    }
-
-    private fun initGoogleAuthorization() {
-        googleAuthorization = GoogleAuthorization(this)
-        googleAuthorization!!.registerCallbackListener(this@AuthenticationFragment)
     }
 
     override fun onCreateView(
@@ -62,15 +42,15 @@ class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handleAppEvent()
 
         binding.flLoginKakao.setOnClickListener {
-            kakaoAuthorization?.loginKakao(requireContext())
+            viewModel.loginKakao()
         }
 
         binding.flLoginGoogle.setOnClickListener {
-            googleAuthorization?.launchGoogleAuthActivity()
+            viewModel.loginGoogle()
         }
-        handleAuthenticationResult()
     }
 
     override fun onDestroyView() {
@@ -78,52 +58,30 @@ class AuthenticationFragment : Fragment(), FirebaseAuthorizationEvent {
         _binding = null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        kakaoAuthorization?.unregisterCallbackListener()
-        googleAuthorization?.unregisterCallbackListener()
-        googleAuthorization = null
-        kakaoAuthorization = null
-    }
-
-    override fun onSuccess(user: FirebaseUser) {
-        viewModel.updateUid(user.uid)
-        viewModel.updateUserName(user.displayName ?: getString(R.string.login_default_nickname))
-        Toast.makeText(requireContext(), "${user.displayName}님 환영합니다", Toast.LENGTH_SHORT).show()
-        viewModel.registeredApp()
-    }
-
-    override fun onFailure(t: Throwable?) {
-        if (context != null) {
-            Toast.makeText(context, "로그인 에러", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun handleAuthenticationResult() {
-        lifecycleScope.launch {
-            viewModel.authenticationUiState
-                .distinctUntilChanged()
-                .collectLatestWithLifecycle(lifecycle, Lifecycle.State.CREATED) { uiState ->
-                    when (uiState) {
-                        is AuthenticationUiState.AlreadyUser -> {
-                            findNavController().navigateToHomeScreenWithClearBackStack()
-                        }
-
-                        is AuthenticationUiState.NewMember -> {
-                            val termDialog = TermBottomSheetDialog()
-                            termDialog.show(childFragmentManager, termDialog.tag)
-                        }
-
-                        is AuthenticationUiState.Error -> {
-                            Toast.makeText(requireContext(), "에러가 발생하였습니다", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                        is AuthenticationUiState.Guest -> {}
-
-                        is AuthenticationUiState.Init -> {}
-                    }
+    private fun handleAppEvent() = lifecycleScope.launch {
+        viewModel.event.collectLatestWithLifecycle(
+            lifecycle = lifecycle,
+            minActiveState = Lifecycle.State.STARTED
+        ) { uiEvent ->
+            when (uiEvent) {
+                is AuthenticationEvent.AlreadyUser -> {
+                    findNavController().navigateToHomeScreenWithClearBackStack()
                 }
+
+                is AuthenticationEvent.NewMember -> {
+                    val termDialog = TermBottomSheetDialog()
+                    termDialog.show(childFragmentManager, termDialog.tag)
+                }
+
+                is AuthenticationEvent.Error -> {
+                    Toast.makeText(requireContext(), "에러가 발생하였습니다", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is AuthenticationEvent.Guest -> {}
+
+                is AuthenticationEvent.Init -> {}
+            }
         }
     }
 }

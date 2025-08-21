@@ -1,6 +1,7 @@
 package com.stopsmoke.kekkek.core.data.di
 
 import com.stopsmoke.kekkek.core.data.repository.AchievementRepositoryImpl
+import com.stopsmoke.kekkek.core.data.repository.AuthenticationRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.BookmarkRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.CommentRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.NotificationRepositoryImpl
@@ -8,6 +9,7 @@ import com.stopsmoke.kekkek.core.data.repository.PostRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.ReplyRepositoryImpl
 import com.stopsmoke.kekkek.core.data.repository.SearchRepositoryImpl
 import com.stopsmoke.kekkek.core.domain.repository.AchievementRepository
+import com.stopsmoke.kekkek.core.domain.repository.AuthenticationRepository
 import com.stopsmoke.kekkek.core.domain.repository.BookmarkRepository
 import com.stopsmoke.kekkek.core.domain.repository.CommentRepository
 import com.stopsmoke.kekkek.core.domain.repository.NotificationRepository
@@ -57,4 +59,9 @@ internal interface DataViewModelModule {
     fun bindReplyRepository(
         replyRepositoryImpl: ReplyRepositoryImpl
     ): ReplyRepository
+
+    @Binds
+    fun bindAuthenticationRepository(
+        authenticationRepositoryImpl: AuthenticationRepositoryImpl
+    ): AuthenticationRepository
 }

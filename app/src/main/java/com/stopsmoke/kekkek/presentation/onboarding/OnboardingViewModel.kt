@@ -2,28 +2,15 @@ package com.stopsmoke.kekkek.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stopsmoke.kekkek.common.exception.GuestModeException
 import com.stopsmoke.kekkek.core.domain.usecase.CheckNicknameUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.FinishOnboardingUseCase
-import com.stopsmoke.kekkek.core.domain.usecase.GetUserDataUseCase
 import com.stopsmoke.kekkek.core.domain.usecase.SignUpUseCase
-import com.stopsmoke.kekkek.presentation.onboarding.model.AuthenticationUiState
 import com.stopsmoke.kekkek.presentation.onboarding.model.OnboardingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.retry
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +18,6 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val sinUpUseCase: SignUpUseCase,
     private val finishOnboardingUseCase: FinishOnboardingUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase,
     private val checkNicknameUseCase: CheckNicknameUseCase,
 ) : ViewModel() {
 
@@ -114,46 +100,5 @@ class OnboardingViewModel @Inject constructor(
 
     fun setNameDuplicationInspectionResult(setBool: Boolean?) = viewModelScope.launch {
         _nameDuplicationInspectionResult.emit(setBool)
-    }
-
-    private val registerEventListener = MutableSharedFlow<Unit>()
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val authenticationUiState: SharedFlow<AuthenticationUiState> =
-        registerEventListener.flatMapLatest {
-            if (uid.value.isBlank()) {
-                return@flatMapLatest flowOf(AuthenticationUiState.Error(NullPointerException()))
-            }
-
-            getUserDataUseCase().mapLatest { user ->
-                if (user.uid.isBlank()) {
-                    return@mapLatest AuthenticationUiState.NewMember
-                }
-                finishOnboardingUseCase()
-                AuthenticationUiState.AlreadyUser
-            }
-                .retry(1) {
-                    (it is GuestModeException).also {
-                        delay(500)
-                        registerEventListener.emit(Unit)
-                    }
-                }
-        }
-            .catch {
-                if (it is GuestModeException) {
-                    emit(AuthenticationUiState.Guest)
-                    return@catch
-                }
-                emit(AuthenticationUiState.Error(it))
-            }
-            .shareIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000)
-            )
-
-    fun registeredApp() {
-        viewModelScope.launch {
-            registerEventListener.emit(Unit)
-        }
     }
 }

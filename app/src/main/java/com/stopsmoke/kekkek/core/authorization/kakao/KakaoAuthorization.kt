@@ -2,9 +2,9 @@ package com.stopsmoke.kekkek.core.authorization.kakao
 
 import android.content.Context
 import android.util.Log
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.oAuthCredential
-import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
