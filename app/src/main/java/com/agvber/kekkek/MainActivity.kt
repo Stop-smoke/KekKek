@@ -1,4 +1,4 @@
-package com.agvber.kekkek.presentation
+package com.agvber.kekkek
 
 import android.os.Bundle
 import android.view.View
@@ -7,24 +7,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.agvber.kekkek.R
-import com.agvber.kekkek.core.domain.repository.UserRepository
 import com.agvber.kekkek.databinding.ActivityMainBinding
+import com.agvber.kekkek.presentation.collectLatestWithLifecycle
 import com.agvber.kekkek.presentation.utils.defaultNavigationOption
 import com.agvber.kekkek.presentation.utils.newBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    @Inject
-    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +33,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         navController = navHostFragment.navController
 
-        val isOnboardingComplete = runBlocking {
-            userRepository.isOnboardingComplete().first()
-        }
+        val isOnboardingComplete = intent.getBooleanExtra(IS_ONBOARDING_COMPLETE_PARAM, false)
         setNavGraph(isOnboardingComplete)
     }
 
@@ -135,5 +126,10 @@ class MainActivity : AppCompatActivity() {
             navGraph.setStartDestination(R.id.authentication)
         }
         navController.setGraph(navGraph, null)
+    }
+
+    companion object {
+        const val TAG = "MainActivity"
+        const val IS_ONBOARDING_COMPLETE_PARAM = "is_onboarding_complete"
     }
 }

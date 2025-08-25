@@ -18,14 +18,13 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
 import coil.load
-import com.google.android.material.snackbar.Snackbar
+import com.agvber.kekkek.MainActivity
 import com.agvber.kekkek.R
 import com.agvber.kekkek.core.domain.model.DateTimeUnit
 import com.agvber.kekkek.core.domain.model.ElapsedDateTime
-import com.agvber.kekkek.core.domain.model.PostCategory
-import com.agvber.kekkek.core.domain.model.PostWriteCategory
 import com.agvber.kekkek.core.domain.model.ProfileImage
 import com.agvber.kekkek.core.domain.model.User
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -73,7 +72,7 @@ fun convertHtmlToSpannable(html: String): Spannable {
     return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT) as Spannable
 }
 
-fun<T> List<T>.toggleElement(value: T): List<T> {
+fun <T> List<T>.toggleElement(value: T): List<T> {
     if (contains(value)) {
         return this.toMutableList().apply {
             remove(value)
@@ -84,7 +83,7 @@ fun<T> List<T>.toggleElement(value: T): List<T> {
     }
 }
 
-fun<T> Set<T>.toggleElement(value: T): Set<T> {
+fun <T> Set<T>.toggleElement(value: T): Set<T> {
     if (contains(value)) {
         return this.toMutableSet().apply {
             remove(value)
@@ -107,7 +106,7 @@ internal fun ElapsedDateTime.toResourceId(context: Context): String =
     }
 
 
-internal fun<T> Flow<T>.collectLatest(
+internal fun <T> Flow<T>.collectLatest(
     lifecycleScope: LifecycleCoroutineScope,
     action: (value: T) -> Unit
 ): Job {
@@ -116,7 +115,7 @@ internal fun<T> Flow<T>.collectLatest(
     }
 }
 
-internal fun<T> Flow<T>.collectLatestWithLifecycle(
+internal fun <T> Flow<T>.collectLatestWithLifecycle(
     lifecycle: Lifecycle,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     action: suspend (value: T) -> Unit
@@ -128,7 +127,7 @@ internal fun<T> Flow<T>.collectLatestWithLifecycle(
     }
 }
 
-internal fun<T> Bundle.getParcelableAndroidVersionSupport(key: String, clazz: Class<T>) =
+internal fun <T> Bundle.getParcelableAndroidVersionSupport(key: String, clazz: Class<T>) =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getParcelable(key, clazz)
     } else {
@@ -147,19 +146,25 @@ internal fun View.snackbarLongShow(message: String) {
 }
 
 internal fun ImageView.setDefaultProfileImage(profileImage: ProfileImage) {
-    when(profileImage) {
+    when (profileImage) {
         ProfileImage.Default -> setImageResource(R.drawable.ic_user_profile_test)
         is ProfileImage.Web -> load(profileImage.url)
     }
 }
 
 
-fun User.getTotalDay(): Long{
-    var totalDay:Long = 0
+fun User.getTotalDay(): Long {
+    var totalDay: Long = 0
     this.history.historyTimeList.forEach {
-        if(it.quitSmokingStartDateTime !=null){
-            if(it.quitSmokingStopDateTime != null)  totalDay += ChronoUnit.DAYS.between(it.quitSmokingStartDateTime, it.quitSmokingStopDateTime)
-            else if(it.quitSmokingStopDateTime == null) totalDay += ChronoUnit.DAYS.between(it.quitSmokingStartDateTime, LocalDateTime.now())
+        if (it.quitSmokingStartDateTime != null) {
+            if (it.quitSmokingStopDateTime != null) totalDay += ChronoUnit.DAYS.between(
+                it.quitSmokingStartDateTime,
+                it.quitSmokingStopDateTime
+            )
+            else if (it.quitSmokingStopDateTime == null) totalDay += ChronoUnit.DAYS.between(
+                it.quitSmokingStartDateTime,
+                LocalDateTime.now()
+            )
         }
     }
     return totalDay
@@ -170,7 +175,7 @@ internal fun View.hideSoftKeyboard() {
     inputMethodManager?.hideSoftInputFromWindow(windowToken, 0)
 }
 
-internal fun<T> NavController.putNavigationResult(key: String, value: T) {
+internal fun <T> NavController.putNavigationResult(key: String, value: T) {
     previousBackStackEntry?.savedStateHandle?.set(key, value)
 }
 
