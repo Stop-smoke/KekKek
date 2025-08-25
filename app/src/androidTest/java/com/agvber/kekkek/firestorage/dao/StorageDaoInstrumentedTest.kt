@@ -1,19 +1,17 @@
 package com.agvber.kekkek.firestorage.dao
 
 import android.os.Build
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.agvber.kekkek.core.firestorage.dao.StorageDao
 import com.agvber.kekkek.core.firestorage.data.StorageDaoImpl
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.InputStream
 
 @RunWith(AndroidJUnit4::class)
 class StorageDaoInstrumentedTest {

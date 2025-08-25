@@ -1,35 +1,8 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
-##################### KAKAO SDK ############################
--keep class com.kakao.sdk.**.model.* { <fields>; }
--keep class * extends com.google.gson.TypeAdapter
-
-# https://github.com/square/okhttp/pull/6792
--dontwarn org.bouncycastle.jsse.**
--dontwarn org.conscrypt.*
--dontwarn org.openjsse.**
-##################### KAKAO SDK ############################
-
+########################################################
+# R8 Global Settings
+########################################################
+# 최적화 및 축소는 수행하되, 이름 난독화(암호화)는 하지 않음
+-dontobfuscate
 ########################################################
 # AndroidX / Jetpack
 ########################################################
@@ -78,6 +51,24 @@
 -dontwarn com.google.android.gms.**
 -dontwarn com.google.ads.**
 
+# Firebase Messaging - 모든 클래스, 인터페이스, 생성자, 필드, 메서드 유지
+-keep class com.google.firebase.messaging.** { *; }
+
+# Firebase Events (Subscriber 인터페이스 포함) - 모든 클래스, 인터페이스, 생성자, 필드, 메서드 유지
+-keep class com.google.firebase.events.** { *; }
+
+# Firebase Components (FirebaseApp, ComponentRegistrar 등) - 잠재적 초기화 문제 방지
+-keep class com.google.firebase.components.** { *; }
+
+# Firebase Installations - Messaging이 의존할 수 있음
+-keep class com.google.firebase.installations.** { *; }
+
+# Firebase Common (내부 유틸리티)
+-keep class com.google.firebase.common.** { *; }
+
+# Google Android GMS Tasks API (Firebase가 내부적으로 많이 사용)
+-keep class com.google.android.gms.tasks.** { *; }
+
 # Firebase Analytics & Crashlytics
 -keep class com.google.firebase.analytics.** { *; }
 -keep class com.google.firebase.crashlytics.** { *; }
@@ -90,6 +81,28 @@
     public void onMessageReceived(...);
     public void onNewToken(...);
 }
+
+# -keep class com.firebase.** { *; } 규칙은 좀 더 구체적인 com.google.firebase.** 규칙들로 대체되거나 보완될 수 있습니다.
+# 혼란을 피하기 위해, 더 구체적인 위 규칙들을 사용하고, com.firebase.** 는 삭제하거나 주석 처리하는 것을 고려할 수 있습니다.
+# 여기서는 일단 추가하는 방향으로 제안합니다.
+-keep class com.firebase.** { *; } # 기존 규칙 유지
+
+# 시스템 클래스인 tagsoup 관련 경고를 억제하고 클래스를 유지 (다른 라이브러리가 포함할 경우 대비)
+# 이 규칙은 시스템 클래스 자체를 앱 패키지에 포함시키는 것이 아니라,
+# 만약 다른 라이브러리가 이 클래스를 포함하고 R8이 이를 처리하려고 할 때를 대비합니다.
+-keep class org.ccil.cowan.tagsoup.** { *; }
+-dontwarn org.ccil.cowan.tagsoup.**
+
+# 기존 기타 Firebase 관련 규칙들 (필요시 유지 또는 검토)
+-keep class org.apache.** { *; }
+-keepnames class com.fasterxml.jackson.** { *; }
+-keepnames class javax.servlet.** { *; }
+-keepnames class org.ietf.jgss.** { *; }
+-dontwarn org.w3c.dom.**
+-dontwarn org.joda.time.**
+-dontwarn org.shaded.apache.**
+-dontwarn org.ietf.jgss.**
+-keep class com.shaded.fasterxml.jackson.** { *; }
 
 ########################################################
 # Google Play Services (Auth, Maps, Ads, Location)
@@ -108,7 +121,7 @@
 ########################################################
 # Glide 모델 파서 / API 유지
 -keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.AppGlideModule { *; }
+#-keep public class * extends com.bumptech.glide.AppGlideModule { *; }
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** { *; }
 -dontwarn com.bumptech.glide.**
 
@@ -130,8 +143,8 @@
 # 기타 라이브러리
 ########################################################
 # Aztec Editor
--keep class org.wordpress.aztec.** { *; }
--dontwarn org.wordpress.aztec.**
+#-keep class org.wordpress.aztec.** { *; }
+#-dontwarn org.wordpress.aztec.**
 
 # Algolia InstantSearch
 -keep class com.algolia.instantsearch.** { *; }
@@ -148,12 +161,25 @@
 -dontwarn androidx.test.espresso.**
 
 ########################################################
+# Data classes for Deserialization
+########################################################
+-keep class com.agvber.kekkek.core.firestore.model.** { *; }
+
+-keepclassmembers class ** {
+    @com.google.firebase.* <fields>;
+}
+-keep @com.google.firebase.firestore.PropertyName class ** { *; }
+
+
+########################################################
 # 안전 장치
 ########################################################
 # 리플렉션 사용 클래스명 유지
--keepattributes Signature, InnerClasses, EnclosingMethod, RuntimeVisibleAnnotations, AnnotationDefault
+-keepattributes Signature,InnerClasses,EnclosingMethod,RuntimeVisibleAnnotations,AnnotationDefault,Deprecated,SourceFile,LineNumberTable,*Annotation*,kotlin.Metadata
 
 # Please add these rules to your existing keep rules in order to suppress warnings.
 # This is generated automatically by the Android Gradle plugin.
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -dontwarn org.slf4j.impl.StaticMDCBinder
+
+-keepclassmembers class * implements androidx.viewbinding.ViewBinding { *; }

@@ -265,8 +265,8 @@ class PostDetailViewModel @Inject constructor(
         _postDetailUiState.value = PostDetailUiState.ErrorExit
     }
 
-    fun toggleBookmark() = try {
-        viewModelScope.launch {
+    fun toggleBookmark() = viewModelScope.launch {
+        runCatching {
             val user = user.value ?: return@launch
             val postId = postId.value ?: return@launch
 
@@ -276,9 +276,10 @@ class PostDetailViewModel @Inject constructor(
             }
             postRepository.addBookmark(postId)
         }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        _postDetailUiState.value = PostDetailUiState.ErrorExit
+            .onFailure {
+                it.printStackTrace()
+                _postDetailUiState.value = PostDetailUiState.ErrorExit
+            }
     }
 
     fun toggleCommentLike(comment: Comment) = viewModelScope.launch {
