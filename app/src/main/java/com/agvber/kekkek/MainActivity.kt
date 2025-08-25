@@ -5,6 +5,9 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.agvber.kekkek.databinding.ActivityMainBinding
@@ -19,13 +22,33 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+    private var isSystemPaddingApplied = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setupSystemPadding()
         setupNavigation()
         setupBottomNavigation()
+    }
+
+    private fun setupSystemPadding() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            if (isSystemPaddingApplied) {
+                return@setOnApplyWindowInsetsListener insets
+            }
+
+            val sb = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(
+                left = v.paddingLeft + sb.left,
+                top = v.paddingTop + sb.top,
+                right = v.paddingRight + sb.right,
+                bottom = v.paddingBottom + sb.bottom
+            )
+            isSystemPaddingApplied = true
+            insets
+        }
     }
 
     private fun setupNavigation() {
