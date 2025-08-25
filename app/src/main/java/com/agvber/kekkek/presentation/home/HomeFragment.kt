@@ -4,12 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.agvber.kekkek.R
 import com.agvber.kekkek.common.Result
 import com.agvber.kekkek.databinding.FragmentHomeBinding
+import com.agvber.kekkek.presentation.ViewBindingFragment
 import com.agvber.kekkek.presentation.attainments.navigateToAttainmentsScreen
 import com.agvber.kekkek.presentation.collectLatestWithLifecycle
 import com.agvber.kekkek.presentation.error.ErrorHandle
@@ -35,10 +33,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), ErrorHandle {
-
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+class HomeFragment : ViewBindingFragment<FragmentHomeBinding>(), ErrorHandle {
 
     private val viewModel: HomeViewModel by activityViewModels()
 
@@ -54,14 +49,6 @@ class HomeFragment : Fragment(), ErrorHandle {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         checkNotificationPermission()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -215,12 +202,6 @@ class HomeFragment : Fragment(), ErrorHandle {
 
     private fun formatToOneDecimalPlace(value: Double): String {
         return String.format("%.1f", value)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun checkNotificationPermission() {
